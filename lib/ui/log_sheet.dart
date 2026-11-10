@@ -29,6 +29,9 @@ Future<void> quickLog(
     ..showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
+        // Sparisce da sola anche con "Annulla" (rapporto 16).
+        duration: const Duration(seconds: 4),
+        persist: false,
         content: Text(
           '${type.label}${indoor ? ' in casa' : ''} registrata alle ${hm(e.time)}',
         ),

@@ -3,9 +3,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'notifications.dart';
+import 'brand.dart';
 import 'store.dart';
 import 'sync/supabase_backend.dart';
+import 'logic/alerts.dart';
+import 'models.dart';
 import 'ui/account_screen.dart';
+import 'ui/avatar.dart';
 import 'ui/common.dart';
 import 'ui/dog_form.dart';
 import 'ui/health_screen.dart';
@@ -13,6 +17,7 @@ import 'ui/home_screen.dart';
 import 'ui/nutrition_screen.dart';
 import 'ui/potty_screen.dart';
 import 'ui/profile_screen.dart';
+import 'ui/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,31 +51,13 @@ class ZampaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme(Brightness b) {
-      final scheme = ColorScheme.fromSeed(
-        seedColor: const Color(0xFF2E7D6B),
-        brightness: b,
-      ).copyWith(tertiary: const Color(0xFFE08A3C));
-      return ThemeData(
-        colorScheme: scheme,
-        useMaterial3: true,
-        cardTheme: const CardThemeData(
-          elevation: 0,
-          margin: EdgeInsets.symmetric(vertical: 6),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
-        ),
-      );
-    }
-
     return StoreScope(
       store: store,
       child: MaterialApp(
-        title: 'Zampa',
+        title: appName,
         debugShowCheckedModeBanner: false,
-        theme: theme(Brightness.light),
-        darkTheme: theme(Brightness.dark),
+        theme: buildTheme(Brightness.light),
+        darkTheme: buildTheme(Brightness.dark),
         locale: const Locale('it'),
         supportedLocales: const [Locale('it'), Locale('en')],
         localizationsDelegates: const [
@@ -106,41 +93,95 @@ class _RootPageState extends State<RootPage> {
       const NutritionScreen(),
       const ProfileScreen(),
     ];
+    // Con il testo molto grande le etichette della barra restano solo sulla
+    // voce attiva, così non vengono tagliate (P12/P13 del rapporto 16).
+    final bigText = MediaQuery.textScalerOf(context).scale(10) > 13;
     return Scaffold(
-      body: SafeArea(child: pages[_tab]),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _tab,
-        onDestinationSelected: (i) => setState(() => _tab = i),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.today_outlined),
-            selectedIcon: Icon(Icons.today),
-            label: 'Oggi',
+      body: SafeArea(
+        bottom: false,
+        child: AnimatedSwitcher(
+          duration: Motion.of(context, Motion.short),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          child: KeyedSubtree(key: ValueKey(_tab), child: pages[_tab]),
+        ),
+      ),
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.water_drop_outlined),
-            selectedIcon: Icon(Icons.water_drop),
-            label: 'Bisogni',
+        ),
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: 1.3,
+          child: NavigationBar(
+            selectedIndex: _tab,
+            labelBehavior: bigText
+                ? NavigationDestinationLabelBehavior.onlyShowSelected
+                : null,
+            onDestinationSelected: (i) => setState(() => _tab = i),
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.wb_sunny_outlined),
+                selectedIcon: Icon(Icons.wb_sunny),
+                label: 'Oggi',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.water_drop_outlined),
+                selectedIcon: Icon(Icons.water_drop),
+                label: 'Bisogni',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.monitor_heart_outlined),
+                selectedIcon: Icon(Icons.monitor_heart),
+                label: 'Salute',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.rice_bowl_outlined),
+                selectedIcon: Icon(Icons.rice_bowl),
+                label: 'Nutrizione',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.pets_outlined),
+                selectedIcon: Icon(Icons.pets),
+                label: 'Profilo',
+              ),
+            ],
           ),
-          NavigationDestination(
-            icon: Icon(Icons.medical_services_outlined),
-            selectedIcon: Icon(Icons.medical_services),
-            label: 'Salute',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.restaurant_outlined),
-            selectedIcon: Icon(Icons.restaurant),
-            label: 'Nutrizione',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.pets_outlined),
-            selectedIcon: Icon(Icons.pets),
-            label: 'Profilo',
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+/// Impaginazione comune di benvenuto e avvertenza: colonna stretta,
+/// testo allineato a sinistra, scorrevole anche con il testo al 200%.
+class _IntroLayout extends StatelessWidget {
+  const _IntroLayout({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: SafeArea(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(
+              Space.xl,
+              Space.xl,
+              Space.xl,
+              Space.xxl,
+            ),
+            children: children,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class WelcomePage extends StatelessWidget {
@@ -150,68 +191,79 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = StoreScope.of(context);
     final t = Theme.of(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: ListView(
-              padding: const EdgeInsets.all(28),
-              shrinkWrap: true,
-              children: [
-                Icon(Icons.pets, size: 64, color: t.colorScheme.primary),
-                const SizedBox(height: 12),
-                Text(
-                  'Zampa',
-                  style: t.textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'La salute del tuo cane in un posto solo: cartella sanitaria, '
-                  'vaccini, farmaci, nutrizione e un modello che impara quando '
-                  'deve uscire per la pipì e la cacca.',
-                  style: t.textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 28),
-                FilledButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Aggiungi il tuo cane'),
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const DogFormPage()),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                if (appAuth != null) ...[
-                  OutlinedButton.icon(
-                    icon: const Icon(Icons.login),
-                    label: const Text('Ho già un account'),
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const AccountScreen()),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                ],
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.science_outlined),
-                  label: const Text('Prova con un cane di esempio'),
-                  onPressed: store.loadDemo,
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'I dati restano sul tuo dispositivo. Zampa non sostituisce il '
-                  'veterinario.',
-                  style: t.textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+    return _IntroLayout(
+      children: [
+        CompanionDevice(
+          child: ExcludeSemantics(
+            child: PixelDogView(
+              look: AvatarLook(),
+              pose: Pose.happy,
+              height: 150,
             ),
           ),
         ),
-      ),
+        const SizedBox(height: Space.xl),
+        Semantics(
+          header: true,
+          child: Text(appName, style: t.textTheme.displaySmall),
+        ),
+        const SizedBox(height: Space.s),
+        Text(
+          appTagline,
+          style: t.textTheme.titleLarge?.copyWith(color: t.colorScheme.primary),
+        ),
+        const SizedBox(height: Space.m),
+        Text(
+          'La salute del tuo cane in un posto solo: cartella sanitaria, '
+          'vaccini, farmaci, nutrizione e un modello che impara quando '
+          'deve uscire per la pipì e la cacca.',
+          style: t.textTheme.bodyLarge?.copyWith(
+            color: t.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: Space.xl),
+        FilledButton.icon(
+          icon: const Icon(Icons.add),
+          label: const Text('Aggiungi il tuo cane'),
+          onPressed: () =>
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const DogFormPage())),
+        ),
+        const SizedBox(height: Space.m),
+        if (appAuth != null) ...[
+          OutlinedButton.icon(
+            icon: const Icon(Icons.login),
+            label: const Text('Ho già un account'),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const AccountScreen())),
+          ),
+          const SizedBox(height: Space.m),
+        ],
+        OutlinedButton.icon(
+          icon: const Icon(Icons.science_outlined),
+          label: const Text('Prova con un cane di esempio'),
+          onPressed: store.loadDemo,
+        ),
+        const SizedBox(height: Space.xl),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.lock_outline,
+              size: 18,
+              color: t.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: Space.s),
+            Expanded(
+              child: Text(
+                'I dati restano sul tuo dispositivo. $appName non sostituisce il '
+                'veterinario.',
+                style: t.textTheme.bodySmall,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -229,60 +281,75 @@ class _TermsPageState extends State<TermsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 520),
-            child: ListView(
-              padding: const EdgeInsets.all(28),
-              shrinkWrap: true,
-              children: [
-                Icon(
-                  Icons.health_and_safety_outlined,
-                  size: 56,
-                  color: t.colorScheme.primary,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Prima di iniziare',
-                  style: t.textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Text(disclaimer, style: t.textTheme.bodyLarge),
-                const SizedBox(height: 12),
-                const Text(
-                  'Zampa non è un dispositivo medico. In Italia diagnosi e '
-                  'prescrizione dei farmaci veterinari spettano solo al '
-                  'veterinario: l\'app non suggerisce dosi né terapie. Le '
-                  'previsioni dei bisogni sono stime statistiche.',
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'I dati restano solo su questo dispositivo: nessun account, '
-                  'nessun server, nessuna pubblicità. Solo se attivi l\'avviso '
-                  'caldo, la città viene inviata al servizio meteo Open-Meteo.',
-                ),
-                const SizedBox(height: 16),
-                CheckboxListTile(
-                  value: ok,
-                  onChanged: (v) => setState(() => ok = v ?? false),
-                  title: const Text('Ho letto e ho capito'),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                const SizedBox(height: 8),
-                FilledButton(
-                  onPressed: ok
-                      ? () => StoreScope.read(context).acceptTerms()
-                      : null,
-                  child: const Text('Continua'),
-                ),
-              ],
-            ),
+    final s = t.colorScheme;
+    Widget point(IconData icon, String text) => Padding(
+      padding: const EdgeInsets.only(top: Space.l),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: s.primary),
+          const SizedBox(width: Space.m),
+          Expanded(child: Text(text, style: t.textTheme.bodyLarge)),
+        ],
+      ),
+    );
+    return _IntroLayout(
+      children: [
+        Container(
+          width: 64,
+          height: 64,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: s.primaryContainer,
+            borderRadius: BorderRadius.circular(Radii.card),
+          ),
+          child: Icon(
+            Icons.health_and_safety_outlined,
+            size: 34,
+            color: s.onPrimaryContainer,
           ),
         ),
-      ),
+        const SizedBox(height: Space.l),
+        Semantics(
+          header: true,
+          child: Text('Prima di iniziare', style: t.textTheme.headlineMedium),
+        ),
+        const SizedBox(height: Space.l),
+        const NoticeCard(disclaimer, level: AlertLevel.info),
+        point(
+          Icons.medical_information_outlined,
+          '$appName non è un dispositivo medico. In Italia diagnosi e '
+          'prescrizione dei farmaci veterinari spettano solo al '
+          'veterinario: l\'app non suggerisce dosi né terapie. Le '
+          'previsioni dei bisogni sono stime statistiche.',
+        ),
+        point(
+          Icons.lock_outline,
+          'I dati restano solo su questo dispositivo: nessun account, '
+          'nessun server, nessuna pubblicità. Solo se attivi l\'avviso '
+          'caldo, la città viene inviata al servizio meteo Open-Meteo.',
+        ),
+        const SizedBox(height: Space.xl),
+        Material(
+          color: ok ? s.primaryContainer : s.surfaceContainerLow,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Radii.field),
+            side: BorderSide(color: ok ? s.primary : s.outline),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: CheckboxListTile(
+            value: ok,
+            onChanged: (v) => setState(() => ok = v ?? false),
+            title: const Text('Ho letto e ho capito'),
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+        ),
+        const SizedBox(height: Space.l),
+        FilledButton(
+          onPressed: ok ? () => StoreScope.read(context).acceptTerms() : null,
+          child: const Text('Continua'),
+        ),
+      ],
     );
   }
 }

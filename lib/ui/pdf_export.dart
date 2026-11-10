@@ -1,4 +1,7 @@
 import 'dart:math' as math;
+
+import '../brand.dart';
+
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart' show BuildContext;
@@ -23,7 +26,7 @@ Future<void> exportPdf(BuildContext context, AppStore store, Dog dog) async {
     await Printing.sharePdf(
       bytes: bytes,
       filename:
-          'Zampa_${dog.name}_${dmy(DateTime.now()).replaceAll('/', '-')}.pdf',
+          '${appName}_${dog.name}_${dmy(DateTime.now()).replaceAll('/', '-')}.pdf',
     );
   } catch (e) {
     if (context.mounted) toast(context, 'PDF non disponibile: $e');
@@ -40,7 +43,7 @@ String _safe(String s) => s
     .replaceAll(RegExp(r'[^\u0000-ÿ€–—’]'), '');
 
 Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
-  final doc = pw.Document(title: 'Zampa – ${dog.name}', author: 'Zampa');
+  final doc = pw.Document(title: '$appName – ${dog.name}', author: appName);
   final plan = Nutrition.plan(dog, now);
   final logs = store.logsOf(dog.id);
   final days = [
@@ -171,7 +174,7 @@ Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
       margin: const pw.EdgeInsets.all(32),
       footer: (c) => pw.Text(
         _safe(
-          'Dati inseriti dal proprietario con Zampa il ${dmy(now)} – non sostituisce la visita veterinaria – pag. ${c.pageNumber}/${c.pagesCount}',
+          'Dati inseriti dal proprietario con $appName il ${dmy(now)} – non sostituisce la visita veterinaria – pag. ${c.pageNumber}/${c.pagesCount}',
         ),
         style: const pw.TextStyle(fontSize: 7, color: PdfColors.grey600),
       ),
@@ -235,7 +238,7 @@ Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
         ),
         p(
           'Intervallo tipico tra le pipì da sveglio: ${pf.typicalIntervalMin.round()} min '
-          '(modello Zampa, ${pf.learnedDays.toStringAsFixed(1)} giorni di dati).',
+          '(modello $appName, ${pf.learnedDays.toStringAsFixed(1)} giorni di dati).',
           size: 8,
         ),
         if (therapies.isNotEmpty) ...[

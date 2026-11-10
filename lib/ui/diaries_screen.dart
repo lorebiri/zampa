@@ -1,3 +1,5 @@
+import '../brand.dart';
+
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -8,6 +10,7 @@ import '../logic/potty_predictor.dart';
 import '../models.dart';
 import '../store.dart';
 import 'common.dart';
+import 'theme.dart';
 import 'log_sheet.dart';
 import 'pdf_export.dart';
 
@@ -231,8 +234,14 @@ class _BreathingPageState extends State<BreathingPage> {
           for (final l in rows.take(30))
             ListTile(
               dense: true,
+              // Il livello si legge anche dalla forma dell'icona, non solo
+              // dal colore (rapporto 16, P2).
               leading: Icon(
-                Icons.air,
+                l.value! > 40
+                    ? Icons.error
+                    : l.value! > 30
+                    ? Icons.warning_amber_rounded
+                    : Icons.air,
                 color: l.value! > 40
                     ? t.colorScheme.error
                     : l.value! > 30
@@ -314,7 +323,7 @@ class DiabetesPage extends StatelessWidget {
             ),
           ),
           const Text(
-            'Le unità sono quelle prescritte dal veterinario: Zampa le registra, non le calcola. '
+            'Le unità sono quelle prescritte dal veterinario: $appName le registra, non le calcola. '
             'Acqua, pipì e peso sono gli indicatori di controllo (AAHA 2018).',
           ),
           const SectionTitle('Indicatori'),
@@ -603,16 +612,9 @@ class _QolPageState extends State<QolPage> {
           ],
           Text('Totale: $total / 70', style: t.textTheme.titleLarge),
           if (total < 35)
-            Card(
-              color: const Color(0xFFFFE9C7),
-              child: const Padding(
-                padding: EdgeInsets.all(12),
-                child: Text(
-                  'Punteggio sotto 35: parlane con il veterinario. Esistono molte possibilità per '
-                  'controllare dolore e disagio.',
-                  style: TextStyle(color: Color(0xFF5A3A00)),
-                ),
-              ),
+            const NoticeCard(
+              'Punteggio sotto 35: parlane con il veterinario. Esistono molte possibilità per '
+              'controllare dolore e disagio.',
             ),
           const SizedBox(height: 8),
           if (!complete)
@@ -688,7 +690,7 @@ class LabsPage extends StatelessWidget {
       body: PageBody(
         children: [
           const Text(
-            'Zampa non interpreta gli esami: mostra l\'andamento e segnala i valori fuori '
+            '$appName non interpreta gli esami: mostra l\'andamento e segnala i valori fuori '
             'dall\'intervallo indicato dal laboratorio. L\'interpretazione spetta al veterinario.',
           ),
           if (byName.isEmpty)
@@ -900,7 +902,7 @@ class _TravelPageState extends State<TravelPage> {
                   color: i.ok == null
                       ? null
                       : i.ok!
-                      ? Colors.green
+                      ? context.colors.good
                       : t.colorScheme.error,
                 ),
                 title: Text(i.item),
@@ -1130,17 +1132,10 @@ class _SeniorScalesPageState extends State<SeniorScalesPage> {
             ),
           ),
           if (mcs != null && mcs! >= 1)
-            Card(
-              color: const Color(0xFFFFE9C7),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  mcs! >= 2
-                      ? 'Perdita muscolare moderata o grave: parlane con il veterinario nei prossimi giorni.'
-                      : 'Perdita lieve: segnalala alla prossima visita.',
-                  style: const TextStyle(color: Color(0xFF5A3A00)),
-                ),
-              ),
+            NoticeCard(
+              mcs! >= 2
+                  ? 'Perdita muscolare moderata o grave: parlane con il veterinario nei prossimi giorni.'
+                  : 'Perdita lieve: segnalala alla prossima visita.',
             ),
           FilledButton.tonal(
             onPressed: mcs == null
@@ -1161,7 +1156,7 @@ class _SeniorScalesPageState extends State<SeniorScalesPage> {
           ),
           const SectionTitle('Cambiamenti cognitivi (checklist DISHAA)'),
           Text(
-            'Checklist informativa scritta per Zampa sui sei ambiti DISHAA: non è un punteggio '
+            'Checklist informativa scritta per $appName sui sei ambiti DISHAA: non è un punteggio '
             'validato e non fa diagnosi. Per ogni voce: 0 = no, 1 = a volte, 2 = spesso.',
             style: t.textTheme.bodySmall,
           ),
@@ -1190,17 +1185,10 @@ class _SeniorScalesPageState extends State<SeniorScalesPage> {
             ),
           ],
           if (cogDone && (cogTotal >= 3 || cog.values.any((v) => v == 2)))
-            const Card(
-              color: Color(0xFFFFE9C7),
-              child: Padding(
-                padding: EdgeInsets.all(12),
-                child: Text(
-                  'Ci sono cambiamenti da segnalare: parlane con il veterinario. Alcuni '
-                  'possono dipendere da dolore, problemi di vista o udito, o malattie '
-                  'curabili, non solo dall\'età.',
-                  style: TextStyle(color: Color(0xFF5A3A00)),
-                ),
-              ),
+            const NoticeCard(
+              'Ci sono cambiamenti da segnalare: parlane con il veterinario. Alcuni '
+              'possono dipendere da dolore, problemi di vista o udito, o malattie '
+              'curabili, non solo dall\'età.',
             ),
           const SizedBox(height: 8),
           FilledButton.tonal(

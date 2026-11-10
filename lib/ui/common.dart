@@ -5,7 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../logic/alerts.dart';
 import '../models.dart';
 import '../store.dart';
+import '../brand.dart';
 import 'emergency_screen.dart';
+import 'theme.dart';
 
 class StoreScope extends InheritedNotifier<AppStore> {
   const StoreScope({super.key, required AppStore store, required super.child})
@@ -30,13 +32,16 @@ class PageBody extends StatelessWidget {
     child: ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 720),
       child: ListView(
-        padding: padding ?? const EdgeInsets.fromLTRB(16, 12, 16, 96),
+        padding:
+            padding ??
+            const EdgeInsets.fromLTRB(Space.l, Space.m, Space.l, 112),
         children: children,
       ),
     ),
   );
 }
 
+/// Titolo di sezione: un'intestazione vera per i lettori di schermo.
 class SectionTitle extends StatelessWidget {
   const SectionTitle(this.text, {super.key, this.trailing});
   final String text;
@@ -44,14 +49,14 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(4, 18, 4, 6),
+    padding: const EdgeInsets.fromLTRB(4, Space.xl, 0, Space.s),
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+          child: Semantics(
+            header: true,
+            child: Text(text, style: Theme.of(context).textTheme.titleLarge),
           ),
         ),
         ?trailing,
@@ -60,100 +65,259 @@ class SectionTitle extends StatelessWidget {
   );
 }
 
+/// Intestazione grande di una pagina (Nutrizione, Profilo…).
+class PageTitle extends StatelessWidget {
+  const PageTitle(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(4, Space.s, 4, Space.s),
+    child: Semantics(
+      header: true,
+      child: Text(text, style: Theme.of(context).textTheme.headlineMedium),
+    ),
+  );
+}
+
+/// Forma di un livello: SUBITO è un blocco pieno, OGGI ha una banda spessa
+/// e il bordo, ATTENZIONE una banda sottile, INFO nessuna banda. Così il
+/// livello si riconosce da posizione, forma, parola e icona, non solo dal
+/// colore (rapporto 16, P2 e §5.4).
+class _ToneBox extends StatelessWidget {
+  const _ToneBox({required this.level, required this.child});
+  final AlertLevel level;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tone = context.colors.tone(level);
+    final stripe = switch (level) {
+      AlertLevel.subito => 0.0,
+      AlertLevel.oggi => 8.0,
+      AlertLevel.attenzione => 5.0,
+      AlertLevel.info => 0.0,
+    };
+    final border = switch (level) {
+      AlertLevel.subito => BorderSide(color: tone.accent, width: 3),
+      AlertLevel.oggi => BorderSide(color: tone.accent, width: 1.5),
+      AlertLevel.attenzione => BorderSide(
+        color: tone.accent.withValues(alpha: 0.6),
+      ),
+      AlertLevel.info => BorderSide.none,
+    };
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      decoration: ShapeDecoration(
+        color: tone.bg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.alert),
+          side: border,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (stripe > 0) Container(width: stripe, color: tone.accent),
+            Expanded(child: child),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Riga "icona + PAROLA DEL LIVELLO", grande e in grassetto.
+class LevelTag extends StatelessWidget {
+  const LevelTag(this.level, {super.key, this.text});
+  final AlertLevel level;
+
+  /// Parola alternativa (es. "IN RITARDO").
+  final String? text;
+
+  @override
+  Widget build(BuildContext context) {
+    final tone = context.colors.tone(level);
+    final label = text ?? tone.label;
+    final iconSize = switch (level) {
+      AlertLevel.subito => 30.0,
+      AlertLevel.oggi => 26.0,
+      _ => 24.0,
+    };
+    final iconColor = level == AlertLevel.subito ? tone.fg : tone.accent;
+    return Row(
+      children: [
+        Icon(tone.icon, color: iconColor, size: iconSize),
+        if (label != null) ...[
+          const SizedBox(width: Space.s),
+          Flexible(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontFamily: fontFamily,
+                color: tone.fg,
+                fontSize: level == AlertLevel.subito ? 18 : 16,
+                height: 1.2,
+                letterSpacing: 0.8,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 class AlertCard extends StatelessWidget {
   const AlertCard(this.alert, {super.key});
   final HealthAlert alert;
 
   @override
   Widget build(BuildContext context) {
-    final s = Theme.of(context).colorScheme;
-    final (bg, fg, icon, label) = switch (alert.level) {
-      AlertLevel.subito => (s.error, s.onError, Icons.emergency, 'SUBITO'),
-      AlertLevel.oggi => (
-        s.errorContainer,
-        s.onErrorContainer,
-        Icons.local_hospital_outlined,
-        'OGGI',
-      ),
-      AlertLevel.attenzione => (
-        const Color(0xFFFFE9C7),
-        const Color(0xFF5A3A00),
-        Icons.warning_amber_rounded,
-        'ATTENZIONE',
-      ),
-      AlertLevel.info => (
-        s.secondaryContainer,
-        s.onSecondaryContainer,
-        Icons.info_outline,
-        null,
-      ),
-    };
+    final tone = context.colors.tone(alert.level);
+    final fg = tone.fg;
+    final t = Theme.of(context).textTheme;
     final urgent =
         alert.level == AlertLevel.subito || alert.level == AlertLevel.oggi;
     final dog = StoreScope.read(context).dog;
-    return Card(
-      color: bg,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: fg),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
+    // Pulsanti a colori invertiti rispetto alla scheda: contrasto alto in
+    // entrambi i temi.
+    final strong = FilledButton.styleFrom(
+      backgroundColor: fg,
+      foregroundColor: tone.bg,
+    );
+    final soft = OutlinedButton.styleFrom(
+      foregroundColor: fg,
+      side: BorderSide(color: fg, width: 1.5),
+    );
+    final levelName = tone.label?.toLowerCase();
+    return Semantics(
+      container: true,
+      liveRegion: alert.level == AlertLevel.subito,
+      label: levelName == null ? null : 'Allarme livello $levelName',
+      child: _ToneBox(
+        level: alert.level,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(Space.l, 14, Space.l, Space.l),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (tone.label != null) ...[
+                LevelTag(alert.level),
+                const SizedBox(height: Space.s),
+              ],
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (label != null)
-                    Text(
-                      label,
-                      style: TextStyle(
-                        color: fg,
-                        fontSize: 11,
-                        letterSpacing: 1.2,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  Text(
-                    alert.title,
-                    style: TextStyle(color: fg, fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: 4),
-                  if (alert.actionText != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        alert.actionText!,
-                        style: TextStyle(
-                          color: fg,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  Text(alert.message, style: TextStyle(color: fg)),
-                  if (urgent) ...[
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        if (dog != null && dog.vetPhone.isNotEmpty)
-                          FilledButton.tonalIcon(
-                            icon: const Icon(Icons.call),
-                            label: const Text('Chiama il veterinario'),
-                            onPressed: () => callNumber(context, dog.vetPhone),
-                          ),
-                        FilledButton.tonalIcon(
-                          icon: const Icon(Icons.emergency),
-                          label: const Text('Emergenze'),
-                          onPressed: () => openEmergencies(context),
-                        ),
-                      ],
-                    ),
+                  if (tone.label == null) ...[
+                    Icon(tone.icon, color: tone.accent),
+                    const SizedBox(width: Space.m),
                   ],
+                  Expanded(
+                    child: Text(
+                      alert.title,
+                      style: t.titleMedium?.copyWith(
+                        color: fg,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ],
               ),
+              const SizedBox(height: Space.xs),
+              if (alert.actionText != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Space.xs),
+                  child: Text(
+                    alert.actionText!,
+                    style: t.bodyLarge?.copyWith(
+                      color: fg,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              Text(alert.message, style: t.bodyMedium?.copyWith(color: fg)),
+              if (urgent) ...[
+                const SizedBox(height: Space.m),
+                Wrap(
+                  spacing: Space.s,
+                  runSpacing: Space.s,
+                  children: [
+                    if (dog != null && dog.vetPhone.isNotEmpty)
+                      FilledButton.icon(
+                        style: strong,
+                        icon: const Icon(Icons.call),
+                        label: const Text('Chiama il veterinario'),
+                        onPressed: () => callNumber(context, dog.vetPhone),
+                      ),
+                    OutlinedButton.icon(
+                      style: soft,
+                      icon: const Icon(Icons.emergency),
+                      label: const Text('Emergenze'),
+                      onPressed: () => openEmergencies(context),
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Avviso testuale con il tono di un livello (sostituisce le schede con il
+/// fondo crema fisso, illeggibili in tema scuro: rapporto 16, P1).
+class NoticeCard extends StatelessWidget {
+  const NoticeCard(
+    this.text, {
+    super.key,
+    this.level = AlertLevel.attenzione,
+    this.tag,
+    this.child,
+  });
+  final String text;
+  final AlertLevel level;
+
+  /// Parola del livello da mostrare sopra il testo (es. "IN RITARDO").
+  final String? tag;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tone = context.colors.tone(level);
+    final t = Theme.of(context).textTheme;
+    return _ToneBox(
+      level: level,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, Space.m, Space.l, Space.m),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (tag != null) ...[
+              LevelTag(level, text: tag),
+              const SizedBox(height: Space.s),
+            ],
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (tag == null) ...[
+                  Icon(tone.icon, color: tone.accent),
+                  const SizedBox(width: Space.m),
+                ],
+                Expanded(
+                  child: Text(
+                    text,
+                    style: t.bodyMedium?.copyWith(color: tone.fg),
+                  ),
+                ),
+              ],
             ),
+            ?child,
           ],
         ),
       ),
@@ -234,12 +398,16 @@ void toast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
-      SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating),
+      SnackBar(
+        content: Text(msg),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 4),
+      ),
     );
 }
 
 const disclaimer =
-    'Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce '
+    '$appName aiuta a osservare e organizzare: non fa diagnosi e non sostituisce '
     'la visita veterinaria. In emergenza (fatica a respirare, gengive pallide '
     'o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto '
     'avvelenamento, sforzo a urinare senza risultato, colpo di calore) '

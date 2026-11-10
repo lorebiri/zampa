@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models.dart';
 import 'avatar.dart';
 import 'common.dart';
+import 'theme.dart';
 
 /// Personalizzazione del compagno: taglia, mantello, motivo, orecchie, coda,
 /// pelo e collare, con anteprima dal vivo.
@@ -49,27 +50,52 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
     CoatPattern.maschera => 'Maschera scura',
   };
 
-  Widget swatch(int c, bool selected, VoidCallback onTap, {String? tip}) =>
-      Tooltip(
+  /// Campione di colore: bersaglio da 48 dp, con nome e stato per i
+  /// lettori di schermo.
+  Widget swatch(int c, bool selected, VoidCallback onTap, {String? tip}) {
+    final s = Theme.of(context).colorScheme;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: tip ?? 'Colore',
+      child: Tooltip(
         message: tip ?? '',
-        child: GestureDetector(
+        excludeFromSemantics: true,
+        child: InkResponse(
           onTap: onTap,
+          radius: 28,
           child: Container(
-            width: 36,
-            height: 36,
+            width: 48,
+            height: 48,
+            padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
-              color: Color(c),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(Radii.chip),
               border: Border.all(
-                color: selected
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.black26,
-                width: selected ? 3 : 1,
+                color: selected ? s.primary : Colors.transparent,
+                width: 3,
               ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(c),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: s.outline.withValues(alpha: 0.5)),
+              ),
+              child: selected
+                  ? Icon(
+                      Icons.check,
+                      size: 20,
+                      color: Color(c).computeLuminance() > 0.4
+                          ? Colors.black87
+                          : Colors.white,
+                    )
+                  : null,
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +104,12 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
       appBar: AppBar(title: Text('L\'aspetto di ${widget.dog.name}')),
       body: PageBody(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFFDDEBCB),
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.black26, width: 3),
+          CompanionDevice(
+            child: ExcludeSemantics(
+              child: PixelDogView(look: look, pose: preview, height: 200),
             ),
-            padding: const EdgeInsets.all(8),
-            child: PixelDogView(look: look, pose: preview, height: 200),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Space.m),
           SegmentedButton<Pose>(
             segments: const [
               ButtonSegment(value: Pose.happy, label: Text('Felice')),
@@ -180,12 +202,14 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
           const SectionTitle('Collare'),
           Wrap(
             spacing: 8,
+            runSpacing: 8,
             children: [
               for (final c in collars)
                 swatch(
                   c,
                   look.collar == c,
                   () => setState(() => look.collar = c),
+                  tip: 'Collare',
                 ),
             ],
           ),

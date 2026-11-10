@@ -29,6 +29,9 @@ class HealthScreen extends StatelessWidget {
             ),
           ],
           bottom: const TabBar(
+            // Scorrevole: regge testo grande e altre lingue (P13).
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
             tabs: [
               Tab(text: 'Scadenze'),
               Tab(text: 'Cartella'),

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../brand.dart';
 import '../store.dart';
 import '../sync/supabase_backend.dart';
 import '../sync/sync_engine.dart';
@@ -102,7 +103,7 @@ class _AccountScreenState extends State<AccountScreen> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       Text(
-        'L\'account è facoltativo. Serve per il backup, per usare Zampa su più dispositivi '
+        'L\'account è facoltativo. Serve per il backup, per usare $appName su più dispositivi '
         'e per condividere il cane con la famiglia. I dati vengono salvati su server in UE '
         '(Francoforte) e solo i membri di un cane possono vederne i dati.',
         style: t.textTheme.bodyMedium,

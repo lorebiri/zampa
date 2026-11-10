@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../brand.dart';
 import '../models.dart';
 import '../store.dart';
 import '../logic/weather.dart';
@@ -218,7 +219,7 @@ class _DogFormPageState extends State<DogFormPage> {
               labelText: 'Prudenza delle uscite',
               helperText:
                   'Più prudenza = uscite anticipate. "Meno uscite" vale solo '
-                  'per adulti sani: per cuccioli, anziani e cani malati Zampa '
+                  'per adulti sani: per cuccioli, anziani e cani malati $appName '
                   'usa comunque "Equilibrata".',
               helperMaxLines: 3,
             ),
