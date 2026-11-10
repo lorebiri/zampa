@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../logic/nutrition.dart';
 import '../models.dart';
 import 'common.dart';
+import 'theme.dart';
 
 class NutritionScreen extends StatelessWidget {
   const NutritionScreen({super.key});
@@ -26,17 +27,14 @@ class NutritionScreen extends StatelessWidget {
 
     return PageBody(
       children: [
-        Text(
-          'Nutrizione di ${dog.name}',
-          style: t.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 8),
+        PageTitle('Nutrizione di ${dog.name}'),
         Card(
           color: t.colorScheme.primaryContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Radii.hero),
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -80,33 +78,29 @@ class NutritionScreen extends StatelessWidget {
             ),
           ),
         ),
-        for (final n in plan.notes)
-          Card(
-            color: const Color(0xFFFFE9C7),
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Text(n, style: const TextStyle(color: Color(0xFF5A3A00))),
-            ),
-          ),
+        for (final n in plan.notes) NoticeCard(n),
         const SectionTitle('Oggi'),
-        Row(
-          children: [
-            Expanded(
-              child: _Stat(
-                label: 'Pasti registrati',
-                value: '$mealsToday / ${plan.meals}',
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _Stat(
+                  label: 'Pasti registrati',
+                  value: '$mealsToday / ${plan.meals}',
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _Stat(
-                label: 'Acqua registrata',
-                value: '${waterToday.round()} ml',
-                hint:
-                    'Riferimento ${plan.waterMlMin.round()}-${plan.waterMlMax.round()} ml (inclusa l\'acqua del cibo)',
+              const SizedBox(width: 8),
+              Expanded(
+                child: _Stat(
+                  label: 'Acqua registrata',
+                  value: '${waterToday.round()} ml',
+                  hint:
+                      'Riferimento ${plan.waterMlMin.round()}-${plan.waterMlMax.round()} ml (inclusa l\'acqua del cibo)',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SectionTitle('Forma fisica (Body Condition Score)'),
         Card(

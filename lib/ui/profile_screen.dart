@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../brand.dart';
 import '../store.dart';
 import 'common.dart';
 import 'account_screen.dart';
@@ -16,19 +17,15 @@ class ProfileScreen extends StatelessWidget {
     final t = Theme.of(context);
     return PageBody(
       children: [
-        Text(
-          'I tuoi cani',
-          style: t.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-        const SizedBox(height: 8),
+        const PageTitle('I tuoi cani'),
         for (final d in store.dogs)
           Card(
             child: ListTile(
               leading: SizedBox(
                 width: 64,
-                child: PixelDogView(look: d.look, height: 48),
+                child: ExcludeSemantics(
+                  child: PixelDogView(look: d.look, height: 48),
+                ),
               ),
               title: Text(d.name),
               subtitle: Text(
@@ -37,6 +34,7 @@ class ProfileScreen extends StatelessWidget {
               selected: d.id == store.dog?.id,
               onTap: () => store.selectDog(d.id),
               trailing: IconButton(
+                tooltip: 'Modifica ${d.name}',
                 icon: const Icon(Icons.edit_outlined),
                 onPressed: () => Navigator.of(
                   context,
@@ -116,7 +114,10 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Zampa 0.1 – prototipo', style: t.textTheme.titleMedium),
+                Text(
+                  '$appName 0.1 – prototipo',
+                  style: t.textTheme.titleMedium,
+                ),
                 const SizedBox(height: 6),
                 const Text(
                   'I dati restano solo su questo dispositivo: nessun account, nessun server, nessuna pubblicità. '

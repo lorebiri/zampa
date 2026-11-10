@@ -15,6 +15,7 @@ import 'common.dart';
 import 'avatar_editor.dart';
 import 'avatar.dart';
 import 'log_sheet.dart';
+import 'theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.onOpenTab});
@@ -125,36 +126,14 @@ class _HomeScreenState extends State<HomeScreen> {
         if (pending.isNotEmpty) ...[
           const SectionTitle('Dosi da confermare'),
           for (final p in pending)
-            Card(
-              color: now.difference(p.at).inMinutes >= 120
-                  ? const Color(0xFFFFE9C7)
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
-                child: Row(
-                  children: [
-                    const Icon(Icons.medication),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        '${p.record.title}${p.record.dose.isNotEmpty ? ' · ${p.record.dose}' : ''}\n'
-                        'prevista ${whenLabel(p.at, now)}',
-                      ),
-                    ),
-                    FilledButton.tonal(
-                      onPressed: () =>
-                          store.confirmDose(p.record, p.at, DoseStatus.dato),
-                      child: const Text('Dato'),
-                    ),
-                    const SizedBox(width: 6),
-                    TextButton(
-                      onPressed: () =>
-                          store.confirmDose(p.record, p.at, DoseStatus.saltato),
-                      child: const Text('Saltato'),
-                    ),
-                  ],
-                ),
-              ),
+            _DoseCard(
+              text:
+                  '${p.record.title}${p.record.dose.isNotEmpty ? ' · ${p.record.dose}' : ''}\n'
+                  'prevista ${whenLabel(p.at, now)}',
+              late: now.difference(p.at).inMinutes >= 120,
+              onGiven: () => store.confirmDose(p.record, p.at, DoseStatus.dato),
+              onSkipped: () =>
+                  store.confirmDose(p.record, p.at, DoseStatus.saltato),
             ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -264,65 +243,157 @@ class DogHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = StoreScope.of(context);
     final t = Theme.of(context);
+    final s = t.colorScheme;
+    final c = context.colors;
+    final bigText = MediaQuery.textScalerOf(context).scale(10) > 13;
+    // Il pulsante Emergenze ha sempre la parola, non solo l'icona (P14).
+    final emergency = FilledButton.icon(
+      style: FilledButton.styleFrom(
+        backgroundColor: c.subito.bg,
+        foregroundColor: c.subito.fg,
+        minimumSize: const Size(48, 48),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+      ),
+      icon: const Icon(Icons.emergency, size: 20),
+      label: const Text('Emergenze'),
+      onPressed: () => openEmergencies(context),
+    );
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(0, Space.s, 0, Space.m),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CircleAvatar(
-            radius: 26,
-            backgroundColor: t.colorScheme.primaryContainer,
-            child: Text(
-              dog.name.isEmpty ? '?' : dog.name[0].toUpperCase(),
-              style: t.textTheme.headlineSmall?.copyWith(
-                color: t.colorScheme.onPrimaryContainer,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  dog.name,
-                  style: t.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
+          Row(
+            children: [
+              ExcludeSemantics(
+                child: Container(
+                  width: 52,
+                  height: 52,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: c.dark ? Palette.nightMustard : Palette.mustard,
+                    borderRadius: BorderRadius.circular(Radii.field),
+                  ),
+                  child: Text(
+                    dog.name.isEmpty ? '?' : dog.name[0].toUpperCase(),
+                    style: t.textTheme.headlineSmall?.copyWith(
+                      color: Palette.mustardInk,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
-                Text(
-                  [
-                    if (dog.breed.isNotEmpty) dog.breed,
-                    ageLabel(dog),
-                    '${dog.weightKg.toStringAsFixed(1)} kg',
-                    switch (lifeStageOf(dog)) {
-                      LifeStage.cucciolo => 'cucciolo',
-                      LifeStage.giovane => 'giovane',
-                      LifeStage.adulto => 'adulto',
-                      LifeStage.anziano => 'anziano',
-                    },
-                  ].join(' · '),
-                  style: t.textTheme.bodyMedium,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Semantics(
+                      header: true,
+                      child: Text(
+                        dog.name,
+                        style: t.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      [
+                        if (dog.breed.isNotEmpty) dog.breed,
+                        ageLabel(dog),
+                        // Spazio indivisibile: "14.2 kg" non va a capo.
+                        '${dog.weightKg.toStringAsFixed(1)}\u00A0kg',
+                        switch (lifeStageOf(dog)) {
+                          LifeStage.cucciolo => 'cucciolo',
+                          LifeStage.giovane => 'giovane',
+                          LifeStage.adulto => 'adulto',
+                          LifeStage.anziano => 'anziano',
+                        },
+                      ].join(' · '),
+                      style: t.textTheme.bodyMedium?.copyWith(
+                        color: s.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              if (store.dogs.length > 1)
+                PopupMenuButton<String>(
+                  tooltip: 'Cambia cane',
+                  icon: const Icon(Icons.swap_horiz),
+                  onSelected: store.selectDog,
+                  itemBuilder: (_) => [
+                    for (final d in store.dogs)
+                      PopupMenuItem(value: d.id, child: Text(d.name)),
+                  ],
+                ),
+              if (!bigText) ...[const SizedBox(width: Space.s), emergency],
+            ],
           ),
-          IconButton.filledTonal(
-            tooltip: 'Emergenze',
-            icon: Icon(Icons.emergency, color: t.colorScheme.error),
-            onPressed: () => openEmergencies(context),
-          ),
-          if (store.dogs.length > 1)
-            PopupMenuButton<String>(
-              tooltip: 'Cambia cane',
-              icon: const Icon(Icons.swap_horiz),
-              onSelected: store.selectDog,
-              itemBuilder: (_) => [
-                for (final d in store.dogs)
-                  PopupMenuItem(value: d.id, child: Text(d.name)),
-              ],
-            ),
+          if (bigText) ...[const SizedBox(height: Space.m), emergency],
         ],
+      ),
+    );
+  }
+}
+
+/// Dose da confermare: testo sopra, pulsanti grandi e separati sotto, così
+/// regge il testo al 200% e "Saltato" non si tocca per sbaglio (P1, P11).
+class _DoseCard extends StatelessWidget {
+  const _DoseCard({
+    required this.text,
+    required this.late,
+    required this.onGiven,
+    required this.onSkipped,
+  });
+  final String text;
+  final bool late;
+  final VoidCallback onGiven;
+  final VoidCallback onSkipped;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context);
+    final buttons = Padding(
+      padding: const EdgeInsets.only(top: Space.m),
+      child: Wrap(
+        spacing: Space.m,
+        runSpacing: Space.s,
+        children: [
+          FilledButton.icon(
+            icon: const Icon(Icons.check),
+            label: const Text('Dato'),
+            onPressed: onGiven,
+          ),
+          OutlinedButton(onPressed: onSkipped, child: const Text('Saltato')),
+        ],
+      ),
+    );
+    if (late) {
+      return NoticeCard(
+        text,
+        level: AlertLevel.attenzione,
+        tag: 'IN RITARDO',
+        child: buttons,
+      );
+    }
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(Space.l),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.medication, color: t.colorScheme.primary),
+                const SizedBox(width: Space.m),
+                Expanded(child: Text(text, style: t.textTheme.bodyLarge)),
+              ],
+            ),
+            buttons,
+          ],
+        ),
       ),
     );
   }
@@ -348,8 +419,11 @@ class ForecastCard extends StatelessWidget {
     final now = DateTime.now();
     final isPee = f.need == Need.pipi;
     final urgent = f.overdue || f.recommendedAt.difference(now).inMinutes <= 15;
+    final c = context.colors;
+    // "È quasi ora" usa la senape del brand, mai i colori degli allarmi:
+    // un'uscita imminente non è un problema di salute.
     final bg = urgent
-        ? t.colorScheme.tertiaryContainer
+        ? (c.dark ? Palette.nightMustardSoft : Palette.mustardSoft)
         : t.colorScheme.primaryContainer;
     final fg = urgent
         ? t.colorScheme.onTertiaryContainer
@@ -359,20 +433,36 @@ class ForecastCard extends StatelessWidget {
       Confidence.media => 'Affidabilità media',
       Confidence.alta => 'Affidabilità alta',
     };
+    final confIcon = switch (f.confidence) {
+      Confidence.bassa => Icons.school_outlined,
+      Confidence.media => Icons.signal_cellular_alt_2_bar,
+      Confidence.alta => Icons.signal_cellular_alt,
+    };
+    final muted = fg.withValues(alpha: 0.85);
     return Card(
       color: bg,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Radii.hero),
+        side: urgent
+            ? BorderSide(
+                color: c.dark ? Palette.nightMustard : Palette.mustard,
+                width: 2,
+              )
+            : BorderSide.none,
+      ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Icon(isPee ? Icons.water_drop : Icons.grass, color: fg),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: Space.s),
                   Expanded(
                     child: Text(
                       isPee ? 'Prossima pipì' : 'Prossima cacca',
@@ -382,67 +472,101 @@ class ForecastCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Chip(
-                    visualDensity: VisualDensity.compact,
-                    label: Text(confLabel),
-                    side: BorderSide.none,
-                    backgroundColor: t.colorScheme.surface.withValues(
-                      alpha: 0.6,
+                ],
+              ),
+              const SizedBox(height: Space.xs),
+              Row(
+                children: [
+                  Icon(confIcon, size: 16, color: muted),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      confLabel,
+                      style: t.textTheme.labelMedium?.copyWith(color: muted),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: Space.m),
               if (f.last == null)
                 Text(f.reason, style: TextStyle(color: fg))
               else ...[
-                Text(
-                  f.overdue ? 'Adesso' : 'Esci alle ${hm(f.recommendedAt)}',
-                  style: t.textTheme.displaySmall?.copyWith(
-                    color: fg,
-                    fontWeight: FontWeight.w800,
+                if (f.overdue)
+                  Text(
+                    'Adesso',
+                    style: t.textTheme.displayMedium?.copyWith(color: fg),
+                  )
+                else
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Esci alle ',
+                          style: t.textTheme.titleLarge?.copyWith(
+                            color: fg,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: hm(f.recommendedAt),
+                          style: t.textTheme.displayMedium?.copyWith(color: fg),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                const SizedBox(height: Space.xs),
                 Text(
                   f.overdue
                       ? 'Ultima ${relative(f.last!, now)}'
                       : '${relative(f.recommendedAt, now)}${dayLabel(f.recommendedAt, now) != 'oggi' ? ' (${dayLabel(f.recommendedAt, now)})' : ''} · ultima ${relative(f.last!, now)}',
-                  style: TextStyle(color: fg),
+                  style: t.textTheme.bodyLarge?.copyWith(
+                    color: fg,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: Space.m),
                 Text(
                   'Finestra probabile ${hm(f.windowStart)}–${hm(f.windowEnd)} · '
                   'probabilità nella prossima ora ${(f.probNextHour * 100).round()}%',
-                  style: t.textTheme.bodySmall?.copyWith(color: fg),
+                  style: t.textTheme.bodySmall?.copyWith(color: muted),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: Space.xs),
                 Text(
                   f.reason,
-                  style: t.textTheme.bodyMedium?.copyWith(
-                    color: fg,
-                    fontStyle: FontStyle.italic,
-                  ),
+                  style: t.textTheme.bodyMedium?.copyWith(color: fg),
                 ),
                 if (f.factors.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.only(top: Space.xs),
                     child: Text(
                       'Fattori considerati: ${f.factors.join(', ')}',
-                      style: t.textTheme.bodySmall?.copyWith(color: fg),
+                      style: t.textTheme.bodySmall?.copyWith(color: muted),
                     ),
                   ),
               ],
-              const SizedBox(height: 10),
+              const SizedBox(height: Space.l),
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: Space.m,
+                runSpacing: Space.s,
                 children: [
-                  FilledButton.tonalIcon(
+                  FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(48, 56),
+                      backgroundColor: c.dark ? Palette.nightInk : Palette.ink,
+                      foregroundColor: c.dark
+                          ? const Color(0xFF0B2545)
+                          : Colors.white,
+                    ),
                     icon: const Icon(Icons.check),
                     label: const Text('Fatta fuori'),
                     onPressed: () => quickLog(context, dog, f.need.logType),
                   ),
                   OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(48, 56),
+                      foregroundColor: fg,
+                      side: BorderSide(color: fg.withValues(alpha: 0.6)),
+                    ),
                     icon: const Icon(Icons.home_outlined),
                     label: const Text('In casa'),
                     onPressed: () =>
@@ -471,22 +595,53 @@ class QuickActions extends StatelessWidget {
       LogType.risveglio,
       LogType.gioco,
     ];
+    Widget button(IconData icon, String label, VoidCallback onTap) =>
+        _QuickButton(icon: icon, label: label, onTap: onTap);
     return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+      spacing: Space.s,
+      runSpacing: Space.s,
       children: [
         for (final t in items)
-          ActionChip(
-            avatar: Icon(t.icon, size: 18),
-            label: Text(t.label),
-            onPressed: () => quickLog(context, dog, t),
-          ),
-        ActionChip(
-          avatar: const Icon(Icons.add, size: 18),
-          label: const Text('Con dettagli…'),
-          onPressed: () => showLogSheet(context, dog, LogType.pipi),
+          button(t.icon, t.label, () => quickLog(context, dog, t)),
+        button(
+          Icons.add,
+          'Con dettagli…',
+          () => showLogSheet(context, dog, LogType.pipi),
         ),
       ],
+    );
+  }
+}
+
+/// Pulsante di registrazione rapida: 48 dp, annunciato come pulsante.
+class _QuickButton extends StatelessWidget {
+  const _QuickButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = Theme.of(context).colorScheme;
+    return OutlinedButton.icon(
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(48, 48),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        backgroundColor: s.surfaceContainerLow,
+        foregroundColor: s.onSurface,
+        iconColor: s.primary,
+        side: BorderSide(color: s.outlineVariant),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.chip),
+        ),
+      ),
+      icon: Icon(icon, size: 20),
+      label: Text(label),
+      onPressed: onTap,
     );
   }
 }
@@ -504,8 +659,11 @@ class PostOpCard extends StatelessWidget {
     final t = Theme.of(context);
     return Card(
       color: t.colorScheme.secondaryContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Radii.card),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(Space.l),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

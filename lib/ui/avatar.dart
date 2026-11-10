@@ -11,6 +11,7 @@ import '../logic/potty_predictor.dart';
 import '../models.dart';
 import '../store.dart';
 import 'common.dart';
+import 'theme.dart';
 
 /// Il "compagno" in pixel art: un cane disegnato da zero, personalizzabile,
 /// i cui stati d'animo riflettono i dati reali (mai colpevolizzante, mai una
@@ -357,6 +358,17 @@ class _PixelDogViewState extends State<PixelDogView>
   bool boost = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // "Riduci movimento": il compagno resta fermo (rapporto 16, P9).
+    if (Motion.reduced(context)) {
+      c.stop();
+    } else if (!c.isAnimating) {
+      c.repeat();
+    }
+  }
+
+  @override
   void dispose() {
     c.dispose();
     super.dispose();
@@ -365,6 +377,7 @@ class _PixelDogViewState extends State<PixelDogView>
   @override
   Widget build(BuildContext context) => GestureDetector(
     onTap: () async {
+      if (Motion.reduced(context)) return;
       setState(() => boost = true);
       await Future<void>.delayed(const Duration(milliseconds: 1600));
       if (mounted) setState(() => boost = false);
@@ -382,7 +395,7 @@ class _PixelDogViewState extends State<PixelDogView>
               ? Pose.happy
               : widget.pose;
           final speed = pose == Pose.happy ? 24 : 9;
-          final frame = (c.value * speed).floor();
+          final frame = Motion.reduced(context) ? 0 : (c.value * speed).floor();
           return CustomPaint(
             size: Size.infinite,
             painter: _PixelPainter(
@@ -543,19 +556,35 @@ class PetScreen extends StatelessWidget {
     // Con un allarme "subito" il compagno lascia il posto a una scheda
     // rossa statica: una cosa seria non deve sembrare un gioco (07 N39).
     if (alerts.any((a) => a.level == AlertLevel.subito)) {
-      return Card(
-        color: t.colorScheme.error,
-        child: ListTile(
-          leading: Icon(Icons.emergency, color: t.colorScheme.onError),
-          title: Text(
-            'Situazione urgente: leggi le segnalazioni qui sopra',
-            style: TextStyle(
-              color: t.colorScheme.onError,
-              fontWeight: FontWeight.w700,
+      final tone = context.colors.subito;
+      return Material(
+        color: tone.bg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.alert),
+          side: BorderSide(color: tone.accent, width: 3),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => openEmergencies(context),
+          child: Padding(
+            padding: const EdgeInsets.all(Space.l),
+            child: Row(
+              children: [
+                Icon(tone.icon, color: tone.fg, size: 30),
+                const SizedBox(width: Space.m),
+                Expanded(
+                  child: Text(
+                    'Situazione urgente: leggi le segnalazioni qui sopra',
+                    style: t.textTheme.titleMedium?.copyWith(
+                      color: tone.fg,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: tone.fg),
+              ],
             ),
           ),
-          trailing: Icon(Icons.chevron_right, color: t.colorScheme.onError),
-          onTap: () => openEmergencies(context),
         ),
       );
     }
@@ -587,7 +616,6 @@ class PetScreen extends StatelessWidget {
               (l.type == LogType.pipi && !l.indoor),
         )
         .length;
-    final target = store.model(dog, Need.pipi, now).dailyPlan(now).length;
     final rest =
         store.records.any(
           (r) =>
@@ -597,145 +625,200 @@ class PetScreen extends StatelessWidget {
               now.difference(r.date).inDays < 14,
         ) ||
         RegExp('riposo|ernia|frattura').hasMatch(dog.conditions.toLowerCase());
-    final need = pee.last == null
-        ? 0.0
-        : (now.difference(pee.last!).inMinutes /
-                  math.max(
-                    30,
-                    pee.recommendedAt.difference(pee.last!).inMinutes,
-                  ))
-              .clamp(0.0, 1.0);
-    final lcd = night ? const Color(0xFF1E2A44) : const Color(0xFFDDEBCB);
-    final ink = night ? const Color(0xFFDDE6FF) : const Color(0xFF26331F);
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: t.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: t.colorScheme.outlineVariant, width: 2),
-      ),
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: lcd,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: Colors.black.withValues(alpha: 0.25),
-                width: 3,
+    final c = context.colors;
+    final ink = night ? Palette.lcdNightInk : c.lcdInk;
+    final lastPee = pee.last == null ? '—' : relative(pee.last!, now);
+    return Semantics(
+      container: true,
+      label: '${dog.name}, il tuo compagno. ${mood.message}',
+      child: CompanionDevice(
+        night: night,
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        overlay: [
+          if (night)
+            Positioned(
+              left: 14,
+              top: 12,
+              child: ExcludeSemantics(
+                child: Icon(
+                  Icons.nightlight_round,
+                  color: ink.withValues(alpha: 0.8),
+                  size: 20,
+                ),
               ),
             ),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 18, 8, 4),
-                  child: PixelDogView(
-                    look: dog.look,
-                    pose: mood.pose,
-                    night: night,
+          if (mood.bubble != null)
+            Positioned(
+              right: 14,
+              top: 10,
+              child: ExcludeSemantics(
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: Palette.pixelInk, width: 2),
                   ),
+                  child: Icon(mood.bubble, size: 22, color: Palette.pixelInk),
                 ),
-                if (night)
-                  Positioned(
-                    left: 16,
-                    top: 12,
-                    child: Icon(
-                      Icons.nightlight_round,
-                      color: ink.withValues(alpha: 0.8),
-                      size: 18,
-                    ),
-                  ),
-                if (mood.bubble != null)
-                  Positioned(
-                    right: 18,
-                    top: 10,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: const Color(0xFF3A2A25),
-                          width: 2,
-                        ),
-                      ),
-                      child: Icon(
-                        mood.bubble,
-                        size: 20,
-                        color: const Color(0xFF3A2A25),
-                      ),
-                    ),
-                  ),
-                if (onEdit != null)
-                  Positioned(
-                    left: 4,
-                    bottom: 4,
-                    child: IconButton(
-                      tooltip: 'Personalizza',
-                      icon: Icon(
-                        Icons.brush_outlined,
-                        color: ink.withValues(alpha: 0.7),
-                        size: 18,
-                      ),
-                      onPressed: onEdit,
-                    ),
-                  ),
-              ],
+              ),
+            ),
+        ],
+        footer: [
+          const SizedBox(height: Space.m),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Space.xs),
+            child: ExcludeSemantics(
+              child: Text(
+                mood.message,
+                style: Theme.of(context).textTheme.titleSmall
+                    ?.copyWith(color: t.colorScheme.onSurface),
+              ),
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            mood.message,
-            textAlign: TextAlign.center,
-            style: t.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
+          const SizedBox(height: Space.m),
+          _StatRow(
             children: [
-              Expanded(
-                child: _Meter(
-                  icon: Icons.water_drop,
-                  label: 'Bisogno',
-                  value: need,
-                ),
+              _Stat(
+                icon: Icons.water_drop_outlined,
+                label: 'Ultima pipì',
+                text: lastPee,
               ),
               if (showMeals)
-                Expanded(
-                  child: _Count(
-                    icon: Icons.restaurant,
-                    label: 'Pasti',
-                    text: '$mealsDone/$meals',
-                  ),
+                _Stat(
+                  icon: Icons.rice_bowl_outlined,
+                  label: 'Pasti',
+                  text: '$mealsDone/$meals',
                 ),
               if (!rest)
-                Expanded(
-                  child: _Count(
-                    icon: Icons.directions_walk,
-                    label: 'Uscite',
-                    text: '$outings/$target',
-                  ),
+                _Stat(
+                  icon: Icons.directions_walk,
+                  label: 'Uscite oggi',
+                  text: '$outings',
                 ),
               if (rest)
-                const Expanded(
-                  child: _Count(
-                    icon: Icons.healing,
-                    label: 'Riposo',
-                    text: 'solo bisogni',
-                  ),
+                const _Stat(
+                  icon: Icons.healing_outlined,
+                  label: 'Riposo',
+                  text: 'solo bisogni',
                 ),
             ],
           ),
+          if (onEdit != null)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                icon: const Icon(Icons.brush_outlined),
+                label: const Text('Cambia aspetto'),
+                onPressed: onEdit,
+              ),
+            ),
+        ],
+        child: ExcludeSemantics(
+          child: PixelDogView(
+            look: dog.look,
+            pose: mood.pose,
+            night: night,
+            height: 200,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// La "console" del compagno: corpo color salvia, schermo LCD con cornice.
+/// È l'unico elemento giocoso dell'app e non usa mai i colori degli
+/// allarmi (rapporto 16, §5.4).
+class CompanionDevice extends StatelessWidget {
+  const CompanionDevice({
+    super.key,
+    required this.child,
+    this.night = false,
+    this.overlay = const [],
+    this.footer = const [],
+    this.margin = EdgeInsets.zero,
+  });
+  final Widget child;
+  final bool night;
+  final List<Widget> overlay;
+  final List<Widget> footer;
+  final EdgeInsets margin;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    return Container(
+      margin: margin,
+      padding: const EdgeInsets.fromLTRB(Space.m, Space.m, Space.m, Space.s),
+      decoration: BoxDecoration(
+        color: c.deviceBody,
+        borderRadius: BorderRadius.circular(Radii.companion),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: night ? Palette.lcdNight : c.lcd,
+              borderRadius: BorderRadius.circular(Radii.card),
+              border: Border.all(color: c.deviceBezel, width: 3),
+              boxShadow: [
+                // Leggera ombra interna simulata: lo schermo sembra incassato.
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: c.dark ? 0.35 : 0.08),
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 6),
+                  child: child,
+                ),
+                ...overlay,
+              ],
+            ),
+          ),
+          ...footer,
         ],
       ),
     );
   }
 }
 
-class _Count extends StatelessWidget {
-  const _Count({required this.icon, required this.label, required this.text});
+/// Indicatori come righe di un libretto: etichetta a sinistra, valore a
+/// destra. Reggono il testo grande e le lingue più lunghe.
+class _StatRow extends StatelessWidget {
+  const _StatRow({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: s.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(Radii.chip),
+      ),
+      child: Column(
+        children: [
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) Divider(indent: Space.l, endIndent: Space.l, height: 1),
+            children[i],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Valore del compagno: un numero da leggere, non una barra da riempire
+/// (07 N42).
+class _Stat extends StatelessWidget {
+  const _Stat({required this.icon, required this.label, required this.text});
   final IconData icon;
   final String label;
   final String text;
@@ -743,63 +826,38 @@ class _Count extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 14),
-            const SizedBox(width: 4),
-            Text(label, style: t.textTheme.labelSmall),
-          ],
-        ),
-        const SizedBox(height: 2),
-        Text(
-          text,
-          style: t.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
-        ),
-      ],
-    );
-  }
-}
-
-/// Indicatore a blocchi in stile pixel (informativo, non un punteggio).
-class _Meter extends StatelessWidget {
-  const _Meter({required this.icon, required this.label, required this.value});
-  final IconData icon;
-  final String label;
-  final double value;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Theme.of(context);
-    final filled = (value * 5).round();
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 14),
-            const SizedBox(width: 4),
-            Text(label, style: t.textTheme.labelSmall),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (var i = 0; i < 5; i++)
-              Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                color: i < filled
-                    ? t.colorScheme.primary
-                    : t.colorScheme.outlineVariant,
+    return Semantics(
+      container: true,
+      label: '$label: $text',
+      child: ExcludeSemantics(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Space.l,
+            vertical: 10,
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: t.colorScheme.secondary),
+              const SizedBox(width: Space.m),
+              Expanded(
+                flex: 3,
+                child: Text(label, style: t.textTheme.bodyMedium),
               ),
-          ],
+              const SizedBox(width: Space.s),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  text,
+                  textAlign: TextAlign.end,
+                  style: t.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 }

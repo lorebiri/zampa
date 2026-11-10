@@ -1,3 +1,5 @@
+import 'brand.dart';
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
@@ -111,7 +113,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   }
 
   String exportJson() => const JsonEncoder.withIndent('  ').convert({
-    'app': 'Zampa',
+    'app': appName,
     'version': 1,
     'exportedAt': DateTime.now().toIso8601String(),
     'selectedDogId': selectedDogId,
@@ -609,7 +611,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
             base + 97 + k,
             confirmAt[k],
             '💊 Dose confermata per ${d.name}?',
-            'Apri Zampa e segna "Dato" o "Saltato". Se l\'hai saltata non '
+            'Apri $appName e segna "Dato" o "Saltato". Se l\'hai saltata non '
                 'raddoppiare la successiva: chiedi al veterinario.',
             1,
             exact: true,
@@ -745,7 +747,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     final b = StringBuffer();
     final plan = Nutrition.plan(d, now);
     b.writeln('CARTELLA SANITARIA – ${d.name.toUpperCase()}');
-    b.writeln('Generata con Zampa il ${dmy(now)}');
+    b.writeln('Generata con $appName il ${dmy(now)}');
     b.writeln();
     b.writeln(
       'Razza: ${d.breed.isEmpty ? '-' : d.breed}  ·  Sesso: ${d.sex.name}'

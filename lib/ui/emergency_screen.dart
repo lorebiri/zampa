@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models.dart';
 import '../store.dart';
 import 'common.dart';
+import 'theme.dart';
 
 /// Scheda Emergenze, sempre raggiungibile (revisione veterinaria 06,
 /// aggiunta ALTA n. 1). Nessuna diagnosi: cosa fare e chi chiamare.
@@ -197,16 +198,32 @@ class _CallTile extends StatelessWidget {
   final String number;
 
   @override
-  Widget build(BuildContext context) => Card(
-    color: Theme.of(context).colorScheme.errorContainer,
-    child: ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.call),
-      onTap: () => callNumber(context, number),
-    ),
-  );
+  Widget build(BuildContext context) {
+    // Il numero da chiamare è l'azione più importante della pagina: blocco
+    // rosso pieno, come gli allarmi SUBITO.
+    final tone = context.colors.subito;
+    final t = Theme.of(context).textTheme;
+    return Card(
+      color: tone.bg,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Radii.alert),
+      ),
+      child: ListTile(
+        minVerticalPadding: 14,
+        leading: Icon(icon, color: tone.fg, size: 28),
+        title: Text(
+          title,
+          style: t.titleMedium?.copyWith(
+            color: tone.fg,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        subtitle: Text(subtitle, style: t.bodyLarge?.copyWith(color: tone.fg)),
+        trailing: Icon(Icons.call, color: tone.fg),
+        onTap: () => callNumber(context, number),
+      ),
+    );
+  }
 }
 
 /// "Cosa dire al telefono" generato dal profilo (07 aggiunta N16).
