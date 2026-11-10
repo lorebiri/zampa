@@ -789,33 +789,25 @@ class CompanionDevice extends StatelessWidget {
   }
 }
 
-/// Indicatori in colonne uguali; con il testo molto grande, uno sotto
-/// l'altro.
+/// Indicatori come righe di un libretto: etichetta a sinistra, valore a
+/// destra. Reggono il testo grande e le lingue più lunghe.
 class _StatRow extends StatelessWidget {
   const _StatRow({required this.children});
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.textScalerOf(context).scale(10) > 15) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final c in children)
-            Padding(
-              padding: const EdgeInsets.only(bottom: Space.s),
-              child: c,
-            ),
-        ],
-      );
-    }
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    final s = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: s.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(Radii.chip),
+      ),
+      child: Column(
         children: [
           for (var i = 0; i < children.length; i++) ...[
-            if (i > 0) const SizedBox(width: Space.s),
-            Expanded(child: children[i]),
+            if (i > 0) Divider(indent: Space.l, endIndent: Space.l, height: 1),
+            children[i],
           ],
         ],
       ),
@@ -838,29 +830,28 @@ class _Stat extends StatelessWidget {
       container: true,
       label: '$label: $text',
       child: ExcludeSemantics(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: t.colorScheme.surfaceContainerLow,
-            borderRadius: BorderRadius.circular(Radii.chip),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Space.l,
+            vertical: 10,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon, size: 16, color: t.colorScheme.secondary),
-                  const SizedBox(width: 4),
-                  Flexible(child: Text(label, style: t.textTheme.labelMedium)),
-                ],
+              Icon(icon, size: 20, color: t.colorScheme.secondary),
+              const SizedBox(width: Space.m),
+              Expanded(
+                flex: 3,
+                child: Text(label, style: t.textTheme.bodyMedium),
               ),
-              const SizedBox(height: 2),
-              Text(
-                text,
-                style: t.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
+              const SizedBox(width: Space.s),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  text,
+                  textAlign: TextAlign.end,
+                  style: t.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
