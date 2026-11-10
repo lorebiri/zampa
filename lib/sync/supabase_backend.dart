@@ -90,14 +90,20 @@ class SupabaseBackend implements SyncBackend {
   @override
   Future<void> updateDogs(List<RemoteRow> rows) async {
     for (final r in rows) {
-      await client
+      final res = await client
           .from('dogs')
           .update({
             'data': r.data,
             'updated_at': r.updatedAt.toUtc().toIso8601String(),
             'deleted': r.deleted,
           })
-          .eq('id', r.id);
+          .eq('id', r.id)
+          .select('id');
+      // Un aggiornamento bloccato dalle regole tocca zero righe senza errore:
+      // va segnalato, altrimenti la modifica si perde (rapporto 11).
+      if (res.isEmpty) {
+        throw StateError('Aggiornamento del cane ${r.id} non consentito');
+      }
     }
   }
 
@@ -121,26 +127,21 @@ class SupabaseBackend implements SyncBackend {
   }
 
   @override
-  Future<String> createInvite(String dogId) async {
-    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // senza 0/O, 1/I
-    final rnd = Random.secure();
-    final code = List.generate(
-      8,
-      (_) => alphabet[rnd.nextInt(alphabet.length)],
-    ).join();
-    await client.from('invites').insert({
-      'code': code,
-      'dog_id': dogId,
-      'created_by': userId,
-    });
-    return code;
-  }
+  Future<String> createInvite(String dogId) async =>
+      // Il codice lo genera il server (monouso, scadenza decisa lato server).
+      await client.rpc('create_invite', params: {'p_dog_id': dogId}) as String;
 
   @override
-  Future<String> acceptInvite(String code) async => await client.rpc(
-    'accept_invite',
-    params: {'invite_code': code.trim().toUpperCase()},
-  ) as String;
+  Future<String> acceptInvite(String code) async {
+    final d = await client.rpc(
+      'accept_invite',
+      params: {'invite_code': code.trim().toUpperCase()},
+    );
+    if (d == null) {
+      throw const AuthException('Codice non valido, scaduto o già usato');
+    }
+    return d as String;
+  }
 
   @override
   Future<void> leaveDog(String dogId) => client

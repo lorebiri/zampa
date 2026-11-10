@@ -1,10 +1,23 @@
+import 'dart:math';
+
 // Modelli dati di Zampa. Tutto è serializzabile in JSON per la persistenza
 // locale (nessun dato lascia il dispositivo nella versione attuale).
 
-String newId() =>
-    '${DateTime.now().microsecondsSinceEpoch.toRadixString(36)}'
-    '${_counter++}';
-int _counter = 0;
+/// Identificativo casuale UUID v4: unico anche tra utenti diversi, così la
+/// sincronizzazione non può avere collisioni (rapporto 11).
+String newId() {
+  final b = List<int>.generate(16, (_) => _rnd.nextInt(256));
+  b[6] = (b[6] & 0x0f) | 0x40;
+  b[8] = (b[8] & 0x3f) | 0x80;
+  final h = b.map((x) => x.toRadixString(16).padLeft(2, '0')).join();
+  return '${h.substring(0, 8)}-${h.substring(8, 12)}-${h.substring(12, 16)}-'
+      '${h.substring(16, 20)}-${h.substring(20)}';
+}
+
+final _rnd = Random.secure();
+
+/// Il cane di esempio non lascia mai il telefono (non va sincronizzato).
+bool isDemoId(String id) => id.startsWith('demo-');
 
 DateTime? _date(Object? v) => v == null ? null : DateTime.parse(v as String);
 String? _iso(DateTime? d) => d?.toIso8601String();
@@ -292,10 +305,24 @@ class Dog {
     return (days >= 0 && days <= limit) ? reproState : ReproState.nessuno;
   }
 
+  /// Età in mesi secondo il calendario (mesi compiuti + frazione del mese
+  /// in corso): evita errori come "8 anni" il giorno del nono compleanno.
   double ageInMonths([DateTime? now]) {
     final n = now ?? DateTime.now();
-    return n.difference(birthDate).inDays / 30.44;
+    var months = (n.year - birthDate.year) * 12 + n.month - birthDate.month;
+    if (n.day < birthDate.day) months--;
+    final anchor = DateTime(
+      birthDate.year,
+      birthDate.month + months,
+      birthDate.day,
+    );
+    final frac = n.difference(anchor).inHours / (24 * 30.44);
+    return months + frac.clamp(0, 0.999);
   }
+
+  /// Accordo grammaticale con il sesso del cane ("contento"/"contenta").
+  String g(String maschile, String femminile) =>
+      sex == Sex.femmina ? femminile : maschile;
 
   Map<String, Object?> toJson() => {
     'id': id,
@@ -414,6 +441,22 @@ enum LogType {
   addomeGonfio,
   mammelle,
   ferita,
+}
+
+extension LogTypeGender on LogType {
+  /// "registrata"/"registrato" secondo il genere del nome dell'evento.
+  String get registered => switch (this) {
+    LogType.pasto ||
+    LogType.risveglio ||
+    LogType.gioco ||
+    LogType.vomito ||
+    LogType.abbattimento ||
+    LogType.respiro ||
+    LogType.collasso ||
+    LogType.addomeGonfio ||
+    LogType.denti => 'registrato',
+    _ => 'registrata',
+  };
 }
 
 extension LogTypeLabel on LogType {

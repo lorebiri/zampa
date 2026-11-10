@@ -452,7 +452,7 @@ class PetMood {
     if (cleanOuting && recent.every((l) => l.signs.isEmpty)) {
       return PetMood(
         Pose.happy,
-        '${dog.name} è contento: uscita fatta!',
+        '${dog.name} è ${dog.g('contento', 'contenta')}: uscita fatta!',
         Icons.favorite,
       );
     }
@@ -475,7 +475,7 @@ class PetMood {
     }
     return PetMood(
       Pose.idle,
-      '${dog.name} sta tranquillo. Prossima uscita alle ${hm(pee.recommendedAt)}.',
+      '${dog.name} sta ${dog.g('tranquillo', 'tranquilla')}. Prossima uscita alle ${hm(pee.recommendedAt)}.',
       null,
     );
   }

@@ -8,6 +8,9 @@ richiedono i tuoi account e le tue chiavi.
 1. Crea un account su <https://supabase.com> e un nuovo progetto.
 2. **Region: Central EU (Frankfurt)**: i dati restano nell'UE (GDPR).
 3. Nel progetto apri **SQL Editor**, incolla tutto `supabase/schema.sql` ed esegui.
+   Lo schema è rieseguibile. Se il progetto ha già la versione precedente basta
+   `supabase/migrations/2026-11-10_sicurezza.sql`. Prima di farlo, prova gli script in locale
+   con `supabase/tests/esegui.sh` (istruzioni in testa al file; niente Docker).
 4. In **Project Settings › API** copia *Project URL* e la chiave *publishable* (anon).
 
 ## 2. Accesso con email (codice a 6 cifre)
@@ -43,7 +46,8 @@ flutter run --dart-define-from-file=config/supabase.json
 - **Offline prima di tutto:** l'app lavora sempre sui dati locali e sincronizza qualche
   secondo dopo ogni modifica, quando c'è rete.
 - **Famiglia:** Profilo › Account e famiglia › *Invita un familiare* crea un codice
-  valido 7 giorni; chi lo inserisce vede e aggiorna i dati di quel cane.
+  valido 7 giorni e **per una sola persona**; chi lo inserisce vede e aggiorna i dati di quel
+  cane, ma non può intestarselo. Dopo 5 codici sbagliati in un'ora si attende un'ora.
 - **Sicurezza:** regole a livello di riga (RLS): ogni utente vede solo i cani di cui è membro.
 - **Eliminazione account:** dall'app (richiesto da Apple e dal GDPR); i cani di cui
   l'utente è proprietario vengono cancellati dal server, anche per i familiari.
@@ -53,3 +57,4 @@ flutter run --dart-define-from-file=config/supabase.json
 - Informativa privacy e termini (bozza in `docs/PRIVACY.md`), nomina di Supabase come
   responsabile del trattamento (DPA di Supabase).
 - Provare l'accesso Apple/Google su dispositivo vero.
+- Checklist completa di produzione: `ricerca/11-sicurezza-backend.md`, sezione 6.

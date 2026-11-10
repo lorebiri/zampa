@@ -89,7 +89,9 @@ class FakeBackend implements SyncBackend {
 
   @override
   Future<String> acceptInvite(String code) async {
-    final d = server.invites[code] ?? (throw StateError('Codice non valido'));
+    final d =
+        server.invites[code] ??
+        (throw StateError('Codice non valido, scaduto o già usato'));
     server.members[d]!.add(uid!);
     return d;
   }
@@ -286,4 +288,33 @@ void main() {
     expect(await a.syncNow(), isNull);
     expect(server.dogs, isEmpty);
   });
+
+  test('il cane di esempio non viene mai caricato online', () async {
+    final server = FakeServer();
+    final a = await device('a.', server, 'lorenzo');
+    await a.loadDemo();
+    await a.upsertDog(dog('d1'));
+    await a.syncNow();
+    expect(server.dogs.keys, ['d1']);
+    expect(server.entries.values.every((e) => e.dogId == 'd1'), isTrue);
+  });
+
+  test(
+    'uscita tenendo i dati: i cani condivisi da altri non restano',
+    () async {
+      final server = FakeServer();
+      final owner = await device('a.', server, 'lorenzo');
+      await owner.upsertDog(dog('d1'));
+      await owner.syncNow();
+      final code = await owner.syncEngine!.backend.createInvite('d1');
+      final family = await device('c.', server, 'giulia');
+      await family.upsertDog(dog('g1'));
+      await family.syncEngine!.backend.acceptInvite(code);
+      await family.syncNow();
+      expect(family.dogs.map((d) => d.id).toSet(), {'d1', 'g1'});
+      (family.syncEngine!.backend as FakeBackend).uid = null;
+      await family.afterSignOut(keepLocal: true, previousUserId: 'giulia');
+      expect(family.dogs.map((d) => d.id), ['g1']);
+    },
+  );
 }

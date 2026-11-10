@@ -30,7 +30,7 @@ Future<void> quickLog(
       SnackBar(
         behavior: SnackBarBehavior.floating,
         content: Text(
-          '${type.label}${indoor ? ' in casa' : ''} registrata alle ${hm(e.time)}',
+          '${type.label}${indoor ? ' in casa' : ''} ${type.registered} alle ${hm(e.time)}',
         ),
         action: SnackBarAction(
           label: 'Annulla',

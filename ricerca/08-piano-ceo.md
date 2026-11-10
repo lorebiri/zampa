@@ -766,7 +766,7 @@ Le metriche si misurano solo con il consenso dell'utente, aggregate, su server U
 
 ---
 
-### C1-7 — Analista legale e fiscale: dossier CNR e fisco per Lorenzo · priorità P1
+### C1-7 — Analista legale e fiscale: dossier CNR e fisco per Lorenzo · priorità **P0** (alzata il 10/11: il Mac usato è del CNR, sezione 10)
 
 **Contesto:**
 - sezione 7 di `ricerca/03-business-model.md`;
@@ -900,8 +900,8 @@ Solo Lorenzo può fare queste cose: hanno bisogno della sua identità, dei suoi 
 
 | # | Quando | Azione | Perché ora |
 |---|---|---|---|
-| 1 | **Oggi-domani** | Dare il via a C1-1: confermare dove tenere la copia di lavoro (fuori da OneDrive CNR) e creare o autorizzare il **repository GitHub privato** (`gh auth login` se richiesto) | Il codice oggi non ha né storico né backup |
-| 2 | Questa settimana | Dire se il **Mac** e l'archivio usati per Zampa sono **personali o del CNR**, e se Zampa ha qualche attinenza con le tue mansioni. Da qui in poi lavorare a Zampa **con mezzi personali e fuori orario**, se possibile | Pesa sulla proprietà del software (C1-7) |
+| 1 | ✔ **Fatto** | Repository GitHub privato `lorebiri/zampa` creato, CI verde. Copia di lavoro: resta su OneDrive CNR, per decisione di Lorenzo | — |
+| 2 | ✔ In parte | Il Mac è **del CNR** (risposta di Lorenzo). Resta da dire se Zampa ha attinenza con le mansioni. Valutare, con l'esito di C1-7, se spostare lo sviluppo su un computer e un archivio personali, fuori orario | Pesa sulla proprietà del software (C1-7) |
 | 3 | Entro il 24 novembre | Inviare al CNR l'email preparata da C1-7, dopo averla riletta, e conservare la risposta | Senza risposta non si incassa e non si vende |
 | 4 | Entro fine novembre | Prenotare un **commercialista** con le domande di C1-7 | Regime, partita IVA, eventuale srl |
 | 5 | Entro fine novembre | Trovare **1-2 veterinari abilitati** (meglio uno di medicina interna e uno di pronto soccorso, anche dalla tua rete), proporre la lettera di C1-8 e concordare il compenso (stima 600-1.500 €) | È il collo di bottiglia del Ciclo 2 e del criterio B5 |
@@ -912,7 +912,7 @@ Solo Lorenzo può fare queste cose: hanno bisogno della sua identità, dei suoi 
 | 10 | Fine Ciclo 2 | **Scegliere il nome** tra i candidati di C1-6; registrare il dominio e gli account social; poi, prima del lancio, depositare il marchio UE all'EUIPO (eventualmente con un consulente) | Serve per l'identificativo e per le schede degli store |
 | 11 | Gennaio 2027 | Reclutare **15-25 beta tester** (colleghi, amici, gruppi di proprietari) e chiedere ai veterinari del punto 5 se consigliano la beta ai clienti | Ciclo 4 e studio di accuratezza |
 | 12 | Febbraio 2027 | Se il CNR e il fisco hanno dato il via libera: account **RevenueCat**, contratti a pagamento e dati fiscali e bancari negli store, iscrizione al Small Business Program di Apple | Solo con il via libera |
-| 13 | Sempre | Confermare il **tetto di spesa** (2.500 € fino al lancio) o indicarne un altro, e il tempo settimanale che puoi dedicare | I cicli sono tarati su poche ore a settimana tue |
+| 13 | Sempre | **Riconfermare il tetto di spesa a 3.000 €** (aveva confermato 2.500 € prima che lo alzassi per il marchio UE) o indicarne un altro, e il tempo settimanale che puoi dedicare | I cicli sono tarati su poche ore a settimana tue |
 
 ---
 
@@ -936,4 +936,266 @@ Solo Lorenzo può fare queste cose: hanno bisogno della sua identità, dei suoi 
 - sincronizzazione di foto e documenti (Premium);
 - Apple Watch e Wear OS;
 - portale per il veterinario;
+- **ciclo della cagna (calore):** vedi la decisione nella sezione 10.2. Non prima della fine della beta;
 - studio scientifico pubblicabile sui dati di eliminazione: solo con consenso esplicito e con la posizione CNR chiarita, perché un lavoro di ricerca potrebbe ricadere nelle mansioni di Lorenzo.
+
+---
+
+## 9. Lingue europee — decisione del 10/11/2026
+
+*Richiesta di Lorenzo: "mettici le lingue europee", cioè l'app in più lingue europee e pubblicata in tutta Europa. Questa sezione prevale sulla decisione 3.6 e integra la regola 3.7.*
+
+### 9.0 Decisione in breve
+- **Sì all'Europa, come obiettivo esplicito del primo anno.** Senza l'Europa lo scenario da ≥ 1 M€ è impossibile (sezione 2.2), quindi la richiesta è coerente con il mandato.
+- **No a "tutte le lingue dal giorno 1", per ragioni di salute del cane, non di comodità:**
+  - ogni lingua porta testi clinici (allarmi SUBITO e OGGI, Emergenze) che devono essere esatti;
+  - ogni Paese ha vaccini, parassiti, numeri d'emergenza e leggi diverse;
+  - un allarme tradotto male, o un calendario della filaria italiano mostrato in Germania, è un danno, non una funzione.
+- **Tre ondate, ognuna con un cancello a dati.** Ondata 1: inglese, spagnolo e tedesco, circa 4 mesi dopo il lancio. Ondata 2: francese, portoghese e olandese, dopo il bivio del mese 6. Ondata 3: polacco e altre lingue, solo con i dati.
+- **Le 24 lingue UE non sono un obiettivo.** Non si possono validare clinicamente né offrire assistenza con un fondatore solo. Si aggiunge una lingua solo quando i dati del mercato lo giustificano.
+- **L'infrastruttura si anticipa adesso:**
+  - Ciclo 2: testi clinici e di logica;
+  - Ciclo 3: interfaccia.
+
+  È compatibile con il blocco delle funzioni (3.1): è un rifacimento senza cambiamenti di comportamento, verificato da un test che confronta l'italiano carattere per carattere. Anzi, rende più facile la firma del veterinario, perché i testi diventano un catalogo con ID.
+
+### 9.1 Lingue e ordine
+
+Criteri, in ordine di peso:
+1. numero di cani nel Paese (FEDIAF Facts & Figures 2026, da tabulare: il rapporto 03 riporta solo Italia 9,0 milioni, UE-27 69,6 e Europa 91,2 milioni [FATTO]);
+2. somiglianza clinica con l'Italia, cioè quanto contenuto si riusa (filaria, leishmania, processionaria, clima mediterraneo);
+3. disponibilità a pagare per le app negli store (Paesi del Nord e dell'Ovest più alta) [STIMA];
+4. costo di validazione: una lingua può servire più Paesi;
+5. presenza di concorrenti nella lingua.
+
+| Ondata | Lingue | Paesi serviti | Perché |
+|---|---|---|---|
+| **0 (lancio)** | italiano | Italia (più San Marino) | Contenuti già scritti e firmati |
+| **1** | **inglese, spagnolo, tedesco** | Irlanda, Malta, Regno Unito; Spagna; Germania, Austria | L'inglese è la lingua ponte (store, recensioni, veterinari esteri) e il ripiego per chi ha il telefono in una lingua non supportata. La Spagna ha la clinica più simile all'Italia (leishmania, filaria, processionaria) e molti cani [STIMA, DA VERIFICARE su FEDIAF]. La Germania è il mercato grande dell'UE con alta disponibilità a pagare [STIMA] |
+| **2** | francese, portoghese, olandese | Francia, Belgio, Lussemburgo; Portogallo; Paesi Bassi e Belgio fiammingo | La Francia è un grande mercato con un Sud mediterraneo. Il Portogallo è clinicamente vicino a Spagna e Italia. I Paesi Bassi hanno una spesa per animale alta [STIMA] |
+| **3** | polacco, poi le altre (es. rumeno, ceco, svedese) | Polonia ecc. | Solo se l'analisi L-3 lo giustifica. La Polonia ha molti cani ma una spesa per app più bassa [STIMA, DA VERIFICARE] |
+
+- **Regno Unito:** ha un mercato di cani grande, ma non è UE. Regole sanitarie proprie (es. vaccini, assenza di rabbia endemica, Pet Travel Scheme) e una protezione dei dati propria (UK GDPR). Entra nell'ondata 1 **solo se** il pacchetto Paese britannico è pronto. Altrimenti l'inglese parte con l'Irlanda e Malta.
+- **Svizzera:** italiano, tedesco e francese sono già coperti dalle ondate, ma ha regole proprie. Entra quando ha un pacchetto Paese, non prima.
+- L'ordine finale delle ondate 2 e 3 lo conferma o lo corregge il rapporto L-3, con i numeri FEDIAF per Paese.
+
+### 9.2 Lingua e Paese sono due cose diverse (regola tecnica e clinica)
+
+1. **Lingua:** come l'app parla.
+   - Segue il telefono; l'utente la può cambiare.
+   - Se la lingua del telefono non è supportata, il ripiego è l'inglese validato (dall'ondata 1), altrimenti l'italiano.
+   - È ammesso perché ogni testo mostrato è comunque validato in quella lingua.
+2. **Paese:** quali regole sanitarie valgono.
+   - Si sceglie nel profilo; la proposta iniziale si ricava dallo store o dalle impostazioni.
+   - Determina:
+     - piano vaccinale e antiparassitario;
+     - zone e stagioni dei parassiti (ESCCAP nazionale);
+     - rischi stagionali (processionaria, forasacchi, caldo);
+     - numeri d'emergenza e centri antiveleni;
+     - leggi su microchip e anagrafe;
+     - viaggi;
+     - funzioni fiscali (la detrazione 730 è **solo** italiana).
+3. **Ogni Paese ha un "pacchetto Paese"**: dati versionati con fonte e data di validità, firmati da un veterinario di quel Paese. È la regola 3 del rapporto 02 ("regole normative come dati").
+4. **Paese senza pacchetto validato.** Se l'utente vive in un Paese non supportato (es. un italiano in Svezia):
+   - restano attivi gli **allarmi fisiologici** (anuria, sforzo, torsione, gengive, respiri, convulsioni…), che non dipendono dal Paese e sono validati nella lingua mostrata;
+   - restano attivi la cartella, il diario e la previsione;
+   - si **nascondono** il piano di prevenzione, i numeri d'emergenza nazionali, gli avvisi stagionali e le funzioni fiscali, con il messaggio: "Per il tuo Paese non abbiamo ancora un calendario verificato: chiedi al tuo veterinario il piano di vaccini e antiparassitari";
+   - la scheda Emergenze mostra solo "il tuo veterinario", "il pronto soccorso veterinario più vicino" (mappa) e i primi gesti universali.
+   - **Mai** un numero di un altro Paese.
+
+### 9.3 Testi clinici tradotti (estende la regola 3.7)
+
+1. **Fonte unica:** il catalogo italiano con ID firmato (v1, C1-8). Si traduce **solo** dopo la firma italiana, così non si traducono testi che poi cambiano.
+2. **Procedura per ogni lingua:**
+   1. bozza con traduzione automatica (LLM), usando un **glossario clinico** bilingue fissato prima (es. "anuria", "conati a vuoto", "gengive pallide", livelli SUBITO e OGGI con le frasi d'azione fisse);
+   2. revisione di un **traduttore professionale madrelingua con esperienza medico-veterinaria**, su ogni stringa;
+   3. per SUBITO, OGGI ed Emergenze, **ritraduzione verso l'italiano** fatta da un'altra persona o da un altro modello, e confronto delle differenze di significato;
+   4. **firma di un veterinario abilitato nel Paese di destinazione**, madrelingua, che firma insieme il testo tradotto e il pacchetto Paese.
+
+   Se un veterinario bilingue copre i passaggi 2 e 4, costa meno ed è accettabile.
+3. **Una lingua si attiva nell'app solo se il 100% dei testi SUBITO, OGGI ed Emergenze è firmato.** Niente testi clinici non validati, neanche "provvisori".
+   - Per i testi non clinici (interfaccia, aiuto) basta la revisione del madrelingua.
+   - Per i testi INFO e ATTENZIONE servono revisione e firma, ma una lingua può partire con al massimo il 5% di testi INFO ancora in revisione. In quel caso la regola mostra il ripiego inglese validato con l'avviso "testo in revisione nella tua lingua". **Mai** per SUBITO, OGGI ed Emergenze.
+4. **Ogni modifica** a un testo clinico italiano rende "da rivedere" le traduzioni collegate: lo segnala un test automatico tramite l'hash della versione. Le lingue in ritardo mostrano la versione firmata precedente, solo se la regola non è cambiata, altrimenti la regola si blocca e il rilascio di quella lingua si ferma.
+5. **Il PDF per il veterinario** ha una lingua scelta a parte da quella dell'app (es. utente tedesco in vacanza in Italia: PDF in italiano). Si usano solo lingue validate.
+6. **Unità e formati:** °C e kg di base, °F e libbre come opzione per il Regno Unito e l'Irlanda; date e numeri con `intl`; glicemia in mg/dL o mmol/L secondo il Paese (in Germania e nel Regno Unito spesso si usa mmol/L [DA VERIFICARE]).
+
+### 9.4 Store, distribuzione, legale e marchio
+
+- **Paesi di distribuzione:** dal giorno 1 **solo Italia (e San Marino)**. Non si distribuisce un'app solo in italiano in tutta l'UE:
+  - chi la scarica in Germania o in Spagna vedrebbe un calendario e numeri d'emergenza italiani (rischio clinico);
+  - arriverebbero recensioni negative nella prima settimana, e queste pesano per sempre sulla scheda (rischio commerciale).
+  - Ogni Paese si apre negli store solo quando lingua e pacchetto Paese sono firmati.
+- **Schede localizzate per ogni lingua:** titolo, sottotitolo, parole chiave, schermate e testo, scritte dall'agente ASO con ricerche di parole chiave native, non tradotte e basta. Prezzo per Paese: livelli di prezzo dello store adattati al potere d'acquisto (es. Polonia e Portogallo più bassi), decisi con i dati dell'ondata 1.
+- **DSA "trader":** obbligo già presente per l'Italia (rapporto 03). Vale per tutta l'UE senza costi aggiuntivi, ma rende l'indirizzo visibile in tutti gli store UE: la scelta dell'indirizzo pubblico (azione 9 di Lorenzo) diventa ancora più importante.
+- **IVA:** la versano gli store in ogni Paese UE (rapporto 03), quindi non serve una registrazione IVA per Paese [FATTO, rapporto 03; DA VERIFICARE con il commercialista].
+- **Privacy e condizioni d'uso:**
+  - tradotte in ogni lingua attiva (il GDPR chiede un'informativa comprensibile);
+  - verifica delle regole nazionali sui consumatori e sulle app a contenuto sanitario veterinario;
+  - per il Regno Unito: UK GDPR, ICO, rappresentante nel Regno Unito se serve [DA VERIFICARE].
+- **Assistenza:** in italiano e in inglese. Nelle altre lingue si risponde in inglese, o con traduzione assistita e un avviso. Una lingua senza capacità di assistenza non apre una nuova ondata.
+- **Nome e marchio (aggiorna C1-6 e la decisione 3.2):**
+  - il nome deve funzionare nelle 7 lingue delle ondate 1 e 2 ed essere libero come **marchio UE**;
+  - si deposita direttamente all'**EUIPO** (tasse indicative: circa 850 € per la prima classe; DA VERIFICARE sul sito EUIPO), non all'UIBM;
+  - per il Regno Unito serve un deposito separato all'UKIPO, solo se il Regno Unito entra nell'ondata 1;
+  - **"Lulù" esce indebolito:** l'accento crea problemi nella ricerca su tutti gli store UE e "Lulu" è affollato di marchi. Resta in gara solo se supera la ricerca di anteriorità EUIPO.
+
+### 9.5 Cancelli delle ondate
+
+| Cancello | Quando | Condizioni (tutte necessarie) |
+|---|---|---|
+| **E1, ondata 1** | Circa 2-3 mesi dopo il lancio italiano (luglio 2027) per rilasciare a fine agosto-settembre 2027 | In Italia: crash-free ≥ 99,5%; retention a 30 giorni ≥ 25%; criterio L2 di accuratezza superato; 0 eventi avversi gravi; testi e pacchetto Paese firmati per ogni lingua e Paese; budget approvato da Lorenzo |
+| **E2, ondata 2** | Bivio del mese 6 (ottobre-novembre 2027) | Bivio del mese 6 superato. Nell'ondata 1 almeno un Paese ha raggiunto, in 90 giorni, una retention a 30 giorni ≥ 20% e una conversione ≥ 1,5% |
+| **E3, ondata 3** | Bivio del mese 12 | Rapporto L-3 aggiornato con i dati reali; ritorno atteso della lingua > costo di validazione entro 12 mesi |
+
+### 9.6 Costi [STIMA, da confermare con preventivi]
+
+- **Per ogni lingua e Paese:**
+  - traduzione professionale con revisione clinica del catalogo (stima 15.000-25.000 parole fra interfaccia, allarmi, emergenze e prevenzione): ~1.200-2.500 €;
+  - firma del veterinario e pacchetto Paese: ~600-1.500 €;
+  - schede degli store e documenti legali: ~200-500 €.
+  - **Totale ~2.000-4.500 € per lingua**; meno con un veterinario bilingue che fa insieme revisione e firma.
+- **Ondata 1:** ~6.000-13.000 €. Non rientra nel tetto di 3.000 €: **serve un budget separato approvato da Lorenzo** al cancello E1, finanziato idealmente dai primi ricavi italiani.
+- **Infrastruttura (Cicli 2-3):** solo tempo dello sviluppatore; nessun costo vivo.
+
+### 9.7 Incarichi
+
+**L-1 · Sviluppatore principale: infrastruttura di traduzione per i testi clinici e di logica (Ciclo 2) · P1**
+1. Configura `flutter gen-l10n` (`l10n.yaml`, `lib/l10n/app_it.arb`) con ICU per plurali e parametri.
+2. Rendi i testi generati in `lib/logic/` (`alerts.dart`, `prevention.dart`, `nutrition.dart`, `seasonal.dart`, i motivi della previsione in `elimination_model.dart` e `potty_predictor.dart`) e in `lib/ui/emergency_screen.dart` dei **messaggi con ID e parametri**: es. `AlertText(id: 'ALR-URI-003', params: {...})`. La traduzione avviene nella UI, nel PDF e nelle notifiche (queste ultime nella lingua attiva al momento della programmazione, e riprogrammate quando la lingua cambia).
+   - Gli ID coincidono con il catalogo di C1-8.
+   - Ogni voce dell'ARB ha `@description` con livello, fonte e versione clinica.
+3. **Test d'identità:** prima del rifacimento, genera un'istantanea (snapshot) di **tutti** i testi prodotti dalle regole su un insieme di casi (riusa i test esistenti più un generatore che attiva ogni regola). Dopo il rifacimento, l'italiano deve essere identico carattere per carattere.
+4. Test che ogni ID usato nel codice esista nell'ARB e viceversa, e che ogni voce clinica abbia la versione.
+
+**Vincoli:** nessun cambiamento di comportamento, soglie o testi; analisi e test verdi.
+**Criteri di fine:** test d'identità verde sul 100% delle regole; nessuna stringa visibile all'utente scritta direttamente in `lib/logic/`, verificato da un controllo automatico (es. script che cerca stringhe italiane fuori da `lib/l10n/`); CI verde.
+
+**L-2 · Sviluppatore principale: interfaccia, Paese e pseudo-lingua (Ciclo 3) · P1**
+1. Estrai tutte le stringhe di `lib/ui/` e `lib/main.dart` nell'ARB.
+2. Aggiungi una **pseudo-lingua** di prova (testi allungati del 40% con accenti, es. `[!!! Ţéšţ ţéšţ !!!]`) e un test che controlla l'assenza di overflow sulle schermate principali a 360 dp di larghezza.
+3. Introduci il **Paese** come impostazione dell'utente, separato dalla lingua (sezione 9.2). Predefinito "IT". Tutte le funzioni dipendenti dal Paese leggono un `CountryPack` (per ora contiene solo l'Italia, con i dati attuali spostati in strutture versionate). Con un Paese non supportato si applica il comportamento della sezione 9.2, punto 4, coperto da test.
+4. Ripiego delle lingue: lingua del telefono se supportata e attivata, altrimenti inglese (quando sarà validato), altrimenti italiano. Elenco delle lingue attivate in un unico punto di configurazione.
+5. Lingua del PDF scelta a parte.
+
+**Criteri di fine:** controllo automatico "nessuna stringa visibile fuori dagli ARB" verde; test della pseudo-lingua verde; test "Paese non supportato" verde (niente prevenzione, niente numeri nazionali, allarmi fisiologici attivi); italiano invariato (test d'identità di L-1 esteso alla UI dove possibile).
+
+**L-3 · Analista di mercato: matrice dei Paesi (Ciclo 3, aggiornata al mese 6) · P2**
+1. Tabella per Paese UE più Regno Unito, Svizzera e Norvegia:
+   - cani (FEDIAF Facts & Figures 2026, con pagina citata);
+   - famiglie con cane;
+   - quota iOS/Android;
+   - spesa media per app o abbonamenti, se trovata;
+   - concorrenti locali nella salute del cane e nella previsione della pipì;
+   - somiglianza clinica con l'Italia (leishmania, filaria, processionaria: da ESCCAP);
+   - lingua o lingue.
+2. Punteggio pesato con i criteri della sezione 9.1 e conferma o modifica dell'ordine delle ondate, con il motivo.
+3. Copertura cumulata (% dei cani UE) per ondata.
+
+**Consegna:** `ricerca/17-mercati-europei.md`. **Criteri di fine:** ogni numero ha una fonte o è marcato STIMA; ordine motivato; sensibilità (cosa cambia se si pesa di più la disponibilità a pagare).
+
+**L-4 · Veterinario-editore internazionale: pacchetti Paese dell'ondata 1 (Cicli 5-6, prima del cancello E1) · P2**
+1. Per Spagna, Germania con Austria, Irlanda e Regno Unito:
+   - piani vaccinali (linee guida nazionali, es. StIKo Vet in Germania; obblighi di rabbia per regione in Spagna [DA VERIFICARE]);
+   - antiparassitari e zone (ESCCAP nazionali);
+   - rischi stagionali;
+   - **centri antiveleni e pronto soccorso veterinario con numeri verificati sulle fonti ufficiali**;
+   - leggi su microchip e anagrafe (es. REIAC e registri regionali in Spagna; regole per Land in Germania [DA VERIFICARE]);
+   - viaggi;
+   - unità consuete (es. glicemia).
+2. Formato: dati strutturati con fonte, data di validità e ID, pronti per il `CountryPack`, più un documento leggibile per la firma del veterinario locale.
+3. Differenze rispetto all'Italia che toccano le regole degli allarmi (es. babesiosi e leishmania in zone diverse, specie di zecche diverse): elenco da far decidere al veterinario.
+
+**Vincoli:** non presentarsi come veterinario abilitato; niente numeri non verificati.
+**Consegna:** `docs/clinica/paesi/<codice>/` e `ricerca/18-pacchetti-paese-ondata1.md`. **Criteri di fine:** ogni voce ha fonte e data; il pacchetto di ogni Paese si legge e si firma in ≤ 3 ore.
+
+**L-5 · Traduttori medico-veterinari, uno per lingua (en, es, de dal Ciclo 6; fr, pt, nl dopo E2) · P2**
+1. Partono dal catalogo italiano firmato v1 e dal **glossario clinico** (prima consegna: glossario italiano-lingua di destinazione con le frasi d'azione fisse dei 4 livelli, approvato dal veterinario locale prima di tradurre il resto).
+2. Bozza automatica ammessa; **revisione umana di ogni stringa**, registrata con chi ha revisionato e quando.
+3. Ritraduzione verso l'italiano dei testi SUBITO, OGGI ed Emergenze, fatta da altri, con una tabella delle differenze risolte.
+4. Consegna: `lib/l10n/app_<lingua>.arb` (lo integra lo sviluppatore principale), registro di revisione in `docs/clinica/traduzioni/<lingua>.md`.
+
+**Criteri di fine:** 100% delle stringhe tradotte e revisionate; 0 differenze di significato aperte sui testi urgenti; ICU e parametri validi (test di L-1 verde sulla lingua); il testo regge la prova di overflow.
+
+**L-6 · Veterinario abilitato per Paese (persona reale, reclutata da Lorenzo) · P2**
+Firma glossario, testi tradotti e pacchetto Paese con la versione; segnala le regole da adattare. **Criterio di fine:** documento firmato e datato in `docs/clinica/paesi/<codice>/firma-v1.md`.
+
+**L-7 · Legale e privacy: Europa (Ciclo 6 per l'ondata 1) · P2**
+- Traduzione e adattamento di informativa e condizioni per ogni Paese.
+- Regole nazionali rilevanti (consumatori, contenuti sanitari veterinari, eventuali limiti alla telemedicina).
+- Regno Unito: UK GDPR e rappresentante.
+- Aggiornamento del registro dei trattamenti.
+- Verifica dei costi EUIPO e UKIPO per C1-6.
+
+**Consegna:** `ricerca/19-legale-europa.md`. **Criteri di fine:** documenti pronti per ogni Paese dell'ondata, con le verifiche marcate.
+
+**L-8 · Growth e ASO: schede degli store per lingua (Ciclo 6 per l'italiano, poi per ogni ondata) · P3**
+Ricerca di parole chiave nativa per lingua, titoli e sottotitoli nei limiti di caratteri degli store, schermate localizzate, proposta di prezzo per Paese. **Criteri di fine:** schede complete e controllate da un madrelingua; nessuna promessa clinica non firmata ("pensato con i veterinari" solo se vero in quel Paese).
+
+**L-9 · QA: collaudo per lingua e Paese (a ogni ondata) · P2**
+Matrice lingua × Paese × dispositivo:
+- testo al 200% in tedesco (il più lungo);
+- notifiche nella lingua giusta dopo un cambio di lingua;
+- PDF in un'altra lingua;
+- Paese non supportato;
+- ripiego della lingua;
+- formati di date, numeri e unità.
+
+**Criteri di fine:** 0 difetti A; 0 testi italiani visibili in un'altra lingua; numeri d'emergenza corretti per Paese, verificati con una chiamata di prova solo se il servizio lo consente.
+
+### 9.8 Cosa cambia per Lorenzo
+- **Azione 10:** il marchio si deposita come **marchio UE all'EUIPO** (circa 850 €, DA VERIFICARE). Il tetto di spesa prima del lancio sale a 3.000 €.
+- **Nuova azione, entro luglio 2027:** approvare o no il **budget dell'ondata 1** (~6.000-13.000 € stimati) al cancello E1, e reclutare un veterinario abilitato in Spagna, uno in Germania o Austria e uno anglofono (Irlanda o Regno Unito), anche tramite la propria rete di ricerca europea.
+- **Nuova azione, alla scelta del nome:** verificare la disponibilità del dominio `.eu` oltre a `.it`, `.com` e `.app`.
+
+---
+
+## 10. Aggiornamenti del 10/11/2026 (sera)
+
+### 10.1 Fatti nuovi
+| # | Fatto | Conseguenza |
+|---|---|---|
+| 1 | **C1-1 completato:** backup in `~/Backups`, git, repository privato GitHub `lorebiri/zampa`, CI verde | Criterio B1 verde. Il rischio 5 (nessun controllo di versione) è chiuso |
+| 2 | La copia di lavoro **resta su OneDrive CNR** (decisione di Lorenzo) | Accettata. Il backup è comunque garantito da git e GitHub |
+| 3 | **Il Mac usato per Zampa è di proprietà del CNR** | Il **rischio 3** (CNR e proprietà del software) sale a **pari merito con il rischio 1**. C1-7 passa a **P0**. L'analisi deve trattare esplicitamente l'uso di un bene dell'ente (L. 633/1941 art. 12-bis, regolamenti CNR, codice di comportamento). La bozza di email al CNR deve dichiararlo con trasparenza. **Fino alla risposta del CNR: nessun ricavo, nessun contratto a pagamento negli store, nessuna società.** Per lo sviluppo: no, per ora, a imporre un cambio di computer; è una scelta di Lorenzo da prendere con l'esito di C1-7 |
+| 4 | Budget: Lorenzo aveva confermato 2.500 €; il piano ora dice 3.000 € (deposito EUIPO) | Fino alla riconferma valgono **2.500 €**. Se Lorenzo non conferma i 3.000 €, il deposito UE slitta dopo il lancio: al lancio basta la domanda UIBM, e il criterio L9 si adatta |
+| 5 | **C1-3 in parte:** manifest Android, sveglie esatte, tetto di 60 notifiche con priorità e test, permesso delle notifiche dopo il primo cane | Il codice è fatto. **Non è chiuso** finché C1-2 non lo verifica sul dispositivo |
+| 6 | C1-2 è bloccato: il simulatore iOS è in download e **nessun emulatore Android è installato** | **Azione nuova:** installare l'emulatore Android (Android Studio o `sdkmanager` con un'immagine API 34 o 35). Lo sviluppatore principale lo può fare con il consenso di Lorenzo, perché scarica diversi GB. Il Ciclo 1 si chiude solo con la prova su almeno un iOS e un Android. Se serve, si allunga di una settimana (fino al 1° dicembre) invece di chiudere senza prova |
+| 7 | Lorenzo ha chiesto due agenti "voce dell'utente" (sopra i 40 anni e sotto i 35); rapporti attesi in `ricerca/20` e `ricerca/21` | Li leggo per intero. Entrano come prove nell'audit UX (C1-9) e nel Ciclo 3. **Non** aprono nuove funzioni prima della beta: valgono le stesse regole della sezione 10.2 |
+
+### 10.2 Decisione: "una funzione che segue il ciclo nelle cagne"
+
+**Decisione: sì, ma dopo la beta, come miglioramento del diario esistente. Non è una funzione nuova da costruire ora.**
+
+- **Cosa c'è già** [FATTO, dossier e `lib/logic/modules.dart`]:
+  - storico di calori, accoppiamenti, parti e sterilizzazione;
+  - prossimo calore stimato;
+  - parto presunto a +63 giorni;
+  - finestre di pseudogravidanza e piometra;
+  - allarmi collegati (piometra, perdite vulvari, calore oltre 4 settimane, parto oltre 70 giorni, eclampsia).
+- **La parte di sicurezza** (piometra, eclampsia, parto) è quindi **già presente e gratuita**. Va solo collaudata in beta e firmata dal veterinario con il resto.
+- **Le proposte di Lorenzo sono comodità e informazione, non sicurezza.** Per la regola 3.1 non entrano prima della beta.
+- **Quando:** primo ciclo dopo il lancio (M1-3, maggio-luglio 2027). Si anticipa al Ciclo 5 solo se:
+  - nella beta le femmine intere sono almeno il 15% dei cani attivi;
+  - **e** almeno 3 tester lo chiedono spontaneamente.
+- **Cosa si farà, e con quali limiti:**
+  1. **Promemoria 5-7 giorni prima del calore previsto**, con consigli pratici:
+     - guinzaglio;
+     - aree cani da evitare;
+     - mutandine igieniche;
+     - attenzione ai maschi interi;
+     - "annota il primo giorno di perdite".
+     - Il promemoria mostra quanto è incerta la stima, e non scatta se lo storico ha meno di 2 calori.
+  2. **Fasi proestro, estro, diestro, anestro**, solo come **informazione** sui segni osservabili. **Nessun calcolo dei "giorni fertili"** né consigli per far accoppiare o per evitare una gravidanza: la fase fertile si accerta solo con esami (progesterone, citologia) dal veterinario. Indicarla nell'app crea false sicurezze, gravidanze indesiderate e accoppiamenti mal programmati.
+  3. **Sterilizzazione:** informazione neutra, già presente in parte (età nelle grandi taglie, solo "parlane col veterinario"). Si aggiunge il riferimento alla piometra e ai tumori mammari come argomenti da discutere col veterinario, **senza raccomandare un'età né spingere una scelta**.
+  4. Tutti i testi entrano nel catalogo clinico con ID, firmati dal veterinario. Nelle lingue europee seguono la sezione 9.3.
+- **Prezzo:** gratis. Riguarda la salute riproduttiva e la piometra (regola 3.4).
+- **Incarico (da assegnare al primo ciclo dopo il lancio, non ora):**
+  - **veterinario-editore:** testi e soglie per i punti 1-3, con le fonti (es. Johnston, Root Kustritz e Olson, *Canine and Feline Theriogenology*);
+  - **sviluppatore principale:** promemoria e scheda delle fasi nel diario Riproduzione esistente, con test.
+  - **Criteri di fine:**
+    - il promemoria arriva una sola volta per calore previsto;
+    - non arriva con meno di 2 calori registrati, né con la cagna sterilizzata o gravida;
+    - nessun testo parla di giorni fertili;
+    - testi firmati;
+    - QA su dispositivo superato.

@@ -161,16 +161,26 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     }
   }
 
+  /// Oggetti da sincronizzare; il cane di esempio e i suoi dati restano
+  /// solo sul telefono (rapporto 11, P0).
   @override
   List<LocalItem> syncItems() => [
-    for (final d in dogs) LocalItem('dog', d.id, d.id, d.toJson()),
-    for (final x in logs) LocalItem('log', x.id, x.dogId, x.toJson()),
-    for (final x in records) LocalItem('record', x.id, x.dogId, x.toJson()),
-    for (final x in weights) LocalItem('weight', x.id, x.dogId, x.toJson()),
-    for (final x in doses) LocalItem('dose', x.id, x.dogId, x.toJson()),
-    for (final x in repro) LocalItem('repro', x.id, x.dogId, x.toJson()),
-    for (final x in qol) LocalItem('qol', x.id, x.dogId, x.toJson()),
-    for (final x in labs) LocalItem('lab', x.id, x.dogId, x.toJson()),
+    for (final d in dogs)
+      if (!isDemoId(d.id)) LocalItem('dog', d.id, d.id, d.toJson()),
+    for (final x in logs)
+      if (!isDemoId(x.dogId)) LocalItem('log', x.id, x.dogId, x.toJson()),
+    for (final x in records)
+      if (!isDemoId(x.dogId)) LocalItem('record', x.id, x.dogId, x.toJson()),
+    for (final x in weights)
+      if (!isDemoId(x.dogId)) LocalItem('weight', x.id, x.dogId, x.toJson()),
+    for (final x in doses)
+      if (!isDemoId(x.dogId)) LocalItem('dose', x.id, x.dogId, x.toJson()),
+    for (final x in repro)
+      if (!isDemoId(x.dogId)) LocalItem('repro', x.id, x.dogId, x.toJson()),
+    for (final x in qol)
+      if (!isDemoId(x.dogId)) LocalItem('qol', x.id, x.dogId, x.toJson()),
+    for (final x in labs)
+      if (!isDemoId(x.dogId)) LocalItem('lab', x.id, x.dogId, x.toJson()),
   ];
 
   void _put<T>(List<T> list, T item, String Function(T) id) {
@@ -261,7 +271,19 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   }
 
   /// Uscita dall'account: i dati restano sul telefono oppure si cancellano.
-  Future<void> afterSignOut({required bool keepLocal}) async {
+  Future<void> afterSignOut({
+    required bool keepLocal,
+    String? previousUserId,
+  }) async {
+    // I cani condivisi da altri non restano sul telefono: non sono nostri e,
+    // con un altro account, verrebbero caricati come se lo fossero (rapp. 11).
+    final e = syncEngine;
+    if (keepLocal && e != null && previousUserId != null) {
+      for (final d in dogs.toList()) {
+        final owner = e.ownerOf(d.id);
+        if (owner != null && owner != previousUserId) removeLocal('dog', d.id);
+      }
+    }
     await syncEngine?.reset();
     if (!keepLocal) {
       await wipe();
@@ -799,7 +821,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     final rnd = math.Random(7);
     final now = DateTime.now();
     final d = Dog(
-      id: newId(),
+      id: 'demo-${newId()}',
       name: 'Luna',
       birthDate: DateTime(now.year - 3, now.month, 1),
       sex: Sex.femmina,
@@ -950,7 +972,10 @@ String dmy(DateTime t) => '${two(t.day)}/${two(t.month)}/${t.year}';
 
 String ageLabel(Dog d, [DateTime? now]) {
   final m = d.ageInMonths(now);
-  if (m < 1) return '${(m * 4.35).floor()} settimane';
+  if (m < 4) {
+    final w = (now ?? DateTime.now()).difference(d.birthDate).inDays ~/ 7;
+    return w == 1 ? '1 settimana' : '$w settimane';
+  }
   if (m < 24) return '${m.floor()} mesi';
   final y = (m / 12).floor();
   return '$y anni';

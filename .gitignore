@@ -61,3 +61,6 @@ GoogleService-Info.plist
 *.p8
 *.p12
 *.mobileprovision
+
+# Worktree degli agenti
+.claude/worktrees/

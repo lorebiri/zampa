@@ -27,8 +27,9 @@ class _DogFormPageState extends State<DogFormPage> {
   late final vetPhone = TextEditingController(text: d?.vetPhone ?? '');
   late final allergies = TextEditingController(text: d?.allergies ?? '');
   late final conditions = TextEditingController(text: d?.conditions ?? '');
-  late DateTime birth =
-      d?.birthDate ?? DateTime.now().subtract(const Duration(days: 365 * 2));
+  // Nessuna data predefinita per un cane nuovo: un cucciolo trattato da
+  // adulto riceverebbe consigli sbagliati (rapporti 16 e 21).
+  late DateTime? birth = d?.birthDate;
   late Sex sex = d?.sex ?? Sex.maschio;
   late bool neutered = d?.neutered ?? false;
   late ActivityLevel activity = d?.activity ?? ActivityLevel.normale;
@@ -69,12 +70,20 @@ class _DogFormPageState extends State<DogFormPage> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.cake_outlined),
-            title: Text('Nato il ${dmy(birth)}'),
+            title: Text(
+              birth == null
+                  ? 'Data di nascita *'
+                  : '${sex == Sex.femmina ? 'Nata' : 'Nato'} il ${dmy(birth!)}',
+            ),
             subtitle: const Text(
               'Se non la sai, una data approssimativa va bene',
             ),
             onTap: () async {
-              final r = await pickDate(context, birth);
+              final r = await pickDate(
+                context,
+                birth ?? DateTime.now().subtract(const Duration(days: 90)),
+                lastDate: DateTime.now(),
+              );
               if (r != null) setState(() => birth = r);
             },
           ),
@@ -347,17 +356,27 @@ class _DogFormPageState extends State<DogFormPage> {
 
   Future<void> _save() async {
     final kg = double.tryParse(weight.text.replaceAll(',', '.'));
-    if (name.text.trim().isEmpty || kg == null || kg <= 0) {
-      toast(context, 'Servono almeno nome e peso');
+    if (name.text.trim().isEmpty || kg == null || kg <= 0 || birth == null) {
+      toast(context, 'Servono almeno nome, data di nascita e peso');
       return;
     }
     final store = StoreScope.read(context);
-    final dog = d ?? Dog(id: newId(), name: '', birthDate: birth, sex: sex);
+    final dog =
+        d ??
+        Dog(
+          id: newId(),
+          name: '',
+          birthDate: birth!,
+          sex: sex,
+          weightKg: kg,
+          // Taglia del compagno coerente con il peso indicato.
+          look: AvatarLook.forWeight(kg),
+        );
     final weightChanged = d != null && (d!.weightKg - kg).abs() > 0.01;
     dog
       ..name = name.text.trim()
       ..breed = breed.text.trim()
-      ..birthDate = birth
+      ..birthDate = birth!
       ..sex = sex
       ..neutered = neutered
       ..weightKg = kg

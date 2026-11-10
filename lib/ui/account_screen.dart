@@ -341,8 +341,9 @@ class _AccountScreenState extends State<AccountScreen> {
     if (keep == null) return;
     await _do(() async {
       if (delete) await store.syncEngine!.backend.deleteAccount();
+      final uid = auth.user?.id;
       await auth.signOut();
-      await store.afterSignOut(keepLocal: keep);
+      await store.afterSignOut(keepLocal: keep, previousUserId: uid);
     }, ok: delete ? 'Account eliminato' : 'Sei uscito dall\'account');
   }
 }

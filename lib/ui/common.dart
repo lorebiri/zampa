@@ -222,13 +222,19 @@ Future<DateTime?> pickDateTime(BuildContext context, DateTime initial) async {
   return DateTime(d.year, d.month, d.day, t.hour, t.minute);
 }
 
-Future<DateTime?> pickDate(BuildContext context, DateTime initial) =>
-    showDatePicker(
-      context: context,
-      initialDate: initial,
-      firstDate: DateTime(1995),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
-    );
+Future<DateTime?> pickDate(
+  BuildContext context,
+  DateTime initial, {
+  DateTime? lastDate,
+}) {
+  final last = lastDate ?? DateTime.now().add(const Duration(days: 365 * 5));
+  return showDatePicker(
+    context: context,
+    initialDate: initial.isAfter(last) ? last : initial,
+    firstDate: DateTime(1995),
+    lastDate: last,
+  );
+}
 
 void toast(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
