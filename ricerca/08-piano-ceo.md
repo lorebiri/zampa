@@ -912,7 +912,8 @@ Solo Lorenzo può fare queste cose: hanno bisogno della sua identità, dei suoi 
 | 10 | Fine Ciclo 2 | **Scegliere il nome** tra i candidati di C1-6; registrare il dominio e gli account social; poi, prima del lancio, depositare il marchio UE all'EUIPO (eventualmente con un consulente) | Serve per l'identificativo e per le schede degli store |
 | 11 | Gennaio 2027 | Reclutare **15-25 beta tester** (colleghi, amici, gruppi di proprietari) e chiedere ai veterinari del punto 5 se consigliano la beta ai clienti | Ciclo 4 e studio di accuratezza |
 | 12 | Febbraio 2027 | Se il CNR e il fisco hanno dato il via libera: account **RevenueCat**, contratti a pagamento e dati fiscali e bancari negli store, iscrizione al Small Business Program di Apple | Solo con il via libera |
-| 13 | Sempre | **Riconfermare il tetto di spesa a 3.000 €** (aveva confermato 2.500 € prima che lo alzassi per il marchio UE) o indicarne un altro, e il tempo settimanale che puoi dedicare | I cicli sono tarati su poche ore a settimana tue |
+| 13 | Sempre | ✔ Tetto **confermato a 3.000 €** il 10/11 (marchio UE prima del lancio). Resta da indicare il tempo settimanale disponibile | I cicli sono tarati su poche ore a settimana tue |
+| 14 | Entro il 15/12/2026 | **Acquistare un Mac personale** per lo sviluppo (sezione 10.4; investimento personale fuori dal tetto, circa 700-1.100 €) e migrare lì la copia di lavoro e gli account | Riduce il rischio sulla proprietà del software |
 
 ---
 
@@ -1199,3 +1200,90 @@ Matrice lingua × Paese × dispositivo:
     - nessun testo parla di giorni fertili;
     - testi firmati;
     - QA su dispositivo superato.
+
+### 10.3 Risposte di Lorenzo e decisioni conseguenti (10/11/2026, notte)
+
+| # | Risposta | Decisione |
+|---|---|---|
+| 1 | Budget pre-lancio **confermato a 3.000 €** | Vale la 3.10. Il marchio UE si deposita all'EUIPO prima del lancio; la riga 4 di 10.1 è superata |
+| 2 | Emulatore Android **approvato**, in installazione | C1-2 riparte sui due sistemi |
+| 3 | Zampa **non ha attinenza** con le mansioni CNR | Fatto favorevole per la titolarità (art. 12-bis L. 633/1941). Va scritto nell'email al CNR (C1-7) |
+| 4 | Lavoro **fuori orario**, ma **solo sul Mac del CNR**; nessun computer personale | Vedi 10.4 |
+
+### 10.4 Decisione: computer personale per lo sviluppo
+- **Sì. Priorità P0 per la proprietà del software**: è la misura più economica contro il rischio 3. Da qui in poi, ogni ora di lavoro su un bene dell'ente rafforza un'eventuale pretesa del CNR. Le opzioni di `ricerca/14-cnr-e-fisco.md` restano il quadro di riferimento.
+- **Serve un Mac:** le build e la firma per iOS richiedono macOS. Basta un **Mac mini o un MacBook Air con chip Apple**, anche ricondizionato con garanzia, con almeno 16 GB di RAM e 256-512 GB di disco: circa 700-1.100 € [STIMA, prezzi da verificare].
+- **Fuori dal tetto di 3.000 €.** È un bene personale di Lorenzo che resta suo qualunque cosa succeda a Zampa. Lo registro come **investimento personale separato, da decidere da Lorenzo**. Se in futuro nascerà un'attività, il commercialista dirà se e come ammortizzarlo.
+- **Quando:** **prima della fine del Ciclo 2 (15 dicembre 2026)**, e comunque prima del primo caricamento in TestFlight. Al più tardi prima del primo euro incassato.
+- **Migrazione:**
+  1. clonare da GitHub `lorebiri/zampa`, che è un account personale;
+  2. copia di lavoro su un disco personale, non su OneDrive CNR;
+  3. account Apple, Google e Supabase creati con credenziali personali, non istituzionali;
+  4. la copia su OneDrive CNR diventa solo lettura e poi si archivia, d'accordo con l'esito della risposta del CNR.
+- **Lavoro già fatto sul Mac del CNR:** non si nasconde. Va dichiarato nell'email al CNR insieme a "fuori orario" e "nessuna attinenza con le mansioni" (C1-7). Lorenzo tiene un registro delle date.
+- **Fino all'arrivo del nuovo computer:** si continua (la beta resta gratuita e senza ricavi), solo fuori orario. Niente dati personali di utenti reali sul Mac del CNR oltre a quelli di prova.
+
+### 10.5 Decisione: numero del Centro Antiveleni nell'app
+- **Sì, si rimette.** La verifica di C1-8 (`ricerca/15`, fonti `centroantiveleni.org` e `ospedaleniguarda.it`, consultate il 10/11/2026) conferma che il **CAV di Milano, Ospedale Niguarda, 02 6610 1029, risponde 24 ore su 24 anche per gli animali**, da tutta Italia. Non è una funzione nuova: è il ripristino di un dato di sicurezza tolto perché non verificato, quindi è compatibile con la 3.1.
+- **Regole:**
+  1. Solo nel **pacchetto Paese Italia**, mai mostrato con un altro Paese (9.2).
+  2. Testo, con ID nel catalogo e da far firmare al veterinario (B5): «Sospetto avvelenamento: chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il **Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24**: risponde anche per gli animali e ti chiederà nome e recapiti.» L'ordine (prima il veterinario) è voluto: il CAV consiglia, ma non cura il cane.
+  3. Numero con chiamata diretta, nella scheda Emergenze e nella situazione "Ha ingerito qualcosa".
+  4. Si scrive la **data di verifica** nel catalogo. Il numero si **riverifica a ogni rilascio pubblico** e almeno ogni 6 mesi; un test controlla che la data non superi i 6 mesi.
+  5. Non dichiarare che è gratuito: il sito non lo dice.
+- **Chi lo fa:** lo sviluppatore principale nel Ciclo 2, insieme al catalogo dei testi; il veterinario abilitato lo firma con le Emergenze.
+
+### 10.6 Stato del Ciclo 1 (aggiornato)
+| Incarico | Stato |
+|---|---|
+| C1-1 repository, backup, CI | ✔ Fatto |
+| C1-2 QA su dispositivo | In corso: build iOS in debug; emulatore Android in installazione |
+| C1-3 correzioni notifiche | Codice fatto e testato (manifest, sveglie esatte, tetto di 60 con priorità, permesso dopo il primo cane). **Manca la prova su dispositivo**: non è chiuso |
+| C1-4 sicurezza backend | ✔ Fatto (`ricerca/11`, 79 test SQL). Correzioni P0 e P1 di `lib/sync` applicate: il cane di esempio non va mai online, i cani altrui vengono rimossi all'uscita, UUID, inviti generati dal server, errori espliciti. **Restano P1 per il Ciclo 2:** concorrenza ottimistica e "reset con ombra vuota". P2 e P3 nel Ciclo 2 o 3 |
+| C1-5 accuratezza | In corso |
+| C1-6 nome e marchio | In corso (deve tenere conto della sezione 9.4) |
+| C1-7 CNR e fisco | ✔ Fatto (`ricerca/14`, bozza dell'email pronta). Lorenzo la invia **aggiungendo** i fatti 10.3-3 e 10.3-4 |
+| C1-8 pacchetto per il veterinario | ✔ Fatto (`docs/clinica`, 269 testi; antiveleni verificato) |
+| C1-9 audit UX | ✔ Fatto (`ricerca/16`) |
+| Voci dell'utente | ✔ Fatte (`ricerca/20`, `ricerca/21`). Già corretti su main: età calcolata male, date future, data di nascita predefinita, taglia del compagno, accordo al femminile |
+| Designer visivo (chiesto da Lorenzo) | In corso su un ramo separato, compresi contrasto e accessibilità di 16/20/21. **Condizioni per l'integrazione su main:** nessuna regola del compagno violata (rapporto 07, F; allarmi SUBITO sempre sopra); nessun testo clinico cambiato; contrasto WCAG AA verificato; tutti i test e l'analisi verdi; prova di QA sulle schermate principali. È rifinitura grafica di funzioni esistenti, ammessa dalla 3.1, ma non aggiunge schermate o funzioni |
+
+**Chiusura del Ciclo 1:** resta fissata alla prova su dispositivo di C1-2 e C1-3 e alla consegna di C1-5 e C1-6. Termine massimo 1° dicembre 2026.
+
+### 10.7 Decisione: app gratuita come scelta di partenza (10/11/2026)
+
+**Decisione: sì, Zampa parte gratuita**, su proposta di Lorenzo. Questa sezione prevale sulla 3.4 per tutto ciò che riguarda l'attivazione del Premium.
+
+1. **Perché.**
+   - Senza incassi si riduce il rischio art. 53 e disciplinare con il CNR.
+   - Si elimina la condizione "via libera fiscale" dal percorso critico del lancio.
+   - Aumenta la fiducia degli utenti e dei veterinari.
+   - **Restano però obbligatori:** l'email al CNR va inviata e la risposta attesa **prima di pubblicare, anche gratis**, perché la titolarità del software (Mac del CNR) resta da chiarire. Valgono anche marchio, firma del veterinario e criteri B e L.
+2. **Costi:** tutti a carico di Lorenzo, nel tetto di 3.000 € (Apple 99 €/anno, Google 25 $, veterinario, privacy, marchio UE, Android di prova). Il Mac personale resta fuori dal tetto (10.4). Supabase gratuito per la beta; il piano Pro (~25 $/mese) solo quando il gratuito non basta.
+3. **Promessa pubblica:** "Gratis, senza pubblicità, i dati restano sul tuo telefono".
+   - **Niente di ciò che è gratis verrà mai tolto o messo a pagamento.**
+   - Un eventuale "Plus" futuro conterrà **solo funzioni nuove** (es. widget avanzati, Apple Watch, archivio di foto e documenti nel cloud, PDF esteso, accessori del compagno).
+   - Allarmi, emergenze, cartella, diari e previsione restano gratis per sempre (regola 3.4).
+4. **Rimandati:** RevenueCat, contratti a pagamento e dati bancari negli store, Small Business Program (azione 12 di Lorenzo) e criterio L11.
+5. **Donazioni ("offrimi un caffè"): no, per ora.**
+   - Anche le donazioni ricorrenti possono configurare un ricavo o un'attività economica rilevante per il CNR e per il fisco.
+   - Il pulsante di donazione negli store è soggetto alle regole sugli acquisti in-app [DA VERIFICARE].
+   - Si rivaluta solo con la risposta scritta del CNR e il parere del commercialista.
+6. **KPI e bivi:** le metriche di conversione (avvio della prova, prova → pagante, download → pagante, rinnovo) sono **sospese**. Al loro posto:
+   - retention a 30 e 90 giorni (≥ 30% / ≥ 15%);
+   - cani con ≥ 21 giorni di registrazioni;
+   - coefficiente di invito (≥ 0,2);
+   - **veterinari che consigliano l'app** (≥ 10 entro il mese 3, ≥ 30 entro il mese 6);
+   - voto sugli store (≥ 4,5);
+   - utilità degli allarmi (≥ 70%);
+   - **disponibilità a pagare**, misurata con un sondaggio in app, opt-in, su un "Plus" descritto, senza vendere nulla: obiettivo ≥ 15% "lo pagherei 20-30 €/anno".
+
+   Il bivio del mese 6 usa queste soglie. Con una retention a 30 giorni sotto il 15%, Zampa resta un progetto personale gratuito.
+7. **Quando si rivaluta il Premium: al bivio del mese 6** (ottobre-novembre 2027), solo se valgono tutte e cinque le condizioni:
+   1. risposta scritta del CNR che consente l'incasso, e regime fiscale definito con il commercialista;
+   2. accuratezza dimostrata (L2 e L3);
+   3. retention a 30 giorni ≥ 30%;
+   4. ≥ 15% di disponibilità a pagare nel sondaggio;
+   5. almeno una funzione nuova pronta per il Plus.
+
+   Altrimenti si rivaluta al mese 12. **Effetto sulla tesi economica:** il percorso verso il milione (sezione 2) slitta di almeno 6 mesi. È un prezzo accettabile in cambio di un rischio legale molto più basso.
