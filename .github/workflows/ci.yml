@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Nessun segreto nel codice
+        run: |
+          if git grep -nE 'sb_secret_|service_role|-----BEGIN (RSA |EC )?PRIVATE KEY|eyJhbGciOi[A-Za-z0-9_-]{20,}' -- ':!.github/workflows/ci.yml'; then
+            echo "Possibile segreto nel repository"; exit 1
+          fi
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test || echo "::warning::formattazione da sistemare"
+      - run: flutter analyze --fatal-infos
+      - run: flutter test
