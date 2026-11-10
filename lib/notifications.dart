@@ -13,6 +13,50 @@ class Notifier {
 
   final _plugin = FlutterLocalNotificationsPlugin();
   bool _ready = false;
+  bool _exactAllowed = false;
+
+  /// Chiede il permesso per le notifiche (e su Android le sveglie esatte).
+  Future<bool> requestPermissions() async {
+    if (!supported || !_ready) return false;
+    var ok = true;
+    final ios = _plugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
+    final mac = _plugin
+        .resolvePlatformSpecificImplementation<
+          MacOSFlutterLocalNotificationsPlugin
+        >();
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (ios != null) {
+      ok =
+          await ios.requestPermissions(alert: true, badge: true, sound: true) ??
+          false;
+    } else if (mac != null) {
+      ok =
+          await mac.requestPermissions(alert: true, badge: true, sound: true) ??
+          false;
+    } else if (android != null) {
+      ok = await android.requestNotificationsPermission() ?? false;
+      if (ok) await requestExactAlarms();
+    }
+    return ok;
+  }
+
+  /// Su Android 12+ chiede di consentire le sveglie esatte (urgenze e dosi).
+  Future<bool> requestExactAlarms() async {
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (android == null) return true;
+    await android.requestExactAlarmsPermission();
+    _exactAllowed = await android.canScheduleExactNotifications() ?? false;
+    return _exactAllowed;
+  }
 
   bool get supported =>
       !kIsWeb &&
@@ -27,9 +71,11 @@ class Notifier {
       final info = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(info.identifier));
       const darwin = DarwinInitializationSettings(
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
+        // I permessi si chiedono dopo il primo cane, spiegando a cosa
+        // servono (vedi requestPermissions), non all'apertura dell'app.
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
       );
       await _plugin.initialize(
         settings: const InitializationSettings(
@@ -38,11 +84,15 @@ class Notifier {
           macOS: darwin,
         ),
       );
-      await _plugin
+      final android = _plugin
           .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin
-          >()
-          ?.requestNotificationsPermission();
+          >();
+      if (android != null) {
+        _exactAllowed = await android.canScheduleExactNotifications() ?? false;
+      } else {
+        _exactAllowed = true; // iOS/macOS: sempre puntuali
+      }
       _ready = true;
     } catch (e) {
       debugPrint('Notifiche non disponibili: $e');
@@ -66,8 +116,9 @@ class Notifier {
     int id,
     DateTime when,
     String title,
-    String body,
-  ) async {
+    String body, {
+    bool exact = false,
+  }) async {
     if (!_ready) return;
     try {
       await _plugin.cancel(id: id);
@@ -76,7 +127,11 @@ class Notifier {
         id: id,
         scheduledDate: tz.TZDateTime.from(when, tz.local),
         notificationDetails: _details,
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        // Urgenze e dosi all'orario esatto anche in Doze (se l'utente ha
+        // concesso le sveglie esatte su Android 12+); il resto può slittare.
+        androidScheduleMode: exact && _exactAllowed
+            ? AndroidScheduleMode.exactAllowWhileIdle
+            : AndroidScheduleMode.inexactAllowWhileIdle,
         title: title,
         body: body,
       );

@@ -501,43 +501,23 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   }
 
   // --- Promemoria ---------------------------------------------------------
-  Future<void> _reschedule() async {
-    final n = notifier;
-    if (n == null || !n.supported) return;
-    final now = DateTime.now();
+
+  /// Massimo di notifiche programmate insieme: iOS ne conserva 64 in attesa
+  /// e scarta le altre; ne lasciamo libere alcune per gli avvisi immediati.
+  static const maxScheduled = 60;
+
+  /// Tutte le notifiche che vorremmo programmare, con priorità (decisione 7
+  /// del CEO): 0 urgenti, 1 dosi, 2 scadenze entro 7 giorni, 3 uscite,
+  /// 4 scadenze lontane. Funzione pura: non tocca il sistema (testabile).
+  List<PlannedNotification> planNotifications(DateTime now) {
+    final out = <PlannedNotification>[];
     for (var di = 0; di < dogs.length && di < 9; di++) {
       final d = dogs[di];
       final base = (di + 1) * 1000;
-      // Allarmi urgenti: notifica immediata, una volta sola per allarme
-      // (06 aggiunta 13).
-      final urgent =
-          AlertEngine.compute(
-            dog: d,
-            logs: logs,
-            records: records,
-            weights: weights,
-            now: now,
-            repro: repro,
-            pendingDoses: pendingDoses(d.id, now),
-          ).where(
-            (a) => a.level == AlertLevel.subito || a.level == AlertLevel.oggi,
-          );
-      var ui = 0;
-      for (final a in urgent.take(6)) {
-        final key =
-            'alert_${d.id}_${a.title}_${now.year}${now.month}${now.day}';
-        final slot = base + 90 + ui++;
-        if (_prefs!.getBool(key) ?? false) continue;
-        await _prefs!.setBool(key, true);
-        await n.showNow(
-          slot,
-          '${a.level == AlertLevel.subito ? '🔴 SUBITO' : '🟠 OGGI'}: ${a.title}',
-          '${d.name}: ${a.actionText ?? a.message}',
-        );
-      }
-      // Notifiche a tempo anche ad app chiusa (07 N13): pipì mancata.
       final dLogs = logs.where((l) => l.dogId == d.id).toList()
         ..sort((a, b) => a.time.compareTo(b.time));
+
+      // Pipì mancata, anche ad app chiusa (07 N13).
       final real = dLogs.where(
         (l) => l.type == LogType.pipi && !l.signs.contains(Sign.gocce),
       );
@@ -560,90 +540,22 @@ class AppStore extends ChangeNotifier implements SyncTarget {
         if (puppy && PottyPredictor.inSleepWindow(d, at)) {
           at = PottyPredictor.nextWake(d, at).add(const Duration(hours: 1));
         }
-        await n.schedule(
-          base + 96,
-          at,
-          '🔴 ${d.name}: nessuna pipì da $hours ore?',
-          'Se non ha davvero urinato è un\'urgenza: contatta il veterinario. '
-              'Se l\'ha fatta, registrala.',
-        );
-      } else {
-        await n.cancel(base + 96);
-      }
-      // Dosi non confermate dopo 2 ore.
-      final upcoming = <DateTime>[];
-      for (final r in records.where(
-        (r) => r.dogId == d.id && r.isActiveTherapy(now),
-      )) {
-        final nd = nextDose(r, now.subtract(const Duration(hours: 2)));
-        if (nd != null) upcoming.add(nd.add(const Duration(hours: 2)));
-      }
-      upcoming.sort();
-      for (var k = 0; k < 3; k++) {
-        if (k < upcoming.length) {
-          await n.schedule(
-            base + 97 + k,
-            upcoming[k],
-            '💊 Dose confermata per ${d.name}?',
-            'Apri Zampa e segna "Dato" o "Saltato". Se l\'hai saltata non '
-                'raddoppiare la successiva: chiedi al veterinario.',
-          );
-        } else {
-          await n.cancel(base + 97 + k);
-        }
-      }
-      // Prossima uscita per pipì e cacca.
-      for (final need in Need.values) {
-        final id = base + (need == Need.pipi ? 0 : 45);
-        final on = need == Need.pipi ? d.pottyRemindersOn : d.poopRemindersOn;
-        if (!on) {
-          await n.cancel(id);
-          continue;
-        }
-        final p = forecast(d, need, now);
-        if (p.last == null) {
-          await n.cancel(id);
-          continue;
-        }
-        final at = p.recommendedAt.subtract(
-          Duration(minutes: d.reminderLeadMinutes),
-        );
-        await n.schedule(
-          id,
-          at.isAfter(now) ? at : p.recommendedAt,
-          need == Need.pipi
-              ? 'È quasi ora di uscire con ${d.name} 🐾'
-              : 'Probabile cacca in arrivo per ${d.name} 💩',
-          'Uscita consigliata alle ${hm(p.recommendedAt)}. ${p.reason}',
+        out.add(
+          PlannedNotification(
+            base + 96,
+            at,
+            '🔴 ${d.name}: nessuna pipì da $hours ore?',
+            'Se non ha davvero urinato è un\'urgenza: contatta il veterinario. '
+                'Se l\'ha fatta, registrala.',
+            0,
+            exact: true,
+          ),
         );
       }
-      // Scadenze sanitarie: il giorno stesso alle 9 e 3 giorni prima.
-      final due = dueItems(
-        records,
-        d.id,
-      ).where((x) => !x.overdue(now)).take(20);
-      var k = 1;
-      for (final item in due) {
-        final day = DateTime(item.due.year, item.due.month, item.due.day, 9);
-        await n.schedule(
-          base + k++,
-          day.subtract(const Duration(days: 3)),
-          '${item.record.type.emoji} Tra 3 giorni: ${item.record.title}',
-          'Promemoria per ${d.name}. Prenota se serve.',
-        );
-        await n.schedule(
-          base + k++,
-          day,
-          '${item.record.type.emoji} Oggi: ${item.record.title}',
-          'Scadenza di oggi per ${d.name}.',
-        );
-      }
-      for (; k <= 40; k++) {
-        await n.cancel(base + k);
-      }
-      // Terapie in corso: tutte le dosi delle prossime 72 ore (così i
-      // promemoria arrivano anche se l'app non viene aperta).
+
+      // Dosi delle prossime 72 ore e conferma dopo 2 ore.
       var t = 0;
+      final confirmAt = <DateTime>[];
       for (final r in records.where(
         (r) => r.dogId == d.id && r.isActiveTherapy(now),
       )) {
@@ -651,21 +563,146 @@ class AppStore extends ChangeNotifier implements SyncTarget {
         while (next != null &&
             t < 30 &&
             next.isBefore(now.add(const Duration(hours: 72)))) {
-          await n.schedule(
-            base + 50 + t++,
-            next,
-            '💊 ${r.title} per ${d.name}',
-            '${r.dose.isEmpty ? 'È ora della dose' : 'Dose: ${r.dose}'} '
-                '(come prescritta dal veterinario). Se l\'hai saltata, non '
-                'raddoppiare: chiedi al veterinario.',
+          out.add(
+            PlannedNotification(
+              base + 50 + t++,
+              next,
+              '💊 ${r.title} per ${d.name}',
+              '${r.dose.isEmpty ? 'È ora della dose' : 'Dose: ${r.dose}'} '
+                  '(come prescritta dal veterinario). Se l\'hai saltata, non '
+                  'raddoppiare: chiedi al veterinario.',
+              1,
+              exact: true,
+            ),
           );
           next = nextDose(r, next.add(const Duration(minutes: 1)));
         }
+        final nd = nextDose(r, now.subtract(const Duration(hours: 2)));
+        if (nd != null) confirmAt.add(nd.add(const Duration(hours: 2)));
       }
-      for (; t < 30; t++) {
-        await n.cancel(base + 50 + t);
+      confirmAt.sort();
+      for (var k = 0; k < 3 && k < confirmAt.length; k++) {
+        out.add(
+          PlannedNotification(
+            base + 97 + k,
+            confirmAt[k],
+            '💊 Dose confermata per ${d.name}?',
+            'Apri Zampa e segna "Dato" o "Saltato". Se l\'hai saltata non '
+                'raddoppiare la successiva: chiedi al veterinario.',
+            1,
+            exact: true,
+          ),
+        );
+      }
+
+      // Prossima uscita per pipì e cacca.
+      for (final need in Need.values) {
+        final on = need == Need.pipi ? d.pottyRemindersOn : d.poopRemindersOn;
+        if (!on) continue;
+        final p = forecast(d, need, now);
+        if (p.last == null) continue;
+        final at = p.recommendedAt.subtract(
+          Duration(minutes: d.reminderLeadMinutes),
+        );
+        out.add(
+          PlannedNotification(
+            base + (need == Need.pipi ? 0 : 45),
+            at.isAfter(now) ? at : p.recommendedAt,
+            need == Need.pipi
+                ? 'È quasi ora di uscire con ${d.name} 🐾'
+                : 'Probabile cacca in arrivo per ${d.name} 💩',
+            'Uscita consigliata alle ${hm(p.recommendedAt)}. ${p.reason}',
+            3,
+          ),
+        );
+      }
+
+      // Scadenze sanitarie: 3 giorni prima e il giorno stesso alle 9.
+      var k = 1;
+      for (final item in dueItems(
+        records,
+        d.id,
+      ).where((x) => !x.overdue(now)).take(20)) {
+        final day = DateTime(item.due.year, item.due.month, item.due.day, 9);
+        final near = day.difference(now).inDays <= 7;
+        out
+          ..add(
+            PlannedNotification(
+              base + k++,
+              day.subtract(const Duration(days: 3)),
+              '${item.record.type.emoji} Tra 3 giorni: ${item.record.title}',
+              'Promemoria per ${d.name}. Prenota se serve.',
+              near ? 2 : 4,
+            ),
+          )
+          ..add(
+            PlannedNotification(
+              base + k++,
+              day,
+              '${item.record.type.emoji} Oggi: ${item.record.title}',
+              'Scadenza di oggi per ${d.name}.',
+              near ? 2 : 4,
+            ),
+          );
       }
     }
+    // Solo eventi futuri, per priorità e poi per orario.
+    final future = out.where((p) => p.when.isAfter(now)).toList()
+      ..sort((a, b) {
+        final c = a.priority.compareTo(b.priority);
+        return c != 0 ? c : a.when.compareTo(b.when);
+      });
+    return future.take(maxScheduled).toList();
+  }
+
+  static const _notifKey = 'zampa_notif_ids';
+
+  Future<void> _reschedule() async {
+    final n = notifier;
+    if (n == null || !n.supported) return;
+    final now = DateTime.now();
+    // Allarmi urgenti: notifica immediata, una volta sola per allarme.
+    for (var di = 0; di < dogs.length && di < 9; di++) {
+      final d = dogs[di];
+      final urgent =
+          AlertEngine.compute(
+            dog: d,
+            logs: logs,
+            records: records,
+            weights: weights,
+            now: now,
+            repro: repro,
+            pendingDoses: pendingDoses(d.id, now),
+          ).where(
+            (a) => a.level == AlertLevel.subito || a.level == AlertLevel.oggi,
+          );
+      var ui = 0;
+      for (final a in urgent.take(6)) {
+        final key =
+            'alert_${d.id}_${a.title}_${now.year}${now.month}${now.day}';
+        final slot = (di + 1) * 1000 + 90 + ui++;
+        if (_prefs!.getBool(key) ?? false) continue;
+        await _prefs!.setBool(key, true);
+        await n.showNow(
+          slot,
+          '${a.level == AlertLevel.subito ? '🔴 SUBITO' : '🟠 OGGI'}: ${a.title}',
+          '${d.name}: ${a.actionText ?? a.message}',
+        );
+      }
+    }
+    // Notifiche programmate, entro il tetto e per priorità.
+    final planned = planNotifications(now);
+    final keep = {for (final p in planned) p.id};
+    final previous = (_prefs!.getStringList(_notifKey) ?? const []).map(
+      int.parse,
+    );
+    for (final id in previous) {
+      if (!keep.contains(id)) await n.cancel(id);
+    }
+    for (final p in planned) {
+      await n.schedule(p.id, p.when, p.title, p.body, exact: p.exact);
+    }
+    await _prefs!.setStringList(_notifKey, [for (final id in keep) '$id']);
   }
 
   static DateTime? nextDose(HealthRecord r, DateTime now) {
@@ -928,4 +965,26 @@ String? microchipProblem(String code) {
     return 'Il microchip ISO ha 15 cifre numeriche.';
   }
   return null;
+}
+
+/// Notifica da programmare (vedi AppStore.planNotifications).
+class PlannedNotification {
+  PlannedNotification(
+    this.id,
+    this.when,
+    this.title,
+    this.body,
+    this.priority, {
+    this.exact = false,
+  });
+  final int id;
+  final DateTime when;
+  final String title;
+  final String body;
+
+  /// 0 urgenti, 1 dosi, 2 scadenze vicine, 3 uscite, 4 scadenze lontane.
+  final int priority;
+
+  /// Da consegnare all'orario esatto anche in risparmio energetico.
+  final bool exact;
 }

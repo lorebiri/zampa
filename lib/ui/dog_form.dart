@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models.dart';
 import '../store.dart';
 import '../logic/weather.dart';
+import '../notifications.dart';
 import 'common.dart';
 import 'avatar_editor.dart';
 
@@ -394,7 +395,37 @@ class _DogFormPageState extends State<DogFormPage> {
         if (mounted) toast(context, 'Meteo non raggiungibile ora');
       }
     }
+    final firstDog = store.dogs.isEmpty;
     await store.upsertDog(dog);
+    if (firstDog && Notifier.instance.supported && mounted) {
+      // Permesso notifiche dopo il primo cane, spiegando perché (CEO C1-3).
+      final go = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Attivare le notifiche?'),
+          content: Text(
+            'Servono per avvisarti quando ${dog.name} deve uscire, quando è ora '
+            'di una medicina o di un vaccino e, soprattutto, se qualcosa nei dati '
+            'registrati richiede di sentire il veterinario. Puoi cambiarle quando vuoi.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Non ora'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Attiva'),
+            ),
+          ],
+        ),
+      );
+      if (go == true) {
+        await Notifier.instance.requestPermissions();
+        // Riprogramma le notifiche ora che sono permesse.
+        await store.upsertDog(dog);
+      }
+    }
     if (weightChanged) await store.addWeight(dog.id, kg, DateTime.now());
     if (mounted) Navigator.pop(context);
   }
