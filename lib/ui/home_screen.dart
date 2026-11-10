@@ -301,7 +301,8 @@ class DogHeader extends StatelessWidget {
                       [
                         if (dog.breed.isNotEmpty) dog.breed,
                         ageLabel(dog),
-                        '${dog.weightKg.toStringAsFixed(1)} kg',
+                        // Spazio indivisibile: "14.2 kg" non va a capo.
+                        '${dog.weightKg.toStringAsFixed(1)}\u00A0kg',
                         switch (lifeStageOf(dog)) {
                           LifeStage.cucciolo => 'cucciolo',
                           LifeStage.giovane => 'giovane',

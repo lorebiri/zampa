@@ -80,24 +80,27 @@ class NutritionScreen extends StatelessWidget {
         ),
         for (final n in plan.notes) NoticeCard(n),
         const SectionTitle('Oggi'),
-        Row(
-          children: [
-            Expanded(
-              child: _Stat(
-                label: 'Pasti registrati',
-                value: '$mealsToday / ${plan.meals}',
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _Stat(
+                  label: 'Pasti registrati',
+                  value: '$mealsToday / ${plan.meals}',
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _Stat(
-                label: 'Acqua registrata',
-                value: '${waterToday.round()} ml',
-                hint:
-                    'Riferimento ${plan.waterMlMin.round()}-${plan.waterMlMax.round()} ml (inclusa l\'acqua del cibo)',
+              const SizedBox(width: 8),
+              Expanded(
+                child: _Stat(
+                  label: 'Acqua registrata',
+                  value: '${waterToday.round()} ml',
+                  hint:
+                      'Riferimento ${plan.waterMlMin.round()}-${plan.waterMlMax.round()} ml (inclusa l\'acqua del cibo)',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SectionTitle('Forma fisica (Body Condition Score)'),
         Card(

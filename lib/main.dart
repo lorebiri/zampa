@@ -295,18 +295,21 @@ class _TermsPageState extends State<TermsPage> {
     );
     return _IntroLayout(
       children: [
-        Container(
-          width: 64,
-          height: 64,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: s.primaryContainer,
-            borderRadius: BorderRadius.circular(Radii.card),
-          ),
-          child: Icon(
-            Icons.health_and_safety_outlined,
-            size: 34,
-            color: s.onPrimaryContainer,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Container(
+            width: 64,
+            height: 64,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: s.primaryContainer,
+              borderRadius: BorderRadius.circular(Radii.card),
+            ),
+            child: Icon(
+              Icons.health_and_safety_outlined,
+              size: 34,
+              color: s.onPrimaryContainer,
+            ),
           ),
         ),
         const SizedBox(height: Space.l),

@@ -677,9 +677,7 @@ class PetScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Space.m),
-          Wrap(
-            spacing: Space.s,
-            runSpacing: Space.s,
+          _StatRow(
             children: [
               _Stat(
                 icon: Icons.water_drop_outlined,
@@ -791,6 +789,40 @@ class CompanionDevice extends StatelessWidget {
   }
 }
 
+/// Indicatori in colonne uguali; con il testo molto grande, uno sotto
+/// l'altro.
+class _StatRow extends StatelessWidget {
+  const _StatRow({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.textScalerOf(context).scale(10) > 15) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final c in children)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Space.s),
+              child: c,
+            ),
+        ],
+      );
+    }
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) const SizedBox(width: Space.s),
+            Expanded(child: children[i]),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 /// Valore del compagno: un numero da leggere, non una barra da riempire
 /// (07 N42).
 class _Stat extends StatelessWidget {
@@ -807,7 +839,6 @@ class _Stat extends StatelessWidget {
       label: '$label: $text',
       child: ExcludeSemantics(
         child: Container(
-          constraints: const BoxConstraints(minWidth: 96),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: t.colorScheme.surfaceContainerLow,
