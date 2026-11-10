@@ -155,6 +155,12 @@ class Notifier {
     }
   }
 
+  /// Notifiche programmate in attesa nel sistema (per il collaudo).
+  Future<List<PendingNotificationRequest>> pending() async =>
+      _ready ? _plugin.pendingNotificationRequests() : const [];
+
+  bool get ready => _ready;
+
   Future<void> cancel(int id) async {
     if (!_ready) return;
     await _plugin.cancel(id: id);
