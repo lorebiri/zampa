@@ -14,7 +14,7 @@ import 'models.dart';
 import 'ui/account_screen.dart';
 import 'ui/avatar.dart';
 import 'ui/common.dart';
-import 'ui/dog_form.dart';
+import 'ui/dog_wizard.dart';
 import 'ui/health_screen.dart';
 import 'ui/home_screen.dart';
 import 'ui/nutrition_screen.dart';
@@ -229,9 +229,8 @@ class WelcomePage extends StatelessWidget {
         FilledButton.icon(
           icon: const Icon(Icons.add),
           label: const Text('Aggiungi il tuo cane'),
-          onPressed: () =>
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const DogFormPage())),
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const DogWizardPage())),
         ),
         const SizedBox(height: Space.m),
         if (appAuth != null) ...[
