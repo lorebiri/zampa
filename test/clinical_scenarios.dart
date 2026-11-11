@@ -923,6 +923,17 @@ List<Scenario> seasonalScenarios() => [
   ),
 ];
 
+/// Viaggi: partenza tra 30 giorni (Scenario.now = data di partenza).
+List<Scenario> travelScenarios() => [
+  Scenario('senza antirabbico', now: baseNow.add(d(30))),
+  Scenario(
+    'con antirabbico e microchip',
+    dog: mkDog(microchip: '380260000000001'),
+    now: baseNow.add(d(30)),
+    records: [rec(RecordType.vaccino, 'Rabbia', d(100))],
+  ),
+];
+
 List<(String, Dog?)> emergencyDogs() => [
   ('nessun cane', null),
   ('cane senza numeri', mkDog()),

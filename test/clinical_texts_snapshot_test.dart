@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zampa/logic/alerts.dart';
+import 'package:zampa/logic/modules.dart';
 import 'package:zampa/logic/nutrition.dart';
 import 'package:zampa/logic/prevention.dart';
 import 'package:zampa/logic/seasonal.dart';
@@ -96,6 +97,19 @@ String clinicalTexts() {
     ]) {
       line('${t.icon} | ${t.title} | ${t.text}');
     }
+  }
+
+  line('');
+  line('### Viaggi (Modules.travelChecklist)');
+  for (final s in travelScenarios()) {
+    line('## ${s.name}');
+    for (final c in Modules.travelChecklist(s.dog, s.records, s.now)) {
+      line('${c.ok} | ${c.item} | ${c.note}');
+    }
+  }
+  line('## Qualità della vita (Modules.qolItems)');
+  for (final (item, help) in Modules.qolItems) {
+    line('$item | $help');
   }
 
   line('');

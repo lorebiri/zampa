@@ -610,6 +610,30 @@ info | Veleni per lumache e topi | In questa stagione sono più usati nei giardi
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
 
+### Viaggi (Modules.travelChecklist)
+## senza antirabbico
+true | Età minima | Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età.
+false | Microchip registrato | Obbligatorio e impiantato prima del vaccino antirabbico.
+false | Vaccino antirabbico valido | Nessun antirabbico in cartella.
+null | Passaporto europeo per animali | Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute.
+null | Trattamento contro Echinococcus | Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.
+null | Rischi parassitari della destinazione | Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.
+## con antirabbico e microchip
+true | Età minima | Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età.
+true | Microchip registrato | Obbligatorio e impiantato prima del vaccino antirabbico.
+true | Vaccino antirabbico valido | La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: 2/8/2026).
+null | Passaporto europeo per animali | Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute.
+null | Trattamento contro Echinococcus | Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.
+null | Rischi parassitari della destinazione | Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.
+## Qualità della vita (Modules.qolItems)
+Dolore (Hurt) | Il dolore è controllato? Respira bene? 10 = nessun dolore
+Fame (Hunger) | Mangia abbastanza? 10 = appetito normale
+Idratazione | Beve abbastanza? 10 = sì
+Igiene | Si mantiene pulito, niente piaghe? 10 = sì
+Felicità | Interagisce, gioca, risponde? 10 = come sempre
+Mobilità | Si alza e cammina da solo? 10 = sì
+Più giorni buoni che cattivi | 10 = quasi tutti buoni
+
 ### Emergenze: segnali d'allarme (EmergencyScreen.redFlags)
 Addome gonfio, conati a vuoto, agitazione | Possibile torsione/dilatazione dello stomaco: ogni minuto conta.
 Fatica a respirare, respiro rumoroso, lingua o gengive blu | Tienilo calmo e al fresco durante il trasporto.
