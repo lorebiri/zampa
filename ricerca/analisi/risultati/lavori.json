@@ -1,11 +1,12 @@
-{"tag": "R7", "shadow": true, "of": 4,
+{"tag": "basefin", "shadow": false, "of": 4,
  "jobs": [
-  {"scenario": "realistico", "grid": true},
-  {"scenario": "pulito", "every": 3},
-  {"scenario": "orari_padrone", "every": 3},
-  {"scenario": "poliuria", "every": 3},
-  {"scenario": "mancanti", "every": 3},
-  {"scenario": "jitter", "every": 3},
-  {"scenario": "weekend", "every": 3},
-  {"scenario": "cambio_routine", "every": 3}
+  {"scenario": "realistico"},
+  {"scenario": "pulito"},
+  {"scenario": "mancanti"},
+  {"scenario": "jitter"},
+  {"scenario": "orari_padrone"},
+  {"scenario": "weekend"},
+  {"scenario": "cambio_routine"},
+  {"scenario": "poliuria"},
+  {"scenario": "realistico", "need": "cacca"}
  ]}
