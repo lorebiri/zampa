@@ -59,6 +59,8 @@ List<HealthAlert> run(
 );
 
 void main() {
+  // Il PDF carica Atkinson dagli asset (C2-9).
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('Nuovi segni (revisione veterinaria)', () {
     test('ha ingerito qualcosa → subito', () {
       expect(

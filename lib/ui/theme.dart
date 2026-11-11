@@ -450,6 +450,10 @@ ThemeData buildTheme(Brightness b) {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
+      // Aiuti ed errori lunghi vanno a capo invece di essere troncati (testo
+      // al 200%, ricerca/22 §8).
+      helperMaxLines: 12,
+      errorMaxLines: 12,
       filled: true,
       fillColor: fieldFill,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -466,8 +470,6 @@ ThemeData buildTheme(Brightness b) {
         borderSide: BorderSide(color: scheme.primary, width: 2),
       ),
       labelStyle: text.bodyLarge!.copyWith(color: scheme.onSurfaceVariant),
-      helperMaxLines: 4,
-      errorMaxLines: 4,
     ),
     checkboxTheme: CheckboxThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),

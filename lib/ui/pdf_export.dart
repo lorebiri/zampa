@@ -5,6 +5,7 @@ import '../brand.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart' show BuildContext;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -42,8 +43,39 @@ String _safe(String s) => s
     .replaceAll('µ', 'u')
     .replaceAll(RegExp(r'[^\u0000-ÿ€–—’]'), '');
 
+pw.ThemeData? _pdfTheme;
+
+/// Tema del PDF con Atkinson Hyperlegible Next, lo stesso carattere dell'app
+/// (ricerca/22 §8): i TTF inclusi negli asset disegnano «–» e gli accenti,
+/// che l'Helvetica predefinita del pacchetto `pdf` non copre.
+Future<pw.ThemeData> pdfTheme() async {
+  if (_pdfTheme case final t?) return t;
+  Future<pw.Font> ttf(String w) async => pw.Font.ttf(
+    await rootBundle.load('assets/fonts/AtkinsonHyperlegibleNext-$w.ttf'),
+  );
+  final bold = await ttf('Bold');
+  return _pdfTheme = pw.ThemeData.withFont(
+    base: await ttf('Regular'),
+    bold: bold,
+    italic: await ttf('Italic'),
+    // Il corsivo grassetto non è incluso: si usa il grassetto.
+    boldItalic: bold,
+  );
+}
+
 Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
-  final doc = pw.Document(title: '$appName – ${dog.name}', author: appName);
+  pw.ThemeData? theme;
+  try {
+    theme = await pdfTheme();
+  } catch (_) {
+    // Senza i caratteri il PDF esce comunque, con l'Helvetica del pacchetto
+    // (_safe toglie i simboli che non sa disegnare).
+  }
+  final doc = pw.Document(
+    title: '$appName – ${dog.name}',
+    author: appName,
+    theme: theme,
+  );
   final plan = Nutrition.plan(dog, now);
   final logs = store.logsOf(dog.id);
   final days = [

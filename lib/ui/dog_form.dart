@@ -58,14 +58,14 @@ class _DogFormPageState extends State<DogFormPage> {
       ),
       body: PageBody(
         children: [
-          TextField(
-            controller: name,
-            decoration: const InputDecoration(labelText: 'Nome *'),
+          _Labeled(
+            label: 'Nome *',
+            child: TextField(controller: name),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: breed,
-            decoration: const InputDecoration(labelText: 'Razza o tipo'),
+          _Labeled(
+            label: 'Razza o tipo',
+            child: TextField(controller: breed),
           ),
           const SizedBox(height: 12),
           ListTile(
@@ -88,12 +88,14 @@ class _DogFormPageState extends State<DogFormPage> {
               if (r != null) setState(() => birth = r);
             },
           ),
-          TextField(
-            controller: weight,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(
-              labelText: 'Peso *',
-              suffixText: 'kg',
+          _Labeled(
+            label: 'Peso *',
+            child: TextField(
+              controller: weight,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(suffixText: 'kg'),
             ),
           ),
           const SizedBox(height: 12),
@@ -111,71 +113,81 @@ class _DogFormPageState extends State<DogFormPage> {
             value: neutered,
             onChanged: (v) => setState(() => neutered = v),
           ),
-          DropdownButtonFormField<AdultSize?>(
-            initialValue: adultSize,
-            decoration: const InputDecoration(
-              labelText: 'Taglia adulta prevista',
-              helperText: 'Per i cuccioli: decide fino a quando cresce e il tipo di alimento',
+          _Labeled(
+            label: 'Taglia adulta prevista',
+            child: DropdownButtonFormField<AdultSize?>(
+              isExpanded: true,
+              initialValue: adultSize,
+              decoration: const InputDecoration(
+                helperText: 'Per i cuccioli: decide fino a quando cresce e il tipo di alimento',
+              ),
+              items: [
+                const DropdownMenuItem(
+                  value: null,
+                  child: Text('Non so / già adulto'),
+                ),
+                for (final x in AdultSize.values)
+                  DropdownMenuItem(value: x, child: Text(x.label)),
+              ],
+              onChanged: (v) => setState(() => adultSize = v),
             ),
-            items: [
-              const DropdownMenuItem(
-                value: null,
-                child: Text('Non so / già adulto'),
-              ),
-              for (final x in AdultSize.values)
-                DropdownMenuItem(value: x, child: Text(x.label)),
-            ],
-            onChanged: (v) => setState(() => adultSize = v),
           ),
           const SizedBox(height: 12),
-          DropdownButtonFormField<ActivityLevel>(
-            initialValue: activity,
-            decoration: const InputDecoration(labelText: 'Livello di attività'),
-            items: const [
-              DropdownMenuItem(
-                value: ActivityLevel.bassa,
-                child: Text('Bassa (sedentario)'),
-              ),
-              DropdownMenuItem(
-                value: ActivityLevel.normale,
-                child: Text('Normale'),
-              ),
-              DropdownMenuItem(
-                value: ActivityLevel.alta,
-                child: Text('Alta (molto sportivo)'),
-              ),
-              DropdownMenuItem(
-                value: ActivityLevel.lavoro,
-                child: Text('Cane da lavoro'),
-              ),
-            ],
-            onChanged: (v) => setState(() => activity = v ?? activity),
+          _Labeled(
+            label: 'Livello di attività',
+            child: DropdownButtonFormField<ActivityLevel>(
+              isExpanded: true,
+              initialValue: activity,
+              items: const [
+                DropdownMenuItem(
+                  value: ActivityLevel.bassa,
+                  child: Text('Bassa (sedentario)'),
+                ),
+                DropdownMenuItem(
+                  value: ActivityLevel.normale,
+                  child: Text('Normale'),
+                ),
+                DropdownMenuItem(
+                  value: ActivityLevel.alta,
+                  child: Text('Alta (molto sportivo)'),
+                ),
+                DropdownMenuItem(
+                  value: ActivityLevel.lavoro,
+                  child: Text('Cane da lavoro'),
+                ),
+              ],
+              onChanged: (v) => setState(() => activity = v ?? activity),
+            ),
           ),
           const SizedBox(height: 12),
-          DropdownButtonFormField<DietType>(
-            initialValue: diet,
-            decoration: const InputDecoration(labelText: 'Alimentazione'),
-            items: [
-              for (final x in DietType.values)
-                DropdownMenuItem(value: x, child: Text(x.label)),
-            ],
-            onChanged: (v) => setState(() => diet = v ?? diet),
+          _Labeled(
+            label: 'Alimentazione',
+            child: DropdownButtonFormField<DietType>(
+              isExpanded: true,
+              initialValue: diet,
+              items: [
+                for (final x in DietType.values)
+                  DropdownMenuItem(value: x, child: Text(x.label)),
+              ],
+              onChanged: (v) => setState(() => diet = v ?? diet),
+            ),
           ),
           if (sex == Sex.femmina) ...[
             const SizedBox(height: 12),
-            DropdownButtonFormField<ReproState>(
-              initialValue: repro,
-              decoration: const InputDecoration(
-                labelText: 'Stato riproduttivo',
+            _Labeled(
+              label: 'Stato riproduttivo',
+              child: DropdownButtonFormField<ReproState>(
+                isExpanded: true,
+                initialValue: repro,
+                items: [
+                  for (final x in ReproState.values)
+                    DropdownMenuItem(value: x, child: Text(x.label)),
+                ],
+                onChanged: (v) => setState(() {
+                  repro = v ?? repro;
+                  reproSince ??= DateTime.now();
+                }),
               ),
-              items: [
-                for (final x in ReproState.values)
-                  DropdownMenuItem(value: x, child: Text(x.label)),
-              ],
-              onChanged: (v) => setState(() {
-                repro = v ?? repro;
-                reproSince ??= DateTime.now();
-              }),
             ),
             if (repro != ReproState.nessuno)
               ListTile(
@@ -203,6 +215,8 @@ class _DogFormPageState extends State<DogFormPage> {
           ],
           const SectionTitle('Routine e promemoria'),
           Row(
+            // Etichette di altezza diversa: i campi restano allineati in basso.
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 child: _hourPicker(
@@ -222,21 +236,23 @@ class _DogFormPageState extends State<DogFormPage> {
             ],
           ),
           const SizedBox(height: 12),
-          DropdownButtonFormField<Prudence>(
-            initialValue: prudence,
-            decoration: const InputDecoration(
-              labelText: 'Prudenza delle uscite',
-              helperText:
-                  'Più prudenza = uscite anticipate. "Meno uscite" vale solo '
-                  'per adulti sani: per cuccioli, anziani e cani malati $appName '
-                  'usa comunque "Equilibrata".',
-              helperMaxLines: 3,
+          _Labeled(
+            label: 'Prudenza delle uscite',
+            child: DropdownButtonFormField<Prudence>(
+              isExpanded: true,
+              initialValue: prudence,
+              decoration: const InputDecoration(
+                helperText:
+                    'Più prudenza = uscite anticipate. "Meno uscite" vale solo '
+                    'per adulti sani: per cuccioli, anziani e cani malati $appName '
+                    'usa comunque "Equilibrata".',
+              ),
+              items: [
+                for (final x in Prudence.values)
+                  DropdownMenuItem(value: x, child: Text(x.label)),
+              ],
+              onChanged: (v) => setState(() => prudence = v ?? prudence),
             ),
-            items: [
-              for (final x in Prudence.values)
-                DropdownMenuItem(value: x, child: Text(x.label)),
-            ],
-            onChanged: (v) => setState(() => prudence = v ?? prudence),
           ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
@@ -250,14 +266,17 @@ class _DogFormPageState extends State<DogFormPage> {
             value: poopRem,
             onChanged: (v) => setState(() => poopRem = v),
           ),
-          DropdownButtonFormField<int>(
-            initialValue: lead,
-            decoration: const InputDecoration(labelText: 'Avvisami prima di'),
-            items: [
-              for (final m in [0, 5, 10, 15, 20, 30])
-                DropdownMenuItem(value: m, child: Text('$m minuti')),
-            ],
-            onChanged: (v) => setState(() => lead = v ?? lead),
+          _Labeled(
+            label: 'Avvisami prima di',
+            child: DropdownButtonFormField<int>(
+              isExpanded: true,
+              initialValue: lead,
+              items: [
+                for (final m in [0, 5, 10, 15, 20, 30])
+                  DropdownMenuItem(value: m, child: Text('$m minuti')),
+              ],
+              onChanged: (v) => setState(() => lead = v ?? lead),
+            ),
           ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
@@ -270,71 +289,76 @@ class _DogFormPageState extends State<DogFormPage> {
             onChanged: (v) => setState(() => heat = v),
           ),
           if (heat)
-            TextField(
-              controller: city,
-              decoration: const InputDecoration(labelText: 'Città'),
+            _Labeled(
+              label: 'Città',
+              child: TextField(controller: city),
             ),
           const SectionTitle('Dati sanitari'),
-          TextField(
-            controller: chip,
-            keyboardType: TextInputType.number,
-            onChanged: (_) => setState(() {}),
-            decoration: InputDecoration(
-              labelText: 'Microchip',
-              errorText: chipProblem,
-              helperText: '15 cifre (in Italia inizia con 380)',
+          _Labeled(
+            label: 'Microchip',
+            child: TextField(
+              controller: chip,
+              keyboardType: TextInputType.number,
+              onChanged: (_) => setState(() {}),
+              decoration: InputDecoration(
+                errorText: chipProblem,
+                helperText: '15 cifre (in Italia inizia con 380)',
+              ),
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: vetName,
-            decoration: const InputDecoration(
-              labelText: 'Veterinario di fiducia',
+          _Labeled(
+            label: 'Veterinario di fiducia',
+            child: TextField(controller: vetName),
+          ),
+          const SizedBox(height: 12),
+          _Labeled(
+            label: 'Telefono del veterinario',
+            child: TextField(
+              controller: vetPhone,
+              keyboardType: TextInputType.phone,
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: vetPhone,
-            keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(
-              labelText: 'Telefono del veterinario',
+          _Labeled(
+            label: 'Pronto soccorso veterinario h24 di riferimento',
+            child: TextField(
+              controller: emergency,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                helperText: 'Lo trovi nella scheda Emergenze',
+              ),
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: emergency,
-            keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(
-              labelText: 'Pronto soccorso veterinario h24 di riferimento',
-              helperText: 'Lo trovi nella scheda Emergenze',
+          _Labeled(
+            label: 'Dove vive',
+            child: DropdownButtonFormField<Region>(
+              isExpanded: true,
+              initialValue: region,
+              decoration: const InputDecoration(
+                helperText: 'Per la stagione di zanzare, pappataci e zecche',
+              ),
+              items: [
+                for (final x in Region.values)
+                  DropdownMenuItem(value: x, child: Text(x.label)),
+              ],
+              onChanged: (v) => setState(() => region = v ?? region),
             ),
           ),
           const SizedBox(height: 12),
-          DropdownButtonFormField<Region>(
-            initialValue: region,
-            decoration: const InputDecoration(
-              labelText: 'Dove vive',
-              helperText: 'Per la stagione di zanzare, pappataci e zecche',
-            ),
-            items: [
-              for (final x in Region.values)
-                DropdownMenuItem(value: x, child: Text(x.label)),
-            ],
-            onChanged: (v) => setState(() => region = v ?? region),
+          _Labeled(
+            label: 'Allergie e intolleranze',
+            child: TextField(controller: allergies),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: allergies,
-            decoration: const InputDecoration(
-              labelText: 'Allergie e intolleranze',
-            ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: conditions,
-            decoration: const InputDecoration(
-              labelText: 'Patologie note',
-              helperText: 'Es. diabete, Cushing, malattia renale, cistite: il modello ne tiene conto',
+          _Labeled(
+            label: 'Patologie note',
+            child: TextField(
+              controller: conditions,
+              decoration: const InputDecoration(
+                helperText: 'Es. diabete, Cushing, malattia renale, cistite: il modello ne tiene conto',
+              ),
             ),
           ),
           const SizedBox(height: 24),
@@ -345,14 +369,17 @@ class _DogFormPageState extends State<DogFormPage> {
   }
 
   Widget _hourPicker(String label, int value, ValueChanged<int> onChanged) =>
-      DropdownButtonFormField<int>(
-        initialValue: value,
-        decoration: InputDecoration(labelText: label),
-        items: [
-          for (var h = 0; h < 24; h++)
-            DropdownMenuItem(value: h, child: Text('${two(h)}:00')),
-        ],
-        onChanged: (v) => onChanged(v ?? value),
+      _Labeled(
+        label: label,
+        child: DropdownButtonFormField<int>(
+          isExpanded: true,
+          initialValue: value,
+          items: [
+            for (var h = 0; h < 24; h++)
+              DropdownMenuItem(value: h, child: Text('${two(h)}:00')),
+          ],
+          onChanged: (v) => onChanged(v ?? value),
+        ),
       );
 
   Future<void> _save() async {
@@ -480,5 +507,36 @@ class _DogFormPageState extends State<DogFormPage> {
     }
     if (weightChanged) await store.addWeight(dog.id, kg, DateTime.now());
     if (mounted) Navigator.pop(context);
+  }
+}
+
+/// Etichetta sopra il campo, non dentro il bordo: va a capo con il testo al
+/// 200% invece di essere troncata (ricerca/22 §8). MergeSemantics la lega al
+/// campo, così il lettore di schermo la legge insieme al valore.
+class _Labeled extends StatelessWidget {
+  const _Labeled({required this.label, required this.child});
+  final String label;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context);
+    return MergeSemantics(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 6),
+            child: Text(
+              label,
+              style: t.textTheme.titleSmall?.copyWith(
+                color: t.colorScheme.onSurface,
+              ),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
   }
 }
