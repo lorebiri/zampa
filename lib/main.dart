@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'notifications.dart';
 import 'brand.dart';
+import 'consent.dart';
 import 'store.dart';
 import 'sync/supabase_backend.dart';
 import 'logic/alerts.dart';
@@ -24,6 +27,7 @@ Future<void> main() async {
   await Notifier.instance.init();
   final store = AppStore(notifier: Notifier.instance);
   await store.load();
+  await ConsentStore.instance.load();
   // Account facoltativo: attivo solo se la build contiene la configurazione
   // Supabase (vedi supabase/LEGGIMI.md).
   if (AccountConfig.enabled) {
@@ -328,9 +332,10 @@ class _TermsPageState extends State<TermsPage> {
         ),
         point(
           Icons.lock_outline,
-          'I dati restano solo su questo dispositivo: nessun account, '
-          'nessun server, nessuna pubblicità. Solo se attivi l\'avviso '
-          'caldo, la città viene inviata al servizio meteo Open-Meteo.',
+          'Senza account i dati restano solo su questo dispositivo; '
+          'l\'account è facoltativo. Nessuna pubblicità. Solo se attivi '
+          'l\'avviso caldo, la città viene inviata al servizio meteo '
+          'Open-Meteo. Dettagli in Profilo › Privacy.',
         ),
         const SizedBox(height: Space.xl),
         Material(
@@ -344,12 +349,22 @@ class _TermsPageState extends State<TermsPage> {
             value: ok,
             onChanged: (v) => setState(() => ok = v ?? false),
             title: const Text('Ho letto e ho capito'),
+            // Età (R-P4 di ricerca/24, informativa §9): una frase in più nel
+            // testo da accettare, salvata con data e versione.
+            subtitle: const Text(
+              'e ho almeno 14 anni, oppure un genitore è d\'accordo',
+            ),
             controlAffinity: ListTileControlAffinity.leading,
           ),
         ),
         const SizedBox(height: Space.l),
         FilledButton(
-          onPressed: ok ? () => StoreScope.read(context).acceptTerms() : null,
+          onPressed: ok
+              ? () {
+                  unawaited(ConsentStore.instance.confirmAge());
+                  StoreScope.read(context).acceptTerms();
+                }
+              : null,
           child: const Text('Continua'),
         ),
       ],

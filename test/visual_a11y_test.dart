@@ -19,6 +19,10 @@ Future<AppStore> _openDemo(WidgetTester tester) async {
     200,
     scrollable: scroll,
   );
+  // Con il testo al 200% la casella (con la frase sull'età) può restare
+  // appena sotto il bordo: la si porta del tutto in vista.
+  await tester.ensureVisible(find.text('Ho letto e ho capito'));
+  await tester.pump();
   await tester.tap(find.text('Ho letto e ho capito'));
   await tester.pump();
   await tester.scrollUntilVisible(

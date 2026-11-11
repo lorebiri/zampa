@@ -6,8 +6,11 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <!-- Account (Supabase) e avviso caldo (Open-Meteo). -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Niente CAMERA: image_picker apre l'app Fotocamera di sistema con un
+         intent, che non richiede il permesso (informativa §3, ricerca/24). -->
+
     <application
         android:label="Zampa"
         android:name="${applicationName}"
