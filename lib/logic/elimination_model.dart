@@ -97,6 +97,56 @@ int _mod(DateTime t) => t.hour * 60 + t.minute;
 
 int _dayKey(DateTime t) => t.year * 400 + t.month * 32 + t.day;
 
+/// R3: risveglio appreso per ogni giorno tra [from] e [to], dai 14 giorni
+/// precedenti dello stesso tipo (fine settimana / feriali; tutti se meno di
+/// 3): mediana dei risvegli registrati se almeno 3, altrimenti della prima
+/// pipì del giorno (dopo almeno 5 ore, prima delle 14) meno 15 minuti.
+Map<int, int> _wakesByDay(
+  Dog dog,
+  List<DateTime> logged,
+  List<DateTime> pees,
+  DateTime from,
+  DateTime to,
+) {
+  final firsts = <DateTime>[];
+  for (var i = 1; i < pees.length; i++) {
+    final t = pees[i], p = pees[i - 1];
+    if (t.difference(p).inHours < 5 || t.hour >= 14) continue;
+    if (p.day == t.day && p.month == t.month) continue;
+    firsts.add(t.subtract(const Duration(minutes: 15)));
+  }
+  int? med(List<DateTime> xs, DateTime d) {
+    final lo = d.subtract(const Duration(days: 14));
+    final win = [
+      for (final t in xs)
+        if (!t.isBefore(lo) && t.isBefore(d)) t,
+    ];
+    final we = d.weekday >= 6;
+    var use = [
+      for (final t in win)
+        if ((t.weekday >= 6) == we) _mod(t),
+    ];
+    if (use.length < 3) use = [for (final t in win) _mod(t)];
+    if (use.length < 3) return null;
+    use.sort();
+    return use[use.length ~/ 2];
+  }
+
+  final res = <int, int>{};
+  for (
+    var d = DateTime(from.year, from.month, from.day);
+    d.isBefore(to);
+    d = DateTime(d.year, d.month, d.day + 1)
+  ) {
+    final m = med(logged, d) ?? med(firsts, d);
+    // Entro ±3 ore dal profilo: un dato strano non sposta la notte.
+    if (m != null && (m - dog.wakeHour * 60).abs() <= 180) {
+      res[_dayKey(d)] = m;
+    }
+  }
+  return res;
+}
+
 /// R2: per ogni giorno tra [from] e [to], gli orari ricorrenti delle uscite
 /// nei 14 giorni precedenti (gruppi entro 45 minuti presenti in almeno il
 /// 40% dei giorni con dati e in almeno 3). Fine settimana e feriali sono
@@ -181,7 +231,37 @@ class _Context {
     this.expPlays = const [],
     this.expWalks = const [],
     this.habitMin = const {},
+    this.wakeMin = const {},
   });
+
+  /// R3: risveglio appreso per giorno (minuti dalla mezzanotte): mediana dei
+  /// risvegli registrati, o della prima pipì del mattino meno 15 minuti,
+  /// nei 14 giorni precedenti dello stesso tipo (feriali / fine settimana).
+  /// Senza dati vale l'ora del profilo.
+  final Map<int, int> wakeMin;
+
+  int wakeFor(Dog dog, DateTime day) =>
+      wakeMin[_dayKey(day)] ?? dog.wakeHour * 60;
+
+  /// Finestra di sonno con il risveglio appreso (solo dentro il modello).
+  bool asleep(Dog dog, DateTime t) {
+    final h = t.hour * 60 + t.minute;
+    final sl = dog.sleepStartHour * 60;
+    final w = wakeFor(dog, t);
+    if (sl == w) return false;
+    return sl > w ? (h >= sl || h < w) : (h >= sl && h < w);
+  }
+
+  /// Prossimo risveglio appreso dopo [t].
+  DateTime nextWake(Dog dog, DateTime t) {
+    var d = DateTime(t.year, t.month, t.day);
+    for (var k = 0; k < 2; k++) {
+      final w = d.add(Duration(minutes: wakeFor(dog, d)));
+      if (w.isAfter(t)) return w;
+      d = DateTime(d.year, d.month, d.day + 1);
+    }
+    return d.add(Duration(minutes: wakeFor(dog, d)));
+  }
 
   /// R2: orari abituali delle uscite per giorno (minuti dalla mezzanotte),
   /// calcolati per ciascun giorno solo sui 14 giorni precedenti, separando
@@ -248,15 +328,26 @@ class _Context {
         .toList();
 
     final loggedWakes = evs(LogType.risveglio);
-    // Risvegli: quelli registrati + l'orario abituale nei giorni senza
-    // registrazione.
+    // R3: risveglio appreso per giorno (feriali e fine settimana separati).
+    final peeTimes = PottyPredictor.outings(mine).map((o) => o.time).toList();
+    final wakeMin = _wakesByDay(
+      dog,
+      [for (final e in loggedWakes) e.time],
+      peeTimes,
+      from,
+      to,
+    );
+    // Risvegli: quelli registrati + l'orario abituale (appreso) nei giorni
+    // senza registrazione.
     final wakes = <_Ev>[...loggedWakes];
     for (
       var d = DateTime(from.year, from.month, from.day);
       d.isBefore(to);
       d = DateTime(d.year, d.month, d.day + 1)
     ) {
-      final w = DateTime(d.year, d.month, d.day, dog.wakeHour);
+      final w = d.add(
+        Duration(minutes: wakeMin[_dayKey(d)] ?? dog.wakeHour * 60),
+      );
       final logged = loggedWakes.any(
         (e) => e.time.difference(w).inMinutes.abs() < 180,
       );
@@ -290,6 +381,7 @@ class _Context {
       expPlays: exp(plays),
       expWalks: exp(walks),
       habitMin: _habitsByDay(outs.map((o) => o.time).toList(), from, to),
+      wakeMin: wakeMin,
     );
   }
 
@@ -415,7 +507,7 @@ class _Model {
       math.max(0, u - 0.5),
       math.sin(ang),
       math.cos(ang),
-      PottyPredictor.inSleepWindow(dog, mid) ? 1 : 0,
+      c.asleep(dog, mid) ? 1 : 0,
       _kernelSum(c.wakes, mid, cutoff, pr.wake, 1),
       _triggerSum(c.meals, c.expMeals, mid, cutoff, pr.meal, 1.5),
       _triggerSum(c.waters, c.expWaters, mid, cutoff, pr.water, 2.5),
@@ -1098,6 +1190,7 @@ class FittedModel {
       expPlays: _ctx.expPlays,
       expWalks: _ctx.expWalks,
       habitMin: _ctx.habitMin,
+      wakeMin: _ctx.wakeMin,
     );
   }
 
@@ -1349,11 +1442,9 @@ class FittedModel {
     ShadowForecast? shadow;
     if (r != null) {
       var e = r.q[0.5]!;
-      if (PottyPredictor.inSleepWindow(dog, e)) {
-        e = PottyPredictor.nextWake(
-          dog,
-          e,
-        ).add(Duration(minutes: prior.wake.peak.round()));
+      // R3: di notte, al risveglio appreso (feriali e fine settimana).
+      if (c.asleep(dog, e)) {
+        e = c.nextWake(dog, e).add(Duration(minutes: prior.wake.peak.round()));
       }
       shadow = ShadowForecast(
         q10: r.q[0.1]!,
