@@ -6,7 +6,8 @@ plugins {
 
 android {
     namespace = "it.zampa.zampa"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_local_notifications 23 e androidx.core 1.19 richiedono SDK 37.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
