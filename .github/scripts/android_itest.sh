@@ -3,6 +3,7 @@
 # esatte vengono concessi via adb appena l'app è installata, come farebbe
 # l'utente toccando «Consenti»: così il test non resta fermo sul dialogo.
 set -u
+free -m || true
 PKG=it.zampa.zampa
 df -h / || true
 (

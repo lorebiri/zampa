@@ -67,12 +67,16 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      # Compila prima di accendere l'emulatore: Gradle, NDK e SDK 37 insieme
+      # all'emulatore esauriscono la memoria del runner.
+      - run: flutter build apk --debug
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: google_apis
           arch: x86_64
           disk-size: 3072M
+          ram-size: 2048M
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: bash .github/scripts/android_itest.sh
