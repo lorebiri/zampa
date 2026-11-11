@@ -4,6 +4,7 @@
 # l'utente toccando «Consenti»: così il test non resta fermo sul dialogo.
 set -u
 PKG=it.zampa.zampa
+df -h / || true
 (
   for i in $(seq 1 300); do
     if adb shell pm list packages | grep -q "$PKG"; then
