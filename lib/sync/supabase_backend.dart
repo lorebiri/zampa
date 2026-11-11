@@ -38,6 +38,7 @@ class SupabaseBackend implements SyncBackend {
     dogId: r['dog_id'] as String? ?? r['id'] as String,
     data: (r['data'] as Map).cast<String, Object?>(),
     updatedAt: DateTime.parse(r['updated_at'] as String),
+    version: r['updated_at'] as String,
     deleted: r['deleted'] as bool? ?? false,
     owner: r['owner'] as String?,
   );
@@ -83,47 +84,103 @@ class SupabaseBackend implements SyncBackend {
     'deleted': r.deleted,
   };
 
-  @override
-  Future<void> insertDogs(List<RemoteRow> rows) =>
-      client.from('dogs').insert([for (final r in rows) _dogJson(r)]);
+  /// Versioni scritte, dalle righe restituite da `select('id, updated_at')`.
+  static Map<String, String> _versions(List<Map<String, dynamic>> rows) => {
+    for (final r in rows) r['id'] as String: r['updated_at'] as String,
+  };
 
-  @override
-  Future<void> updateDogs(List<RemoteRow> rows) async {
-    for (final r in rows) {
-      final res = await client
-          .from('dogs')
-          .update({
-            'data': r.data,
-            'updated_at': r.updatedAt.toUtc().toIso8601String(),
-            'deleted': r.deleted,
-          })
-          .eq('id', r.id)
-          .select('id');
-      // Un aggiornamento bloccato dalle regole tocca zero righe senza errore:
-      // va segnalato, altrimenti la modifica si perde (rapporto 11).
-      if (res.isEmpty) {
-        throw StateError('Aggiornamento del cane ${r.id} non consentito');
-      }
+  /// La versione si confronta con il testo esatto restituito dal server
+  /// (microsecondi inclusi); `+00:00` diventa `Z` per non dipendere dalla
+  /// codifica del `+` nell'indirizzo della richiesta.
+  static String _ts(String v) =>
+      v.endsWith('+00:00') ? '${v.substring(0, v.length - 6)}Z' : v;
+
+  /// Aggiornamento condizionato alla versione di base (concorrenza
+  /// ottimistica, rapporto 11 A5). Zero righe aggiornate significa conflitto
+  /// se la riga è visibile, altrimenti scrittura non consentita (A6).
+  Future<void> _update(
+    String table,
+    RemoteRow r,
+    Map<String, Object?> values,
+    PushResult out,
+  ) async {
+    var q = client.from(table).update(values).eq('id', r.id);
+    if (r.base != null) q = q.eq('updated_at', _ts(r.base!));
+    final res = await q.select('id, updated_at');
+    if (res.isNotEmpty) {
+      out.versions.addAll(_versions(res));
+      return;
     }
+    final seen = await client
+        .from(table)
+        .select('id')
+        .eq('id', r.id)
+        .maybeSingle();
+    if (r.base != null && seen != null) {
+      out.conflicts.add(r.id);
+      return;
+    }
+    // Un aggiornamento bloccato dalle regole tocca zero righe senza errore:
+    // va segnalato, altrimenti la modifica si perde (rapporto 11).
+    throw StateError('Aggiornamento di ${r.kind} ${r.id} non consentito');
   }
 
   @override
-  Future<void> upsertEntries(List<RemoteRow> rows) async {
-    for (var i = 0; i < rows.length; i += 500) {
-      final chunk = rows.sublist(i, min(i + 500, rows.length));
-      await client.from('entries').upsert([
-        for (final r in chunk)
-          {
-            'id': r.id,
-            'dog_id': r.dogId,
-            'kind': r.kind,
-            'data': r.data,
-            'updated_at': r.updatedAt.toUtc().toIso8601String(),
-            'updated_by': userId,
-            'deleted': r.deleted,
-          },
-      ]);
+  Future<PushResult> insertDogs(List<RemoteRow> rows) async {
+    final res = await client
+        .from('dogs')
+        .insert([for (final r in rows) _dogJson(r)])
+        .select('id, updated_at');
+    return PushResult(versions: _versions(res));
+  }
+
+  @override
+  Future<PushResult> updateDogs(List<RemoteRow> rows) async {
+    final out = PushResult();
+    for (final r in rows) {
+      await _update('dogs', r, {
+        'data': r.data,
+        'updated_at': r.updatedAt.toUtc().toIso8601String(),
+        'deleted': r.deleted,
+      }, out);
     }
+    return out;
+  }
+
+  @override
+  Future<PushResult> upsertEntries(List<RemoteRow> rows) async {
+    final out = PushResult();
+    // Modifiche a voci già sul server: una per una, condizionate alla
+    // versione di base. Sono poche (le voci si aggiungono più che correggere).
+    for (final r in rows.where((r) => r.base != null)) {
+      await _update('entries', r, {
+        'data': r.data,
+        'updated_at': r.updatedAt.toUtc().toIso8601String(),
+        'deleted': r.deleted,
+      }, out);
+    }
+    // Voci nuove e lapidi: a blocchi, senza condizioni.
+    final plain = rows.where((r) => r.base == null).toList();
+    for (var i = 0; i < plain.length; i += 500) {
+      final chunk = plain.sublist(i, min(i + 500, plain.length));
+      final res = await client
+          .from('entries')
+          .upsert([
+            for (final r in chunk)
+              {
+                'id': r.id,
+                'dog_id': r.dogId,
+                'kind': r.kind,
+                'data': r.data,
+                'updated_at': r.updatedAt.toUtc().toIso8601String(),
+                'updated_by': userId,
+                'deleted': r.deleted,
+              },
+          ])
+          .select('id, updated_at');
+      out.versions.addAll(_versions(res));
+    }
+    return out;
   }
 
   @override
