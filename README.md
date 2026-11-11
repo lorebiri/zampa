@@ -6,7 +6,7 @@ bayesiano, compagno in pixel art, account facoltativi con sincronizzazione (Supa
 
 - **Piano e decisioni:** [`ricerca/08-piano-ceo.md`](ricerca/08-piano-ceo.md) (il CEO decide priorità e cicli).
 - **Panoramica:** [`DOSSIER.md`](DOSSIER.md) · rapporti di ricerca in [`ricerca/`](ricerca/).
-- **Account:** [`supabase/LEGGIMI.md`](supabase/LEGGIMI.md) · privacy (bozza): [`docs/PRIVACY.md`](docs/PRIVACY.md).
+- **Account:** [`supabase/LEGGIMI.md`](supabase/LEGGIMI.md) · privacy (beta, da completare): [`docs/PRIVACY.md`](docs/PRIVACY.md).
 
 ## Sviluppo
 
