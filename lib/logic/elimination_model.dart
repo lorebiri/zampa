@@ -59,6 +59,61 @@ class _Ev {
   final bool scheduled;
 }
 
+/// Inneschi abituali (R1, ricerca/12 §6): orari ricorrenti negli ultimi 14
+/// giorni (gruppi entro 90 minuti presenti in almeno il 40% dei giorni in
+/// cui quel tipo di evento è registrato, e in almeno 2). Restituisce
+/// (minuti dalla mezzanotte, quantità tipica).
+List<(int, double)> _habitualOf(List<_Ev> evs, DateTime now) {
+  final recent = [
+    for (final e in evs)
+      if (!e.time.isAfter(now) && now.difference(e.time).inDays < 14) e,
+  ]..sort((a, b) => _mod(a.time).compareTo(_mod(b.time)));
+  if (recent.isEmpty) return const [];
+  final days = {
+    for (final e in recent) DateTime(e.time.year, e.time.month, e.time.day),
+  }.length;
+  if (days < 3) return const [];
+  final clusters = <List<_Ev>>[];
+  for (final e in recent) {
+    if (clusters.isEmpty || _mod(e.time) - _mod(clusters.last.last.time) > 90) {
+      clusters.add([e]);
+    } else {
+      clusters.last.add(e);
+    }
+  }
+  final need = math.max(2.0, days * 0.4);
+  return [
+    for (final c in clusters)
+      if (c.length >= need)
+        (
+          _mod(c[c.length ~/ 2].time),
+          ([for (final e in c) e.amount]..sort())[c.length ~/ 2],
+        ),
+  ];
+}
+
+int _mod(DateTime t) => t.hour * 60 + t.minute;
+
+/// Eventi attesi agli orari abituali, uno per giorno tra [from] e [to].
+List<_Ev> _expectedEvents(
+  List<(int, double)> habits,
+  DateTime from,
+  DateTime to,
+) {
+  final out = <_Ev>[];
+  for (
+    var d = DateTime(from.year, from.month, from.day);
+    d.isBefore(to);
+    d = DateTime(d.year, d.month, d.day + 1)
+  ) {
+    for (final (m, a) in habits) {
+      out.add(_Ev(DateTime(d.year, d.month, d.day, m ~/ 60, m % 60), a));
+    }
+  }
+  out.sort((a, b) => a.time.compareTo(b.time));
+  return out;
+}
+
 /// Eventi del cane già ordinati, pronti per il calcolo delle covariate.
 class _Context {
   _Context({
@@ -69,7 +124,19 @@ class _Context {
     required this.wakes,
     required this.plays,
     required this.walks,
+    this.expMeals = const [],
+    this.expWaters = const [],
+    this.expPlays = const [],
+    this.expWalks = const [],
   });
+
+  /// Inneschi attesi agli orari abituali (R1): contano solo dopo il
+  /// momento della previsione, e solo se non è già stato registrato un
+  /// evento dello stesso tipo nei 90 minuti prima.
+  final List<_Ev> expMeals;
+  final List<_Ev> expWaters;
+  final List<_Ev> expPlays;
+  final List<_Ev> expWalks;
 
   final List<DateTime> outings;
   final List<bool> indoor;
@@ -85,6 +152,7 @@ class _Context {
     List<LogEntry> logs,
     DateTime from,
     DateTime to,
+    DateTime now,
   ) {
     // Le pipì con solo gocce non sono una minzione: non azzerano il timer
     // (revisione veterinaria 07 N5).
@@ -132,14 +200,23 @@ class _Context {
         2.5,
       ),
     );
+    final meals = evs(LogType.pasto);
+    final plays = evs(LogType.gioco);
+    final walks = evs(LogType.passeggiata);
+    List<_Ev> exp(List<_Ev> e) =>
+        _expectedEvents(_habitualOf(e, now), from, to);
     return _Context(
       outings: outs.map((o) => o.time).toList(),
       indoor: outs.map((o) => o.indoor).toList(),
-      meals: evs(LogType.pasto),
+      meals: meals,
       waters: waters,
       wakes: wakes,
-      plays: evs(LogType.gioco),
-      walks: evs(LogType.passeggiata),
+      plays: plays,
+      walks: walks,
+      expMeals: exp(meals),
+      expWaters: exp(waters),
+      expPlays: exp(plays),
+      expWalks: exp(walks),
     );
   }
 
@@ -157,6 +234,46 @@ class _Context {
     }
     return ans;
   }
+}
+
+/// Somma dei kernel di un innesco: eventi registrati noti a [cutoff] più
+/// eventi attesi agli orari abituali dopo [cutoff] (R1).
+double _triggerSum(
+  List<_Ev> evs,
+  List<_Ev> expected,
+  DateTime t,
+  DateTime cutoff,
+  Trigger tr,
+  double cap,
+) {
+  var s = _kernelSum(evs, t, cutoff, tr, double.infinity);
+  if (expected.isNotEmpty && t.isAfter(cutoff)) {
+    // Ultimo evento registrato noto al momento della previsione.
+    DateTime? lastReal;
+    var lo = 0, hi = evs.length - 1;
+    while (lo <= hi) {
+      final mid = (lo + hi) >> 1;
+      if (!evs[mid].time.isAfter(cutoff)) {
+        lastReal = evs[mid].time;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    final horizon = tr.peak + 4 * tr.width;
+    for (var i = expected.length - 1; i >= 0; i--) {
+      final e = expected[i];
+      if (e.time.isAfter(t)) continue;
+      if (!e.time.isAfter(cutoff)) break;
+      final dt = t.difference(e.time).inSeconds / 60.0;
+      if (dt > horizon) break;
+      if (lastReal != null && e.time.difference(lastReal).inMinutes < 90) {
+        continue;
+      }
+      s += e.amount * BioParams.kernel(dt, tr);
+    }
+  }
+  return math.min(s, cap);
 }
 
 double _kernelSum(
@@ -227,10 +344,10 @@ class _Model {
       math.cos(ang),
       PottyPredictor.inSleepWindow(dog, mid) ? 1 : 0,
       _kernelSum(c.wakes, mid, cutoff, pr.wake, 1),
-      _kernelSum(c.meals, mid, cutoff, pr.meal, 1.5),
-      _kernelSum(c.waters, mid, cutoff, pr.water, 2.5),
-      _kernelSum(c.plays, mid, cutoff, pr.play, 1),
-      _kernelSum(c.walks, mid, cutoff, pr.walk, 1),
+      _triggerSum(c.meals, c.expMeals, mid, cutoff, pr.meal, 1.5),
+      _triggerSum(c.waters, c.expWaters, mid, cutoff, pr.water, 2.5),
+      _triggerSum(c.plays, c.expPlays, mid, cutoff, pr.play, 1),
+      _triggerSum(c.walks, c.expWalks, mid, cutoff, pr.walk, 1),
     ];
   }
 }
@@ -394,28 +511,36 @@ class EliminationModel {
             ? first
             : first.add(Duration(minutes: span * i ~/ (mealsN - 1)));
         final jit = Duration(minutes: rnd.nextInt(31) - 15);
-        meals.add(_Ev(t.add(jit)));
+        meals.add(_Ev(t.add(jit), 1, true));
         waters.add(
           _Ev(
             t.add(jit).add(const Duration(minutes: 10)),
             drinkMl / (dog.weightKg * 10),
+            true,
           ),
         );
       }
+      // Nel prior la routine è nota in anticipo (eventi «scheduled»).
       waters.add(
         _Ev(
           DateTime(day.year, day.month, day.day, 13, rnd.nextInt(60)),
           drinkMl / (dog.weightKg * 10),
+          true,
         ),
       );
       waters.add(
         _Ev(
           DateTime(day.year, day.month, day.day, 17, rnd.nextInt(60)),
           drinkMl / (dog.weightKg * 10),
+          true,
         ),
       );
       plays.add(
-        _Ev(DateTime(day.year, day.month, day.day, 16, 30 + rnd.nextInt(60))),
+        _Ev(
+          DateTime(day.year, day.month, day.day, 16, 30 + rnd.nextInt(60)),
+          1,
+          true,
+        ),
       );
       // Passeggiate tipiche di chi vive in appartamento: al risveglio, a
       // metà giornata, nel tardo pomeriggio e prima di dormire.
@@ -425,6 +550,8 @@ class EliminationModel {
             wake.add(
               Duration(minutes: (h * 60).round() + rnd.nextInt(21) - 10),
             ),
+            1,
+            true,
           ),
         );
       }
@@ -569,7 +696,14 @@ class EliminationModel {
               (li + 1 < c.outings.length && c.outings[li + 1].isBefore(end))
               ? 1.0
               : 0.0;
-          xs.add(withFeatures ? model.features(c, t, last, t, pr) : const []);
+          // R1: in addestramento gli inneschi sono quelli noti all'ultimo
+          // evento (più quelli attesi agli orari abituali), come al momento
+          // della previsione. Prima il modello «vedeva» acqua, passeggiate e
+          // gioco successivi e al momento della previsione li dava per
+          // assenti: da qui il ritardo sistematico (ricerca/12 §3.5).
+          xs.add(
+            withFeatures ? model.features(c, t, last, last, pr) : const [],
+          );
           ys.add(y);
           ws.add(weightOf(t));
         }
@@ -698,6 +832,7 @@ class EliminationModel {
       logs,
       from,
       now.add(const Duration(days: 2)),
+      now,
     );
     final halfLife = dog.ageInMonths(now) < 6 ? 5.0 : 14.0;
 
@@ -872,34 +1007,22 @@ class FittedModel {
     ];
   }
 
-  /// Contesto con i pasti futuri attesi (abitudini) a partire da [now].
+  /// Contesto per la previsione (gli inneschi attesi sono già nel
+  /// contesto, R1), con un'eventuale uscita in più per il piano del giorno.
   _Context _withFuture(DateTime now, {DateTime? extraOuting}) {
-    final meals = [..._ctx.meals];
-    for (final mm in habitualMealMinutes(now)) {
-      for (var d = 0; d <= 1; d++) {
-        final t = DateTime(now.year, now.month, now.day + d, mm ~/ 60, mm % 60);
-        if (!t.isAfter(now)) continue;
-        final already = _ctx.meals.any(
-          (e) => e.time.difference(t).inMinutes.abs() < 90,
-        );
-        if (!already) meals.add(_Ev(t, 1, true));
-      }
-    }
-    meals.sort((a, b) => a.time.compareTo(b.time));
-    final outs = [..._ctx.outings];
-    final indoor = [..._ctx.indoor];
-    if (extraOuting != null) {
-      outs.add(extraOuting);
-      indoor.add(false);
-    }
+    if (extraOuting == null) return _ctx;
     return _Context(
-      outings: outs,
-      indoor: indoor,
-      meals: meals,
+      outings: [..._ctx.outings, extraOuting],
+      indoor: [..._ctx.indoor, false],
+      meals: _ctx.meals,
       waters: _ctx.waters,
       wakes: _ctx.wakes,
       plays: _ctx.plays,
       walks: _ctx.walks,
+      expMeals: _ctx.expMeals,
+      expWaters: _ctx.expWaters,
+      expPlays: _ctx.expPlays,
+      expWalks: _ctx.expWalks,
     );
   }
 

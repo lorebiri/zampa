@@ -1,12 +1,8 @@
-{"tag": "base", "shadow": false, "of": 4,
+{"tag": "R1", "shadow": true, "of": 4,
  "jobs": [
   {"scenario": "realistico"},
-  {"scenario": "pulito"},
-  {"scenario": "mancanti"},
-  {"scenario": "jitter"},
-  {"scenario": "orari_padrone"},
-  {"scenario": "weekend"},
-  {"scenario": "cambio_routine"},
-  {"scenario": "poliuria"},
-  {"scenario": "realistico", "need": "cacca"}
+  {"scenario": "realistico", "grid": true},
+  {"scenario": "pulito", "every": 3},
+  {"scenario": "orari_padrone", "every": 3},
+  {"scenario": "poliuria", "every": 3}
  ]}
