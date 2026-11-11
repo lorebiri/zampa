@@ -6,6 +6,7 @@ import 'common.dart';
 import 'account_screen.dart';
 import 'avatar.dart';
 import 'dog_form.dart';
+import 'dog_wizard.dart';
 import 'privacy_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -45,9 +46,8 @@ class ProfileScreen extends StatelessWidget {
         OutlinedButton.icon(
           icon: const Icon(Icons.add),
           label: const Text('Aggiungi un altro cane'),
-          onPressed: () =>
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => const DogFormPage())),
+          onPressed: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const DogWizardPage())),
         ),
         const SectionTitle('Account'),
         Card(
