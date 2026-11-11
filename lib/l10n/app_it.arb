@@ -1,0 +1,2192 @@
+{
+  "@@locale": "it",
+  "alrLiv001Text": "Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.",
+  "@alrLiv001Text": {
+    "description": "ALR-LIV-001 · testo · frase d'azione del livello SUBITO"
+  },
+  "alrLiv002Text": "Contatta il veterinario oggi stesso.",
+  "@alrLiv002Text": {
+    "description": "ALR-LIV-002 · testo · frase d'azione del livello OGGI"
+  },
+  "alrLiv003Text": "Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.",
+  "@alrLiv003Text": {
+    "description": "ALR-LIV-003 · testo · frase d'azione del livello ATTENZIONE"
+  },
+  "alrLiv004Text": "Parlane alla prossima visita.",
+  "@alrLiv004Text": {
+    "description": "ALR-LIV-004 · testo · frase d'azione del livello INFO"
+  },
+  "alrUri001Title": "Sforzo a urinare: possibile urgenza",
+  "@alrUri001Title": {
+    "description": "ALR-URI-001 · titolo"
+  },
+  "alrUri001Text": "Se {name} si mette in posizione e non esce urina, o escono solo poche gocce, contatta subito il veterinario o un pronto soccorso veterinario, anche di notte. Nel maschio un blocco delle vie urinarie è un'emergenza: non aspettare il giorno dopo. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario.",
+  "@alrUri001Text": {
+    "description": "ALR-URI-001 · testo",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri002Title": "Sforzo a urinare ripetuto",
+  "@alrUri002Title": {
+    "description": "ALR-URI-002 · titolo"
+  },
+  "alrUri002Text": "Più tentativi con sforzo o poche gocce in 24 ore. Contatta il veterinario oggi stesso; subito se non esce urina. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario.",
+  "@alrUri002Text": {
+    "description": "ALR-URI-002 · testo"
+  },
+  "alrUri003Title": "Pipì con sforzo o a gocce",
+  "@alrUri003Title": {
+    "description": "ALR-URI-003 · titolo"
+  },
+  "alrUri003Text": "Osserva le prossime pipì. Se non riesce a urinare affatto, contatta subito il veterinario. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario.",
+  "@alrUri003Text": {
+    "description": "ALR-URI-003 · testo"
+  },
+  "alrUri004Title": "Cucciolo senza pipì da {hours} ore da sveglio",
+  "@alrUri004Title": {
+    "description": "ALR-URI-004 · titolo",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri004Text": "Un cucciolo sveglio urina molto più spesso. Se non è una registrazione mancante, contatta subito il veterinario. Se escono solo gocce, conta come se non avesse urinato.",
+  "@alrUri004Text": {
+    "description": "ALR-URI-004 · testo"
+  },
+  "alrUri005Title": "Nessuna pipì da {hours} ore",
+  "@alrUri005Title": {
+    "description": "ALR-URI-005 · titolo",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri005Text": "Se {name} non ha davvero urinato (e non è solo una registrazione mancante), è un'urgenza, specie nei maschi. Se escono solo gocce, conta come se non avesse urinato.",
+  "@alrUri005Text": {
+    "description": "ALR-URI-005 · testo",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri006Title": "Nessuna pipì registrata da {hours} ore",
+  "@alrUri006Title": {
+    "description": "ALR-URI-006 · titolo · spine = yes se intervento alla colonna negli ultimi 14 giorni",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri006Text": "{spine, select, yes{Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza.} other{Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza.}}",
+  "@alrUri006Text": {
+    "description": "ALR-URI-006 · testo · spine = yes se intervento alla colonna negli ultimi 14 giorni",
+    "placeholders": {
+      "spine": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri007Title": "Sangue nelle urine con malessere",
+  "@alrUri007Title": {
+    "description": "ALR-URI-007 · titolo"
+  },
+  "alrUri007Text": "Sangue nelle urine insieme a vomito o abbattimento richiede una visita oggi stesso.",
+  "@alrUri007Text": {
+    "description": "ALR-URI-007 · testo"
+  },
+  "alrUri008Title": "Sangue durante il calore",
+  "@alrUri008Title": {
+    "description": "ALR-URI-008 · titolo"
+  },
+  "alrUri008Text": "In calore è normale una perdita di sangue dalla vulva. Se il sangue è nelle urine stesse, se si sforza o se il calore dura più di 3-4 settimane, senti il veterinario.",
+  "@alrUri008Text": {
+    "description": "ALR-URI-008 · testo"
+  },
+  "alrUri009Title": "Sangue nelle urine",
+  "@alrUri009Title": {
+    "description": "ALR-URI-009 · titolo"
+  },
+  "alrUri009Text": "Va sempre valutato dal veterinario entro 24-48 ore: può essere un segno di cistite o calcoli (solo il veterinario può dirlo). Se possibile raccogli un campione di urina.",
+  "@alrUri009Text": {
+    "description": "ALR-URI-009 · testo"
+  },
+  "alrUri010Title": "Pipì piccole e frequenti",
+  "@alrUri010Title": {
+    "description": "ALR-URI-010 · titolo"
+  },
+  "alrUri010Text": "{count} pipì in 2 ore. Può essere un segno di cistite (solo il veterinario può dirlo): sentilo entro 24-48 ore, subito se c'è sforzo senza urina.",
+  "@alrUri010Text": {
+    "description": "ALR-URI-010 · testo",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alrGi001Title": "Conati a vuoto o addome gonfio",
+  "@alrGi001Title": {
+    "description": "ALR-GI-001 · titolo"
+  },
+  "alrGi001Text": "Conati senza riuscire a vomitare, addome gonfio, agitazione e salivazione possono indicare una torsione/dilatazione dello stomaco: è un'emergenza in cui ogni minuto conta.",
+  "@alrGi001Text": {
+    "description": "ALR-GI-001 · testo"
+  },
+  "alrNeu001Title": "Collasso o svenimento",
+  "@alrNeu001Title": {
+    "description": "ALR-NEU-001 · titolo"
+  },
+  "alrNeu001Text": "Un collasso o uno svenimento va sempre valutato subito, anche se si è ripreso: può dipendere da cuore, emorragia o calo di zuccheri.",
+  "@alrNeu001Text": {
+    "description": "ALR-NEU-001 · testo"
+  },
+  "alrGi002Title": "Cucciolo con vomito o diarrea",
+  "@alrGi002Title": {
+    "description": "ALR-GI-002 · titolo"
+  },
+  "alrGi002Text": "Nei cuccioli vomito e diarrea insieme, o con abbattimento o inappetenza, richiedono una visita oggi stesso: la disidratazione è rapida e va esclusa la parvovirosi, soprattutto se non ha completato i vaccini. Subito se è molto abbattuto, ha sangue nelle feci o non trattiene l'acqua.",
+  "@alrGi002Text": {
+    "description": "ALR-GI-002 · testo"
+  },
+  "alrDia001Title": "Diabetico con vomito o abbattimento",
+  "@alrDia001Title": {
+    "description": "ALR-DIA-001 · titolo"
+  },
+  "alrDia001Text": "Non fare l'insulina senza aver sentito il veterinario. Vomito e abbattimento in un cane diabetico vanno valutati oggi stesso; subito se è molto debole, respira in modo strano o non beve.",
+  "@alrDia001Text": {
+    "description": "ALR-DIA-001 · testo"
+  },
+  "alrFar001Title": "Malessere durante la terapia per il Cushing",
+  "@alrFar001Title": {
+    "description": "ALR-FAR-001 · titolo"
+  },
+  "alrFar001Text": "Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito.",
+  "@alrFar001Text": {
+    "description": "ALR-FAR-001 · testo"
+  },
+  "alrFar002Title": "Non mangia o è abbattuto durante antinfiammatori/cortisone",
+  "@alrFar002Title": {
+    "description": "ALR-FAR-002 · titolo"
+  },
+  "alrFar002Text": "Può essere un effetto collaterale sullo stomaco: chiama il veterinario oggi. Non sospendere né aggiungere farmaci di tua iniziativa.",
+  "@alrFar002Text": {
+    "description": "ALR-FAR-002 · testo"
+  },
+  "alrFar003Title": "Antinfiammatori e cortisone insieme",
+  "@alrFar003Title": {
+    "description": "ALR-FAR-003 · titolo"
+  },
+  "alrFar003Text": "Antinfiammatori e cortisone insieme aumentano il rischio di ulcere: verifica col veterinario che sia voluto.",
+  "@alrFar003Text": {
+    "description": "ALR-FAR-003 · testo"
+  },
+  "alrGi003Title": "Vomito con sangue",
+  "@alrGi003Title": {
+    "description": "ALR-GI-003 · titolo"
+  },
+  "alrGi003Text": "Sangue o materiale scuro \"a fondi di caffè\" nel vomito: visita oggi stesso; subito se è abbattuto o ha le gengive pallide.",
+  "@alrGi003Text": {
+    "description": "ALR-GI-003 · testo"
+  },
+  "alrFar004Title": "Vomito durante la terapia con antinfiammatori o cortisone",
+  "@alrFar004Title": {
+    "description": "ALR-FAR-004 · titolo"
+  },
+  "alrFar004Text": "Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.",
+  "@alrFar004Text": {
+    "description": "ALR-FAR-004 · testo"
+  },
+  "alrGi004Title": "Vomito ripetuto in un cane piccolo",
+  "@alrGi004Title": {
+    "description": "ALR-GI-004 · titolo"
+  },
+  "alrGi004Text": "Nei cuccioli e nei cani sotto i 5 kg disidratazione e ipoglicemia arrivano in fretta.",
+  "@alrGi004Text": {
+    "description": "ALR-GI-004 · testo"
+  },
+  "alrGi005Title": "Vomito ripetuto",
+  "@alrGi005Title": {
+    "description": "ALR-GI-005 · titolo"
+  },
+  "alrGi005Text": "{count} episodi in 24 ore. Senti il veterinario entro 24 ore; subito se non trattiene nemmeno l'acqua o è molto abbattuto.",
+  "@alrGi005Text": {
+    "description": "ALR-GI-005 · testo",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alrGi006Title": "Ha vomitato una volta",
+  "@alrGi006Title": {
+    "description": "ALR-GI-006 · titolo"
+  },
+  "alrGi006Text": "Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario.",
+  "@alrGi006Text": {
+    "description": "ALR-GI-006 · testo"
+  },
+  "alrGi007aTitle": "Feci nere",
+  "@alrGi007aTitle": {
+    "description": "ALR-GI-007a · titolo"
+  },
+  "alrGi007aText": "Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.",
+  "@alrGi007aText": {
+    "description": "ALR-GI-007a · testo"
+  },
+  "alrGi007bTitle": "Feci nere",
+  "@alrGi007bTitle": {
+    "description": "ALR-GI-007b · titolo"
+  },
+  "alrGi007bText": "Feci nere come catrame possono indicare sangue digerito: serve una visita oggi.",
+  "@alrGi007bText": {
+    "description": "ALR-GI-007b · testo"
+  },
+  "alrGi008Title": "Cucciolo con sangue nelle feci",
+  "@alrGi008Title": {
+    "description": "ALR-GI-008 · titolo"
+  },
+  "alrGi008Text": "Nei cuccioli la diarrea con sangue richiede una visita oggi stesso (va esclusa la parvovirosi, soprattutto se non ha completato i vaccini).",
+  "@alrGi008Text": {
+    "description": "ALR-GI-008 · testo"
+  },
+  "alrGi009Title": "Sangue nelle feci con vomito o abbattimento",
+  "@alrGi009Title": {
+    "description": "ALR-GI-009 · titolo"
+  },
+  "alrGi009Text": "Questa combinazione richiede una visita oggi stesso.",
+  "@alrGi009Text": {
+    "description": "ALR-GI-009 · testo"
+  },
+  "alrGi010Title": "Sangue rosso nelle feci",
+  "@alrGi010Title": {
+    "description": "ALR-GI-010 · titolo"
+  },
+  "alrGi010Text": "Se si ripete, se c'è diarrea abbondante o se cambia il suo comportamento, senti il veterinario entro 24-48 ore.",
+  "@alrGi010Text": {
+    "description": "ALR-GI-010 · testo"
+  },
+  "alrGi011Title": "Cucciolo con diarrea",
+  "@alrGi011Title": {
+    "description": "ALR-GI-011 · titolo"
+  },
+  "alrGi011Text": "Nei cuccioli la disidratazione è rapida e va esclusa la parvovirosi: subito se vomita o è abbattuto.",
+  "@alrGi011Text": {
+    "description": "ALR-GI-011 · testo"
+  },
+  "alrGi012Title": "{vomit, select, yes{Diarrea e vomito nelle ultime 24 ore} other{Diarrea nelle ultime 24 ore}}",
+  "@alrGi012Title": {
+    "description": "ALR-GI-012 · titolo",
+    "placeholders": {
+      "vomit": {
+        "type": "String"
+      }
+    }
+  },
+  "alrGi012Text": "Assicurati che beva. Se persiste oltre 24-48 ore, se è abbattuto o vomita ripetutamente, senti il veterinario.",
+  "@alrGi012Text": {
+    "description": "ALR-GI-012 · testo"
+  },
+  "alrGi013Title": "Nessuna cacca da {hours} ore",
+  "@alrGi013Title": {
+    "description": "ALR-GI-013 · titolo",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "alrGi013Text": "Se non è una registrazione mancante: controlla che beva e si muova. Se si sforza senza risultato, vomita o è abbattuto, senti il veterinario. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario.",
+  "@alrGi013Text": {
+    "description": "ALR-GI-013 · testo"
+  },
+  "alrUri011Title": "Fa pipì più spesso del solito",
+  "@alrUri011Title": {
+    "description": "ALR-URI-011 · titolo"
+  },
+  "alrUri011Text": "{diabetic, select, yes{Negli ultimi 3 giorni {recent} uscite al giorno contro {usual} abituali. Può essere un segno di infezione urinaria, diabete o problemi renali (solo il veterinario può dirlo): parlane entro qualche giorno. In un cane diabetico segnalalo al veterinario: la terapia potrebbe andare rivista.} other{Negli ultimi 3 giorni {recent} uscite al giorno contro {usual} abituali. Può essere un segno di infezione urinaria, diabete o problemi renali (solo il veterinario può dirlo): parlane entro qualche giorno.}}",
+  "@alrUri011Text": {
+    "description": "ALR-URI-011 · testo",
+    "placeholders": {
+      "diabetic": {
+        "type": "String"
+      },
+      "recent": {
+        "type": "String"
+      },
+      "usual": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri012Title": "Beve molto",
+  "@alrUri012Title": {
+    "description": "ALR-URI-012 · titolo"
+  },
+  "alrUri012Text": "In media {ml} ml al giorno, oltre i 100 ml/kg. La sete eccessiva può essere un segno di malattie da approfondire (solo il veterinario può dirlo). Non ridurre l'acqua: parlane con il veterinario.",
+  "@alrUri012Text": {
+    "description": "ALR-URI-012 · testo",
+    "placeholders": {
+      "ml": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri013Title": "Beve poco",
+  "@alrUri013Title": {
+    "description": "ALR-URI-013 · titolo"
+  },
+  "alrUri013Text": "Con le crocchette {ml} ml al giorno sono pochi (meno di 20 ml/kg). Se non è una registrazione incompleta e mangia poco o è abbattuto, senti il veterinario.",
+  "@alrUri013Text": {
+    "description": "ALR-URI-013 · testo",
+    "placeholders": {
+      "ml": {
+        "type": "String"
+      }
+    }
+  },
+  "alrRep001Title": "Attenzione all'utero (piometra)",
+  "@alrRep001Title": {
+    "description": "ALR-REP-001 · titolo"
+  },
+  "alrRep001Text": "In una femmina non sterilizzata, nelle settimane dopo il calore, sete e pipì aumentate, perdite dalla vulva, vomito o abbattimento possono indicare un'infezione dell'utero (piometra), che è un'urgenza.",
+  "@alrRep001Text": {
+    "description": "ALR-REP-001 · testo"
+  },
+  "alrRep002Title": "Femmina non sterilizzata: attenzione all'utero",
+  "@alrRep002Title": {
+    "description": "ALR-REP-002 · titolo · urgent = yes con 2 o più segni"
+  },
+  "alrRep002Text": "{urgent, select, yes{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio.} other{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio.}}",
+  "@alrRep002Text": {
+    "description": "ALR-REP-002 · testo · urgent = yes con 2 o più segni",
+    "placeholders": {
+      "urgent": {
+        "type": "String"
+      }
+    }
+  },
+  "alrUri014Title": "Pipì in casa ripetute",
+  "@alrUri014Title": {
+    "description": "ALR-URI-014 · titolo"
+  },
+  "alrUri014Text": "{count} incidenti in 7 giorni in un cane adulto. Le cause possibili sono infezione urinaria, aumento della sete, incontinenza (frequente nelle femmine sterilizzate di taglia media e grande), declino cognitivo nell'anziano, oppure intervalli troppo lunghi tra le uscite. Vale la pena parlarne con il veterinario. Se le perdite avvengono mentre dorme o riposa, registrale come \"Perdita di urina a riposo\".",
+  "@alrUri014Text": {
+    "description": "ALR-URI-014 · testo",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alrPes001Title": "Il cucciolo non cresce",
+  "@alrPes001Title": {
+    "description": "ALR-PES-001 · titolo"
+  },
+  "alrPes001Text": "Un cucciolo dovrebbe aumentare di peso ogni settimana: se il peso è fermo da 2 settimane o cala, senti il veterinario; subito se mangia poco, vomita o ha diarrea.",
+  "@alrPes001Text": {
+    "description": "ALR-PES-001 · testo"
+  },
+  "alrPes002Title": "Sta dimagrendo troppo in fretta",
+  "@alrPes002Title": {
+    "description": "ALR-PES-002 · titolo"
+  },
+  "alrPes002Text": "Oltre il 2% a settimana: un dimagrimento troppo rapido non è sano. Senti il veterinario per rivedere la dieta.",
+  "@alrPes002Text": {
+    "description": "ALR-PES-002 · testo"
+  },
+  "alrPes003Title": "Calo di peso del {percent}%",
+  "@alrPes003Title": {
+    "description": "ALR-PES-003 · titolo",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "alrPes003Text": "Un calo di peso non voluto merita una visita, soprattutto nel cane anziano.",
+  "@alrPes003Text": {
+    "description": "ALR-PES-003 · testo"
+  },
+  "alrPes004Title": "Calo di peso del {percent}%",
+  "@alrPes004Title": {
+    "description": "ALR-PES-004 · titolo",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "alrPes004Text": "Tienilo d'occhio: se continua senza che tu abbia cambiato la dieta, senti il veterinario.",
+  "@alrPes004Text": {
+    "description": "ALR-PES-004 · testo"
+  },
+  "alrPes005Title": "Aumento di peso del {percent}%",
+  "@alrPes005Title": {
+    "description": "ALR-PES-005 · titolo",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "alrPes005Text": "Controlla razione e snack nella sezione Nutrizione.",
+  "@alrPes005Text": {
+    "description": "ALR-PES-005 · testo"
+  },
+  "alrPes006Title": "Sottopeso",
+  "@alrPes006Title": {
+    "description": "ALR-PES-006 · titolo"
+  },
+  "alrPes006Text": "Prima di aumentare la razione fallo visitare, per escludere cause mediche.",
+  "@alrPes006Text": {
+    "description": "ALR-PES-006 · testo"
+  },
+  "alrPes007Title": "Sovrappeso",
+  "@alrPes007Title": {
+    "description": "ALR-PES-007 · titolo"
+  },
+  "alrPes007Text": "Body Condition Score {bcs}/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane.",
+  "@alrPes007Text": {
+    "description": "ALR-PES-007 · testo",
+    "placeholders": {
+      "bcs": {
+        "type": "String"
+      }
+    }
+  },
+  "alrPes008Title": "Leggermente sovrappeso",
+  "@alrPes008Title": {
+    "description": "ALR-PES-008 · titolo"
+  },
+  "alrPes008Text": "Riduci gli snack e ricontrolla tra un mese.",
+  "@alrPes008Text": {
+    "description": "ALR-PES-008 · testo"
+  },
+  "alrTox001Title": "{hasNote, select, yes{Ha ingerito qualcosa: {note}} other{Ha ingerito qualcosa}}",
+  "@alrTox001Title": {
+    "description": "ALR-TOX-001 · titolo",
+    "placeholders": {
+      "hasNote": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "alrTox001Text": "Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta.",
+  "@alrTox001Text": {
+    "description": "ALR-TOX-001 · testo"
+  },
+  "alrTox002Title": "Sorveglianza dopo un'ingestione",
+  "@alrTox002Title": {
+    "description": "ALR-TOX-002 · titolo · date = giorno/mese"
+  },
+  "alrTox002Text": "{hasNote, select, yes{Il {date} ha ingerito: {note}. Alcuni veleni (es. topicidi) danno sintomi dopo giorni: sangue dal naso o dalle gengive, lividi, debolezza, vomito o pipì scarsa → subito dal veterinario.} other{Il {date} ha ingerito. Alcuni veleni (es. topicidi) danno sintomi dopo giorni: sangue dal naso o dalle gengive, lividi, debolezza, vomito o pipì scarsa → subito dal veterinario.}}",
+  "@alrTox002Text": {
+    "description": "ALR-TOX-002 · testo · date = giorno/mese",
+    "placeholders": {
+      "hasNote": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "alrRes001Title": "Gengive pallide o blu",
+  "@alrRes001Title": {
+    "description": "ALR-RES-001 · titolo"
+  },
+  "alrRes001Text": "Possono indicare un problema di circolazione, respirazione o un'emorragia: è un'emergenza.",
+  "@alrRes001Text": {
+    "description": "ALR-RES-001 · testo"
+  },
+  "alrRes002Title": "Gengive rosso scuro",
+  "@alrRes002Title": {
+    "description": "ALR-RES-002 · titolo"
+  },
+  "alrRes002Text": "Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono indicare un colpo di calore o uno shock: raffreddalo con acqua (vedi Emergenze) e vai subito dal veterinario.",
+  "@alrRes002Text": {
+    "description": "ALR-RES-002 · testo"
+  },
+  "alrRes003Title": "Gengive gialle",
+  "@alrRes003Title": {
+    "description": "ALR-RES-003 · titolo"
+  },
+  "alrRes003Text": "Il colore giallo (ittero) va valutato dal veterinario oggi stesso.",
+  "@alrRes003Text": {
+    "description": "ALR-RES-003 · testo"
+  },
+  "alrRes004Title": "Respira molto veloce nel sonno ({rate}/min)",
+  "@alrRes004Title": {
+    "description": "ALR-RES-004 · titolo",
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "alrRes004Text": "Oltre 40 respiri al minuto a riposo: possibile difficoltà respiratoria o cardiaca.",
+  "@alrRes004Text": {
+    "description": "ALR-RES-004 · testo"
+  },
+  "alrRes005Title": "Respiri nel sonno oltre 40/min",
+  "@alrRes005Title": {
+    "description": "ALR-RES-005 · titolo"
+  },
+  "alrRes005Text": "Rimisura tra 15-30 minuti mentre dorme tranquillo. Se resta sopra 40, o respira con fatica a bocca aperta, vai subito dal veterinario.",
+  "@alrRes005Text": {
+    "description": "ALR-RES-005 · testo"
+  },
+  "alrRes006Title": "Respiri nel sonno sopra 30/min",
+  "@alrRes006Title": {
+    "description": "ALR-RES-006 · titolo"
+  },
+  "alrRes006Text": "Due misure di fila sopra 30 respiri al minuto: segnalalo al veterinario oggi, soprattutto se ha una malattia di cuore.",
+  "@alrRes006Text": {
+    "description": "ALR-RES-006 · testo"
+  },
+  "alrRes007Title": "Respiri nel sonno in aumento",
+  "@alrRes007Title": {
+    "description": "ALR-RES-007 · titolo"
+  },
+  "alrRes007Text": "Media della settimana {week}/min contro {month}/min del mese precedente: segnalalo al veterinario oggi.",
+  "@alrRes007Text": {
+    "description": "ALR-RES-007 · testo",
+    "placeholders": {
+      "week": {
+        "type": "String"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "alrRes008Title": "Fatica a respirare",
+  "@alrRes008Title": {
+    "description": "ALR-RES-008 · titolo"
+  },
+  "alrRes008Text": "Respiro affannoso a riposo, bocca aperta o lingua scura: tienilo calmo e al fresco e vai subito dal veterinario.",
+  "@alrRes008Text": {
+    "description": "ALR-RES-008 · testo"
+  },
+  "alrRes009Title": "Tosse in un cane con malattia di cuore",
+  "@alrRes009Title": {
+    "description": "ALR-RES-009 · titolo"
+  },
+  "alrRes009Text": "Nei cardiopatici la tosse va segnalata al veterinario oggi.",
+  "@alrRes009Text": {
+    "description": "ALR-RES-009 · testo"
+  },
+  "alrRes010Title": "Tosse in un Cavalier King",
+  "@alrRes010Title": {
+    "description": "ALR-RES-010 · titolo"
+  },
+  "alrRes010Text": "Il Cavalier è predisposto alla malattia della valvola mitrale: segnala la tosse al veterinario e conta i respiri nel sonno.",
+  "@alrRes010Text": {
+    "description": "ALR-RES-010 · testo"
+  },
+  "alrRes011Title": "Tosse da più giorni",
+  "@alrRes011Title": {
+    "description": "ALR-RES-011 · titolo"
+  },
+  "alrRes011Text": "Tosse che dura da più di 3 giorni o con abbattimento: senti il veterinario entro 24-48 ore. Evita il contatto con altri cani.",
+  "@alrRes011Text": {
+    "description": "ALR-RES-011 · testo"
+  },
+  "alrDia002Title": "Glicemia bassa ({value} mg/dL)",
+  "@alrDia002Title": {
+    "description": "ALR-DIA-002 · titolo",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "alrDia002Text": "Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito.",
+  "@alrDia002Text": {
+    "description": "ALR-DIA-002 · testo"
+  },
+  "alrDia003Title": "Glicemia al limite basso ({value} mg/dL)",
+  "@alrDia003Title": {
+    "description": "ALR-DIA-003 · titolo",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "alrDia003Text": "Segnalala al veterinario oggi, prima della prossima insulina.",
+  "@alrDia003Text": {
+    "description": "ALR-DIA-003 · testo"
+  },
+  "alrDia004Title": "Glicemia alta ({value} mg/dL)",
+  "@alrDia004Title": {
+    "description": "ALR-DIA-004 · titolo",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "alrDia004Text": "Segnalala al veterinario: la terapia potrebbe andare rivista. Se vomita, è abbattuto o non mangia, oggi stesso.",
+  "@alrDia004Text": {
+    "description": "ALR-DIA-004 · testo"
+  },
+  "alrDia005Title": "Due dosi di insulina ravvicinate",
+  "@alrDia005Title": {
+    "description": "ALR-DIA-005 · titolo"
+  },
+  "alrDia005Text": "Due dosi di insulina registrate a {hours} ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una.",
+  "@alrDia005Text": {
+    "description": "ALR-DIA-005 · testo",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "alrRep003Title": "Tremori in una cagna che allatta",
+  "@alrRep003Title": {
+    "description": "ALR-REP-003 · titolo"
+  },
+  "alrRep003Text": "Possibile eclampsia (calcio basso dopo il parto): è un'emergenza. Allontana i cuccioli e vai subito dal veterinario.",
+  "@alrRep003Text": {
+    "description": "ALR-REP-003 · testo"
+  },
+  "alrNeu002Title": "Cucciolo debole o tremante",
+  "@alrNeu002Title": {
+    "description": "ALR-NEU-002 · titolo"
+  },
+  "alrNeu002Text": "Nei cuccioli piccoli può essere un'ipoglicemia. Se è cosciente strofina un po' di miele sulle gengive, poi vai subito dal veterinario.",
+  "@alrNeu002Text": {
+    "description": "ALR-NEU-002 · testo"
+  },
+  "alrNeu003Title": "Convulsione in un cane diabetico",
+  "@alrNeu003Title": {
+    "description": "ALR-NEU-003 · titolo"
+  },
+  "alrNeu003Text": "Può essere un'ipoglicemia. Se è cosciente strofina un po' di miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e vai subito dal veterinario.",
+  "@alrNeu003Text": {
+    "description": "ALR-NEU-003 · testo"
+  },
+  "alrNeu004aTitle": "Convulsione lunga o senza ripresa",
+  "@alrNeu004aTitle": {
+    "description": "ALR-NEU-004a · titolo"
+  },
+  "alrNeu004aText": "Crisi oltre 5 minuti, crisi a grappolo o mancata ripresa sono un'emergenza.",
+  "@alrNeu004aText": {
+    "description": "ALR-NEU-004a · testo"
+  },
+  "alrNeu004bTitle": "{count} convulsioni in 24 ore",
+  "@alrNeu004bTitle": {
+    "description": "ALR-NEU-004b · titolo",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alrNeu004bText": "Crisi oltre 5 minuti, crisi a grappolo o mancata ripresa sono un'emergenza.",
+  "@alrNeu004bText": {
+    "description": "ALR-NEU-004b · testo"
+  },
+  "alrNeu005Title": "Prima convulsione",
+  "@alrNeu005Title": {
+    "description": "ALR-NEU-005 · titolo"
+  },
+  "alrNeu005Text": "Una prima crisi va sempre valutata dal veterinario. Annota durata e cosa è successo prima e dopo.",
+  "@alrNeu005Text": {
+    "description": "ALR-NEU-005 · testo"
+  },
+  "alrNeu006Title": "Crisi più frequenti questo mese",
+  "@alrNeu006Title": {
+    "description": "ALR-NEU-006 · titolo"
+  },
+  "alrNeu006Text": "{count} crisi questo mese contro una media di {average}: parlane con il veterinario, la terapia potrebbe andare rivista.",
+  "@alrNeu006Text": {
+    "description": "ALR-NEU-006 · testo",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "average": {
+        "type": "String"
+      }
+    }
+  },
+  "alrDia006Title": "Possibile ipoglicemia",
+  "@alrDia006Title": {
+    "description": "ALR-DIA-006 · titolo"
+  },
+  "alrDia006Text": "Tremori o barcollamento in un cane diabetico: se è cosciente strofina miele o glucosio sulle gengive e vai subito dal veterinario.",
+  "@alrDia006Text": {
+    "description": "ALR-DIA-006 · testo"
+  },
+  "alrNeu007Title": "Tremori, barcollamento o testa inclinata",
+  "@alrNeu007Title": {
+    "description": "ALR-NEU-007 · titolo"
+  },
+  "alrNeu007Text": "Segni neurologici: se sono comparsi all'improvviso è un'urgenza. Pensa anche a possibili sostanze ingerite.",
+  "@alrNeu007Text": {
+    "description": "ALR-NEU-007 · testo"
+  },
+  "alrTmp001aTitle": "Temperatura {temp} °C",
+  "@alrTmp001aTitle": {
+    "description": "ALR-TMP-001a · titolo",
+    "placeholders": {
+      "temp": {
+        "type": "String"
+      }
+    }
+  },
+  "alrTmp001aText": "Temperatura molto alta: possibile colpo di calore. Raffreddalo subito con acqua fresca o fredda e fai aria, poi vai subito dal veterinario.",
+  "@alrTmp001aText": {
+    "description": "ALR-TMP-001a · testo"
+  },
+  "alrTmp001bTitle": "Temperatura {temp} °C",
+  "@alrTmp001bTitle": {
+    "description": "ALR-TMP-001b · titolo",
+    "placeholders": {
+      "temp": {
+        "type": "String"
+      }
+    }
+  },
+  "alrTmp001bText": "Temperatura troppo bassa: tienilo al caldo e vai subito dal veterinario.",
+  "@alrTmp001bText": {
+    "description": "ALR-TMP-001b · testo"
+  },
+  "alrTmp002Title": "Febbre ({temp} °C)",
+  "@alrTmp002Title": {
+    "description": "ALR-TMP-002 · titolo",
+    "placeholders": {
+      "temp": {
+        "type": "String"
+      }
+    }
+  },
+  "alrTmp002Text": "Normale 38,0-39,2 °C. Non dare antipiretici per persone (sono tossici).",
+  "@alrTmp002Text": {
+    "description": "ALR-TMP-002 · testo"
+  },
+  "alrCib001aTitle": "Non mangia",
+  "@alrCib001aTitle": {
+    "description": "ALR-CIB-001a · titolo"
+  },
+  "alrCib001aText": "Se non ha mangiato o ha vomitato, non fare l'insulina senza aver sentito il veterinario.",
+  "@alrCib001aText": {
+    "description": "ALR-CIB-001a · testo"
+  },
+  "alrCib001bTitle": "Non mangia",
+  "@alrCib001bTitle": {
+    "description": "ALR-CIB-001b · titolo"
+  },
+  "alrCib001bText": "Pasti saltati: serve una visita oggi.",
+  "@alrCib001bText": {
+    "description": "ALR-CIB-001b · testo"
+  },
+  "alrCib002Title": "Ha saltato i pasti",
+  "@alrCib002Title": {
+    "description": "ALR-CIB-002 · titolo"
+  },
+  "alrCib002Text": "Se non mangia da 24 ore senti il veterinario entro 1-2 giorni; prima se vomita o è abbattuto.",
+  "@alrCib002Text": {
+    "description": "ALR-CIB-002 · testo"
+  },
+  "alrCib003aTitle": "Abbattuto",
+  "@alrCib003aTitle": {
+    "description": "ALR-CIB-003a · titolo · reason: signs = con altri segni, puppy, diabetic, other = anziano"
+  },
+  "alrCib003aText": "{reason, select, signs{Abbattimento insieme ad altri segni: contatta il veterinario oggi.} puppy{Abbattimento in un cane cucciolo: contatta il veterinario oggi.} diabetic{Abbattimento in un cane diabetico: contatta il veterinario oggi.} other{Abbattimento in un cane anziano: contatta il veterinario oggi.}}",
+  "@alrCib003aText": {
+    "description": "ALR-CIB-003a · testo · reason: signs = con altri segni, puppy, diabetic, other = anziano",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "alrCib003bTitle": "Abbattuto",
+  "@alrCib003bTitle": {
+    "description": "ALR-CIB-003b · titolo"
+  },
+  "alrCib003bText": "Osservalo: se non torna vivace entro la giornata, o compaiono vomito, diarrea, febbre o gengive pallide, senti il veterinario.",
+  "@alrCib003bText": {
+    "description": "ALR-CIB-003b · testo"
+  },
+  "alrDia007Title": "Insulina fatta senza che abbia mangiato",
+  "@alrDia007Title": {
+    "description": "ALR-DIA-007 · titolo"
+  },
+  "alrDia007Text": "Chiama ora il veterinario e chiedi come comportarti. Nelle prossime ore offrigli il suo pasto e osservalo: se compaiono debolezza, tremori o barcollamento strofina miele sulle gengive e vai subito dal veterinario.",
+  "@alrDia007Text": {
+    "description": "ALR-DIA-007 · testo"
+  },
+  "alrUri015Title": "Urina scura o color caffè",
+  "@alrUri015Title": {
+    "description": "ALR-URI-015 · titolo · variant: tick = stagione delle zecche (marzo-novembre), urgent = abbattimento o febbre"
+  },
+  "alrUri015Text": "{variant, select, tickUrgent{Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Hai trovato zecche di recente? Dillo al veterinario. Con abbattimento o febbre serve una visita oggi.} tick{Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Hai trovato zecche di recente? Dillo al veterinario. Se si ripete, senti il veterinario.} urgent{Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Con abbattimento o febbre serve una visita oggi.} other{Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Se si ripete, senti il veterinario.}}",
+  "@alrUri015Text": {
+    "description": "ALR-URI-015 · testo · variant: tick = stagione delle zecche (marzo-novembre), urgent = abbattimento o febbre",
+    "placeholders": {
+      "variant": {
+        "type": "String"
+      }
+    }
+  },
+  "alrFar005Title": "Loperamide in una razza a rischio MDR1",
+  "@alrFar005Title": {
+    "description": "ALR-FAR-005 · titolo"
+  },
+  "alrFar005Text": "Nelle razze con possibile mutazione MDR1 la loperamide può dare effetti neurologici: verifica con il veterinario.",
+  "@alrFar005Text": {
+    "description": "ALR-FAR-005 · testo"
+  },
+  "alrRep004Title": "Malessere nella prima settimana dopo il parto",
+  "@alrRep004Title": {
+    "description": "ALR-REP-004 · titolo"
+  },
+  "alrRep004Text": "Febbre, perdite maleodoranti o abbattimento dopo il parto possono indicare un'infezione dell'utero: contatta il veterinario oggi.",
+  "@alrRep004Text": {
+    "description": "ALR-REP-004 · testo"
+  },
+  "alrRep005Title": "Mammelle gonfie, calde o dolenti",
+  "@alrRep005Title": {
+    "description": "ALR-REP-005 · titolo"
+  },
+  "alrRep005Text": "Può essere una mastite: contatta il veterinario oggi. Non spremere le mammelle.",
+  "@alrRep005Text": {
+    "description": "ALR-REP-005 · testo"
+  },
+  "alrRep006aTitle": "Temperatura calata da oltre 24 ore senza parto",
+  "@alrRep006aTitle": {
+    "description": "ALR-REP-006a · titolo"
+  },
+  "alrRep006aText": "Il calo di temperatura sotto 37,5 °C precede il parto: se dopo 24 ore non è iniziato il travaglio, chiama il veterinario.",
+  "@alrRep006aText": {
+    "description": "ALR-REP-006a · testo"
+  },
+  "alrRep006bTitle": "Parto atteso entro circa 24 ore",
+  "@alrRep006bTitle": {
+    "description": "ALR-REP-006b · titolo"
+  },
+  "alrRep006bText": "La temperatura sotto 37,5 °C di solito precede il parto di circa 24 ore. Prepara la cassa parto.",
+  "@alrRep006bText": {
+    "description": "ALR-REP-006b · testo"
+  },
+  "alrAlt001Title": "Non appoggia la zampa",
+  "@alrAlt001Title": {
+    "description": "ALR-ALT-001 · titolo"
+  },
+  "alrAlt001Text": "Non caricare l'arto è un segno di dolore importante: visita oggi. Non dare antidolorifici per persone.",
+  "@alrAlt001Text": {
+    "description": "ALR-ALT-001 · testo"
+  },
+  "alrAlt002Title": "Zoppia da più giorni",
+  "@alrAlt002Title": {
+    "description": "ALR-ALT-002 · titolo"
+  },
+  "alrAlt002Text": "Una zoppia che dura da 3-5 giorni va vista dal veterinario.",
+  "@alrAlt002Text": {
+    "description": "ALR-ALT-002 · testo"
+  },
+  "alrAlt003Title": "Prurito, pelle o orecchie",
+  "@alrAlt003Title": {
+    "description": "ALR-ALT-003 · titolo"
+  },
+  "alrAlt003Text": "Senti il veterinario entro qualche giorno; prima se si gratta fino a ferirsi o scuote molto la testa.",
+  "@alrAlt003Text": {
+    "description": "ALR-ALT-003 · testo"
+  },
+  "alrAlt004Title": "Problema ai denti",
+  "@alrAlt004Title": {
+    "description": "ALR-ALT-004 · titolo"
+  },
+  "alrAlt004Text": "Alito cattivo, gengive che sanguinano o fatica a masticare: controllo dentale al prossimo appuntamento, prima se mangia poco.",
+  "@alrAlt004Text": {
+    "description": "ALR-ALT-004 · testo"
+  },
+  "alrAlt005Title": "Denti: {count} spazzolature in 7 giorni",
+  "@alrAlt005Title": {
+    "description": "ALR-ALT-005 · titolo",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alrAlt005Text": "Ideale ogni giorno, almeno 3 volte a settimana (AAHA 2019).",
+  "@alrAlt005Text": {
+    "description": "ALR-ALT-005 · testo"
+  },
+  "alrUri016Title": "Perdite di urina a riposo",
+  "@alrUri016Title": {
+    "description": "ALR-URI-016 · titolo"
+  },
+  "alrUri016Text": "Perdite mentre dorme o riposa: spesso è un problema curabile (incontinenza). Parlane con il veterinario. Non ridurre l'acqua.",
+  "@alrUri016Text": {
+    "description": "ALR-URI-016 · testo"
+  },
+  "alrRep007Title": "Perdite purulente",
+  "@alrRep007Title": {
+    "description": "ALR-REP-007 · titolo"
+  },
+  "alrRep007Text": "Perdite purulente in una femmina non sterilizzata possono indicare un'infezione dell'utero: contatta il veterinario oggi stesso.",
+  "@alrRep007Text": {
+    "description": "ALR-REP-007 · testo"
+  },
+  "alrRep008Title": "Perdite vulvari",
+  "@alrRep008Title": {
+    "description": "ALR-REP-008 · titolo"
+  },
+  "alrRep008Text": "Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente.",
+  "@alrRep008Text": {
+    "description": "ALR-REP-008 · testo"
+  },
+  "alrUri017Title": "Pipì di notte, prima non succedeva",
+  "@alrUri017Title": {
+    "description": "ALR-URI-017 · titolo"
+  },
+  "alrUri017Text": "Due o più notti su 7 con pipì notturna: può essere un segno di sete aumentata o di un problema urinario. Prenota una visita.",
+  "@alrUri017Text": {
+    "description": "ALR-URI-017 · testo"
+  },
+  "alrRep009Title": "Gravidanza oltre i 70 giorni",
+  "@alrRep009Title": {
+    "description": "ALR-REP-009 · titolo"
+  },
+  "alrRep009Text": "Il parto non è ancora avvenuto: contatta il veterinario oggi.",
+  "@alrRep009Text": {
+    "description": "ALR-REP-009 · testo"
+  },
+  "alrRep010Title": "Parto vicino (presunto il {date})",
+  "@alrRep010Title": {
+    "description": "ALR-REP-010 · titolo · date = giorno/mese",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "alrRep010Text": "Prepara la cassa parto. Chiama subito il veterinario se: contrazioni forti per oltre 30 minuti senza cuccioli, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere senza cuccioli.",
+  "@alrRep010Text": {
+    "description": "ALR-REP-010 · testo · date = giorno/mese"
+  },
+  "alrRep011Title": "Calore che dura da oltre 4 settimane",
+  "@alrRep011Title": {
+    "description": "ALR-REP-011 · titolo"
+  },
+  "alrRep011Text": "Un calore persistente va valutato dal veterinario. Se è già finito, registra \"Fine calore\".",
+  "@alrRep011Text": {
+    "description": "ALR-REP-011 · testo"
+  },
+  "alrFar006Title": "Dose non confermata: {drug}",
+  "@alrFar006Title": {
+    "description": "ALR-FAR-006 · titolo · time = HH:MM",
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      }
+    }
+  },
+  "alrFar006Text": "Prevista alle {time}. Se l'hai saltata, non raddoppiare la successiva: chiedi al veterinario cosa fare.",
+  "@alrFar006Text": {
+    "description": "ALR-FAR-006 · testo · time = HH:MM",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "alrGi014Title": "Feci molto dure",
+  "@alrGi014Title": {
+    "description": "ALR-GI-014 · titolo"
+  },
+  "alrGi014Text": "Punteggio 1 della scala fecale: controlla che beva abbastanza. Se si sforza senza risultato, senti il veterinario.",
+  "@alrGi014Text": {
+    "description": "ALR-GI-014 · testo"
+  },
+  "alrChi001Title": "Ferita aperta o che sanguina",
+  "@alrChi001Title": {
+    "description": "ALR-CHI-001 · titolo"
+  },
+  "alrChi001Text": "Punti aperti o sanguinamento della ferita: copri con una garza pulita, impedisci che si lecchi e contatta il veterinario oggi. Subito se il sanguinamento è abbondante o si vede tessuto interno.",
+  "@alrChi001Text": {
+    "description": "ALR-CHI-001 · testo"
+  },
+  "alrChi002Title": "Ferita arrossata, gonfia o con secrezione",
+  "@alrChi002Title": {
+    "description": "ALR-CHI-002 · titolo"
+  },
+  "alrChi002Text": "Può essere un'infiammazione o un'infezione della ferita: mantieni il collare elisabettiano e senti il veterinario entro 1-2 giorni; prima se peggiora o compare febbre.",
+  "@alrChi002Text": {
+    "description": "ALR-CHI-002 · testo"
+  },
+  "alrChi003Title": "Non ha ancora mangiato dopo l'intervento",
+  "@alrChi003Title": {
+    "description": "ALR-CHI-003 · titolo"
+  },
+  "alrChi003Text": "L'appetito di solito torna entro 24-48 ore dall'intervento: contatta il veterinario oggi.",
+  "@alrChi003Text": {
+    "description": "ALR-CHI-003 · testo"
+  },
+  "alrAlt006Title": "Possibile forasacco",
+  "@alrAlt006Title": {
+    "description": "ALR-ALT-006 · titolo"
+  },
+  "alrAlt006Text": "In stagione dei forasacchi, scuotere la testa o starnutire all'improvviso dopo un prato richiede una visita oggi: prima si toglie, meno danni fa.",
+  "@alrAlt006Text": {
+    "description": "ALR-ALT-006 · testo"
+  },
+  "alrPrv001Title": "Ciclo vaccinale non completo",
+  "@alrPrv001Title": {
+    "description": "ALR-PRV-001 · titolo"
+  },
+  "alrPrv001Text": "Finché non è completo, evita aree frequentate da cani sconosciuti e chiama il veterinario per fissare la dose.",
+  "@alrPrv001Text": {
+    "description": "ALR-PRV-001 · testo"
+  },
+  "alrPrv002Title": "{count, plural, =1{Una scadenza superata} other{{count} scadenze superate}}",
+  "@alrPrv002Title": {
+    "description": "ALR-PRV-002 · titolo · items = prime 3 voci scadute, separate da « · »",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alrPrv002Text": "{items}",
+  "@alrPrv002Text": {
+    "description": "ALR-PRV-002 · testo · items = prime 3 voci scadute, separate da « · »",
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "prv001Title": "Microchip e iscrizione all'anagrafe canina",
+  "@prv001Title": {
+    "description": "PRV-001 · titolo"
+  },
+  "prv001Text": "Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe SINAC): entro 60 giorni dalla nascita e comunque prima della cessione. Se hai adottato il cane, verifica che sia intestato a te.",
+  "@prv001Text": {
+    "description": "PRV-001 · testo"
+  },
+  "prv002Title": "Verifica che l'anagrafe sia intestata a te",
+  "@prv002Title": {
+    "description": "PRV-002 · titolo"
+  },
+  "prv002Text": "Controlla sul portale dell'anagrafe canina della tua Regione (o SINAC) che il microchip {microchip} sia intestato a te e che indirizzo e telefono siano aggiornati.",
+  "@prv002Text": {
+    "description": "PRV-002 · testo",
+    "placeholders": {
+      "microchip": {
+        "type": "String"
+      }
+    }
+  },
+  "prv003Title": "{dose, select, first{Vaccino core (cimurro, epatite, parvovirosi) – 1ª dose} second{Vaccino core (cimurro, epatite, parvovirosi) – 2ª dose} other{Vaccino core (cimurro, epatite, parvovirosi) – 3ª dose}}",
+  "@prv003Title": {
+    "description": "PRV-003 · titolo · il titolo diventa il nome della voce in cartella: la logica riconosce «core» e «ª dose»",
+    "placeholders": {
+      "dose": {
+        "type": "String"
+      }
+    }
+  },
+  "prv003Text": "{dose, select, first{WSAVA: prima dose a 6-8 settimane.} second{Ogni 2-4 settimane fino a 16 settimane o più.} other{L'ultima dose non prima delle 16 settimane.}}",
+  "@prv003Text": {
+    "description": "PRV-003 · testo · il titolo diventa il nome della voce in cartella: la logica riconosce «core» e «ª dose»",
+    "placeholders": {
+      "dose": {
+        "type": "String"
+      }
+    }
+  },
+  "prv004Title": "Vaccino core (cimurro, epatite, parvovirosi) – verifica il libretto",
+  "@prv004Title": {
+    "description": "PRV-004 · titolo"
+  },
+  "prv004Text": "Nessun vaccino core registrato. Se non trovi il libretto, il veterinario può fare una dose (WSAVA considera protettiva una dose dei vaccini core vivi attenuati nell'adulto) oppure dosare gli anticorpi.",
+  "@prv004Text": {
+    "description": "PRV-004 · testo"
+  },
+  "prv005Title": "Vaccino core (cimurro, epatite, parvovirosi) – richiamo",
+  "@prv005Title": {
+    "description": "PRV-005 · titolo"
+  },
+  "prv005Text": "WSAVA 2024: richiamo a 26 settimane (oppure a 12 mesi secondo il veterinario), poi ogni 3 anni se il vaccino usato lo prevede.",
+  "@prv005Text": {
+    "description": "PRV-005 · testo"
+  },
+  "prv006Title": "{dose, select, first{Leptospirosi – 1ª dose} other{Leptospirosi – 2ª dose}}",
+  "@prv006Title": {
+    "description": "PRV-006 · titolo",
+    "placeholders": {
+      "dose": {
+        "type": "String"
+      }
+    }
+  },
+  "prv006Text": "{dose, select, first{Consigliata in Italia: 2 dosi a 2-4 settimane di distanza, poi richiamo annuale.} other{Completa l'avvio vaccinale.}}",
+  "@prv006Text": {
+    "description": "PRV-006 · testo",
+    "placeholders": {
+      "dose": {
+        "type": "String"
+      }
+    }
+  },
+  "prv007Title": "Leptospirosi",
+  "@prv007Title": {
+    "description": "PRV-007 · titolo"
+  },
+  "prv007Text": "Se non è mai stato vaccinato servono 2 dosi a 2-4 settimane; poi richiamo annuale. Verifica il libretto.",
+  "@prv007Text": {
+    "description": "PRV-007 · testo"
+  },
+  "prv008Title": "Sverminazione cucciolo",
+  "@prv008Title": {
+    "description": "PRV-008 · titolo"
+  },
+  "prv008Text": "Ogni 2 settimane fino a 2 settimane dopo lo svezzamento, poi ogni mese fino a 6 mesi.",
+  "@prv008Text": {
+    "description": "PRV-008 · testo"
+  },
+  "prv009Title": "Esame delle feci",
+  "@prv009Title": {
+    "description": "PRV-009 · titolo"
+  },
+  "prv009Text": "Da 1 a 4 volte l'anno secondo lo stile di vita (o sverminazione periodica secondo il veterinario).",
+  "@prv009Text": {
+    "description": "PRV-009 · testo"
+  },
+  "prv010Title": "Prevenzione filariosi (stagione {year})",
+  "@prv010Title": {
+    "description": "PRV-010 · titolo",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "prv010Text": "ESCCAP Italia: profilassi mensile fino a dicembre (un mese dopo la fine della stagione delle zanzare). Se non era protetto, chiedi al veterinario se serve prima un test.",
+  "@prv010Text": {
+    "description": "PRV-010 · testo"
+  },
+  "prv011Title": "Filariosi: chiedi al veterinario se fare una dose ora e il test",
+  "@prv011Title": {
+    "description": "PRV-011 · titolo"
+  },
+  "prv011Text": "Se non era protetto quest'estate, il veterinario valuterà un test (antigene + microfilarie) prima di iniziare; il test affidabile si fa in primavera.",
+  "@prv011Text": {
+    "description": "PRV-011 · testo"
+  },
+  "prv012Title": "Test filariosi e leishmaniosi annuale ({year})",
+  "@prv012Title": {
+    "description": "PRV-012 · titolo",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "prv012Text": "Prima di iniziare la profilassi: antigene della filaria e, nelle zone a rischio, test per la leishmania.",
+  "@prv012Text": {
+    "description": "PRV-012 · testo"
+  },
+  "prv013Title": "Inizio profilassi filariosi {year}",
+  "@prv013Title": {
+    "description": "PRV-013 · titolo",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "prv013Text": "{south, select, yes{Mensile fino a dicembre (al Sud valuta con il veterinario la copertura tutto l'anno). Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.} other{Mensile fino a dicembre. Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.}}",
+  "@prv013Text": {
+    "description": "PRV-013 · testo",
+    "placeholders": {
+      "south": {
+        "type": "String"
+      }
+    }
+  },
+  "prv014Title": "Repellente anti-pappataci (leishmaniosi) {year}",
+  "@prv014Title": {
+    "description": "PRV-014 · titolo",
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "prv014Text": "Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.",
+  "@prv014Text": {
+    "description": "PRV-014 · testo"
+  },
+  "prv015Title": "Antiparassitario esterno (zecche e pulci)",
+  "@prv015Title": {
+    "description": "PRV-015 · titolo"
+  },
+  "prv015Text": "Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.",
+  "@prv015Text": {
+    "description": "PRV-015 · testo"
+  },
+  "prv016Title": "{senior, select, yes{Controllo geriatrico semestrale} other{Visita di controllo annuale}}",
+  "@prv016Title": {
+    "description": "PRV-016 · titolo",
+    "placeholders": {
+      "senior": {
+        "type": "String"
+      }
+    }
+  },
+  "prv016Text": "{senior, select, yes{Per i cani anziani: visita ed esami del sangue e delle urine ogni 6 mesi.} other{Visita generale, peso, denti, richiami.}}",
+  "@prv016Text": {
+    "description": "PRV-016 · testo",
+    "placeholders": {
+      "senior": {
+        "type": "String"
+      }
+    }
+  },
+  "nut001Text": "In allattamento il fabbisogno arriva a 4-8 volte quello di riposo: lascia il cibo a disposizione (alimento per cuccioli) e acqua fresca sempre. Se trema, ansima, è agitata o barcolla, chiama subito il veterinario.",
+  "@nut001Text": {
+    "description": "NUT-001 · testo"
+  },
+  "nut002Text": "Per la sua età sono consigliati {meals} pasti al giorno: nei cuccioli piccoli pochi pasti possono causare ipoglicemia.",
+  "@nut002Text": {
+    "description": "NUT-002 · testo",
+    "placeholders": {
+      "meals": {
+        "type": "String"
+      }
+    }
+  },
+  "nut003Text": "Cucciolo di taglia grande: usa un alimento specifico \"puppy large breed\" e non aggiungere integratori di calcio. Mantienilo snello (BCS 4-5): crescere più in fretta non lo fa diventare più grande, aumenta il rischio di problemi alle articolazioni.",
+  "@nut003Text": {
+    "description": "NUT-003 · testo"
+  },
+  "nut004Text": "{conditions, select, yes{Per dimagrire con questa quota di calorie è consigliato un alimento dietetico specifico: riducendo molto la razione del cibo normale si rischiano carenze. Prima di iniziare fai visitare il cane: alcune malattie ormonali causano aumento di peso. Pesalo ogni 2 settimane. Con le patologie registrate la dieta va decisa con il veterinario.} other{Per dimagrire con questa quota di calorie è consigliato un alimento dietetico specifico: riducendo molto la razione del cibo normale si rischiano carenze. Prima di iniziare fai visitare il cane: alcune malattie ormonali causano aumento di peso. Pesalo ogni 2 settimane.}}",
+  "@nut004Text": {
+    "description": "NUT-004 · testo",
+    "placeholders": {
+      "conditions": {
+        "type": "String"
+      }
+    }
+  },
+  "nut005Text": "Sottopeso: prima fallo visitare per escludere cause mediche, poi aumenta la razione gradualmente in 1-2 settimane.",
+  "@nut005Text": {
+    "description": "NUT-005 · testo"
+  },
+  "nutFat001Text": "gravidanza avanzata",
+  "@nutFat001Text": {
+    "description": "NUT-FAT-001 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat002Text": "gravidanza (prime 6 settimane)",
+  "@nutFat002Text": {
+    "description": "NUT-FAT-002 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat003Text": "allattamento (4-8 × RER)",
+  "@nutFat003Text": {
+    "description": "NUT-FAT-003 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat004Text": "cucciolo sotto i 4 mesi",
+  "@nutFat004Text": {
+    "description": "NUT-FAT-004 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat005Text": "cucciolo in crescita",
+  "@nutFat005Text": {
+    "description": "NUT-FAT-005 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat006Text": "programma di dimagrimento (calcolato sul peso ideale)",
+  "@nutFat006Text": {
+    "description": "NUT-FAT-006 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat007Text": "sottopeso: calcolato sul peso ideale",
+  "@nutFat007Text": {
+    "description": "NUT-FAT-007 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat008Text": "cane da lavoro/sport intenso",
+  "@nutFat008Text": {
+    "description": "NUT-FAT-008 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat009Text": "cane molto attivo",
+  "@nutFat009Text": {
+    "description": "NUT-FAT-009 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat010Text": "cane sedentario o incline al sovrappeso",
+  "@nutFat010Text": {
+    "description": "NUT-FAT-010 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat011Text": "cane anziano",
+  "@nutFat011Text": {
+    "description": "NUT-FAT-011 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat012Text": "adulto sterilizzato",
+  "@nutFat012Text": {
+    "description": "NUT-FAT-012 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "nutFat013Text": "adulto non sterilizzato",
+  "@nutFat013Text": {
+    "description": "NUT-FAT-013 · testo · motivo del fattore MER (nuovo ID, non clinico)"
+  },
+  "scaBcs1Text": "Emaciato: costole, vertebre e bacino visibili a distanza.",
+  "@scaBcs1Text": {
+    "description": "SCA-BCS-1 · testo"
+  },
+  "scaBcs2Text": "Molto magro: costole facilmente visibili, nessun grasso palpabile.",
+  "@scaBcs2Text": {
+    "description": "SCA-BCS-2 · testo"
+  },
+  "scaBcs3Text": "Magro: costole facilmente palpabili, vita evidente.",
+  "@scaBcs3Text": {
+    "description": "SCA-BCS-3 · testo"
+  },
+  "scaBcs4Text": "Sottile: costole palpabili con poco grasso, vita ben visibile.",
+  "@scaBcs4Text": {
+    "description": "SCA-BCS-4 · testo"
+  },
+  "scaBcs5Text": "Ideale: costole palpabili senza eccesso di grasso, vita visibile da sopra.",
+  "@scaBcs5Text": {
+    "description": "SCA-BCS-5 · testo"
+  },
+  "scaBcs6Text": "Leggermente sovrappeso: costole palpabili con lieve grasso in più.",
+  "@scaBcs6Text": {
+    "description": "SCA-BCS-6 · testo"
+  },
+  "scaBcs7Text": "Sovrappeso: costole palpabili a fatica, vita poco visibile.",
+  "@scaBcs7Text": {
+    "description": "SCA-BCS-7 · testo"
+  },
+  "scaBcs8Text": "Obeso: costole non palpabili, nessuna vita, addome disteso.",
+  "@scaBcs8Text": {
+    "description": "SCA-BCS-8 · testo"
+  },
+  "scaBcs9Text": "Obesità grave: depositi di grasso su collo, arti e base della coda.",
+  "@scaBcs9Text": {
+    "description": "SCA-BCS-9 · testo"
+  },
+  "tos001Title": "Xilitolo (gomme e dolci \"senza zucchero\", dentifricio per persone, burro di arachidi light, integratori)",
+  "@tos001Title": {
+    "description": "TOS-001 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos001Text": "ipoglicemia e danno al fegato anche a piccole dosi",
+  "@tos001Text": {
+    "description": "TOS-001 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos002Title": "Uva e uvetta",
+  "@tos002Title": {
+    "description": "TOS-002 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos002Text": "insufficienza renale acuta, dose imprevedibile",
+  "@tos002Text": {
+    "description": "TOS-002 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos003Title": "Cioccolato e cacao (più è fondente, più è pericoloso)",
+  "@tos003Title": {
+    "description": "TOS-003 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos003Text": "teobromina: vomito, agitazione, aritmie, convulsioni",
+  "@tos003Text": {
+    "description": "TOS-003 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos004Title": "Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere)",
+  "@tos004Title": {
+    "description": "TOS-004 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos004Text": "anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo",
+  "@tos004Text": {
+    "description": "TOS-004 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos005Title": "Farmaci per persone: paracetamolo, ibuprofene, naprossene, ketoprofene, aspirina",
+  "@tos005Title": {
+    "description": "TOS-005 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos005Text": "ulcere, danno a reni e fegato, anemia",
+  "@tos005Text": {
+    "description": "TOS-005 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos006Title": "Altri farmaci umani: antidepressivi, farmaci per ADHD, farmaci per il cuore",
+  "@tos006Title": {
+    "description": "TOS-006 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos006Text": "agitazione, aritmie, convulsioni",
+  "@tos006Text": {
+    "description": "TOS-006 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos007Title": "Veleni per topi (anticoagulanti, colecalciferolo)",
+  "@tos007Title": {
+    "description": "TOS-007 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos007Text": "emorragie anche dopo 3-5 giorni; danno renale",
+  "@tos007Text": {
+    "description": "TOS-007 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos008Title": "Lumachicidi a base di metaldeide",
+  "@tos008Title": {
+    "description": "TOS-008 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos008Text": "tremori e convulsioni gravi in poco tempo",
+  "@tos008Text": {
+    "description": "TOS-008 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos009Title": "Antigelo (glicole etilenico), insetticidi, bocconi avvelenati",
+  "@tos009Title": {
+    "description": "TOS-009 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos009Text": "insufficienza renale, sintomi neurologici",
+  "@tos009Text": {
+    "description": "TOS-009 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos010Title": "Processionaria del pino (febbraio-maggio)",
+  "@tos010Title": {
+    "description": "TOS-010 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos010Text": "necrosi di lingua e bocca: subito dal veterinario, non strofinare",
+  "@tos010Text": {
+    "description": "TOS-010 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos011Title": "Cannabis / THC",
+  "@tos011Title": {
+    "description": "TOS-011 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos011Text": "barcollamento, perdita di urina, letargia",
+  "@tos011Text": {
+    "description": "TOS-011 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos012Title": "Piante: oleandro, Cycas revoluta, tasso, mughetto, azalea, ricino, bulbi",
+  "@tos012Title": {
+    "description": "TOS-012 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos012Text": "effetti su cuore, fegato o sistema nervoso",
+  "@tos012Text": {
+    "description": "TOS-012 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos013Title": "Funghi selvatici, alghe tossiche in acqua stagnante",
+  "@tos013Title": {
+    "description": "TOS-013 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos013Text": "danno al fegato, sintomi neurologici",
+  "@tos013Text": {
+    "description": "TOS-013 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos014Title": "Rospi e morsi di vipera",
+  "@tos014Title": {
+    "description": "TOS-014 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos014Text": "salivazione, gonfiore, collasso: subito dal veterinario",
+  "@tos014Text": {
+    "description": "TOS-014 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos015Title": "Noci di macadamia",
+  "@tos015Title": {
+    "description": "TOS-015 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos015Text": "debolezza, tremori, febbre",
+  "@tos015Text": {
+    "description": "TOS-015 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos016Title": "Alcol e impasti lievitati crudi",
+  "@tos016Title": {
+    "description": "TOS-016 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos016Text": "intossicazione, dilatazione dello stomaco",
+  "@tos016Text": {
+    "description": "TOS-016 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos017Title": "Caffeina (caffè, tè, energy drink), noce moscata, luppolo",
+  "@tos017Title": {
+    "description": "TOS-017 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos017Text": "agitazione, tachicardia, ipertermia, convulsioni",
+  "@tos017Text": {
+    "description": "TOS-017 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos018Title": "Cibo ammuffito e compost",
+  "@tos018Title": {
+    "description": "TOS-018 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos018Text": "tremori e convulsioni (micotossine)",
+  "@tos018Text": {
+    "description": "TOS-018 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos019Title": "Batterie a bottone, magneti, pannocchie, noccioli, ossa cotte",
+  "@tos019Title": {
+    "description": "TOS-019 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos019Text": "ustioni interne, ostruzioni e perforazioni",
+  "@tos019Text": {
+    "description": "TOS-019 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos020Title": "Avocado",
+  "@tos020Title": {
+    "description": "TOS-020 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos020Text": "disturbi gastrointestinali; il nocciolo causa ostruzioni",
+  "@tos020Text": {
+    "description": "TOS-020 · testo · titolo = alimento, testo = pericolo"
+  },
+  "tos021Title": "Cibi molto grassi (avanzi, fritti) e sale in eccesso",
+  "@tos021Title": {
+    "description": "TOS-021 · titolo · titolo = alimento, testo = pericolo"
+  },
+  "tos021Text": "pancreatite; vomito e convulsioni da sale",
+  "@tos021Text": {
+    "description": "TOS-021 · testo · titolo = alimento, testo = pericolo"
+  },
+  "stg001Title": "Stagione della processionaria",
+  "@stg001Title": {
+    "description": "STG-001 · titolo"
+  },
+  "stg001Text": "Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.",
+  "@stg001Text": {
+    "description": "STG-001 · testo"
+  },
+  "stg002Title": "Stagione dei forasacchi",
+  "@stg002Title": {
+    "description": "STG-002 · titolo"
+  },
+  "stg002Text": "Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.",
+  "@stg002Text": {
+    "description": "STG-002 · testo"
+  },
+  "stg003Title": "Caldo: rischio colpo di calore",
+  "@stg003Title": {
+    "description": "STG-003 · titolo"
+  },
+  "stg003Text": "{atRisk, select, yes{Per {name} il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.} other{Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.}}",
+  "@stg003Text": {
+    "description": "STG-003 · testo",
+    "placeholders": {
+      "atRisk": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "stg004Title": "Veleni per lumache e topi",
+  "@stg004Title": {
+    "description": "STG-004 · titolo"
+  },
+  "stg004Text": "In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.",
+  "@stg004Text": {
+    "description": "STG-004 · testo"
+  },
+  "stg005Title": "Acqua stagnante e leptospirosi",
+  "@stg005Title": {
+    "description": "STG-005 · titolo"
+  },
+  "stg005Text": "Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.",
+  "@stg005Text": {
+    "description": "STG-005 · testo"
+  },
+  "stg006Title": "Freddo",
+  "@stg006Title": {
+    "description": "STG-006 · titolo"
+  },
+  "stg006Text": "{fragile, select, yes{Per {name} il freddo pesa di più. Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).} other{Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).}}",
+  "@stg006Text": {
+    "description": "STG-006 · testo",
+    "placeholders": {
+      "fragile": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "stg007Title": "Zecche",
+  "@stg007Title": {
+    "description": "STG-007 · titolo"
+  },
+  "stg007Text": "{allYear, select, yes{Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.} other{Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.}}",
+  "@stg007Text": {
+    "description": "STG-007 · testo",
+    "placeholders": {
+      "allYear": {
+        "type": "String"
+      }
+    }
+  },
+  "stg008Title": "Botti di Capodanno",
+  "@stg008Title": {
+    "description": "STG-008 · titolo"
+  },
+  "stg008Text": "Tienilo in casa, con una zona tranquilla e finestre chiuse; controlla che la medaglietta sia aggiornata. Se è molto pauroso, parlane prima con il veterinario.",
+  "@stg008Text": {
+    "description": "STG-008 · testo"
+  },
+  "raz001Title": "Torace profondo: attenzione alla torsione gastrica",
+  "@raz001Title": {
+    "description": "RAZ-001 · titolo"
+  },
+  "raz001Text": "Pasti divisi, niente corse subito dopo mangiato. Addome gonfio con conati a vuoto è un'emergenza.",
+  "@raz001Text": {
+    "description": "RAZ-001 · testo"
+  },
+  "raz002Title": "Razza brachicefala",
+  "@raz002Title": {
+    "description": "RAZ-002 · titolo"
+  },
+  "raz002Text": "Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.",
+  "@raz002Text": {
+    "description": "RAZ-002 · testo"
+  },
+  "raz003Title": "Possibile mutazione MDR1",
+  "@raz003Title": {
+    "description": "RAZ-003 · titolo"
+  },
+  "raz003Text": "Chiedi al veterinario il test MDR1 prima di usare alcuni antiparassitari e farmaci (es. ivermectina ad alte dosi).",
+  "@raz003Text": {
+    "description": "RAZ-003 · testo"
+  },
+  "raz004Title": "Dalmata: calcoli di urati",
+  "@raz004Title": {
+    "description": "RAZ-004 · titolo"
+  },
+  "raz004Text": "Acqua abbondante e dieta concordata con il veterinario; segnala sforzo o sangue nelle urine.",
+  "@raz004Text": {
+    "description": "RAZ-004 · testo"
+  },
+  "raz005Title": "Schiena lunga",
+  "@raz005Title": {
+    "description": "RAZ-005 · titolo"
+  },
+  "raz005Text": "Evita salti da divani e scale ripide. Dolore alla schiena o zampe posteriori deboli: subito dal veterinario.",
+  "@raz005Text": {
+    "description": "RAZ-005 · testo"
+  },
+  "raz006Title": "Razza toy: trachea e zuccheri",
+  "@raz006Title": {
+    "description": "RAZ-006 · titolo"
+  },
+  "raz006Text": "Predisposta al collasso tracheale (tosse \"a clacson\": usa la pettorina, non il collare) e, da cucciolo, all'ipoglicemia: pasti frequenti.",
+  "@raz006Text": {
+    "description": "RAZ-006 · testo"
+  },
+  "raz007Title": "Schnauzer nano: pancreatite",
+  "@raz007Title": {
+    "description": "RAZ-007 · titolo"
+  },
+  "raz007Text": "Evita avanzi e cibi grassi; vomito e dolore addominale dopo un pasto grasso vanno visti dal veterinario.",
+  "@raz007Text": {
+    "description": "RAZ-007 · testo"
+  },
+  "raz008Title": "Dobermann: cuore",
+  "@raz008Title": {
+    "description": "RAZ-008 · titolo"
+  },
+  "raz008Text": "Predisposto alla cardiomiopatia dilatativa: chiedi al veterinario dei controlli cardiologici periodici (ECG Holter, ecografia).",
+  "@raz008Text": {
+    "description": "RAZ-008 · testo"
+  },
+  "raz009Title": "Cocker: orecchie",
+  "@raz009Title": {
+    "description": "RAZ-009 · titolo"
+  },
+  "raz009Text": "Predisposto alle otiti: controlla e asciuga le orecchie dopo bagni e passeggiate sotto la pioggia.",
+  "@raz009Text": {
+    "description": "RAZ-009 · testo"
+  },
+  "raz010Title": "Bulldog francese: schiena",
+  "@raz010Title": {
+    "description": "RAZ-010 · titolo"
+  },
+  "raz010Text": "Predisposto all'ernia del disco: dolore alla schiena o zampe posteriori deboli vanno visti subito.",
+  "@raz010Text": {
+    "description": "RAZ-010 · testo"
+  },
+  "raz011Title": "Cavalier King: cuore",
+  "@raz011Title": {
+    "description": "RAZ-011 · titolo"
+  },
+  "raz011Text": "Predisposto alla malattia della valvola mitrale: conta i respiri nel sonno ogni settimana (sezione Diari).",
+  "@raz011Text": {
+    "description": "RAZ-011 · testo"
+  },
+  "raz012Title": "Sterilizzazione nelle taglie grandi",
+  "@raz012Title": {
+    "description": "RAZ-012 · titolo"
+  },
+  "raz012Text": "Per alcune razze grandi gli studi indicano che l'età della sterilizzazione può influire su articolazioni e alcuni tumori (Hart et al. 2020). Non esiste un'età giusta per tutti: parlane con il veterinario.",
+  "@raz012Text": {
+    "description": "RAZ-012 · testo"
+  },
+  "cuc001Title": "Finestra di socializzazione (fino a ~14 settimane)",
+  "@cuc001Title": {
+    "description": "CUC-001 · titolo"
+  },
+  "cuc001Text": "Fagli conoscere con calma persone, rumori, superfici e cani vaccinati e sani, anche prima della fine dei vaccini, in ambienti controllati (AVSAB 2008). Finché i vaccini non sono completi evita parchi e aree con feci di cani sconosciuti; sì a cani sani e vaccinati, case di amici e classi per cuccioli con protocollo igienico. Abitualo a trasportino e manipolazione.",
+  "@cuc001Text": {
+    "description": "CUC-001 · testo"
+  },
+  "cuc002Title": "Educazione al bisogno",
+  "@cuc002Title": {
+    "description": "CUC-002 · titolo"
+  },
+  "cuc002Text": "Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Zampa ti dice quando portarlo fuori.",
+  "@cuc002Text": {
+    "description": "CUC-002 · testo"
+  },
+  "via001Title": "Età minima",
+  "@via001Title": {
+    "description": "VIA-001 · titolo"
+  },
+  "via001Text": "Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età.",
+  "@via001Text": {
+    "description": "VIA-001 · testo"
+  },
+  "via002Title": "Microchip registrato",
+  "@via002Title": {
+    "description": "VIA-002 · titolo"
+  },
+  "via002Text": "Obbligatorio e impiantato prima del vaccino antirabbico.",
+  "@via002Text": {
+    "description": "VIA-002 · testo"
+  },
+  "via003Title": "Vaccino antirabbico valido",
+  "@via003Title": {
+    "description": "VIA-003 · titolo · date = giorno/mese/anno"
+  },
+  "via003Text": "{hasRabies, select, yes{La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: {date}).} other{Nessun antirabbico in cartella.}}",
+  "@via003Text": {
+    "description": "VIA-003 · testo · date = giorno/mese/anno",
+    "placeholders": {
+      "hasRabies": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "via004Title": "Passaporto europeo per animali",
+  "@via004Title": {
+    "description": "VIA-004 · titolo"
+  },
+  "via004Text": "Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute.",
+  "@via004Text": {
+    "description": "VIA-004 · testo"
+  },
+  "via005Title": "Trattamento contro Echinococcus",
+  "@via005Title": {
+    "description": "VIA-005 · titolo"
+  },
+  "via005Text": "Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.",
+  "@via005Text": {
+    "description": "VIA-005 · testo"
+  },
+  "via006Title": "Rischi parassitari della destinazione",
+  "@via006Title": {
+    "description": "VIA-006 · titolo"
+  },
+  "via006Text": "Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.",
+  "@via006Text": {
+    "description": "VIA-006 · testo"
+  },
+  "scaQol1Title": "Dolore (Hurt)",
+  "@scaQol1Title": {
+    "description": "SCA-QOL-1 · titolo"
+  },
+  "scaQol1Text": "Il dolore è controllato? Respira bene? 10 = nessun dolore",
+  "@scaQol1Text": {
+    "description": "SCA-QOL-1 · testo"
+  },
+  "scaQol2Title": "Fame (Hunger)",
+  "@scaQol2Title": {
+    "description": "SCA-QOL-2 · titolo"
+  },
+  "scaQol2Text": "Mangia abbastanza? 10 = appetito normale",
+  "@scaQol2Text": {
+    "description": "SCA-QOL-2 · testo"
+  },
+  "scaQol3Title": "Idratazione",
+  "@scaQol3Title": {
+    "description": "SCA-QOL-3 · titolo"
+  },
+  "scaQol3Text": "Beve abbastanza? 10 = sì",
+  "@scaQol3Text": {
+    "description": "SCA-QOL-3 · testo"
+  },
+  "scaQol4Title": "Igiene",
+  "@scaQol4Title": {
+    "description": "SCA-QOL-4 · titolo"
+  },
+  "scaQol4Text": "Si mantiene pulito, niente piaghe? 10 = sì",
+  "@scaQol4Text": {
+    "description": "SCA-QOL-4 · testo"
+  },
+  "scaQol5Title": "Felicità",
+  "@scaQol5Title": {
+    "description": "SCA-QOL-5 · titolo"
+  },
+  "scaQol5Text": "Interagisce, gioca, risponde? 10 = come sempre",
+  "@scaQol5Text": {
+    "description": "SCA-QOL-5 · testo"
+  },
+  "scaQol6Title": "Mobilità",
+  "@scaQol6Title": {
+    "description": "SCA-QOL-6 · titolo"
+  },
+  "scaQol6Text": "Si alza e cammina da solo? 10 = sì",
+  "@scaQol6Text": {
+    "description": "SCA-QOL-6 · testo"
+  },
+  "scaQol7Title": "Più giorni buoni che cattivi",
+  "@scaQol7Title": {
+    "description": "SCA-QOL-7 · titolo"
+  },
+  "scaQol7Text": "10 = quasi tutti buoni",
+  "@scaQol7Text": {
+    "description": "SCA-QOL-7 · testo"
+  },
+  "lab001Text": "Creatinina",
+  "@lab001Text": {
+    "description": "LAB-001 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab002Text": "SDMA",
+  "@lab002Text": {
+    "description": "LAB-002 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab003Text": "Urea (BUN)",
+  "@lab003Text": {
+    "description": "LAB-003 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab004Text": "ALT",
+  "@lab004Text": {
+    "description": "LAB-004 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab005Text": "Fosfatasi alcalina (ALP)",
+  "@lab005Text": {
+    "description": "LAB-005 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab006Text": "Glucosio",
+  "@lab006Text": {
+    "description": "LAB-006 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab007Text": "Fruttosamina",
+  "@lab007Text": {
+    "description": "LAB-007 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab008Text": "Ematocrito",
+  "@lab008Text": {
+    "description": "LAB-008 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab009Text": "Globuli bianchi",
+  "@lab009Text": {
+    "description": "LAB-009 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab010Text": "Piastrine",
+  "@lab010Text": {
+    "description": "LAB-010 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab011Text": "Proteine totali",
+  "@lab011Text": {
+    "description": "LAB-011 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab012Text": "Albumina",
+  "@lab012Text": {
+    "description": "LAB-012 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab013Text": "T4 totale",
+  "@lab013Text": {
+    "description": "LAB-013 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab014Text": "Peso specifico urinario",
+  "@lab014Text": {
+    "description": "LAB-014 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab015Text": "UPC (proteinuria)",
+  "@lab015Text": {
+    "description": "LAB-015 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab016Text": "Pressione sistolica",
+  "@lab016Text": {
+    "description": "LAB-016 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "lab017Text": "Titolo Leishmania",
+  "@lab017Text": {
+    "description": "LAB-017 · testo · esame di laboratorio suggerito (nuovo ID, non clinico)"
+  },
+  "emg001Title": "Addome gonfio, conati a vuoto, agitazione",
+  "@emg001Title": {
+    "description": "EMG-001 · titolo"
+  },
+  "emg001Text": "Possibile torsione/dilatazione dello stomaco: ogni minuto conta.",
+  "@emg001Text": {
+    "description": "EMG-001 · testo"
+  },
+  "emg002Title": "Fatica a respirare, respiro rumoroso, lingua o gengive blu",
+  "@emg002Title": {
+    "description": "EMG-002 · titolo"
+  },
+  "emg002Text": "Tienilo calmo e al fresco durante il trasporto.",
+  "@emg002Text": {
+    "description": "EMG-002 · testo"
+  },
+  "emg003Title": "Gengive pallide o bianche, collasso, debolezza improvvisa",
+  "@emg003Title": {
+    "description": "EMG-003 · titolo"
+  },
+  "emg003Text": "Può indicare un'emorragia interna o uno shock.",
+  "@emg003Text": {
+    "description": "EMG-003 · testo"
+  },
+  "emg004Title": "Convulsioni oltre 5 minuti, oppure 2 o più in 24 ore",
+  "@emg004Title": {
+    "description": "EMG-004 · titolo"
+  },
+  "emg004Text": "Non mettere le mani in bocca; allontana gli oggetti; cronometra.",
+  "@emg004Text": {
+    "description": "EMG-004 · testo"
+  },
+  "emg005Title": "Colpo di calore: ansima molto, barcolla, gengive rosso scuro",
+  "@emg005Title": {
+    "description": "EMG-005 · titolo"
+  },
+  "emg005Text": "Raffreddalo subito: bagnalo abbondantemente con acqua fresca o fredda e fai aria. Non coprirlo con asciugamani bagnati. Poi vai subito dal veterinario continuando a raffreddarlo in auto, anche se sembra riprendersi.",
+  "@emg005Text": {
+    "description": "EMG-005 · testo"
+  },
+  "emg006Title": "Sospetto avvelenamento, morso di vipera, contatto con processionaria",
+  "@emg006Title": {
+    "description": "EMG-006 · titolo"
+  },
+  "emg006Text": "Porta la confezione o una foto. Non provocare il vomito di tua iniziativa (niente sale o acqua ossigenata).",
+  "@emg006Text": {
+    "description": "EMG-006 · testo"
+  },
+  "emg007Title": "Sforzo a urinare senza risultato, o nessuna pipì da 24 ore",
+  "@emg007Title": {
+    "description": "EMG-007 · titolo"
+  },
+  "emg007Text": "Nel maschio un blocco urinario è un'emergenza.",
+  "@emg007Text": {
+    "description": "EMG-007 · testo"
+  },
+  "emg008Title": "Cucciolo con vomito e diarrea, soprattutto se non vaccinato",
+  "@emg008Title": {
+    "description": "EMG-008 · titolo"
+  },
+  "emg008Text": "Va esclusa la parvovirosi; la disidratazione è rapida.",
+  "@emg008Text": {
+    "description": "EMG-008 · testo"
+  },
+  "emg009Title": "Cucciolo di taglia toy debole, tremante o che non risponde",
+  "@emg009Title": {
+    "description": "EMG-009 · titolo"
+  },
+  "emg009Text": "Possibile ipoglicemia: solo se è cosciente, un po' di miele sulle gengive, poi subito dal veterinario.",
+  "@emg009Text": {
+    "description": "EMG-009 · testo"
+  },
+  "emg010Title": "Femmina non sterilizzata abbattuta, che beve molto o ha perdite dalla vulva, settimane dopo il calore",
+  "@emg010Title": {
+    "description": "EMG-010 · titolo"
+  },
+  "emg010Text": "Possibile piometra (infezione dell'utero).",
+  "@emg010Text": {
+    "description": "EMG-010 · testo"
+  },
+  "emg011Title": "Parto difficile",
+  "@emg011Title": {
+    "description": "EMG-011 · titolo"
+  },
+  "emg011Text": "Oltre 30 minuti di contrazioni forti senza cucciolo, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere, gravidanza oltre i 70 giorni.",
+  "@emg011Text": {
+    "description": "EMG-011 · testo"
+  },
+  "emg012Title": "Cagna che allatta e trema, barcolla o è agitata",
+  "@emg012Title": {
+    "description": "EMG-012 · titolo"
+  },
+  "emg012Text": "Possibile eclampsia (calcio basso).",
+  "@emg012Text": {
+    "description": "EMG-012 · testo"
+  },
+  "emg013Title": "Traumi (investimento, caduta, morsi), sanguinamenti, feci nere",
+  "@emg013Title": {
+    "description": "EMG-013 · titolo"
+  },
+  "emg013Text": "Anche se sembra stare bene: le lesioni interne non si vedono.",
+  "@emg013Text": {
+    "description": "EMG-013 · testo"
+  },
+  "emg014Title": "Dolore intenso, guaisce se toccato, non si alza",
+  "@emg014Title": {
+    "description": "EMG-014 · titolo"
+  },
+  "emg014Text": "Non dare farmaci per persone: molti sono tossici per il cane.",
+  "@emg014Text": {
+    "description": "EMG-014 · testo"
+  },
+  "emg015Title": "Ha ingerito un oggetto, ossa, pannocchie, batterie o farmaci",
+  "@emg015Title": {
+    "description": "EMG-015 · titolo"
+  },
+  "emg015Text": "Chiama prima di fare qualsiasi cosa.",
+  "@emg015Text": {
+    "description": "EMG-015 · testo"
+  },
+  "emg016Title": "Reazione allergica grave: muso o palpebre gonfie, orticaria diffusa, vomito o fatica a respirare dopo puntura, farmaco o vaccino",
+  "@emg016Title": {
+    "description": "EMG-016 · titolo"
+  },
+  "emg016Text": "Il gonfiore del muso può chiudere le vie respiratorie: vai subito.",
+  "@emg016Text": {
+    "description": "EMG-016 · testo"
+  },
+  "emg017Title": "Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista",
+  "@emg017Title": {
+    "description": "EMG-017 · titolo"
+  },
+  "emg017Text": "Impedisci che si gratti; non mettere colliri di tua iniziativa.",
+  "@emg017Text": {
+    "description": "EMG-017 · testo"
+  },
+  "emg018Title": "Ustioni, folgorazione (cavi elettrici) o quasi-annegamento",
+  "@emg018Title": {
+    "description": "EMG-018 · titolo"
+  },
+  "emg018Text": "Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.",
+  "@emg018Text": {
+    "description": "EMG-018 · testo"
+  },
+  "emg019Title": "Sospetto avvelenamento",
+  "@emg019Title": {
+    "description": "EMG-019 · titolo"
+  },
+  "emg019Text": "Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell'etichetta.",
+  "@emg019Text": {
+    "description": "EMG-019 · testo"
+  },
+  "emg020Title": "Aggiungi i numeri utili",
+  "@emg020Title": {
+    "description": "EMG-020 · titolo"
+  },
+  "emg020Text": "Nel profilo del cane inserisci il telefono del tuo veterinario e di un pronto soccorso h24: li troverai qui.",
+  "@emg020Text": {
+    "description": "EMG-020 · testo"
+  },
+  "emg021Title": "Cosa dire al telefono",
+  "@emg021Title": {
+    "description": "EMG-021 · titolo · testo = prima riga del promemoria; le altre righe sono UI-EMG-007…011"
+  },
+  "emg021Text": "{name}, {sex, select, male{maschio} other{femmina}}{neutered, select, yes{ sterilizzato/a} other{}}, {age}, {weight} kg{hasBreed, select, yes{, {breed}} other{}}.",
+  "@emg021Text": {
+    "description": "EMG-021 · testo · testo = prima riga del promemoria; le altre righe sono UI-EMG-007…011",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "sex": {
+        "type": "String"
+      },
+      "neutered": {
+        "type": "String"
+      },
+      "age": {
+        "type": "String"
+      },
+      "weight": {
+        "type": "String"
+      },
+      "breed": {
+        "type": "String"
+      }
+    }
+  },
+  "uiEmg001Text": "Emergenze",
+  "@uiEmg001Text": {
+    "description": "UI-EMG-001 · testo · titolo della scheda"
+  },
+  "uiEmg002Text": "Chiama il mio veterinario",
+  "@uiEmg002Text": {
+    "description": "UI-EMG-002 · testo"
+  },
+  "uiEmg003Text": "Pronto soccorso veterinario h24",
+  "@uiEmg003Text": {
+    "description": "UI-EMG-003 · testo"
+  },
+  "uiEmg004Title": "Cerca pronto soccorso veterinario vicino a me",
+  "@uiEmg004Title": {
+    "description": "UI-EMG-004 · titolo"
+  },
+  "uiEmg004Text": "Apre la mappa",
+  "@uiEmg004Text": {
+    "description": "UI-EMG-004 · testo"
+  },
+  "uiEmg005Text": "Vai subito dal veterinario se…",
+  "@uiEmg005Text": {
+    "description": "UI-EMG-005 · testo"
+  },
+  "uiEmg007Text": "{hasNote, select, yes{Ha ingerito: {note} alle {time}.} other{Ha ingerito: (descrivi cosa e quanto) alle {time}.}}",
+  "@uiEmg007Text": {
+    "description": "UI-EMG-007 · testo",
+    "placeholders": {
+      "hasNote": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "uiEmg008Text": "{hasDrugs, select, yes{Farmaci in corso: {drugs}.} other{Farmaci in corso: nessuno.}}",
+  "@uiEmg008Text": {
+    "description": "UI-EMG-008 · testo",
+    "placeholders": {
+      "hasDrugs": {
+        "type": "String"
+      },
+      "drugs": {
+        "type": "String"
+      }
+    }
+  },
+  "uiEmg009Text": "Patologie note: {conditions}.",
+  "@uiEmg009Text": {
+    "description": "UI-EMG-009 · testo",
+    "placeholders": {
+      "conditions": {
+        "type": "String"
+      }
+    }
+  },
+  "uiEmg010Text": "Allergie: {allergies}.",
+  "@uiEmg010Text": {
+    "description": "UI-EMG-010 · testo",
+    "placeholders": {
+      "allergies": {
+        "type": "String"
+      }
+    }
+  },
+  "uiEmg011Text": "Cosa è successo e da quando; come respira; colore delle gengive.",
+  "@uiEmg011Text": {
+    "description": "UI-EMG-011 · testo"
+  }
+}

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../l10n/clinical_text.dart';
 import '../models.dart';
 
 /// Logica dei moduli clinici (revisione veterinaria 06, aggiunte 4-11, 18,
@@ -164,81 +165,65 @@ class Modules {
         (booster || departure.difference(firstRabies!.date).inDays >= 21) &&
         (rabies.first.nextDue == null ||
             rabies.first.nextDue!.isAfter(departure));
+    // Voci del catalogo VIA-001…006: titolo = voce, testo = nota.
+    ({String item, bool? ok, String note}) via(
+      String id,
+      bool? ok, [
+      Map<String, Object> p = const {},
+    ]) {
+      final t = ClinicalText(id, p);
+      return (item: t.title, ok: ok, note: t.text);
+    }
+
+    final last = rabies.isEmpty ? null : rabies.first.date;
     return [
-      (
-        item: 'Età minima',
-        ok: departure.difference(d.birthDate).inDays >= 15 * 7,
-        note:
-            'Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia '
-            'prima delle 15 settimane di età.',
-      ),
-      (
-        item: 'Microchip registrato',
-        ok: d.microchip.isNotEmpty,
-        note: 'Obbligatorio e impiantato prima del vaccino antirabbico.',
-      ),
-      (
-        item: 'Vaccino antirabbico valido',
-        ok: rabiesOk,
-        note: rabies.isEmpty
-            ? 'Nessun antirabbico in cartella.'
-            : 'La prima vaccinazione è valida dopo 21 giorni; i richiami fatti '
-                  'in tempo valgono subito. Durata 1-3 anni secondo la scheda '
-                  'tecnica (ultimo: ${rabies.first.date.day}/${rabies.first.date.month}/${rabies.first.date.year}).',
-      ),
-      (
-        item: 'Passaporto europeo per animali',
-        ok: null,
-        note:
-            'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. '
-            '(UE) 576/2013 e successive modifiche; verifica prima di partire '
-            'sul sito del Ministero della Salute.',
-      ),
-      (
-        item: 'Trattamento contro Echinococcus',
-        ok: null,
-        note: 'Obbligatorio 24-120 h prima dell\'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.',
-      ),
-      (
-        item: 'Rischi parassitari della destinazione',
-        ok: null,
-        note: 'Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.',
-      ),
+      via('VIA-001', departure.difference(d.birthDate).inDays >= 15 * 7),
+      via('VIA-002', d.microchip.isNotEmpty),
+      via('VIA-003', rabiesOk, {
+        'hasRabies': yesNo(last != null),
+        'date': last == null ? '' : '${last.day}/${last.month}/${last.year}',
+      }),
+      via('VIA-004', null),
+      via('VIA-005', null),
+      via('VIA-006', null),
     ];
   }
 
   // --- Qualità della vita (HHHHHMM, Villalobos) ---------------------------
-  static const qolItems = [
-    (
-      'Dolore (Hurt)',
-      'Il dolore è controllato? Respira bene? 10 = nessun dolore',
-    ),
-    ('Fame (Hunger)', 'Mangia abbastanza? 10 = appetito normale'),
-    ('Idratazione', 'Beve abbastanza? 10 = sì'),
-    ('Igiene', 'Si mantiene pulito, niente piaghe? 10 = sì'),
-    ('Felicità', 'Interagisce, gioca, risponde? 10 = come sempre'),
-    ('Mobilità', 'Si alza e cammina da solo? 10 = sì'),
-    ('Più giorni buoni che cattivi', '10 = quasi tutti buoni'),
+  /// Voci del catalogo SCA-QOL-1…7: (voce, domanda).
+  static List<(String, String)> get qolItems => [
+    for (var i = 1; i <= 7; i++)
+      (ClinicalText('SCA-QOL-$i').title, ClinicalText('SCA-QOL-$i').text),
   ];
 
   // --- Esami di laboratorio: voci frequenti -------------------------------
-  static const labPresets = <(String, String)>[
-    ('Creatinina', 'mg/dL'),
-    ('SDMA', 'µg/dL'),
-    ('Urea (BUN)', 'mg/dL'),
-    ('ALT', 'U/L'),
-    ('Fosfatasi alcalina (ALP)', 'U/L'),
-    ('Glucosio', 'mg/dL'),
-    ('Fruttosamina', 'µmol/L'),
-    ('Ematocrito', '%'),
-    ('Globuli bianchi', '×10³/µL'),
-    ('Piastrine', '×10³/µL'),
-    ('Proteine totali', 'g/dL'),
-    ('Albumina', 'g/dL'),
-    ('T4 totale', 'µg/dL'),
-    ('Peso specifico urinario', ''),
-    ('UPC (proteinuria)', ''),
-    ('Pressione sistolica', 'mmHg'),
-    ('Titolo Leishmania', ''),
+  /// Unità degli esami LAB-001…017, nello stesso ordine del catalogo.
+  static const _labUnits = [
+    'mg/dL',
+    'µg/dL',
+    'mg/dL',
+    'U/L',
+    'U/L',
+    'mg/dL',
+    'µmol/L',
+    '%',
+    '×10³/µL',
+    '×10³/µL',
+    'g/dL',
+    'g/dL',
+    'µg/dL',
+    '',
+    '',
+    'mmHg',
+    '',
+  ];
+
+  /// Esami frequenti: (nome dal catalogo LAB-nnn, unità).
+  static List<(String, String)> get labPresets => [
+    for (var i = 0; i < _labUnits.length; i++)
+      (
+        ClinicalText('LAB-${(i + 1).toString().padLeft(3, '0')}').text,
+        _labUnits[i],
+      ),
   ];
 }

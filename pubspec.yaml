@@ -49,6 +49,7 @@ dependencies:
   sign_in_with_apple: ^8.2.0
   google_sign_in: ^7.2.0
   crypto: ^3.0.8
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
