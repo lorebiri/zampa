@@ -609,8 +609,14 @@ class AppStore extends ChangeNotifier implements SyncTarget {
       // Dosi delle prossime 72 ore e conferma dopo 2 ore.
       var t = 0;
       final confirmAt = <DateTime>[];
+      // Anche le terapie che iniziano più avanti: altrimenti la prima dose
+      // e le successive non sono avvisate finché non si riapre l'app dopo
+      // l'inizio (rapporto 10, difetto A1).
       for (final r in records.where(
-        (r) => r.dogId == d.id && r.isActiveTherapy(now),
+        (r) =>
+            r.dogId == d.id &&
+            (r.isActiveTherapy(now) ||
+                (r.date.isAfter(now) && r.isActiveTherapy(r.date))),
       )) {
         var next = nextDose(r, now);
         while (next != null &&
