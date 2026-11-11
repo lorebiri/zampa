@@ -1,4 +1,4 @@
-{"tag": "R1", "shadow": true, "of": 4,
+{"tag": "R2", "shadow": true, "of": 4,
  "jobs": [
   {"scenario": "realistico"},
   {"scenario": "realistico", "grid": true},

@@ -31,7 +31,7 @@ import 'potty_predictor.dart';
 /// L'accuratezza viene misurata a posteriori sugli ultimi eventi reali.
 
 const int _binMin = 15;
-const int _nFeat = 16;
+const int _nFeat = 17;
 
 const featureNames = [
   'base',
@@ -50,6 +50,7 @@ const featureNames = [
   'acqua',
   'attività',
   'passeggiata',
+  'uscita abituale',
 ];
 
 class _Ev {
@@ -94,6 +95,57 @@ List<(int, double)> _habitualOf(List<_Ev> evs, DateTime now) {
 
 int _mod(DateTime t) => t.hour * 60 + t.minute;
 
+int _dayKey(DateTime t) => t.year * 400 + t.month * 32 + t.day;
+
+/// R2: per ogni giorno tra [from] e [to], gli orari ricorrenti delle uscite
+/// nei 14 giorni precedenti (gruppi entro 45 minuti presenti in almeno il
+/// 40% dei giorni con dati e in almeno 3). Fine settimana e feriali sono
+/// separati quando ci sono almeno 3 giorni dello stesso tipo.
+Map<int, List<int>> _habitsByDay(
+  List<DateTime> outs,
+  DateTime from,
+  DateTime to,
+) {
+  final res = <int, List<int>>{};
+  for (
+    var d = DateTime(from.year, from.month, from.day);
+    d.isBefore(to);
+    d = DateTime(d.year, d.month, d.day + 1)
+  ) {
+    final lo = d.subtract(const Duration(days: 14));
+    final win = [
+      for (final t in outs)
+        if (!t.isBefore(lo) && t.isBefore(d)) t,
+    ];
+    if (win.isEmpty) continue;
+    final we = d.weekday >= 6;
+    var use = [
+      for (final t in win)
+        if ((t.weekday >= 6) == we) t,
+    ];
+    final sameDays = {for (final t in use) _dayKey(t)}.length;
+    if (sameDays < 3) use = win;
+    final days = {for (final t in use) _dayKey(t)}.length;
+    if (days < 3) continue;
+    final mins = [for (final t in use) _mod(t)]..sort();
+    final clusters = <List<int>>[];
+    for (final m in mins) {
+      if (clusters.isEmpty || m - clusters.last.last > 45) {
+        clusters.add([m]);
+      } else {
+        clusters.last.add(m);
+      }
+    }
+    final need = math.max(3, (days * 0.4).ceil());
+    final hs = [
+      for (final c in clusters)
+        if (c.length >= need) c[c.length ~/ 2],
+    ];
+    if (hs.isNotEmpty) res[_dayKey(d)] = hs;
+  }
+  return res;
+}
+
 /// Eventi attesi agli orari abituali, uno per giorno tra [from] e [to].
 List<_Ev> _expectedEvents(
   List<(int, double)> habits,
@@ -128,7 +180,27 @@ class _Context {
     this.expWaters = const [],
     this.expPlays = const [],
     this.expWalks = const [],
+    this.habitMin = const {},
   });
+
+  /// R2: orari abituali delle uscite per giorno (minuti dalla mezzanotte),
+  /// calcolati per ciascun giorno solo sui 14 giorni precedenti, separando
+  /// feriali e fine settimana. Vuoto nel simulatore del prior.
+  final Map<int, List<int>> habitMin;
+
+  /// Vicinanza a un orario abituale di uscita (0-1, kernel di 30 minuti).
+  double habitAt(DateTime t) {
+    final hs = habitMin[_dayKey(t)];
+    if (hs == null || hs.isEmpty) return 0;
+    final m = t.hour * 60 + t.minute;
+    var best = 0.0;
+    for (final h in hs) {
+      final z = (m - h) / 30;
+      final v = math.exp(-0.5 * z * z);
+      if (v > best) best = v;
+    }
+    return best;
+  }
 
   /// Inneschi attesi agli orari abituali (R1): contano solo dopo il
   /// momento della previsione, e solo se non è già stato registrato un
@@ -217,6 +289,7 @@ class _Context {
       expWaters: exp(waters),
       expPlays: exp(plays),
       expWalks: exp(walks),
+      habitMin: _habitsByDay(outs.map((o) => o.time).toList(), from, to),
     );
   }
 
@@ -348,6 +421,7 @@ class _Model {
       _triggerSum(c.waters, c.expWaters, mid, cutoff, pr.water, 2.5),
       _triggerSum(c.plays, c.expPlays, mid, cutoff, pr.play, 1),
       _triggerSum(c.walks, c.expWalks, mid, cutoff, pr.walk, 1),
+      c.habitAt(mid),
     ];
   }
 }
@@ -1023,6 +1097,7 @@ class FittedModel {
       expWaters: _ctx.expWaters,
       expPlays: _ctx.expPlays,
       expWalks: _ctx.expWalks,
+      habitMin: _ctx.habitMin,
     );
   }
 
