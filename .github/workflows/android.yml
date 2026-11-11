@@ -67,9 +67,17 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      # In CI Gradle non deve prendersi 8 GB: insieme all'emulatore il runner
+      # (16 GB) esaurisce la memoria e il processo viene ucciso in silenzio.
+      - name: Memoria di Gradle limitata
+        run: |
+          mkdir -p ~/.gradle
+          printf 'org.gradle.jvmargs=-Xmx3g -XX:MaxMetaspaceSize=1g\nkotlin.daemon.jvmargs=-Xmx1g\n' >> ~/.gradle/gradle.properties
       # Compila prima di accendere l'emulatore: Gradle, NDK e SDK 37 insieme
       # all'emulatore esauriscono la memoria del runner.
       - run: flutter build apk --debug
+      - name: Ferma i demoni di Gradle prima dell'emulatore
+        run: cd android && ./gradlew --stop || true
       - uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
