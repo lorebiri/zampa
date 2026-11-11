@@ -14,6 +14,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zampa/brand.dart';
+import 'package:zampa/l10n/clinical_text.dart';
 import 'package:zampa/logic/alerts.dart';
 import 'package:zampa/logic/modules.dart';
 import 'package:zampa/logic/nutrition.dart';
@@ -55,6 +57,21 @@ String clinicalTexts() {
         '${a.actionText ?? '(nessuna frase d\'azione)'}',
       );
     }
+  }
+
+  line('');
+  line('### Dosi: conferma di «Saltato» e promemoria a 2 ore');
+  for (final drug in ['Metacam', 'Caninsulin', 'Fenobarbital', 'Keppra']) {
+    final kind = Modules.doseKind(drug);
+    line('## $drug ($kind)');
+    final skip = ClinicalText('UI-DOS-001', {'kind': kind});
+    line('saltato | ${skip.title} | ${skip.text}');
+    final rem = ClinicalText('UI-DOS-002', {
+      'kind': kind,
+      'name': 'Fido',
+      'app': appName,
+    });
+    line('promemoria | ${rem.title} | ${rem.text}');
   }
 
   line('');

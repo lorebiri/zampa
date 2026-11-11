@@ -19,15 +19,18 @@ subito | Nessuna pipì da 30 ore | Se Fido non ha davvero urinato (e non è solo
 ## adulto senza pipì da 14 ore
 attenzione | Nessuna pipì registrata da 14 ore | Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | (nessuna frase d'azione)
 ## maschio, sforzo 14 ore fa e poi niente
-subito | Nessuna pipì registrata da 14 ore | Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+subito | Nessuna pipì registrata da 14 ore | Fido è un maschio, si è sforzato a urinare nelle ultime 24 ore e da 14 ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 ## senza pipì da 14 ore dopo chirurgia della colonna
 oggi | Non ha ancora mangiato dopo l'intervento | L'appetito di solito torna entro 24-48 ore dall'intervento: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
 attenzione | Nessuna pipì registrata da 14 ore | Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | (nessuna frase d'azione)
+## maschio, sforzo 14 ore fa e poi niente, dopo chirurgia della colonna
+subito | Nessuna pipì registrata da 14 ore | Fido è un maschio, si è sforzato a urinare nelle ultime 24 ore e da 14 ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato. Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+oggi | Non ha ancora mangiato dopo l'intervento | L'appetito di solito torna entro 24-48 ore dall'intervento: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
 ## sangue nelle urine con vomito
 oggi | Sangue nelle urine con malessere | Sangue nelle urine insieme a vomito o abbattimento richiede una visita oggi stesso. | Contatta il veterinario oggi stesso.
 info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
 ## sangue durante il calore
-info | Sangue durante il calore | In calore è normale una perdita di sangue dalla vulva. Se il sangue è nelle urine stesse, se si sforza o se il calore dura più di 3-4 settimane, senti il veterinario. | Parlane alla prossima visita.
+info | Sangue durante il calore | Durante il calore è normale una perdita di sangue dalla vulva, che può macchiare la pipì. Senti il veterinario nei prossimi giorni se il calore dura più di 3-4 settimane o se la pipì resta rossa anche dopo; oggi stesso se si sforza a urinare, va molto spesso o è abbattuta. | (nessuna frase d'azione)
 ## sangue nelle urine
 attenzione | Sangue nelle urine | Va sempre valutato dal veterinario entro 24-48 ore: può essere un segno di cistite o calcoli (solo il veterinario può dirlo). Se possibile raccogli un campione di urina. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## pipì piccole e frequenti
@@ -48,7 +51,7 @@ oggi | Diabetico con vomito o abbattimento | Non fare l'insulina senza aver sent
 ## diabetico con vomito e abbattimento
 subito | Diabetico con vomito o abbattimento | Non fare l'insulina senza aver sentito il veterinario. Vomito e abbattimento in un cane diabetico vanno valutati oggi stesso; subito se è molto debole, respira in modo strano o non beve. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 ## Cushing con vomito
-subito | Malessere durante la terapia per il Cushing | Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Malessere durante la terapia per il Cushing | Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo. Non dare la prossima dose finché non hai parlato con il veterinario, e chiamalo subito. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
 info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
 ## FANS e inappetenza
 oggi | Non mangia o è abbattuto durante antinfiammatori/cortisone | Può essere un effetto collaterale sullo stomaco: chiama il veterinario oggi. Non sospendere né aggiungere farmaci di tua iniziativa. | Contatta il veterinario oggi stesso.
@@ -58,7 +61,12 @@ attenzione | Antinfiammatori e cortisone insieme | Antinfiammatori e cortisone i
 ## vomito con sangue
 oggi | Vomito con sangue | Sangue o materiale scuro "a fondi di caffè" nel vomito: visita oggi stesso; subito se è abbattuto o ha le gengive pallide. | Contatta il veterinario oggi stesso.
 ## FANS e vomito
-subito | Vomito durante la terapia con antinfiammatori o cortisone | Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Vomito durante la terapia con antinfiammatori o cortisone | Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l'hai sentito, e non aggiungere altri farmaci (mai antidolorifici per persone). | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
+## cortisone e vomito
+subito | Vomito durante la terapia con antinfiammatori o cortisone | Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere il cortisone di colpo e non aggiungere altri farmaci: chiedi a lui cosa fare. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
+## FANS, cortisone e vomito
+subito | Vomito durante la terapia con antinfiammatori o cortisone | Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l'hai sentito, non sospendere il cortisone di colpo e non aggiungere altri farmaci (mai antidolorifici per persone). | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
+attenzione | Antinfiammatori e cortisone insieme | Antinfiammatori e cortisone insieme aumentano il rischio di ulcere: verifica col veterinario che sia voluto. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## cane piccolo, due vomiti
 oggi | Vomito ripetuto in un cane piccolo | Nei cuccioli e nei cani sotto i 5 kg disidratazione e ipoglicemia arrivano in fretta. | Contatta il veterinario oggi stesso.
 ## tre vomiti
@@ -66,7 +74,9 @@ attenzione | Vomito ripetuto | 3 episodi in 24 ore. Senti il veterinario entro 2
 ## un vomito
 info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
 ## feci nere con FANS
-subito | Feci nere | Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Feci nere | Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario; non dare la prossima dose di antinfiammatorio finché non l'hai sentito. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
+## feci nere con cortisone
+subito | Feci nere | Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
 ## feci nere
 oggi | Feci nere | Feci nere come catrame possono indicare sangue digerito: serve una visita oggi. | Contatta il veterinario oggi stesso.
 ## cucciolo con sangue nelle feci
@@ -127,12 +137,14 @@ info | Aumento di peso del 12% | Controlla razione e snack nella sezione Nutrizi
 attenzione | Sottopeso | Prima di aumentare la razione fallo visitare, per escludere cause mediche. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## sovrappeso
 info | Sovrappeso | Body Condition Score 8/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane. | Parlane alla prossima visita.
+## cucciolo sovrappeso
+info | Sovrappeso | Body Condition Score 8/9: per un cucciolo è sopra l'ideale. Non ridurre il cibo da solo: durante la crescita la razione va decisa con il veterinario, controllando la curva di crescita. | Parlane alla prossima visita.
 ## leggermente sovrappeso
 info | Leggermente sovrappeso | Riduci gli snack e ricontrolla tra un mese. | Parlane alla prossima visita.
 ## ha ingerito cioccolato
-subito | Ha ingerito qualcosa: cioccolato | Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Ha ingerito qualcosa: cioccolato | Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
 ## ha ingerito qualcosa
-subito | Ha ingerito qualcosa | Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Ha ingerito qualcosa | Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
 ## sorveglianza dopo ingestione con nota
 attenzione | Sorveglianza dopo un'ingestione | Il 8/11 ha ingerito: topicida. Alcuni veleni (es. topicidi) danno sintomi dopo giorni: sangue dal naso o dalle gengive, lividi, debolezza, vomito o pipì scarsa → subito dal veterinario. | (nessuna frase d'azione)
 ## sorveglianza dopo ingestione
@@ -140,7 +152,7 @@ attenzione | Sorveglianza dopo un'ingestione | Il 8/11 ha ingerito. Alcuni velen
 ## gengive pallide
 subito | Gengive pallide o blu | Possono indicare un problema di circolazione, respirazione o un'emorragia: è un'emergenza. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 ## gengive rosse
-subito | Gengive rosso scuro | Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono indicare un colpo di calore o uno shock: raffreddalo con acqua (vedi Emergenze) e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+subito | Gengive rosso scuro | Gengive rosso scuro possono indicare un colpo di calore, un'infezione grave o uno shock. Se ha preso caldo o ha fatto sforzi, inizia subito a raffreddarlo con acqua fresca (vedi Emergenze) e poi parti; negli altri casi parti subito per il veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 ## gengive gialle
 oggi | Gengive gialle | Il colore giallo (ittero) va valutato dal veterinario oggi stesso. | Contatta il veterinario oggi stesso.
 ## cardiopatico, 44 respiri
@@ -160,7 +172,7 @@ attenzione | Tosse in un Cavalier King | Il Cavalier è predisposto alla malatti
 ## tosse da più giorni
 attenzione | Tosse da più giorni | Tosse che dura da più di 3 giorni o con abbattimento: senti il veterinario entro 24-48 ore. Evita il contatto con altri cani. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## glicemia 50
-subito | Glicemia bassa (50 mg/dL) | Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Glicemia bassa (50 mg/dL) | Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Se trema, barcolla, ha convulsioni o non è ben sveglio, vai direttamente al pronto soccorso veterinario. Non fare la prossima insulina senza averlo sentito. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
 ## glicemia 70
 oggi | Glicemia al limite basso (70 mg/dL) | Segnalala al veterinario oggi, prima della prossima insulina. | Contatta il veterinario oggi stesso.
 ## glicemia 450
@@ -168,7 +180,7 @@ attenzione | Glicemia alta (450 mg/dL) | Segnalala al veterinario: la terapia po
 ## glicemia 450 e non mangia
 oggi | Glicemia alta (450 mg/dL) | Segnalala al veterinario: la terapia potrebbe andare rivista. Se vomita, è abbattuto o non mangia, oggi stesso. | Contatta il veterinario oggi stesso.
 ## due dosi di insulina ravvicinate
-subito | Due dosi di insulina ravvicinate | Due dosi di insulina registrate a 2.0 ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+subito | Due dosi di insulina ravvicinate | Due dosi di insulina registrate a 2.0 ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Intanto offrigli il suo pasto e non lasciarlo solo. Se è un errore di registrazione, cancellane una. | Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.
 ## insulina senza pasto
 oggi | Insulina fatta senza che abbia mangiato | Chiama ora il veterinario e chiedi come comportarti. Nelle prossime ore offrigli il suo pasto e osservalo: se compaiono debolezza, tremori o barcollamento strofina miele sulle gengive e vai subito dal veterinario. | Contatta il veterinario oggi stesso.
 ## cagna che allatta trema
@@ -236,9 +248,9 @@ info | Parto vicino (presunto il 13/11) | Prepara la cassa parto. Chiama subito 
 oggi | Perdite purulente | Perdite purulente in una femmina non sterilizzata possono indicare un'infezione dell'utero: contatta il veterinario oggi stesso. | Contatta il veterinario oggi stesso.
 attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## sterilizzata con perdite
-attenzione | Perdite vulvari | Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+attenzione | Perdite vulvari | Perdite dalla vulva in una femmina sterilizzata vanno fatte vedere nei prossimi giorni. Se sono sangue e lei si comporta come in calore, dillo al veterinario: a volte resta un pezzetto di ovaio. Oggi stesso se è abbattuta, beve molto o compaiono pus o cattivo odore. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## sterilizzata con perdite purulente
-oggi | Perdite vulvari | Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente. | Contatta il veterinario oggi stesso.
+oggi | Perdite vulvari | In una femmina sterilizzata, perdite con pus o cattivo odore possono indicare un'infezione della vagina o di ciò che resta dell'utero: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
 ## gravidanza oltre i 70 giorni
 oggi | Gravidanza oltre i 70 giorni | Il parto non è ancora avvenuto: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
 ## parto vicino
@@ -276,6 +288,20 @@ attenzione | Ciclo vaccinale non completo | Finché non è completo, evita aree 
 info | Una scadenza superata | Vaccino core – 2ª dose | (nessuna frase d'azione)
 ## tre scadenze superate
 info | 3 scadenze superate | Esame delle feci · Visita di controllo annuale · Leptospirosi | (nessuna frase d'azione)
+
+### Dosi: conferma di «Saltato» e promemoria a 2 ore
+## Metacam (other)
+saltato | Dose saltata? | Confermi che questa dose non è stata data? Non raddoppiare la prossima: chiedi al veterinario cosa fare.
+promemoria | 💊 Dose confermata per Fido? | Apri Zampa e segna "Dato" o "Saltato". Se l'hai saltata non raddoppiare la successiva: chiedi al veterinario.
+## Caninsulin (insulin)
+saltato | Dose saltata? | Confermi che l'insulina non è stata fatta? Non farla in ritardo e non raddoppiare la prossima senza aver sentito il veterinario. Se non sei sicuro che sia stata fatta, non rifarla.
+promemoria | 💉 Insulina di Fido: segnata? | Se è stata fatta, segna "Dato". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario.
+## Fenobarbital (antiepileptic)
+saltato | Dose saltata? | Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.
+promemoria | 💊 Dose confermata per Fido? | Apri Zampa e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso.
+## Keppra (antiepileptic)
+saltato | Dose saltata? | Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.
+promemoria | 💊 Dose confermata per Fido? | Apri Zampa e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso.
 
 ### Prevenzione (PreventionPlanner.suggest)
 ## cucciolo di 4 settimane, nord
@@ -394,7 +420,7 @@ nota | In allattamento il fabbisogno arriva a 4-8 volte quello di riposo: lascia
 Xilitolo (gomme e dolci "senza zucchero", dentifricio per persone, burro di arachidi light, integratori) | ipoglicemia e danno al fegato anche a piccole dosi | grave
 Uva e uvetta | insufficienza renale acuta, dose imprevedibile | grave
 Cioccolato e cacao (più è fondente, più è pericoloso) | teobromina: vomito, agitazione, aritmie, convulsioni | grave
-Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere) | anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo | grave
+Cipolla, aglio, porro, erba cipollina (anche cotti, in polvere o nei sughi) | possono causare anemia. Già da circa 5 g di cipolla per kg di peso, cioè mezza cipolla piccola per un cane di 10 kg, e meno per l'aglio. Piccole quantità ripetute si sommano. I segni possono comparire dopo 1-5 giorni. | grave
 Farmaci per persone: paracetamolo, ibuprofene, naprossene, ketoprofene, aspirina | ulcere, danno a reni e fegato, anemia | grave
 Altri farmaci umani: antidepressivi, farmaci per ADHD, farmaci per il cuore | agitazione, aritmie, convulsioni | grave
 Veleni per topi (anticoagulanti, colecalciferolo) | emorragie anche dopo 3-5 giorni; danno renale | grave
@@ -463,43 +489,43 @@ info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo l
 info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
 ## mese 6, adulto al centro
 info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
-warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
 ## mese 6, anziano brachicefalo piccolo al nord
 info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
-warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
 info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
 ## mese 7, adulto al centro
 info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
-warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
 ## mese 7, anziano brachicefalo piccolo al nord
 info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
-warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
 info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
 ## mese 8, adulto al centro
 info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
-warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
 ## mese 8, anziano brachicefalo piccolo al nord
 info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
-warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
 info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
 ## mese 9, adulto al centro
-warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
 ## mese 9, anziano brachicefalo piccolo al nord
-warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
 info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
@@ -616,14 +642,14 @@ true | Età minima | Antirabbico da 12 settimane + 21 giorni: in genere non si v
 false | Microchip registrato | Obbligatorio e impiantato prima del vaccino antirabbico.
 false | Vaccino antirabbico valido | Nessun antirabbico in cartella.
 null | Passaporto europeo per animali | Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.
-null | Trattamento contro Echinococcus | Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).
+null | Trattamento contro la tenia Echinococcus | Va fatto da un veterinario e registrato sul passaporto 24-120 ore (da 1 a 5 giorni) prima dell'ingresso nei Paesi indenni. Verifica l'elenco aggiornato prima di partire, con il veterinario o sul sito del Ministero della Salute.
 null | Rischi parassitari della destinazione | Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.
 ## con antirabbico e microchip
 true | Età minima | Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età.
 true | Microchip registrato | Obbligatorio e impiantato prima del vaccino antirabbico.
 true | Vaccino antirabbico valido | La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: 2/8/2026).
 null | Passaporto europeo per animali | Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.
-null | Trattamento contro Echinococcus | Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).
+null | Trattamento contro la tenia Echinococcus | Va fatto da un veterinario e registrato sul passaporto 24-120 ore (da 1 a 5 giorni) prima dell'ingresso nei Paesi indenni. Verifica l'elenco aggiornato prima di partire, con il veterinario o sul sito del Ministero della Salute.
 null | Rischi parassitari della destinazione | Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.
 ## Qualità della vita (Modules.qolItems)
 Dolore (Hurt) | Il dolore è controllato? Respira bene? 10 = nessun dolore
@@ -707,7 +733,7 @@ Nel profilo del cane inserisci il telefono del tuo veterinario e di un pronto so
 Cerca pronto soccorso veterinario vicino a me
 Apre la mappa
 Sospetto avvelenamento
-Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.
+Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. Se ha convulsioni, respira male o non è ben sveglio, parti subito per il pronto soccorso veterinario e chiama durante il tragitto.
 Cosa dire al telefono
 • Farmaci in corso: nessuno.
 • Cosa è successo e da quando; come respira; colore delle gengive.
@@ -807,7 +833,7 @@ Pronto soccorso veterinario h24
 Cerca pronto soccorso veterinario vicino a me
 Apre la mappa
 Sospetto avvelenamento
-Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.
+Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. Se ha convulsioni, respira male o non è ben sveglio, parti subito per il pronto soccorso veterinario e chiama durante il tragitto.
 Cosa dire al telefono
 • Farmaci in corso: nessuno.
 • Patologie note: artrosi.

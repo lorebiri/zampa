@@ -24,6 +24,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alrLiv004Text => 'Parlane alla prossima visita.';
 
   @override
+  String get alrLiv005Text =>
+      'Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.';
+
+  @override
   String get alrUri001Title => 'Sforzo a urinare: possibile urgenza';
 
   @override
@@ -70,9 +74,13 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String alrUri006Text(String spine) {
-    String _temp0 = intl.Intl.selectLogic(spine, {
-      'yes': 'Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.',
+  String alrUri006Text(String variant, String name, String hours) {
+    String _temp0 = intl.Intl.selectLogic(variant, {
+      'strainSpine':
+          '$name è un maschio, si è sforzato a urinare nelle ultime 24 ore e da $hours ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un\'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato. Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica.',
+      'strain':
+          '$name è un maschio, si è sforzato a urinare nelle ultime 24 ore e da $hours ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un\'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato.',
+      'spine': 'Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.',
       'other': 'Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.',
     });
     return '$_temp0';
@@ -90,7 +98,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get alrUri008Text =>
-      'In calore è normale una perdita di sangue dalla vulva. Se il sangue è nelle urine stesse, se si sforza o se il calore dura più di 3-4 settimane, senti il veterinario.';
+      'Durante il calore è normale una perdita di sangue dalla vulva, che può macchiare la pipì. Senti il veterinario nei prossimi giorni se il calore dura più di 3-4 settimane o se la pipì resta rossa anche dopo; oggi stesso se si sforza a urinare, va molto spesso o è abbattuta.';
 
   @override
   String get alrUri009Title => 'Sangue nelle urine';
@@ -140,11 +148,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get alrFar001Text =>
-      'Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito.';
-
-  @override
-  String get alrFar001Action =>
-      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+      'Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo. Non dare la prossima dose finché non hai parlato con il veterinario, e chiamalo subito.';
 
   @override
   String get alrFar002Title =>
@@ -173,12 +177,14 @@ class AppLocalizationsIt extends AppLocalizations {
       'Vomito durante la terapia con antinfiammatori o cortisone';
 
   @override
-  String get alrFar004Text =>
-      'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.';
-
-  @override
-  String get alrFar004Action =>
-      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+  String alrFar004Text(String drug) {
+    String _temp0 = intl.Intl.selectLogic(drug, {
+      'fans': 'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l\'hai sentito, e non aggiungere altri farmaci (mai antidolorifici per persone).',
+      'cortisone': 'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere il cortisone di colpo e non aggiungere altri farmaci: chiedi a lui cosa fare.',
+      'other': 'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l\'hai sentito, non sospendere il cortisone di colpo e non aggiungere altri farmaci (mai antidolorifici per persone).',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get alrGi004Title => 'Vomito ripetuto in un cane piccolo';
@@ -206,12 +212,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alrGi007aTitle => 'Feci nere';
 
   @override
-  String get alrGi007aText =>
-      'Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.';
-
-  @override
-  String get alrGi007aAction =>
-      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+  String alrGi007aText(String nsaid) {
+    String _temp0 = intl.Intl.selectLogic(nsaid, {
+      'yes': 'Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario; non dare la prossima dose di antinfiammatorio finché non l\'hai sentito.',
+      'other': 'Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get alrGi007bTitle => 'Feci nere';
@@ -380,8 +387,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alrPes007Title => 'Sovrappeso';
 
   @override
-  String alrPes007Text(String bcs) {
-    return 'Body Condition Score $bcs/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane.';
+  String alrPes007Text(String growing, String bcs) {
+    String _temp0 = intl.Intl.selectLogic(growing, {
+      'yes':
+          'Body Condition Score $bcs/9: per un cucciolo è sopra l\'ideale. Non ridurre il cibo da solo: durante la crescita la razione va decisa con il veterinario, controllando la curva di crescita.',
+      'other':
+          'Body Condition Score $bcs/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane.',
+    });
+    return '$_temp0';
   }
 
   @override
@@ -402,10 +415,6 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get alrTox001Text =>
       'Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell\'etichetta.';
-
-  @override
-  String get alrTox001Action =>
-      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
 
   @override
   String get alrTox002Title => 'Sorveglianza dopo un\'ingestione';
@@ -433,7 +442,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get alrRes002Text =>
-      'Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono indicare un colpo di calore o uno shock: raffreddalo con acqua (vedi Emergenze) e vai subito dal veterinario.';
+      'Gengive rosso scuro possono indicare un colpo di calore, un\'infezione grave o uno shock. Se ha preso caldo o ha fatto sforzi, inizia subito a raffreddarlo con acqua fresca (vedi Emergenze) e poi parti; negli altri casi parti subito per il veterinario.';
 
   @override
   String get alrRes003Title => 'Gengive gialle';
@@ -508,11 +517,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get alrDia002Text =>
-      'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito.';
-
-  @override
-  String get alrDia002Action =>
-      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+      'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Se trema, barcolla, ha convulsioni o non è ben sveglio, vai direttamente al pronto soccorso veterinario. Non fare la prossima insulina senza averlo sentito.';
 
   @override
   String alrDia003Title(String value) {
@@ -537,12 +542,8 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String alrDia005Text(String hours) {
-    return 'Due dosi di insulina registrate a $hours ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una.';
+    return 'Due dosi di insulina registrate a $hours ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Intanto offrigli il suo pasto e non lasciarlo solo. Se è un errore di registrazione, cancellane una.';
   }
-
-  @override
-  String get alrDia005Action =>
-      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
 
   @override
   String get alrRep003Title => 'Tremori in una cagna che allatta';
@@ -793,8 +794,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get alrRep008Title => 'Perdite vulvari';
 
   @override
-  String get alrRep008Text =>
-      'Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente.';
+  String alrRep008Text(String variant) {
+    String _temp0 = intl.Intl.selectLogic(variant, {
+      'spayedPus': 'In una femmina sterilizzata, perdite con pus o cattivo odore possono indicare un\'infezione della vagina o di ciò che resta dell\'utero: contatta il veterinario oggi.',
+      'spayed': 'Perdite dalla vulva in una femmina sterilizzata vanno fatte vedere nei prossimi giorni. Se sono sangue e lei si comporta come in calore, dillo al veterinario: a volte resta un pezzetto di ovaio. Oggi stesso se è abbattuta, beve molto o compaiono pus o cattivo odore.',
+      'other': 'Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get alrUri017Title => 'Pipì di notte, prima non succedeva';
@@ -1183,11 +1190,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get tos004Title =>
-      'Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere)';
+      'Cipolla, aglio, porro, erba cipollina (anche cotti, in polvere o nei sughi)';
 
   @override
   String get tos004Text =>
-      'anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo';
+      'possono causare anemia. Già da circa 5 g di cipolla per kg di peso, cioè mezza cipolla piccola per un cane di 10 kg, e meno per l\'aglio. Piccole quantità ripetute si sommano. I segni possono comparire dopo 1-5 giorni.';
 
   @override
   String get tos005Title =>
@@ -1323,8 +1330,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String stg003Text(String atRisk, String name) {
     String _temp0 = intl.Intl.selectLogic(atRisk, {
       'yes':
-          'Per $name il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.',
-      'other': 'Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.',
+          'Per $name il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.',
+      'other': 'Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.',
     });
     return '$_temp0';
   }
@@ -1510,11 +1517,11 @@ class AppLocalizationsIt extends AppLocalizations {
       'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.';
 
   @override
-  String get via005Title => 'Trattamento contro Echinococcus';
+  String get via005Title => 'Trattamento contro la tenia Echinococcus';
 
   @override
   String get via005Text =>
-      'Obbligatorio 24-120 ore prima dell\'ingresso nei Paesi indenni (verifica l\'elenco aggiornato con il veterinario).';
+      'Va fatto da un veterinario e registrato sul passaporto 24-120 ore (da 1 a 5 giorni) prima dell\'ingresso nei Paesi indenni. Verifica l\'elenco aggiornato prima di partire, con il veterinario o sul sito del Ministero della Salute.';
 
   @override
   String get via006Title => 'Rischi parassitari della destinazione';
@@ -1758,7 +1765,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String emg019Text(String cav, String phone) {
     String _temp0 = intl.Intl.selectLogic(cav, {
       'yes':
-          'Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), $phone, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell\'etichetta.',
+          'Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), $phone, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell\'etichetta. Se ha convulsioni, respira male o non è ben sveglio, parti subito per il pronto soccorso veterinario e chiama durante il tragitto.',
       'other': 'Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.',
     });
     return '$_temp0';
@@ -1848,4 +1855,38 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get uiEmg011Text =>
       'Cosa è successo e da quando; come respira; colore delle gengive.';
+
+  @override
+  String get uiDos001Title => 'Dose saltata?';
+
+  @override
+  String uiDos001Text(String kind) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'insulin': 'Confermi che l\'insulina non è stata fatta? Non farla in ritardo e non raddoppiare la prossima senza aver sentito il veterinario. Se non sei sicuro che sia stata fatta, non rifarla.',
+      'antiepileptic': 'Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.',
+      'other': 'Confermi che questa dose non è stata data? Non raddoppiare la prossima: chiedi al veterinario cosa fare.',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String uiDos002Title(String kind, String name) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'insulin': '💉 Insulina di $name: segnata?',
+      'other': '💊 Dose confermata per $name?',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String uiDos002Text(String kind, String app) {
+    String _temp0 = intl.Intl.selectLogic(kind, {
+      'insulin': 'Se è stata fatta, segna \"Dato\". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario.',
+      'antiepileptic':
+          'Apri $app e segna \"Dato\" o \"Saltato\". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l\'hai saltata, chiama il veterinario oggi per sapere se darla adesso.',
+      'other':
+          'Apri $app e segna \"Dato\" o \"Saltato\". Se l\'hai saltata non raddoppiare la successiva: chiedi al veterinario.',
+    });
+    return '$_temp0';
+  }
 }

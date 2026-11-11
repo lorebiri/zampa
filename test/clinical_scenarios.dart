@@ -200,6 +200,13 @@ List<Scenario> alertScenarios() {
     records: [rec(RecordType.intervento, 'Ernia del disco', d(5))],
   );
   add(
+    'maschio, sforzo 14 ore fa e poi niente, dopo chirurgia della colonna',
+    logs: [
+      e(pee, h(14), signs: {Sign.sforzo}),
+    ],
+    records: [rec(RecordType.intervento, 'Ernia del disco', d(5))],
+  );
+  add(
     'sangue nelle urine con vomito',
     logs: [
       e(pee, h(1), signs: {Sign.sangue}),
@@ -289,6 +296,19 @@ List<Scenario> alertScenarios() {
     records: [drug('Metacam', effect: DrugEffect.fans)],
   );
   add(
+    'cortisone e vomito',
+    logs: [e(LogType.vomito, h(1))],
+    records: [drug('Prednisolone', effect: DrugEffect.cortisonico)],
+  );
+  add(
+    'FANS, cortisone e vomito',
+    logs: [e(LogType.vomito, h(1))],
+    records: [
+      drug('Metacam', effect: DrugEffect.fans),
+      drug('Prednisolone', effect: DrugEffect.cortisonico),
+    ],
+  );
+  add(
     'cane piccolo, due vomiti',
     dog: mkDog(kg: 4),
     logs: [e(LogType.vomito, h(1)), e(LogType.vomito, h(3))],
@@ -308,6 +328,13 @@ List<Scenario> alertScenarios() {
       e(LogType.cacca, h(1), signs: {Sign.nero}),
     ],
     records: [drug('Metacam', effect: DrugEffect.fans)],
+  );
+  add(
+    'feci nere con cortisone',
+    logs: [
+      e(LogType.cacca, h(1), signs: {Sign.nero}),
+    ],
+    records: [drug('Prednisolone', effect: DrugEffect.cortisonico)],
   );
   add(
     'feci nere',
@@ -422,6 +449,10 @@ List<Scenario> alertScenarios() {
   add('aumento di peso del 12%', weights: [w(d(60), 20), w(d(1), 22.4)]);
   add('sottopeso', dog: mkDog(bcs: 3));
   add('sovrappeso', dog: mkDog(bcs: 8));
+  add(
+    'cucciolo sovrappeso',
+    dog: mkDog(birth: DateTime(2026, 8, 10), kg: 8, neutered: false, bcs: 8),
+  );
   add('leggermente sovrappeso', dog: mkDog(bcs: 6));
 
   // Ingestione.

@@ -24,6 +24,23 @@ class Modules {
     ].any(t.contains);
   }
 
+  /// Farmaci per le convulsioni, dal nome (principio attivo o nome
+  /// commerciale): fenobarbital, levetiracetam, bromuro, imepitoina,
+  /// zonisamide (ricerca/26 §5.1).
+  static bool isAntiepileptic(String title) => RegExp(
+    'fenobarb|phenobarb|gardenal|luminal|soliphen|soriphen|epiphen|'
+    'levetiracetam|keppra|bromuro di (potassio|sodio)|potassium bromide|'
+    'libromide|imepitoin|pexion|zonisamid',
+  ).hasMatch(title.toLowerCase());
+
+  /// Variante dei testi delle dosi (UI-DOS-001, UI-DOS-002): insulina,
+  /// antiepilettico o farmaco generico.
+  static String doseKind(String title) => isInsulin(title)
+      ? 'insulin'
+      : isAntiepileptic(title)
+      ? 'antiepileptic'
+      : 'other';
+
   static bool diabetic(Dog d, List<HealthRecord> records) =>
       _cond(d, ['diabet']) ||
       records.any((r) => r.dogId == d.id && isInsulin(r.title));
