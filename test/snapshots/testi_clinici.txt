@@ -1,0 +1,854 @@
+### Frasi d'azione dei livelli
+info | Parlane alla prossima visita.
+attenzione | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+oggi | Contatta il veterinario oggi stesso.
+subito | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+
+### Avvisi (AlertEngine)
+## nessun dato
+## maschio, sforzo a urinare
+subito | Sforzo a urinare: possibile urgenza | Se Fido si mette in posizione e non esce urina, o escono solo poche gocce, contatta subito il veterinario o un pronto soccorso veterinario, anche di notte. Nel maschio un blocco delle vie urinarie è un'emergenza: non aspettare il giorno dopo. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## femmina, due sforzi in 24 ore
+oggi | Sforzo a urinare ripetuto | Più tentativi con sforzo o poche gocce in 24 ore. Contatta il veterinario oggi stesso; subito se non esce urina. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario. | Contatta il veterinario oggi stesso.
+## femmina, uno sforzo
+attenzione | Pipì con sforzo o a gocce | Osserva le prossime pipì. Se non riesce a urinare affatto, contatta subito il veterinario. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## cucciolo senza pipì da 7 ore
+subito | Cucciolo senza pipì da 7 ore da sveglio | Un cucciolo sveglio urina molto più spesso. Se non è una registrazione mancante, contatta subito il veterinario. Se escono solo gocce, conta come se non avesse urinato. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## adulto senza pipì da 30 ore
+subito | Nessuna pipì da 30 ore | Se Fido non ha davvero urinato (e non è solo una registrazione mancante), è un'urgenza, specie nei maschi. Se escono solo gocce, conta come se non avesse urinato. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## adulto senza pipì da 14 ore
+attenzione | Nessuna pipì registrata da 14 ore | Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | (nessuna frase d'azione)
+## maschio, sforzo 14 ore fa e poi niente
+subito | Nessuna pipì registrata da 14 ore | Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## senza pipì da 14 ore dopo chirurgia della colonna
+oggi | Non ha ancora mangiato dopo l'intervento | L'appetito di solito torna entro 24-48 ore dall'intervento: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+attenzione | Nessuna pipì registrata da 14 ore | Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | (nessuna frase d'azione)
+## sangue nelle urine con vomito
+oggi | Sangue nelle urine con malessere | Sangue nelle urine insieme a vomito o abbattimento richiede una visita oggi stesso. | Contatta il veterinario oggi stesso.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## sangue durante il calore
+info | Sangue durante il calore | In calore è normale una perdita di sangue dalla vulva. Se il sangue è nelle urine stesse, se si sforza o se il calore dura più di 3-4 settimane, senti il veterinario. | Parlane alla prossima visita.
+## sangue nelle urine
+attenzione | Sangue nelle urine | Va sempre valutato dal veterinario entro 24-48 ore: può essere un segno di cistite o calcoli (solo il veterinario può dirlo). Se possibile raccogli un campione di urina. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## pipì piccole e frequenti
+attenzione | Pipì piccole e frequenti | 4 pipì in 2 ore. Può essere un segno di cistite (solo il veterinario può dirlo): sentilo entro 24-48 ore, subito se c'è sforzo senza urina. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## addome gonfio
+subito | Conati a vuoto o addome gonfio | Conati senza riuscire a vomitare, addome gonfio, agitazione e salivazione possono indicare una torsione/dilatazione dello stomaco: è un'emergenza in cui ogni minuto conta. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## conati
+subito | Conati a vuoto o addome gonfio | Conati senza riuscire a vomitare, addome gonfio, agitazione e salivazione possono indicare una torsione/dilatazione dello stomaco: è un'emergenza in cui ogni minuto conta. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## collasso
+subito | Collasso o svenimento | Un collasso o uno svenimento va sempre valutato subito, anche se si è ripreso: può dipendere da cuore, emorragia o calo di zuccheri. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## cucciolo con vomito e diarrea
+oggi | Cucciolo con vomito o diarrea | Nei cuccioli vomito e diarrea insieme, o con abbattimento o inappetenza, richiedono una visita oggi stesso: la disidratazione è rapida e va esclusa la parvovirosi, soprattutto se non ha completato i vaccini. Subito se è molto abbattuto, ha sangue nelle feci o non trattiene l'acqua. | Contatta il veterinario oggi stesso.
+## cucciolo con vomito e diarrea con sangue
+subito | Cucciolo con vomito o diarrea | Nei cuccioli vomito e diarrea insieme, o con abbattimento o inappetenza, richiedono una visita oggi stesso: la disidratazione è rapida e va esclusa la parvovirosi, soprattutto se non ha completato i vaccini. Subito se è molto abbattuto, ha sangue nelle feci o non trattiene l'acqua. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+oggi | Sangue nelle feci con vomito o abbattimento | Questa combinazione richiede una visita oggi stesso. | Contatta il veterinario oggi stesso.
+## diabetico con vomito
+oggi | Diabetico con vomito o abbattimento | Non fare l'insulina senza aver sentito il veterinario. Vomito e abbattimento in un cane diabetico vanno valutati oggi stesso; subito se è molto debole, respira in modo strano o non beve. | Contatta il veterinario oggi stesso.
+## diabetico con vomito e abbattimento
+subito | Diabetico con vomito o abbattimento | Non fare l'insulina senza aver sentito il veterinario. Vomito e abbattimento in un cane diabetico vanno valutati oggi stesso; subito se è molto debole, respira in modo strano o non beve. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## Cushing con vomito
+subito | Malessere durante la terapia per il Cushing | Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## FANS e inappetenza
+oggi | Non mangia o è abbattuto durante antinfiammatori/cortisone | Può essere un effetto collaterale sullo stomaco: chiama il veterinario oggi. Non sospendere né aggiungere farmaci di tua iniziativa. | Contatta il veterinario oggi stesso.
+oggi | Non mangia | Pasti saltati: serve una visita oggi. | Contatta il veterinario oggi stesso.
+## FANS e cortisone insieme
+attenzione | Antinfiammatori e cortisone insieme | Antinfiammatori e cortisone insieme aumentano il rischio di ulcere: verifica col veterinario che sia voluto. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## vomito con sangue
+oggi | Vomito con sangue | Sangue o materiale scuro "a fondi di caffè" nel vomito: visita oggi stesso; subito se è abbattuto o ha le gengive pallide. | Contatta il veterinario oggi stesso.
+## FANS e vomito
+subito | Vomito durante la terapia con antinfiammatori o cortisone | Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+## cane piccolo, due vomiti
+oggi | Vomito ripetuto in un cane piccolo | Nei cuccioli e nei cani sotto i 5 kg disidratazione e ipoglicemia arrivano in fretta. | Contatta il veterinario oggi stesso.
+## tre vomiti
+attenzione | Vomito ripetuto | 3 episodi in 24 ore. Senti il veterinario entro 24 ore; subito se non trattiene nemmeno l'acqua o è molto abbattuto. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## un vomito
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## feci nere con FANS
+subito | Feci nere | Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+## feci nere
+oggi | Feci nere | Feci nere come catrame possono indicare sangue digerito: serve una visita oggi. | Contatta il veterinario oggi stesso.
+## cucciolo con sangue nelle feci
+oggi | Cucciolo con sangue nelle feci | Nei cuccioli la diarrea con sangue richiede una visita oggi stesso (va esclusa la parvovirosi, soprattutto se non ha completato i vaccini). | Contatta il veterinario oggi stesso.
+## sangue nelle feci con vomito
+oggi | Sangue nelle feci con vomito o abbattimento | Questa combinazione richiede una visita oggi stesso. | Contatta il veterinario oggi stesso.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## sangue nelle feci
+attenzione | Sangue rosso nelle feci | Se si ripete, se c'è diarrea abbondante o se cambia il suo comportamento, senti il veterinario entro 24-48 ore. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## cucciolo con diarrea
+oggi | Cucciolo con diarrea | Nei cuccioli la disidratazione è rapida e va esclusa la parvovirosi: subito se vomita o è abbattuto. | Contatta il veterinario oggi stesso.
+## tre diarree
+attenzione | Diarrea nelle ultime 24 ore | Assicurati che beva. Se persiste oltre 24-48 ore, se è abbattuto o vomita ripetutamente, senti il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## diarrea e vomito
+attenzione | Diarrea e vomito nelle ultime 24 ore | Assicurati che beva. Se persiste oltre 24-48 ore, se è abbattuto o vomita ripetutamente, senti il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## nessuna cacca da 50 ore
+attenzione | Nessuna cacca da 50 ore | Se non è una registrazione mancante: controlla che beva e si muova. Se si sforza senza risultato, vomita o è abbattuto, senti il veterinario. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## nessuna cacca da 80 ore
+oggi | Nessuna cacca da 80 ore | Se non è una registrazione mancante: controlla che beva e si muova. Se si sforza senza risultato, vomita o è abbattuto, senti il veterinario. Lo sforzo per urinare e quello per defecare si confondono facilmente: se non sei sicuro, consideralo un problema urinario. | Contatta il veterinario oggi stesso.
+## feci molto dure
+info | Feci molto dure | Punteggio 1 della scala fecale: controlla che beva abbastanza. Se si sforza senza risultato, senti il veterinario. | Parlane alla prossima visita.
+## fa pipì più spesso
+attenzione | Nessuna pipì registrata da 20 ore | Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | (nessuna frase d'azione)
+attenzione | Fa pipì più spesso del solito | Negli ultimi 3 giorni 6.0 uscite al giorno contro 2.0 abituali. Può essere un segno di infezione urinaria, diabete o problemi renali (solo il veterinario può dirlo): parlane entro qualche giorno. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## diabetico, fa pipì più spesso
+attenzione | Nessuna pipì registrata da 20 ore | Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza. | (nessuna frase d'azione)
+attenzione | Fa pipì più spesso del solito | Negli ultimi 3 giorni 6.0 uscite al giorno contro 2.0 abituali. Può essere un segno di infezione urinaria, diabete o problemi renali (solo il veterinario può dirlo): parlane entro qualche giorno. In un cane diabetico segnalalo al veterinario: la terapia potrebbe andare rivista. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## beve molto
+attenzione | Beve molto | In media 2500 ml al giorno, oltre i 100 ml/kg. La sete eccessiva può essere un segno di malattie da approfondire (solo il veterinario può dirlo). Non ridurre l'acqua: parlane con il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## beve poco con le crocchette
+attenzione | Beve poco | Con le crocchette 200 ml al giorno sono pochi (meno di 20 ml/kg). Se non è una registrazione incompleta e mangia poco o è abbattuto, senti il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## piometra dopo il calore
+oggi | Attenzione all'utero (piometra) | In una femmina non sterilizzata, nelle settimane dopo il calore, sete e pipì aumentate, perdite dalla vulva, vomito o abbattimento possono indicare un'infezione dell'utero (piometra), che è un'urgenza. | Contatta il veterinario oggi stesso.
+attenzione | Calore che dura da oltre 4 settimane | Un calore persistente va valutato dal veterinario. Se è già finito, registra "Fine calore". | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## femmina intera, un segno
+attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## femmina intera, due segni
+oggi | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Contatta il veterinario oggi stesso.
+info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
+## pipì in casa ripetute
+subito | Nessuna pipì da 24 ore | Se Fido non ha davvero urinato (e non è solo una registrazione mancante), è un'urgenza, specie nei maschi. Se escono solo gocce, conta come se non avesse urinato. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+attenzione | Pipì in casa ripetute | 2 incidenti in 7 giorni in un cane adulto. Le cause possibili sono infezione urinaria, aumento della sete, incontinenza (frequente nelle femmine sterilizzate di taglia media e grande), declino cognitivo nell'anziano, oppure intervalli troppo lunghi tra le uscite. Vale la pena parlarne con il veterinario. Se le perdite avvengono mentre dorme o riposa, registrale come "Perdita di urina a riposo". | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## il cucciolo non cresce
+attenzione | Il cucciolo non cresce | Un cucciolo dovrebbe aumentare di peso ogni settimana: se il peso è fermo da 2 settimane o cala, senti il veterinario; subito se mangia poco, vomita o ha diarrea. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## dimagrisce troppo in fretta
+attenzione | Sta dimagrendo troppo in fretta | Oltre il 2% a settimana: un dimagrimento troppo rapido non è sano. Senti il veterinario per rivedere la dieta. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+info | Sovrappeso | Body Condition Score 7/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane. | Parlane alla prossima visita.
+## calo di peso del 12%
+attenzione | Calo di peso del 12% | Un calo di peso non voluto merita una visita, soprattutto nel cane anziano. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## calo di peso del 6%
+info | Calo di peso del 6% | Tienilo d'occhio: se continua senza che tu abbia cambiato la dieta, senti il veterinario. | Parlane alla prossima visita.
+## aumento di peso del 12%
+info | Aumento di peso del 12% | Controlla razione e snack nella sezione Nutrizione. | Parlane alla prossima visita.
+## sottopeso
+attenzione | Sottopeso | Prima di aumentare la razione fallo visitare, per escludere cause mediche. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## sovrappeso
+info | Sovrappeso | Body Condition Score 8/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane. | Parlane alla prossima visita.
+## leggermente sovrappeso
+info | Leggermente sovrappeso | Riduci gli snack e ricontrolla tra un mese. | Parlane alla prossima visita.
+## ha ingerito cioccolato
+subito | Ha ingerito qualcosa: cioccolato | Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+## ha ingerito qualcosa
+subito | Ha ingerito qualcosa | Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+## sorveglianza dopo ingestione con nota
+attenzione | Sorveglianza dopo un'ingestione | Il 8/11 ha ingerito: topicida. Alcuni veleni (es. topicidi) danno sintomi dopo giorni: sangue dal naso o dalle gengive, lividi, debolezza, vomito o pipì scarsa → subito dal veterinario. | (nessuna frase d'azione)
+## sorveglianza dopo ingestione
+attenzione | Sorveglianza dopo un'ingestione | Il 8/11 ha ingerito. Alcuni veleni (es. topicidi) danno sintomi dopo giorni: sangue dal naso o dalle gengive, lividi, debolezza, vomito o pipì scarsa → subito dal veterinario. | (nessuna frase d'azione)
+## gengive pallide
+subito | Gengive pallide o blu | Possono indicare un problema di circolazione, respirazione o un'emorragia: è un'emergenza. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## gengive rosse
+subito | Gengive rosso scuro | Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono indicare un colpo di calore o uno shock: raffreddalo con acqua (vedi Emergenze) e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## gengive gialle
+oggi | Gengive gialle | Il colore giallo (ittero) va valutato dal veterinario oggi stesso. | Contatta il veterinario oggi stesso.
+## cardiopatico, 44 respiri
+subito | Respira molto veloce nel sonno (44/min) | Oltre 40 respiri al minuto a riposo: possibile difficoltà respiratoria o cardiaca. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## 44 respiri
+oggi | Respiri nel sonno oltre 40/min | Rimisura tra 15-30 minuti mentre dorme tranquillo. Se resta sopra 40, o respira con fatica a bocca aperta, vai subito dal veterinario. | Contatta il veterinario oggi stesso.
+## due misure sopra 30
+oggi | Respiri nel sonno sopra 30/min | Due misure di fila sopra 30 respiri al minuto: segnalalo al veterinario oggi, soprattutto se ha una malattia di cuore. | Contatta il veterinario oggi stesso.
+## respiri in aumento
+oggi | Respiri nel sonno in aumento | Media della settimana 32/min contro 21/min del mese precedente: segnalalo al veterinario oggi. | Contatta il veterinario oggi stesso.
+## fatica a respirare
+subito | Fatica a respirare | Respiro affannoso a riposo, bocca aperta o lingua scura: tienilo calmo e al fresco e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## tosse in un cardiopatico
+oggi | Tosse in un cane con malattia di cuore | Nei cardiopatici la tosse va segnalata al veterinario oggi. | Contatta il veterinario oggi stesso.
+## tosse in un Cavalier
+attenzione | Tosse in un Cavalier King | Il Cavalier è predisposto alla malattia della valvola mitrale: segnala la tosse al veterinario e conta i respiri nel sonno. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## tosse da più giorni
+attenzione | Tosse da più giorni | Tosse che dura da più di 3 giorni o con abbattimento: senti il veterinario entro 24-48 ore. Evita il contatto con altri cani. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## glicemia 50
+subito | Glicemia bassa (50 mg/dL) | Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+## glicemia 70
+oggi | Glicemia al limite basso (70 mg/dL) | Segnalala al veterinario oggi, prima della prossima insulina. | Contatta il veterinario oggi stesso.
+## glicemia 450
+attenzione | Glicemia alta (450 mg/dL) | Segnalala al veterinario: la terapia potrebbe andare rivista. Se vomita, è abbattuto o non mangia, oggi stesso. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## glicemia 450 e non mangia
+oggi | Glicemia alta (450 mg/dL) | Segnalala al veterinario: la terapia potrebbe andare rivista. Se vomita, è abbattuto o non mangia, oggi stesso. | Contatta il veterinario oggi stesso.
+## due dosi di insulina ravvicinate
+subito | Due dosi di insulina ravvicinate | Due dosi di insulina registrate a 2.0 ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una. | Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.
+## insulina senza pasto
+oggi | Insulina fatta senza che abbia mangiato | Chiama ora il veterinario e chiedi come comportarti. Nelle prossime ore offrigli il suo pasto e osservalo: se compaiono debolezza, tremori o barcollamento strofina miele sulle gengive e vai subito dal veterinario. | Contatta il veterinario oggi stesso.
+## cagna che allatta trema
+subito | Tremori in una cagna che allatta | Possibile eclampsia (calcio basso dopo il parto): è un'emergenza. Allontana i cuccioli e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## cucciolo che trema
+subito | Cucciolo debole o tremante | Nei cuccioli piccoli può essere un'ipoglicemia. Se è cosciente strofina un po' di miele sulle gengive, poi vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## convulsione in un diabetico
+subito | Convulsione in un cane diabetico | Può essere un'ipoglicemia. Se è cosciente strofina un po' di miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## convulsione lunga
+subito | Convulsione lunga o senza ripresa | Crisi oltre 5 minuti, crisi a grappolo o mancata ripresa sono un'emergenza. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## due convulsioni
+subito | 2 convulsioni in 24 ore | Crisi oltre 5 minuti, crisi a grappolo o mancata ripresa sono un'emergenza. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## prima convulsione
+oggi | Prima convulsione | Una prima crisi va sempre valutata dal veterinario. Annota durata e cosa è successo prima e dopo. | Contatta il veterinario oggi stesso.
+## crisi più frequenti questo mese
+attenzione | Crisi più frequenti questo mese | 3 crisi questo mese contro una media di 1.0: parlane con il veterinario, la terapia potrebbe andare rivista. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## diabetico che trema
+subito | Possibile ipoglicemia | Tremori o barcollamento in un cane diabetico: se è cosciente strofina miele o glucosio sulle gengive e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## tremori
+oggi | Tremori, barcollamento o testa inclinata | Segni neurologici: se sono comparsi all'improvviso è un'urgenza. Pensa anche a possibili sostanze ingerite. | Contatta il veterinario oggi stesso.
+## tremori improvvisi
+subito | Tremori, barcollamento o testa inclinata | Segni neurologici: se sono comparsi all'improvviso è un'urgenza. Pensa anche a possibili sostanze ingerite. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## 41,2 °C
+subito | Temperatura 41.2 °C | Temperatura molto alta: possibile colpo di calore. Raffreddalo subito con acqua fresca o fredda e fai aria, poi vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## 36,5 °C
+subito | Temperatura 36.5 °C | Temperatura troppo bassa: tienilo al caldo e vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+## 39,8 °C
+oggi | Febbre (39.8 °C) | Normale 38,0-39,2 °C. Non dare antipiretici per persone (sono tossici). | Contatta il veterinario oggi stesso.
+## diabetico non mangia
+oggi | Non mangia | Se non ha mangiato o ha vomitato, non fare l'insulina senza aver sentito il veterinario. | Contatta il veterinario oggi stesso.
+## anziano non mangia
+oggi | Non mangia | Pasti saltati: serve una visita oggi. | Contatta il veterinario oggi stesso.
+## ha saltato i pasti
+attenzione | Ha saltato i pasti | Se non mangia da 24 ore senti il veterinario entro 1-2 giorni; prima se vomita o è abbattuto. | (nessuna frase d'azione)
+## abbattuto con altri segni
+oggi | Abbattuto | Abbattimento insieme ad altri segni: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+## cucciolo abbattuto
+subito | Cucciolo debole o tremante | Nei cuccioli piccoli può essere un'ipoglicemia. Se è cosciente strofina un po' di miele sulle gengive, poi vai subito dal veterinario. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+oggi | Abbattuto | Abbattimento in un cane cucciolo: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+## anziano abbattuto
+oggi | Abbattuto | Abbattimento in un cane anziano: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+## abbattuto
+attenzione | Abbattuto | Osservalo: se non torna vivace entro la giornata, o compaiono vomito, diarrea, febbre o gengive pallide, senti il veterinario. | (nessuna frase d'azione)
+## urina scura
+attenzione | Urina scura o color caffè | Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Hai trovato zecche di recente? Dillo al veterinario. Se si ripete, senti il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## urina scura e abbattimento
+oggi | Urina scura o color caffè | Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Hai trovato zecche di recente? Dillo al veterinario. Con abbattimento o febbre serve una visita oggi. | Contatta il veterinario oggi stesso.
+attenzione | Abbattuto | Osservalo: se non torna vivace entro la giornata, o compaiono vomito, diarrea, febbre o gengive pallide, senti il veterinario. | (nessuna frase d'azione)
+## urina scura a dicembre
+attenzione | Urina scura o color caffè | Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Se si ripete, senti il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## urina scura e febbre a dicembre
+oggi | Febbre (39.8 °C) | Normale 38,0-39,2 °C. Non dare antipiretici per persone (sono tossici). | Contatta il veterinario oggi stesso.
+oggi | Urina scura o color caffè | Urine scure, soprattutto con abbattimento, possono indicare una distruzione dei globuli rossi (es. malattie trasmesse dalle zecche come la babesiosi) o un danno muscolare. Con abbattimento o febbre serve una visita oggi. | Contatta il veterinario oggi stesso.
+## loperamide in un Border Collie
+attenzione | Loperamide in una razza a rischio MDR1 | Nelle razze con possibile mutazione MDR1 la loperamide può dare effetti neurologici: verifica con il veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## febbre dopo il parto
+oggi | Febbre (39.8 °C) | Normale 38,0-39,2 °C. Non dare antipiretici per persone (sono tossici). | Contatta il veterinario oggi stesso.
+oggi | Malessere nella prima settimana dopo il parto | Febbre, perdite maleodoranti o abbattimento dopo il parto possono indicare un'infezione dell'utero: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+## mammelle
+oggi | Mammelle gonfie, calde o dolenti | Può essere una mastite: contatta il veterinario oggi. Non spremere le mammelle. | Contatta il veterinario oggi stesso.
+## temperatura calata, parto atteso
+info | Parto atteso entro circa 24 ore | La temperatura sotto 37,5 °C di solito precede il parto di circa 24 ore. Prepara la cassa parto. | (nessuna frase d'azione)
+info | Parto vicino (presunto il 13/11) | Prepara la cassa parto. Chiama subito il veterinario se: contrazioni forti per oltre 30 minuti senza cuccioli, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere senza cuccioli. | (nessuna frase d'azione)
+## perdite purulente
+oggi | Perdite purulente | Perdite purulente in una femmina non sterilizzata possono indicare un'infezione dell'utero: contatta il veterinario oggi stesso. | Contatta il veterinario oggi stesso.
+attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## sterilizzata con perdite
+attenzione | Perdite vulvari | Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## sterilizzata con perdite purulente
+oggi | Perdite vulvari | Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente. | Contatta il veterinario oggi stesso.
+## gravidanza oltre i 70 giorni
+oggi | Gravidanza oltre i 70 giorni | Il parto non è ancora avvenuto: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+## parto vicino
+info | Parto vicino (presunto il 13/11) | Prepara la cassa parto. Chiama subito il veterinario se: contrazioni forti per oltre 30 minuti senza cuccioli, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere senza cuccioli. | (nessuna frase d'azione)
+## calore lungo
+attenzione | Calore che dura da oltre 4 settimane | Un calore persistente va valutato dal veterinario. Se è già finito, registra "Fine calore". | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## non appoggia la zampa
+oggi | Non appoggia la zampa | Non caricare l'arto è un segno di dolore importante: visita oggi. Non dare antidolorifici per persone. | Contatta il veterinario oggi stesso.
+## zoppia da più giorni
+attenzione | Zoppia da più giorni | Una zoppia che dura da 3-5 giorni va vista dal veterinario. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## prurito
+attenzione | Prurito, pelle o orecchie | Senti il veterinario entro qualche giorno; prima se si gratta fino a ferirsi o scuote molto la testa. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## denti
+attenzione | Problema ai denti | Alito cattivo, gengive che sanguinano o fatica a masticare: controllo dentale al prossimo appuntamento, prima se mangia poco. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## spazzolature
+info | Denti: 1 spazzolature in 7 giorni | Ideale ogni giorno, almeno 3 volte a settimana (AAHA 2019). | Parlane alla prossima visita.
+## perdite a riposo
+attenzione | Perdite di urina a riposo | Perdite mentre dorme o riposa: spesso è un problema curabile (incontinenza). Parlane con il veterinario. Non ridurre l'acqua. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## pipì di notte
+subito | Nessuna pipì da 36 ore | Se Fido non ha davvero urinato (e non è solo una registrazione mancante), è un'urgenza, specie nei maschi. Se escono solo gocce, conta come se non avesse urinato. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
+attenzione | Pipì di notte, prima non succedeva | Due o più notti su 7 con pipì notturna: può essere un segno di sete aumentata o di un problema urinario. Prenota una visita. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## dose non confermata
+attenzione | Dose non confermata: Metacam | Prevista alle 12:00. Se l'hai saltata, non raddoppiare la successiva: chiedi al veterinario cosa fare. | (nessuna frase d'azione)
+## ferita aperta
+oggi | Ferita aperta o che sanguina | Punti aperti o sanguinamento della ferita: copri con una garza pulita, impedisci che si lecchi e contatta il veterinario oggi. Subito se il sanguinamento è abbondante o si vede tessuto interno. | Contatta il veterinario oggi stesso.
+## ferita arrossata
+attenzione | Ferita arrossata, gonfia o con secrezione | Può essere un'infiammazione o un'infezione della ferita: mantieni il collare elisabettiano e senti il veterinario entro 1-2 giorni; prima se peggiora o compare febbre. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## non mangia dopo l'intervento
+oggi | Non ha ancora mangiato dopo l'intervento | L'appetito di solito torna entro 24-48 ore dall'intervento: contatta il veterinario oggi. | Contatta il veterinario oggi stesso.
+## forasacco
+oggi | Possibile forasacco | In stagione dei forasacchi, scuotere la testa o starnutire all'improvviso dopo un prato richiede una visita oggi: prima si toglie, meno danni fa. | Contatta il veterinario oggi stesso.
+attenzione | Prurito, pelle o orecchie | Senti il veterinario entro qualche giorno; prima se si gratta fino a ferirsi o scuote molto la testa. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+## cucciolo con vaccino core scaduto
+attenzione | Ciclo vaccinale non completo | Finché non è completo, evita aree frequentate da cani sconosciuti e chiama il veterinario per fissare la dose. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+info | Una scadenza superata | Vaccino core – 2ª dose | (nessuna frase d'azione)
+## tre scadenze superate
+info | 3 scadenze superate | Esame delle feci · Visita di controllo annuale · Leptospirosi | (nessuna frase d'azione)
+
+### Prevenzione (PreventionPlanner.suggest)
+## cucciolo di 4 settimane, nord
+visita | Microchip e iscrizione all'anagrafe canina | Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe SINAC): entro 60 giorni dalla nascita e comunque prima della cessione. Se hai adottato il cane, verifica che sia intestato a te.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – 1ª dose | WSAVA: prima dose a 6-8 settimane.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – 2ª dose | Ogni 2-4 settimane fino a 16 settimane o più.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – 3ª dose | L'ultima dose non prima delle 16 settimane.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – richiamo | WSAVA 2024: richiamo a 26 settimane (oppure a 12 mesi secondo il veterinario), poi ogni 3 anni se il vaccino usato lo prevede.
+vaccino | Leptospirosi – 1ª dose | Consigliata in Italia: 2 dosi a 2-4 settimane di distanza, poi richiamo annuale.
+vaccino | Leptospirosi – 2ª dose | Completa l'avvio vaccinale.
+antiparassitario | Sverminazione cucciolo | Ogni 2 settimane fino a 2 settimane dopo lo svezzamento, poi ogni mese fino a 6 mesi.
+antiparassitario | Inizio profilassi filariosi 2027 | Mensile fino a dicembre. Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.
+antiparassitario | Repellente anti-pappataci (leishmaniosi) 2027 | Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+antiparassitario | Antiparassitario esterno (zecche e pulci) | Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+visita | Visita di controllo annuale | Visita generale, peso, denti, richiami.
+## cucciolo di 3 mesi, sud
+visita | Microchip e iscrizione all'anagrafe canina | Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe SINAC): entro 60 giorni dalla nascita e comunque prima della cessione. Se hai adottato il cane, verifica che sia intestato a te.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – 3ª dose | L'ultima dose non prima delle 16 settimane.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – richiamo | WSAVA 2024: richiamo a 26 settimane (oppure a 12 mesi secondo il veterinario), poi ogni 3 anni se il vaccino usato lo prevede.
+vaccino | Leptospirosi – 1ª dose | Consigliata in Italia: 2 dosi a 2-4 settimane di distanza, poi richiamo annuale.
+vaccino | Leptospirosi – 2ª dose | Completa l'avvio vaccinale.
+antiparassitario | Sverminazione cucciolo | Ogni 2 settimane fino a 2 settimane dopo lo svezzamento, poi ogni mese fino a 6 mesi.
+esame | Test filariosi e leishmaniosi annuale (2027) | Prima di iniziare la profilassi: antigene della filaria e, nelle zone a rischio, test per la leishmania.
+antiparassitario | Inizio profilassi filariosi 2027 | Mensile fino a dicembre (al Sud valuta con il veterinario la copertura tutto l'anno). Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.
+antiparassitario | Repellente anti-pappataci (leishmaniosi) 2027 | Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+antiparassitario | Antiparassitario esterno (zecche e pulci) | Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+visita | Visita di controllo annuale | Visita generale, peso, denti, richiami.
+## adulto senza libretto, con microchip
+visita | Verifica che l'anagrafe sia intestata a te | Controlla sul portale dell'anagrafe canina della tua Regione (o SINAC) che il microchip 380260000000001 sia intestato a te e che indirizzo e telefono siano aggiornati.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – verifica il libretto | Nessun vaccino core registrato. Se non trovi il libretto, il veterinario può fare una dose (WSAVA considera protettiva una dose dei vaccini core vivi attenuati nell'adulto) oppure dosare gli anticorpi.
+vaccino | Leptospirosi | Se non è mai stato vaccinato servono 2 dosi a 2-4 settimane; poi richiamo annuale. Verifica il libretto.
+esame | Esame delle feci | Da 1 a 4 volte l'anno secondo lo stile di vita (o sverminazione periodica secondo il veterinario).
+visita | Filariosi: chiedi al veterinario se fare una dose ora e il test | Se non era protetto quest'estate, il veterinario valuterà un test (antigene + microfilarie) prima di iniziare; il test affidabile si fa in primavera.
+esame | Test filariosi e leishmaniosi annuale (2027) | Prima di iniziare la profilassi: antigene della filaria e, nelle zone a rischio, test per la leishmania.
+antiparassitario | Inizio profilassi filariosi 2027 | Mensile fino a dicembre. Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.
+antiparassitario | Repellente anti-pappataci (leishmaniosi) 2027 | Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+antiparassitario | Antiparassitario esterno (zecche e pulci) | Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+visita | Visita di controllo annuale | Visita generale, peso, denti, richiami.
+## anziano
+visita | Microchip e iscrizione all'anagrafe canina | Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe SINAC): entro 60 giorni dalla nascita e comunque prima della cessione. Se hai adottato il cane, verifica che sia intestato a te.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – verifica il libretto | Nessun vaccino core registrato. Se non trovi il libretto, il veterinario può fare una dose (WSAVA considera protettiva una dose dei vaccini core vivi attenuati nell'adulto) oppure dosare gli anticorpi.
+vaccino | Leptospirosi | Se non è mai stato vaccinato servono 2 dosi a 2-4 settimane; poi richiamo annuale. Verifica il libretto.
+esame | Esame delle feci | Da 1 a 4 volte l'anno secondo lo stile di vita (o sverminazione periodica secondo il veterinario).
+visita | Filariosi: chiedi al veterinario se fare una dose ora e il test | Se non era protetto quest'estate, il veterinario valuterà un test (antigene + microfilarie) prima di iniziare; il test affidabile si fa in primavera.
+esame | Test filariosi e leishmaniosi annuale (2027) | Prima di iniziare la profilassi: antigene della filaria e, nelle zone a rischio, test per la leishmania.
+antiparassitario | Inizio profilassi filariosi 2027 | Mensile fino a dicembre. Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.
+antiparassitario | Repellente anti-pappataci (leishmaniosi) 2027 | Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+antiparassitario | Antiparassitario esterno (zecche e pulci) | Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+visita | Controllo geriatrico semestrale | Per i cani anziani: visita ed esami del sangue e delle urine ogni 6 mesi.
+## adulto a giugno, vaccinato
+visita | Microchip e iscrizione all'anagrafe canina | Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe SINAC): entro 60 giorni dalla nascita e comunque prima della cessione. Se hai adottato il cane, verifica che sia intestato a te.
+esame | Esame delle feci | Da 1 a 4 volte l'anno secondo lo stile di vita (o sverminazione periodica secondo il veterinario).
+antiparassitario | Prevenzione filariosi (stagione 2026) | ESCCAP Italia: profilassi mensile fino a dicembre (un mese dopo la fine della stagione delle zanzare). Se non era protetto, chiedi al veterinario se serve prima un test.
+esame | Test filariosi e leishmaniosi annuale (2027) | Prima di iniziare la profilassi: antigene della filaria e, nelle zone a rischio, test per la leishmania.
+antiparassitario | Inizio profilassi filariosi 2027 | Mensile fino a dicembre (al Sud valuta con il veterinario la copertura tutto l'anno). Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.
+antiparassitario | Repellente anti-pappataci (leishmaniosi) 2026 | Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+antiparassitario | Antiparassitario esterno (zecche e pulci) | Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+visita | Visita di controllo annuale | Visita generale, peso, denti, richiami.
+## giovane di 8 mesi a marzo
+visita | Microchip e iscrizione all'anagrafe canina | Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe SINAC): entro 60 giorni dalla nascita e comunque prima della cessione. Se hai adottato il cane, verifica che sia intestato a te.
+vaccino | Vaccino core (cimurro, epatite, parvovirosi) – verifica il libretto | Nessun vaccino core registrato. Se non trovi il libretto, il veterinario può fare una dose (WSAVA considera protettiva una dose dei vaccini core vivi attenuati nell'adulto) oppure dosare gli anticorpi.
+vaccino | Leptospirosi | Se non è mai stato vaccinato servono 2 dosi a 2-4 settimane; poi richiamo annuale. Verifica il libretto.
+esame | Esame delle feci | Da 1 a 4 volte l'anno secondo lo stile di vita (o sverminazione periodica secondo il veterinario).
+esame | Test filariosi e leishmaniosi annuale (2026) | Prima di iniziare la profilassi: antigene della filaria e, nelle zone a rischio, test per la leishmania.
+antiparassitario | Inizio profilassi filariosi 2026 | Mensile fino a dicembre. Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono anche iniezioni a lento rilascio da 6 o 12 mesi.
+antiparassitario | Repellente anti-pappataci (leishmaniosi) 2026 | Da aprile a novembre per tutti i cani, anche al Nord: la leishmaniosi è ormai presente in molte aree. Il collare dura secondo il prodotto, lo spot-on 3-4 settimane. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+antiparassitario | Antiparassitario esterno (zecche e pulci) | Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto l'anno. Gli spot-on e alcuni collari per cani contengono permetrina, molto tossica per i gatti: se in casa c'è un gatto chiedi al veterinario un prodotto adatto e tienili separati finché il prodotto è asciutto.
+visita | Visita di controllo annuale | Visita generale, peso, denti, richiami.
+
+### Nutrizione (Nutrition.plan)
+## adulto sterilizzato
+motivo | adulto sterilizzato
+## adulto non sterilizzato
+motivo | adulto non sterilizzato
+## anziano
+motivo | cane anziano
+## sedentario
+motivo | cane sedentario o incline al sovrappeso
+## molto attivo
+motivo | cane molto attivo
+## da lavoro
+motivo | cane da lavoro/sport intenso
+## sovrappeso
+motivo | programma di dimagrimento (calcolato sul peso ideale)
+nota | Per dimagrire con questa quota di calorie è consigliato un alimento dietetico specifico: riducendo molto la razione del cibo normale si rischiano carenze. Prima di iniziare fai visitare il cane: alcune malattie ormonali causano aumento di peso. Pesalo ogni 2 settimane.
+## sovrappeso con patologie
+motivo | programma di dimagrimento (calcolato sul peso ideale)
+nota | Per dimagrire con questa quota di calorie è consigliato un alimento dietetico specifico: riducendo molto la razione del cibo normale si rischiano carenze. Prima di iniziare fai visitare il cane: alcune malattie ormonali causano aumento di peso. Pesalo ogni 2 settimane. Con le patologie registrate la dieta va decisa con il veterinario.
+## sottopeso
+motivo | sottopeso: calcolato sul peso ideale
+nota | Sottopeso: prima fallo visitare per escludere cause mediche, poi aumenta la razione gradualmente in 1-2 settimane.
+## cucciolo di 2 mesi, toy, 2 pasti
+motivo | cucciolo sotto i 4 mesi
+nota | Per la sua età sono consigliati 5 pasti al giorno: nei cuccioli piccoli pochi pasti possono causare ipoglicemia.
+## cucciolo di 5 mesi, taglia grande
+motivo | cucciolo in crescita
+nota | Cucciolo di taglia grande: usa un alimento specifico "puppy large breed" e non aggiungere integratori di calcio. Mantienilo snello (BCS 4-5): crescere più in fretta non lo fa diventare più grande, aumenta il rischio di problemi alle articolazioni.
+## gravidanza iniziale
+motivo | gravidanza (prime 6 settimane)
+## gravidanza avanzata
+motivo | gravidanza avanzata
+## allattamento
+motivo | allattamento (4-8 × RER)
+nota | In allattamento il fabbisogno arriva a 4-8 volte quello di riposo: lascia il cibo a disposizione (alimento per cuccioli) e acqua fresca sempre. Se trema, ansima, è agitata o barcolla, chiama subito il veterinario.
+## Body Condition Score
+1 | Emaciato: costole, vertebre e bacino visibili a distanza.
+2 | Molto magro: costole facilmente visibili, nessun grasso palpabile.
+3 | Magro: costole facilmente palpabili, vita evidente.
+4 | Sottile: costole palpabili con poco grasso, vita ben visibile.
+5 | Ideale: costole palpabili senza eccesso di grasso, vita visibile da sopra.
+6 | Leggermente sovrappeso: costole palpabili con lieve grasso in più.
+7 | Sovrappeso: costole palpabili a fatica, vita poco visibile.
+8 | Obeso: costole non palpabili, nessuna vita, addome disteso.
+9 | Obesità grave: depositi di grasso su collo, arti e base della coda.
+## Alimenti pericolosi
+Xilitolo (gomme e dolci "senza zucchero", dentifricio per persone, burro di arachidi light, integratori) | ipoglicemia e danno al fegato anche a piccole dosi | grave
+Uva e uvetta | insufficienza renale acuta, dose imprevedibile | grave
+Cioccolato e cacao (più è fondente, più è pericoloso) | teobromina: vomito, agitazione, aritmie, convulsioni | grave
+Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere) | anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo | grave
+Farmaci per persone: paracetamolo, ibuprofene, naprossene, ketoprofene, aspirina | ulcere, danno a reni e fegato, anemia | grave
+Altri farmaci umani: antidepressivi, farmaci per ADHD, farmaci per il cuore | agitazione, aritmie, convulsioni | grave
+Veleni per topi (anticoagulanti, colecalciferolo) | emorragie anche dopo 3-5 giorni; danno renale | grave
+Lumachicidi a base di metaldeide | tremori e convulsioni gravi in poco tempo | grave
+Antigelo (glicole etilenico), insetticidi, bocconi avvelenati | insufficienza renale, sintomi neurologici | grave
+Processionaria del pino (febbraio-maggio) | necrosi di lingua e bocca: subito dal veterinario, non strofinare | grave
+Cannabis / THC | barcollamento, perdita di urina, letargia | moderata
+Piante: oleandro, Cycas revoluta, tasso, mughetto, azalea, ricino, bulbi | effetti su cuore, fegato o sistema nervoso | grave
+Funghi selvatici, alghe tossiche in acqua stagnante | danno al fegato, sintomi neurologici | grave
+Rospi e morsi di vipera | salivazione, gonfiore, collasso: subito dal veterinario | grave
+Noci di macadamia | debolezza, tremori, febbre | moderata
+Alcol e impasti lievitati crudi | intossicazione, dilatazione dello stomaco | grave
+Caffeina (caffè, tè, energy drink), noce moscata, luppolo | agitazione, tachicardia, ipertermia, convulsioni | grave
+Cibo ammuffito e compost | tremori e convulsioni (micotossine) | grave
+Batterie a bottone, magneti, pannocchie, noccioli, ossa cotte | ustioni interne, ostruzioni e perforazioni | grave
+Avocado | disturbi gastrointestinali; il nocciolo causa ostruzioni | lieve
+Cibi molto grassi (avanzi, fritti) e sale in eccesso | pancreatite; vomito e convulsioni da sale | moderata
+
+### Stagioni, razze, cucciolo (SeasonalTips, Breeds)
+## mese 1, adulto al centro
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Freddo | Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Botti di Capodanno | Tienilo in casa, con una zona tranquilla e finestre chiuse; controlla che la medaglietta sia aggiornata. Se è molto pauroso, parlane prima con il veterinario.
+## mese 1, anziano brachicefalo piccolo al nord
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Freddo | Per Fido il freddo pesa di più. Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).
+info | Botti di Capodanno | Tienilo in casa, con una zona tranquilla e finestre chiuse; controlla che la medaglietta sia aggiornata. Se è molto pauroso, parlane prima con il veterinario.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 2, adulto al centro
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Freddo | Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 2, anziano brachicefalo piccolo al nord
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Freddo | Per Fido il freddo pesa di più. Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 3, adulto al centro
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 3, anziano brachicefalo piccolo al nord
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 4, adulto al centro
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 4, anziano brachicefalo piccolo al nord
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 5, adulto al centro
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 5, anziano brachicefalo piccolo al nord
+warning | Stagione della processionaria | Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare.
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 6, adulto al centro
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 6, anziano brachicefalo piccolo al nord
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 7, adulto al centro
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 7, anziano brachicefalo piccolo al nord
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 8, adulto al centro
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 8, anziano brachicefalo piccolo al nord
+info | Stagione dei forasacchi | Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario.
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 9, adulto al centro
+warning | Caldo: rischio colpo di calore | Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 9, anziano brachicefalo piccolo al nord
+warning | Caldo: rischio colpo di calore | Per Fido il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 10, adulto al centro
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 10, anziano brachicefalo piccolo al nord
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 11, adulto al centro
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## mese 11, anziano brachicefalo piccolo al nord
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Stagione delle zecche (marzo-novembre): controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## mese 12, adulto al centro
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Freddo | Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Botti di Capodanno | Tienilo in casa, con una zona tranquilla e finestre chiuse; controlla che la medaglietta sia aggiornata. Se è molto pauroso, parlane prima con il veterinario.
+## mese 12, anziano brachicefalo piccolo al nord
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Freddo | Per Fido il freddo pesa di più. Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro).
+info | Botti di Capodanno | Tienilo in casa, con una zona tranquilla e finestre chiuse; controlla che la medaglietta sia aggiornata. Se è molto pauroso, parlane prima con il veterinario.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+## razza Alano
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Torace profondo: attenzione alla torsione gastrica | Pasti divisi, niente corse subito dopo mangiato. Addome gonfio con conati a vuoto è un'emergenza.
+## razza Piccolo levriero italiano
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## razza Bulldog francese
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+info | Bulldog francese: schiena | Predisposto all'ernia del disco: dolore alla schiena o zampe posteriori deboli vanno visti subito.
+## razza Border Collie
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Possibile mutazione MDR1 | Chiedi al veterinario il test MDR1 prima di usare alcuni antiparassitari e farmaci (es. ivermectina ad alte dosi).
+## razza Dalmata
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Dalmata: calcoli di urati | Acqua abbondante e dieta concordata con il veterinario; segnala sforzo o sangue nelle urine.
+## razza Bassotto
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Schiena lunga | Evita salti da divani e scale ripide. Dolore alla schiena o zampe posteriori deboli: subito dal veterinario.
+## razza Yorkshire
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Razza toy: trachea e zuccheri | Predisposta al collasso tracheale (tosse "a clacson": usa la pettorina, non il collare) e, da cucciolo, all'ipoglicemia: pasti frequenti.
+## razza Schnauzer nano
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Schnauzer nano: pancreatite | Evita avanzi e cibi grassi; vomito e dolore addominale dopo un pasto grasso vanno visti dal veterinario.
+## razza Dobermann
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Torace profondo: attenzione alla torsione gastrica | Pasti divisi, niente corse subito dopo mangiato. Addome gonfio con conati a vuoto è un'emergenza.
+info | Dobermann: cuore | Predisposto alla cardiomiopatia dilatativa: chiedi al veterinario dei controlli cardiologici periodici (ECG Holter, ecografia).
+## razza Cocker
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Cocker: orecchie | Predisposto alle otiti: controlla e asciuga le orecchie dopo bagni e passeggiate sotto la pioggia.
+## razza Cavalier King
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Razza brachicefala | Respira peggio con caldo e sforzo: evita le ore calde e segnala al veterinario russare forte o affanno.
+info | Cavalier King: cuore | Predisposto alla malattia della valvola mitrale: conta i respiri nel sonno ogni settimana (sezione Diari).
+## cane di 40 kg
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Torace profondo: attenzione alla torsione gastrica | Pasti divisi, niente corse subito dopo mangiato. Addome gonfio con conati a vuoto è un'emergenza.
+## taglia grande intera di 10 mesi
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+info | Sterilizzazione nelle taglie grandi | Per alcune razze grandi gli studi indicano che l'età della sterilizzazione può influire su articolazioni e alcuni tumori (Hart et al. 2020). Non esiste un'età giusta per tutti: parlane con il veterinario.
+## cucciolo di 10 settimane
+info | Finestra di socializzazione (fino a ~14 settimane) | Fagli conoscere con calma persone, rumori, superfici e cani vaccinati e sani, anche prima della fine dei vaccini, in ambienti controllati (AVSAB 2008). Finché i vaccini non sono completi evita parchi e aree con feci di cani sconosciuti; sì a cani sani e vaccinati, case di amici e classi per cuccioli con protocollo igienico. Abitualo a trasportino e manipolazione.
+info | Educazione al bisogno | Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Zampa ti dice quando portarlo fuori.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+## cucciolo di 20 settimane
+info | Educazione al bisogno | Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Zampa ti dice quando portarlo fuori.
+info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
+info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
+info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
+
+### Viaggi (Modules.travelChecklist)
+## senza antirabbico
+true | Età minima | Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età.
+false | Microchip registrato | Obbligatorio e impiantato prima del vaccino antirabbico.
+false | Vaccino antirabbico valido | Nessun antirabbico in cartella.
+null | Passaporto europeo per animali | Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.
+null | Trattamento contro Echinococcus | Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).
+null | Rischi parassitari della destinazione | Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.
+## con antirabbico e microchip
+true | Età minima | Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età.
+true | Microchip registrato | Obbligatorio e impiantato prima del vaccino antirabbico.
+true | Vaccino antirabbico valido | La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: 2/8/2026).
+null | Passaporto europeo per animali | Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.
+null | Trattamento contro Echinococcus | Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).
+null | Rischi parassitari della destinazione | Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi.
+## Qualità della vita (Modules.qolItems)
+Dolore (Hurt) | Il dolore è controllato? Respira bene? 10 = nessun dolore
+Fame (Hunger) | Mangia abbastanza? 10 = appetito normale
+Idratazione | Beve abbastanza? 10 = sì
+Igiene | Si mantiene pulito, niente piaghe? 10 = sì
+Felicità | Interagisce, gioca, risponde? 10 = come sempre
+Mobilità | Si alza e cammina da solo? 10 = sì
+Più giorni buoni che cattivi | 10 = quasi tutti buoni
+
+### Emergenze: segnali d'allarme (EmergencyScreen.redFlags)
+Addome gonfio, conati a vuoto, agitazione | Possibile torsione/dilatazione dello stomaco: ogni minuto conta.
+Fatica a respirare, respiro rumoroso, lingua o gengive blu | Tienilo calmo e al fresco durante il trasporto.
+Gengive pallide o bianche, collasso, debolezza improvvisa | Può indicare un'emorragia interna o uno shock.
+Convulsioni oltre 5 minuti, oppure 2 o più in 24 ore | Non mettere le mani in bocca; allontana gli oggetti; cronometra.
+Colpo di calore: ansima molto, barcolla, gengive rosso scuro | Raffreddalo subito: bagnalo abbondantemente con acqua fresca o fredda e fai aria. Non coprirlo con asciugamani bagnati. Poi vai subito dal veterinario continuando a raffreddarlo in auto, anche se sembra riprendersi.
+Sospetto avvelenamento, morso di vipera, contatto con processionaria | Porta la confezione o una foto. Non provocare il vomito di tua iniziativa (niente sale o acqua ossigenata).
+Sforzo a urinare senza risultato, o nessuna pipì da 24 ore | Nel maschio un blocco urinario è un'emergenza.
+Cucciolo con vomito e diarrea, soprattutto se non vaccinato | Va esclusa la parvovirosi; la disidratazione è rapida.
+Cucciolo di taglia toy debole, tremante o che non risponde | Possibile ipoglicemia: solo se è cosciente, un po' di miele sulle gengive, poi subito dal veterinario.
+Femmina non sterilizzata abbattuta, che beve molto o ha perdite dalla vulva, settimane dopo il calore | Possibile piometra (infezione dell'utero).
+Parto difficile | Oltre 30 minuti di contrazioni forti senza cucciolo, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere, gravidanza oltre i 70 giorni.
+Cagna che allatta e trema, barcolla o è agitata | Possibile eclampsia (calcio basso).
+Traumi (investimento, caduta, morsi), sanguinamenti, feci nere | Anche se sembra stare bene: le lesioni interne non si vedono.
+Dolore intenso, guaisce se toccato, non si alza | Non dare farmaci per persone: molti sono tossici per il cane.
+Ha ingerito un oggetto, ossa, pannocchie, batterie o farmaci | Chiama prima di fare qualsiasi cosa.
+Reazione allergica grave: muso o palpebre gonfie, orticaria diffusa, vomito o fatica a respirare dopo puntura, farmaco o vaccino | Il gonfiore del muso può chiudere le vie respiratorie: vai subito.
+Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista | Impedisci che si gratti; non mettere colliri di tua iniziativa.
+Ustioni, folgorazione (cavi elettrici) o quasi-annegamento | Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
+
+### Emergenze: scheda (EmergencyScreen)
+## nessun cane
+Aggiungi i numeri utili
+Nel profilo del cane inserisci il telefono del tuo veterinario e di un pronto soccorso h24: li troverai qui.
+Cerca pronto soccorso veterinario vicino a me
+Apre la mappa
+Sospetto avvelenamento
+Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell'etichetta.
+Vai subito dal veterinario se…
+Addome gonfio, conati a vuoto, agitazione
+Possibile torsione/dilatazione dello stomaco: ogni minuto conta.
+Fatica a respirare, respiro rumoroso, lingua o gengive blu
+Tienilo calmo e al fresco durante il trasporto.
+Gengive pallide o bianche, collasso, debolezza improvvisa
+Può indicare un'emorragia interna o uno shock.
+Convulsioni oltre 5 minuti, oppure 2 o più in 24 ore
+Non mettere le mani in bocca; allontana gli oggetti; cronometra.
+Colpo di calore: ansima molto, barcolla, gengive rosso scuro
+Raffreddalo subito: bagnalo abbondantemente con acqua fresca o fredda e fai aria. Non coprirlo con asciugamani bagnati. Poi vai subito dal veterinario continuando a raffreddarlo in auto, anche se sembra riprendersi.
+Sospetto avvelenamento, morso di vipera, contatto con processionaria
+Porta la confezione o una foto. Non provocare il vomito di tua iniziativa (niente sale o acqua ossigenata).
+Sforzo a urinare senza risultato, o nessuna pipì da 24 ore
+Nel maschio un blocco urinario è un'emergenza.
+Cucciolo con vomito e diarrea, soprattutto se non vaccinato
+Va esclusa la parvovirosi; la disidratazione è rapida.
+Cucciolo di taglia toy debole, tremante o che non risponde
+Possibile ipoglicemia: solo se è cosciente, un po' di miele sulle gengive, poi subito dal veterinario.
+Femmina non sterilizzata abbattuta, che beve molto o ha perdite dalla vulva, settimane dopo il calore
+Possibile piometra (infezione dell'utero).
+Parto difficile
+Oltre 30 minuti di contrazioni forti senza cucciolo, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere, gravidanza oltre i 70 giorni.
+Cagna che allatta e trema, barcolla o è agitata
+Possibile eclampsia (calcio basso).
+Traumi (investimento, caduta, morsi), sanguinamenti, feci nere
+Anche se sembra stare bene: le lesioni interne non si vedono.
+Dolore intenso, guaisce se toccato, non si alza
+Non dare farmaci per persone: molti sono tossici per il cane.
+Ha ingerito un oggetto, ossa, pannocchie, batterie o farmaci
+Chiama prima di fare qualsiasi cosa.
+Reazione allergica grave: muso o palpebre gonfie, orticaria diffusa, vomito o fatica a respirare dopo puntura, farmaco o vaccino
+Il gonfiore del muso può chiudere le vie respiratorie: vai subito.
+Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
+Impedisci che si gratti; non mettere colliri di tua iniziativa.
+Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
+Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
+Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Emergenze
+## cane senza numeri
+Aggiungi i numeri utili
+Nel profilo del cane inserisci il telefono del tuo veterinario e di un pronto soccorso h24: li troverai qui.
+Cerca pronto soccorso veterinario vicino a me
+Apre la mappa
+Sospetto avvelenamento
+Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.
+Cosa dire al telefono
+• Farmaci in corso: nessuno.
+• Cosa è successo e da quando; come respira; colore delle gengive.
+Vai subito dal veterinario se…
+Addome gonfio, conati a vuoto, agitazione
+Possibile torsione/dilatazione dello stomaco: ogni minuto conta.
+Fatica a respirare, respiro rumoroso, lingua o gengive blu
+Tienilo calmo e al fresco durante il trasporto.
+Gengive pallide o bianche, collasso, debolezza improvvisa
+Può indicare un'emorragia interna o uno shock.
+Convulsioni oltre 5 minuti, oppure 2 o più in 24 ore
+Non mettere le mani in bocca; allontana gli oggetti; cronometra.
+Colpo di calore: ansima molto, barcolla, gengive rosso scuro
+Raffreddalo subito: bagnalo abbondantemente con acqua fresca o fredda e fai aria. Non coprirlo con asciugamani bagnati. Poi vai subito dal veterinario continuando a raffreddarlo in auto, anche se sembra riprendersi.
+Sospetto avvelenamento, morso di vipera, contatto con processionaria
+Porta la confezione o una foto. Non provocare il vomito di tua iniziativa (niente sale o acqua ossigenata).
+Sforzo a urinare senza risultato, o nessuna pipì da 24 ore
+Nel maschio un blocco urinario è un'emergenza.
+Cucciolo con vomito e diarrea, soprattutto se non vaccinato
+Va esclusa la parvovirosi; la disidratazione è rapida.
+Cucciolo di taglia toy debole, tremante o che non risponde
+Possibile ipoglicemia: solo se è cosciente, un po' di miele sulle gengive, poi subito dal veterinario.
+Femmina non sterilizzata abbattuta, che beve molto o ha perdite dalla vulva, settimane dopo il calore
+Possibile piometra (infezione dell'utero).
+Parto difficile
+Oltre 30 minuti di contrazioni forti senza cucciolo, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere, gravidanza oltre i 70 giorni.
+Cagna che allatta e trema, barcolla o è agitata
+Possibile eclampsia (calcio basso).
+Traumi (investimento, caduta, morsi), sanguinamenti, feci nere
+Anche se sembra stare bene: le lesioni interne non si vedono.
+Dolore intenso, guaisce se toccato, non si alza
+Non dare farmaci per persone: molti sono tossici per il cane.
+Ha ingerito un oggetto, ossa, pannocchie, batterie o farmaci
+Chiama prima di fare qualsiasi cosa.
+Reazione allergica grave: muso o palpebre gonfie, orticaria diffusa, vomito o fatica a respirare dopo puntura, farmaco o vaccino
+Il gonfiore del muso può chiudere le vie respiratorie: vai subito.
+Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
+Impedisci che si gratti; non mettere colliri di tua iniziativa.
+Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
+Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
+Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Emergenze
+## cane in Svizzera
+Aggiungi i numeri utili
+Nel profilo del cane inserisci il telefono del tuo veterinario e di un pronto soccorso h24: li troverai qui.
+Cerca pronto soccorso veterinario vicino a me
+Apre la mappa
+Sospetto avvelenamento
+Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell'etichetta.
+Cosa dire al telefono
+• Farmaci in corso: nessuno.
+• Cosa è successo e da quando; come respira; colore delle gengive.
+Vai subito dal veterinario se…
+Addome gonfio, conati a vuoto, agitazione
+Possibile torsione/dilatazione dello stomaco: ogni minuto conta.
+Fatica a respirare, respiro rumoroso, lingua o gengive blu
+Tienilo calmo e al fresco durante il trasporto.
+Gengive pallide o bianche, collasso, debolezza improvvisa
+Può indicare un'emorragia interna o uno shock.
+Convulsioni oltre 5 minuti, oppure 2 o più in 24 ore
+Non mettere le mani in bocca; allontana gli oggetti; cronometra.
+Colpo di calore: ansima molto, barcolla, gengive rosso scuro
+Raffreddalo subito: bagnalo abbondantemente con acqua fresca o fredda e fai aria. Non coprirlo con asciugamani bagnati. Poi vai subito dal veterinario continuando a raffreddarlo in auto, anche se sembra riprendersi.
+Sospetto avvelenamento, morso di vipera, contatto con processionaria
+Porta la confezione o una foto. Non provocare il vomito di tua iniziativa (niente sale o acqua ossigenata).
+Sforzo a urinare senza risultato, o nessuna pipì da 24 ore
+Nel maschio un blocco urinario è un'emergenza.
+Cucciolo con vomito e diarrea, soprattutto se non vaccinato
+Va esclusa la parvovirosi; la disidratazione è rapida.
+Cucciolo di taglia toy debole, tremante o che non risponde
+Possibile ipoglicemia: solo se è cosciente, un po' di miele sulle gengive, poi subito dal veterinario.
+Femmina non sterilizzata abbattuta, che beve molto o ha perdite dalla vulva, settimane dopo il calore
+Possibile piometra (infezione dell'utero).
+Parto difficile
+Oltre 30 minuti di contrazioni forti senza cucciolo, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere, gravidanza oltre i 70 giorni.
+Cagna che allatta e trema, barcolla o è agitata
+Possibile eclampsia (calcio basso).
+Traumi (investimento, caduta, morsi), sanguinamenti, feci nere
+Anche se sembra stare bene: le lesioni interne non si vedono.
+Dolore intenso, guaisce se toccato, non si alza
+Non dare farmaci per persone: molti sono tossici per il cane.
+Ha ingerito un oggetto, ossa, pannocchie, batterie o farmaci
+Chiama prima di fare qualsiasi cosa.
+Reazione allergica grave: muso o palpebre gonfie, orticaria diffusa, vomito o fatica a respirare dopo puntura, farmaco o vaccino
+Il gonfiore del muso può chiudere le vie respiratorie: vai subito.
+Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
+Impedisci che si gratti; non mettere colliri di tua iniziativa.
+Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
+Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
+Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Emergenze
+## cane con numeri
+Chiama il mio veterinario
+Dott. Rossi · 055 000000
+Pronto soccorso veterinario h24
+055 111111
+Cerca pronto soccorso veterinario vicino a me
+Apre la mappa
+Sospetto avvelenamento
+Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.
+Cosa dire al telefono
+• Farmaci in corso: nessuno.
+• Patologie note: artrosi.
+• Allergie: pollo.
+• Cosa è successo e da quando; come respira; colore delle gengive.
+Vai subito dal veterinario se…
+Addome gonfio, conati a vuoto, agitazione
+Possibile torsione/dilatazione dello stomaco: ogni minuto conta.
+Fatica a respirare, respiro rumoroso, lingua o gengive blu
+Tienilo calmo e al fresco durante il trasporto.
+Gengive pallide o bianche, collasso, debolezza improvvisa
+Può indicare un'emorragia interna o uno shock.
+Convulsioni oltre 5 minuti, oppure 2 o più in 24 ore
+Non mettere le mani in bocca; allontana gli oggetti; cronometra.
+Colpo di calore: ansima molto, barcolla, gengive rosso scuro
+Raffreddalo subito: bagnalo abbondantemente con acqua fresca o fredda e fai aria. Non coprirlo con asciugamani bagnati. Poi vai subito dal veterinario continuando a raffreddarlo in auto, anche se sembra riprendersi.
+Sospetto avvelenamento, morso di vipera, contatto con processionaria
+Porta la confezione o una foto. Non provocare il vomito di tua iniziativa (niente sale o acqua ossigenata).
+Sforzo a urinare senza risultato, o nessuna pipì da 24 ore
+Nel maschio un blocco urinario è un'emergenza.
+Cucciolo con vomito e diarrea, soprattutto se non vaccinato
+Va esclusa la parvovirosi; la disidratazione è rapida.
+Cucciolo di taglia toy debole, tremante o che non risponde
+Possibile ipoglicemia: solo se è cosciente, un po' di miele sulle gengive, poi subito dal veterinario.
+Femmina non sterilizzata abbattuta, che beve molto o ha perdite dalla vulva, settimane dopo il calore
+Possibile piometra (infezione dell'utero).
+Parto difficile
+Oltre 30 minuti di contrazioni forti senza cucciolo, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere, gravidanza oltre i 70 giorni.
+Cagna che allatta e trema, barcolla o è agitata
+Possibile eclampsia (calcio basso).
+Traumi (investimento, caduta, morsi), sanguinamenti, feci nere
+Anche se sembra stare bene: le lesioni interne non si vedono.
+Dolore intenso, guaisce se toccato, non si alza
+Non dare farmaci per persone: molti sono tossici per il cane.
+Ha ingerito un oggetto, ossa, pannocchie, batterie o farmaci
+Chiama prima di fare qualsiasi cosa.
+Reazione allergica grave: muso o palpebre gonfie, orticaria diffusa, vomito o fatica a respirare dopo puntura, farmaco o vaccino
+Il gonfiore del muso può chiudere le vie respiratorie: vai subito.
+Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
+Impedisci che si gratti; non mettere colliri di tua iniziativa.
+Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
+Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
+Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Emergenze

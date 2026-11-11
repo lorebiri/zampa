@@ -1,3 +1,4 @@
+import '../l10n/clinical_text.dart';
 import '../models.dart';
 import 'bio_params.dart';
 import 'modules.dart';
@@ -10,13 +11,12 @@ import 'prevention.dart';
 enum AlertLevel { info, attenzione, oggi, subito }
 
 extension AlertLevelAction on AlertLevel {
-  String? get action => switch (this) {
-    AlertLevel.subito => 'Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.',
-    AlertLevel.oggi => 'Contatta il veterinario oggi stesso.',
-    AlertLevel.attenzione =>
-      'Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.',
-    AlertLevel.info => 'Parlane alla prossima visita.',
-  };
+  String? get action => ClinicalText(switch (this) {
+    AlertLevel.subito => 'ALR-LIV-001',
+    AlertLevel.oggi => 'ALR-LIV-002',
+    AlertLevel.attenzione => 'ALR-LIV-003',
+    AlertLevel.info => 'ALR-LIV-004',
+  }).text;
 }
 
 class HealthAlert {
@@ -26,8 +26,30 @@ class HealthAlert {
     this.message, {
     this.action,
     this.rank = 50,
+    this.id = '',
   });
+
+  /// Avviso del catalogo clinico: titolo, testo e frase d'azione vengono
+  /// dal catalogo (lib/l10n/app_it.arb) con l'ID di [t].
+  factory HealthAlert.fromCatalog(
+    AlertLevel level,
+    ClinicalText t, {
+    String? action,
+    int rank = 50,
+  }) => HealthAlert(
+    level,
+    t.title,
+    t.text,
+    action: action ?? t.action,
+    rank: rank,
+    id: t.id,
+  );
+
   final AlertLevel level;
+
+  /// ID del catalogo clinico (es. ALR-URI-001); '' per gli avvisi creati
+  /// fuori dal motore delle regole.
+  final String id;
   final String title;
   final String message;
 
@@ -42,10 +64,6 @@ class HealthAlert {
     return (a == null || a.isEmpty) ? null : a;
   }
 }
-
-const _confusion =
-    'Lo sforzo per urinare e quello per defecare si confondono facilmente: '
-    'se non sei sicuro, consideralo un problema urinario.';
 
 /// Segnali d'allarme ricavati dai dati registrati. Non sono diagnosi: fanno
 /// notare un cambiamento e dicono quando sentire il veterinario. Soglie e
@@ -63,11 +81,13 @@ class AlertEngine {
     final out = <HealthAlert>[];
     void add(
       AlertLevel l,
-      String t,
-      String m, {
+      String id, {
+      Map<String, Object> p = const {},
       String? action,
       int rank = 50,
-    }) => out.add(HealthAlert(l, t, m, action: action, rank: rank));
+    }) => out.add(
+      HealthAlert.fromCatalog(l, AlertText(id, p), action: action, rank: rank),
+    );
     final mine =
         logs.where((l) => l.dogId == dog.id && !l.time.isAfter(now)).toList()
           ..sort((a, b) => a.time.compareTo(b.time));
@@ -112,28 +132,11 @@ class AlertEngine {
     final strain12 = h12.where(strain).length;
     final strain24 = h24.where(strain).length;
     if (male && strain12 >= 1) {
-      add(
-        AlertLevel.subito,
-        'Sforzo a urinare: possibile urgenza',
-        'Se $name si mette in posizione e non esce urina, o escono solo poche '
-            'gocce, contatta subito il veterinario o un pronto soccorso '
-            'veterinario, anche di notte. Nel maschio un blocco delle vie '
-            'urinarie è un\'emergenza: non aspettare il giorno dopo. $_confusion',
-      );
+      add(AlertLevel.subito, 'ALR-URI-001', p: {'name': name});
     } else if (!male && strain24 >= 2) {
-      add(
-        AlertLevel.oggi,
-        'Sforzo a urinare ripetuto',
-        'Più tentativi con sforzo o poche gocce in 24 ore. Contatta il '
-            'veterinario oggi stesso; subito se non esce urina. $_confusion',
-      );
+      add(AlertLevel.oggi, 'ALR-URI-002');
     } else if (!male && strain24 == 1) {
-      add(
-        AlertLevel.attenzione,
-        'Pipì con sforzo o a gocce',
-        'Osserva le prossime pipì. Se non riesce a urinare affatto, contatta '
-            'subito il veterinario. $_confusion',
-      );
+      add(AlertLevel.attenzione, 'ALR-URI-003');
     }
 
     // 2. Nessuna pipì da troppo tempo.
@@ -151,19 +154,15 @@ class AlertEngine {
       if (puppy && !asleep && awakeHours >= puppyLimit && hours < 72) {
         add(
           AlertLevel.subito,
-          'Cucciolo senza pipì da ${awakeHours.round()} ore da sveglio',
-          'Un cucciolo sveglio urina molto più spesso. Se non è una '
-              'registrazione mancante, contatta subito il veterinario. Se '
-              'escono solo gocce, conta come se non avesse urinato.',
+          'ALR-URI-004',
+          p: {'hours': '${awakeHours.round()}'},
           rank: 5,
         );
       } else if (hours >= 24 && hours < 72) {
         add(
           AlertLevel.subito,
-          'Nessuna pipì da ${hours.round()} ore',
-          'Se $name non ha davvero urinato (e non è solo una registrazione '
-              'mancante), è un\'urgenza, specie nei maschi. Se escono solo '
-              'gocce, conta come se non avesse urinato.',
+          'ALR-URI-005',
+          p: {'hours': '${hours.round()}', 'name': name},
           rank: 5,
         );
       } else if (hours >= 12 && hours < 24 && (awakeFor4h || postOp)) {
@@ -177,14 +176,11 @@ class AlertEngine {
         );
         add(
           strainMale ? AlertLevel.subito : AlertLevel.attenzione,
-          'Nessuna pipì registrata da ${hours.round()} ore',
-          '${spine ? 'Dopo una chirurgia della colonna, se non riesce a urinare '
-                        'da solo chiama il veterinario oggi: alcuni cani devono '
-                        'essere aiutati a svuotare la vescica. ' : ''}'
-              'Portalo fuori e osserva: se prova a urinare senza riuscirci, è '
-              'abbattuto o vomita, contatta subito il veterinario. Se non '
-              'urina entro 24 ore in totale è comunque un\'urgenza.',
-          action: '',
+          'ALR-URI-006',
+          p: {'hours': '${hours.round()}', 'spine': yesNo(spine)},
+          // v1.0-rc (ricerca/15 §3.1 punto 5): quando sale a SUBITO mostra
+          // la frase d'azione del livello; altrimenti nessuna.
+          action: strainMale ? null : '',
           rank: 6,
         );
       }
@@ -200,28 +196,11 @@ class AlertEngine {
         (l) => l.type == LogType.vomito || hasSign(l, Sign.abbattimento),
       );
       if (vomitOrDown) {
-        add(
-          AlertLevel.oggi,
-          'Sangue nelle urine con malessere',
-          'Sangue nelle urine insieme a vomito o abbattimento richiede una '
-              'visita oggi stesso.',
-        );
+        add(AlertLevel.oggi, 'ALR-URI-007');
       } else if (inHeat && strain24 == 0) {
-        add(
-          AlertLevel.info,
-          'Sangue durante il calore',
-          'In calore è normale una perdita di sangue dalla vulva. Se il '
-              'sangue è nelle urine stesse, se si sforza o se il calore dura '
-              'più di 3-4 settimane, senti il veterinario.',
-        );
+        add(AlertLevel.info, 'ALR-URI-008');
       } else {
-        add(
-          AlertLevel.attenzione,
-          'Sangue nelle urine',
-          'Va sempre valutato dal veterinario entro 24-48 ore: può essere un '
-              'segno di cistite o calcoli (solo il veterinario può dirlo). '
-              'Se possibile raccogli un campione di urina.',
-        );
+        add(AlertLevel.attenzione, 'ALR-URI-009');
       }
     }
 
@@ -235,10 +214,8 @@ class AlertEngine {
         (raw2h.length >= 3 && withSigns >= 1)) {
       add(
         AlertLevel.attenzione,
-        'Pipì piccole e frequenti',
-        '${raw2h.length} pipì in 2 ore. Può essere un segno di cistite (solo '
-            'il veterinario può dirlo): sentilo entro 24-48 ore, subito se c\'è '
-            'sforzo senza urina.',
+        'ALR-URI-010',
+        p: {'count': '${raw2h.length}'},
       );
     }
 
@@ -262,23 +239,10 @@ class AlertEngine {
           l.type == LogType.addomeGonfio,
     );
     if (gdv) {
-      add(
-        AlertLevel.subito,
-        'Conati a vuoto o addome gonfio',
-        'Conati senza riuscire a vomitare, addome gonfio, agitazione e '
-            'salivazione possono indicare una torsione/dilatazione dello '
-            'stomaco: è un\'emergenza in cui ogni minuto conta.',
-        rank: 0,
-      );
+      add(AlertLevel.subito, 'ALR-GI-001', rank: 0);
     }
     if (h24.any((l) => l.type == LogType.collasso)) {
-      add(
-        AlertLevel.subito,
-        'Collasso o svenimento',
-        'Un collasso o uno svenimento va sempre valutato subito, anche se '
-            'si è ripreso: può dipendere da cuore, emorragia o calo di zuccheri.',
-        rank: 1,
-      );
+      add(AlertLevel.subito, 'ALR-NEU-001', rank: 1);
     }
     final vomit = vomits24.isNotEmpty, diarrhea = diarrhea24 > 0;
     final puppyGI =
@@ -287,12 +251,7 @@ class AlertEngine {
     if (puppyGI) {
       add(
         bloodStool || downEvent24 ? AlertLevel.subito : AlertLevel.oggi,
-        'Cucciolo con vomito o diarrea',
-        'Nei cuccioli vomito e diarrea insieme, o con abbattimento o '
-            'inappetenza, richiedono una visita oggi stesso: la disidratazione '
-            'è rapida e va esclusa la parvovirosi, soprattutto se non ha '
-            'completato i vaccini. Subito se è molto abbattuto, ha sangue nelle '
-            'feci o non trattiene l\'acqua.',
+        'ALR-GI-002',
         rank: 10,
       );
     }
@@ -300,83 +259,39 @@ class AlertEngine {
     if (diabeticGI) {
       add(
         vomit && down24 ? AlertLevel.subito : AlertLevel.oggi,
-        'Diabetico con vomito o abbattimento',
-        'Non fare l\'insulina senza aver sentito il veterinario. Vomito e '
-            'abbattimento in un cane diabetico vanno valutati oggi stesso; '
-            'subito se è molto debole, respira in modo strano o non beve.',
+        'ALR-DIA-001',
         rank: 8,
       );
     }
     if (activeDrugs.contains(DrugEffect.trilostano) &&
         (vomit || diarrhea || down24 || inapp24)) {
-      add(
-        AlertLevel.subito,
-        'Malessere durante la terapia per il Cushing',
-        'Durante la terapia per il Cushing questi segni possono indicare un '
-            'calo eccessivo del cortisolo: sospendi la prossima dose solo se te '
-            'lo dice il veterinario e chiamalo subito.',
-        rank: 9,
-      );
+      add(AlertLevel.subito, 'ALR-FAR-001', rank: 9);
     }
     if (onNsaidOrSteroid && !vomit && (inapp24 || down24)) {
-      add(
-        AlertLevel.oggi,
-        'Non mangia o è abbattuto durante antinfiammatori/cortisone',
-        'Può essere un effetto collaterale sullo stomaco: chiama il '
-            'veterinario oggi. Non sospendere né aggiungere farmaci di tua '
-            'iniziativa.',
-      );
+      add(AlertLevel.oggi, 'ALR-FAR-002');
     }
     if (activeDrugs.contains(DrugEffect.fans) &&
         activeDrugs.contains(DrugEffect.cortisonico)) {
-      add(
-        AlertLevel.attenzione,
-        'Antinfiammatori e cortisone insieme',
-        'Antinfiammatori e cortisone insieme aumentano il rischio di ulcere: '
-            'verifica col veterinario che sia voluto.',
-      );
+      add(AlertLevel.attenzione, 'ALR-FAR-003');
     }
     final bloodVomit = vomits24.any((l) => hasSign(l, Sign.sangue));
     if (bloodVomit) {
-      add(
-        AlertLevel.oggi,
-        'Vomito con sangue',
-        'Sangue o materiale scuro "a fondi di caffè" nel vomito: visita oggi '
-            'stesso; subito se è abbattuto o ha le gengive pallide.',
-      );
+      add(AlertLevel.oggi, 'ALR-GI-003');
     }
     final tiny = puppy || dog.weightKg < 5;
     if (onNsaidOrSteroid && vomits24.isNotEmpty) {
-      add(
-        AlertLevel.subito,
-        'Vomito durante la terapia con antinfiammatori o cortisone',
-        'Chiama subito il veterinario: può essere un effetto collaterale '
-            'sullo stomaco. Non sospendere né aggiungere farmaci di tua '
-            'iniziativa.',
-      );
+      add(AlertLevel.subito, 'ALR-FAR-004');
     } else if (!bloodVomit && !gdv && !puppyGI && !diabeticGI) {
       if (tiny && vomits24.length >= 2) {
-        add(
-          AlertLevel.oggi,
-          'Vomito ripetuto in un cane piccolo',
-          'Nei cuccioli e nei cani sotto i 5 kg disidratazione e ipoglicemia '
-              'arrivano in fretta.',
-        );
+        add(AlertLevel.oggi, 'ALR-GI-004');
       } else if (vomits24.length >= 3 || (vomits24.isNotEmpty && depressed24)) {
         add(
           AlertLevel.attenzione,
-          'Vomito ripetuto',
-          '${vomits24.length} episodi in 24 ore. Senti il veterinario entro '
-              '24 ore; subito se non trattiene nemmeno l\'acqua o è molto '
-              'abbattuto.',
+          'ALR-GI-005',
+          p: {'count': '${vomits24.length}'},
         );
       } else if (vomits24.length == 1) {
-        add(
-          AlertLevel.info,
-          'Ha vomitato una volta',
-          'Osserva: se si ripete, se è abbattuto o compaiono altri segni, '
-              'senti il veterinario.',
-        );
+        add(AlertLevel.info, 'ALR-GI-006');
       }
     }
 
@@ -385,54 +300,27 @@ class AlertEngine {
     if (black) {
       add(
         onNsaidOrSteroid ? AlertLevel.subito : AlertLevel.oggi,
-        'Feci nere',
-        onNsaidOrSteroid
-            ? 'Feci nere durante una terapia con antinfiammatori o cortisone: '
-                  'chiama subito il veterinario, potrebbe trattarsi di un '
-                  'sanguinamento dello stomaco.'
-            : 'Feci nere come catrame possono indicare sangue digerito: '
-                  'serve una visita oggi.',
+        onNsaidOrSteroid ? 'ALR-GI-007a' : 'ALR-GI-007b',
       );
     }
     if (bloodStool) {
       if (puppy && !puppyGI) {
-        add(
-          AlertLevel.oggi,
-          'Cucciolo con sangue nelle feci',
-          'Nei cuccioli la diarrea con sangue richiede una visita oggi stesso '
-              '(va esclusa la parvovirosi, soprattutto se non ha completato i '
-              'vaccini).',
-        );
+        add(AlertLevel.oggi, 'ALR-GI-008');
       } else if (vomits24.isNotEmpty || depressed24) {
-        add(
-          AlertLevel.oggi,
-          'Sangue nelle feci con vomito o abbattimento',
-          'Questa combinazione richiede una visita oggi stesso.',
-        );
+        add(AlertLevel.oggi, 'ALR-GI-009');
       } else {
-        add(
-          AlertLevel.attenzione,
-          'Sangue rosso nelle feci',
-          'Se si ripete, se c\'è diarrea abbondante o se cambia il suo '
-              'comportamento, senti il veterinario entro 24-48 ore.',
-        );
+        add(AlertLevel.attenzione, 'ALR-GI-010');
       }
     }
     if (puppy && diarrhea24 >= 2 && !bloodStool && !puppyGI) {
-      add(
-        AlertLevel.oggi,
-        'Cucciolo con diarrea',
-        'Nei cuccioli la disidratazione è rapida e va esclusa la parvovirosi: '
-            'subito se vomita o è abbattuto.',
-      );
+      add(AlertLevel.oggi, 'ALR-GI-011');
     } else if (!puppy &&
         !diabeticGI &&
         (diarrhea24 >= 3 || (diarrhea24 >= 1 && vomits24.isNotEmpty))) {
       add(
         AlertLevel.attenzione,
-        'Diarrea${vomits24.isNotEmpty ? ' e vomito' : ''} nelle ultime 24 ore',
-        'Assicurati che beva. Se persiste oltre 24-48 ore, se è abbattuto o '
-            'vomita ripetutamente, senti il veterinario.',
+        'ALR-GI-012',
+        p: {'vomit': yesNo(vomits24.isNotEmpty)},
       );
     }
 
@@ -456,10 +344,8 @@ class AlertEngine {
             (puppy && h >= 36) || (!puppy && h >= 72) || vomits24.isNotEmpty;
         add(
           urgent ? AlertLevel.oggi : AlertLevel.attenzione,
-          'Nessuna cacca da ${h.round()} ore',
-          'Se non è una registrazione mancante: controlla che beva e si muova. '
-              'Se si sforza senza risultato, vomita o è abbattuto, senti il '
-              'veterinario. $_confusion',
+          'ALR-GI-013',
+          p: {'hours': '${h.round()}'},
         );
       }
     }
@@ -489,12 +375,12 @@ class AlertEngine {
       moreUrine = true;
       add(
         AlertLevel.attenzione,
-        'Fa pipì più spesso del solito',
-        'Negli ultimi 3 giorni ${last3.toStringAsFixed(1)} uscite al giorno '
-            'contro ${base.toStringAsFixed(1)} abituali. Può essere un segno '
-            'di infezione urinaria, diabete o problemi renali (solo il '
-            'veterinario può dirlo): parlane entro qualche giorno.'
-            '${Modules.diabetic(dog, records) ? ' In un cane diabetico segnalalo al veterinario: la terapia potrebbe andare rivista.' : ''}',
+        'ALR-URI-011',
+        p: {
+          'recent': last3.toStringAsFixed(1),
+          'usual': base.toStringAsFixed(1),
+          'diabetic': yesNo(Modules.diabetic(dog, records)),
+        },
       );
     }
 
@@ -514,22 +400,9 @@ class AlertEngine {
           waterByDay.values.reduce((a, b) => a + b) / waterByDay.length;
       if (mean > Nutrition.polydipsiaThresholdMl(dog)) {
         drinksTooMuch = true;
-        add(
-          AlertLevel.attenzione,
-          'Beve molto',
-          'In media ${mean.round()} ml al giorno, oltre i 100 ml/kg. La sete '
-              'eccessiva può essere un segno di malattie da approfondire '
-              '(solo il veterinario può dirlo). Non ridurre l\'acqua: parlane '
-              'con il veterinario.',
-        );
+        add(AlertLevel.attenzione, 'ALR-URI-012', p: {'ml': '${mean.round()}'});
       } else if (dog.diet == DietType.secco && mean < dog.weightKg * 20) {
-        add(
-          AlertLevel.attenzione,
-          'Beve poco',
-          'Con le crocchette ${mean.round()} ml al giorno sono pochi (meno di '
-              '20 ml/kg). Se non è una registrazione incompleta e mangia poco o '
-              'è abbattuto, senti il veterinario.',
-        );
+        add(AlertLevel.attenzione, 'ALR-URI-013', p: {'ml': '${mean.round()}'});
       }
     }
 
@@ -553,15 +426,7 @@ class AlertEngine {
                 l.type == LogType.abbattimento || l.type == LogType.inappetenza,
           );
       if (days >= 14 && days <= 84 && signs) {
-        add(
-          AlertLevel.oggi,
-          'Attenzione all\'utero (piometra)',
-          'In una femmina non sterilizzata, nelle settimane dopo il calore, '
-              'sete e pipì aumentate, perdite dalla vulva, vomito o '
-              'abbattimento possono indicare un\'infezione dell\'utero '
-              '(piometra), che è un\'urgenza.',
-          rank: 12,
-        );
+        add(AlertLevel.oggi, 'ALR-REP-001', rank: 12);
       }
     } else if (!male &&
         !dog.neutered &&
@@ -579,12 +444,8 @@ class AlertEngine {
       if (n >= 1) {
         add(
           n >= 2 ? AlertLevel.oggi : AlertLevel.attenzione,
-          'Femmina non sterilizzata: attenzione all\'utero',
-          'Se è stata in calore negli ultimi 2-3 mesi può trattarsi di '
-              'un\'infezione dell\'utero (piometra), che è un\'urgenza: '
-              '${n >= 2 ? 'contatta il veterinario oggi stesso' : 'osservala e senti il veterinario se compaiono altri segni'}. '
-              'Registra i calori nella sezione Riproduzione: Zampa potrà '
-              'avvisarti meglio.',
+          'ALR-REP-002',
+          p: {'urgent': yesNo(n >= 2)},
           rank: 12,
         );
       }
@@ -596,17 +457,7 @@ class AlertEngine {
           .where((l) => l.indoor && now.difference(l.time).inDays <= 7)
           .length;
       if (n >= 2) {
-        add(
-          AlertLevel.attenzione,
-          'Pipì in casa ripetute',
-          '$n incidenti in 7 giorni in un cane adulto. Le cause possibili sono '
-              'infezione urinaria, aumento della sete, incontinenza (frequente '
-              'nelle femmine sterilizzate di taglia media e grande), declino '
-              'cognitivo nell\'anziano, oppure intervalli troppo lunghi tra le '
-              'uscite. Vale la pena parlarne con il veterinario. Se le perdite '
-              'avvengono mentre dorme o riposa, registrale come "Perdita di '
-              'urina a riposo".',
-        );
+        add(AlertLevel.attenzione, 'ALR-URI-014', p: {'count': '$n'});
       }
     }
 
@@ -623,13 +474,7 @@ class AlertEngine {
           orElse: () => lastW,
         );
         if (ref != lastW && lastW.kg <= ref.kg) {
-          add(
-            AlertLevel.attenzione,
-            'Il cucciolo non cresce',
-            'Un cucciolo dovrebbe aumentare di peso ogni settimana: se il peso '
-                'è fermo da 2 settimane o cala, senti il veterinario; subito se '
-                'mangia poco, vomita o ha diarrea.',
-          );
+          add(AlertLevel.attenzione, 'ALR-PES-001');
         }
       } else if (ageM >= 12) {
         final ref90 = w.firstWhere(
@@ -648,57 +493,35 @@ class AlertEngine {
             : lastW.date.difference(ref7.date).inDays / 7;
         final weekly = weeks > 0 ? (lastW.kg - ref7.kg) / ref7.kg / weeks : 0.0;
         if (dog.bodyCondition >= 7 && weekly < -0.02) {
-          add(
-            AlertLevel.attenzione,
-            'Sta dimagrendo troppo in fretta',
-            'Oltre il 2% a settimana: un dimagrimento troppo rapido non è '
-                'sano. Senti il veterinario per rivedere la dieta.',
-          );
+          add(AlertLevel.attenzione, 'ALR-PES-002');
         } else if (change90 <= -0.10 ||
             (stage == LifeStage.anziano && change90 <= -0.05)) {
           add(
             AlertLevel.attenzione,
-            'Calo di peso del ${(-change90 * 100).toStringAsFixed(0)}%',
-            'Un calo di peso non voluto merita una visita, soprattutto '
-                'nel cane anziano.',
+            'ALR-PES-003',
+            p: {'percent': (-change90 * 100).toStringAsFixed(0)},
           );
         } else if (change90 <= -0.05 && dog.bodyCondition < 7) {
           add(
             AlertLevel.info,
-            'Calo di peso del ${(-change90 * 100).toStringAsFixed(0)}%',
-            'Tienilo d\'occhio: se continua senza che tu abbia cambiato la '
-                'dieta, senti il veterinario.',
+            'ALR-PES-004',
+            p: {'percent': (-change90 * 100).toStringAsFixed(0)},
           );
         } else if (change90 >= 0.10) {
           add(
             AlertLevel.info,
-            'Aumento di peso del ${(change90 * 100).toStringAsFixed(0)}%',
-            'Controlla razione e snack nella sezione Nutrizione.',
+            'ALR-PES-005',
+            p: {'percent': (change90 * 100).toStringAsFixed(0)},
           );
         }
       }
     }
     if (ageM >= 12 && dog.bodyCondition <= 3) {
-      add(
-        AlertLevel.attenzione,
-        'Sottopeso',
-        'Prima di aumentare la razione fallo visitare, per escludere cause '
-            'mediche.',
-      );
+      add(AlertLevel.attenzione, 'ALR-PES-006');
     } else if (dog.bodyCondition >= 7) {
-      add(
-        AlertLevel.info,
-        'Sovrappeso',
-        'Body Condition Score ${dog.bodyCondition}/9: la razione in '
-            'Nutrizione è calcolata per un dimagrimento graduale. Prima di '
-            'iniziare fai visitare il cane.',
-      );
+      add(AlertLevel.info, 'ALR-PES-007', p: {'bcs': '${dog.bodyCondition}'});
     } else if (dog.bodyCondition == 6) {
-      add(
-        AlertLevel.info,
-        'Leggermente sovrappeso',
-        'Riduci gli snack e ricontrolla tra un mese.',
-      );
+      add(AlertLevel.info, 'ALR-PES-008');
     }
 
     // 14. Nuovi segni registrabili (revisione veterinaria 06, aggiunta 2).
@@ -716,24 +539,14 @@ class AlertEngine {
         .toList();
     if (ingest.isNotEmpty) {
       final last = ingest.last;
-      final what = last.note.isNotEmpty ? ': ${last.note}' : '';
+      final note = {'hasNote': yesNo(last.note.isNotEmpty), 'note': last.note};
       if (now.difference(last.time).inHours < 12) {
-        add(
-          AlertLevel.subito,
-          'Ha ingerito qualcosa$what',
-          'Chiama subito il veterinario o un centro antiveleni, anche se sta '
-              'bene. Non provocare il vomito di tua iniziativa. Tieni a portata '
-              'la confezione o una foto dell\'etichetta.',
-          rank: 3,
-        );
+        add(AlertLevel.subito, 'ALR-TOX-001', p: note, rank: 3);
       } else {
         add(
           AlertLevel.attenzione,
-          'Sorveglianza dopo un\'ingestione',
-          'Il ${last.time.day}/${last.time.month} ha ingerito$what. Alcuni '
-              'veleni (es. topicidi) danno sintomi dopo giorni: sangue dal naso '
-              'o dalle gengive, lividi, debolezza, vomito o pipì scarsa → subito '
-              'dal veterinario.',
+          'ALR-TOX-002',
+          p: {...note, 'date': '${last.time.day}/${last.time.month}'},
           action: '',
         );
       }
@@ -744,28 +557,11 @@ class AlertEngine {
     if (gums.any(
       (l) => hasSign(l, Sign.gengivePallide) || hasSign(l, Sign.gengiveBlu),
     )) {
-      add(
-        AlertLevel.subito,
-        'Gengive pallide o blu',
-        'Possono indicare un problema di circolazione, respirazione o '
-            'un\'emorragia: è un\'emergenza.',
-        rank: 2,
-      );
+      add(AlertLevel.subito, 'ALR-RES-001', rank: 2);
     } else if (gums.any((l) => hasSign(l, Sign.gengiveRosse))) {
-      add(
-        AlertLevel.subito,
-        'Gengive rosso scuro',
-        'Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono '
-            'indicare un colpo di calore o uno shock: raffreddalo con acqua '
-            '(vedi Emergenze) e vai subito dal veterinario.',
-        rank: 2,
-      );
+      add(AlertLevel.subito, 'ALR-RES-002', rank: 2);
     } else if (gums.any((l) => hasSign(l, Sign.gengiveGialle))) {
-      add(
-        AlertLevel.oggi,
-        'Gengive gialle',
-        'Il colore giallo (ittero) va valutato dal veterinario oggi stesso.',
-      );
+      add(AlertLevel.oggi, 'ALR-RES-003');
     }
 
     // Respiro nel sonno (ACVIM 2019, 07 N14) e tosse.
@@ -791,28 +587,14 @@ class AlertEngine {
           (cardiac || dyspnea || blueGums || (prev30min && prev.value! > 40))) {
         add(
           AlertLevel.subito,
-          'Respira molto veloce nel sonno (${rate.round()}/min)',
-          'Oltre 40 respiri al minuto a riposo: possibile difficoltà '
-              'respiratoria o cardiaca.',
+          'ALR-RES-004',
+          p: {'rate': '${rate.round()}'},
           rank: 1,
         );
       } else if (rate > 40) {
-        add(
-          AlertLevel.oggi,
-          'Respiri nel sonno oltre 40/min',
-          'Rimisura tra 15-30 minuti mentre dorme tranquillo. Se resta sopra '
-              '40, o respira con fatica a bocca aperta, vai subito dal '
-              'veterinario.',
-          rank: 4,
-        );
+        add(AlertLevel.oggi, 'ALR-RES-005', rank: 4);
       } else if (rate > 30 && prevRecent && prev.value! > 30) {
-        add(
-          AlertLevel.oggi,
-          'Respiri nel sonno sopra 30/min',
-          'Due misure di fila sopra 30 respiri al minuto: segnalalo al '
-              'veterinario oggi, soprattutto se ha una malattia di cuore.',
-          rank: 4,
-        );
+        add(AlertLevel.oggi, 'ALR-RES-006', rank: 4);
       } else {
         double avg(int fromDays, int toDays) {
           final v = breaths
@@ -829,10 +611,8 @@ class AlertEngine {
         if (week > 30 && month > 0 && week >= month * 1.25) {
           add(
             AlertLevel.oggi,
-            'Respiri nel sonno in aumento',
-            'Media della settimana ${week.round()}/min contro '
-                '${month.round()}/min del mese precedente: segnalalo al '
-                'veterinario oggi.',
+            'ALR-RES-007',
+            p: {'week': '${week.round()}', 'month': '${month.round()}'},
           );
         }
       }
@@ -840,13 +620,7 @@ class AlertEngine {
     final coughs = mine.where((l) => l.type == LogType.tosse).toList();
     final cavalier = dog.breed.toLowerCase().contains('cavalier');
     if (dyspnea) {
-      add(
-        AlertLevel.subito,
-        'Fatica a respirare',
-        'Respiro affannoso a riposo, bocca aperta o lingua scura: '
-            'tienilo calmo e al fresco e vai subito dal veterinario.',
-        rank: 1,
-      );
+      add(AlertLevel.subito, 'ALR-RES-008', rank: 1);
     } else if (coughs.isNotEmpty &&
         now.difference(coughs.last.time).inHours <= 24) {
       final recent = coughs
@@ -854,25 +628,11 @@ class AlertEngine {
           .toList();
       final spanDays = now.difference(recent.first.time).inDays;
       if (cardiac) {
-        add(
-          AlertLevel.oggi,
-          'Tosse in un cane con malattia di cuore',
-          'Nei cardiopatici la tosse va segnalata al veterinario oggi.',
-        );
+        add(AlertLevel.oggi, 'ALR-RES-009');
       } else if (cavalier) {
-        add(
-          AlertLevel.attenzione,
-          'Tosse in un Cavalier King',
-          'Il Cavalier è predisposto alla malattia della valvola mitrale: '
-              'segnala la tosse al veterinario e conta i respiri nel sonno.',
-        );
+        add(AlertLevel.attenzione, 'ALR-RES-010');
       } else if (spanDays >= 3 || down24) {
-        add(
-          AlertLevel.attenzione,
-          'Tosse da più giorni',
-          'Tosse che dura da più di 3 giorni o con abbattimento: senti il '
-              'veterinario entro 24-48 ore. Evita il contatto con altri cani.',
-        );
+        add(AlertLevel.attenzione, 'ALR-RES-011');
       }
     }
 
@@ -890,25 +650,17 @@ class AlertEngine {
       if (g < 60) {
         add(
           AlertLevel.subito,
-          'Glicemia bassa (${g.round()} mg/dL)',
-          'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio '
-              'sulle gengive (mai liquidi in bocca a un cane incosciente) e '
-              'chiama subito il veterinario. Non fare la prossima insulina '
-              'senza averlo sentito.',
+          'ALR-DIA-002',
+          p: {'value': '${g.round()}'},
           rank: 2,
         );
       } else if (g < 80) {
-        add(
-          AlertLevel.oggi,
-          'Glicemia al limite basso (${g.round()} mg/dL)',
-          'Segnalala al veterinario oggi, prima della prossima insulina.',
-        );
+        add(AlertLevel.oggi, 'ALR-DIA-003', p: {'value': '${g.round()}'});
       } else if (g > 400) {
         add(
           vomit || down24 || inapp24 ? AlertLevel.oggi : AlertLevel.attenzione,
-          'Glicemia alta (${g.round()} mg/dL)',
-          'Segnalala al veterinario: la terapia potrebbe andare rivista. Se '
-              'vomita, è abbattuto o non mangia, oggi stesso.',
+          'ALR-DIA-004',
+          p: {'value': '${g.round()}'},
         );
       }
     }
@@ -929,11 +681,8 @@ class AlertEngine {
       if (gapH < minGap && now.difference(b.time).inHours <= 12) {
         add(
           AlertLevel.subito,
-          'Due dosi di insulina ravvicinate',
-          'Due dosi di insulina registrate a ${gapH.toStringAsFixed(1)} ore di '
-              'distanza. Se le hai fatte davvero, chiama subito il veterinario: '
-              'rischio di ipoglicemia. Se è un errore di registrazione, '
-              'cancellane una.',
+          'ALR-DIA-005',
+          p: {'hours': gapH.toStringAsFixed(1)},
           rank: 2,
         );
       }
@@ -955,53 +704,25 @@ class AlertEngine {
         );
     final tinyPuppy = puppy && (dog.weightKg < 5 || dog.ageInMonths(now) < 4);
     if (!male && lactating && (neuro.isNotEmpty || seiz24.isNotEmpty)) {
-      add(
-        AlertLevel.subito,
-        'Tremori in una cagna che allatta',
-        'Possibile eclampsia (calcio basso dopo il parto): è un\'emergenza. '
-            'Allontana i cuccioli e vai subito dal veterinario.',
-        rank: 1,
-      );
+      add(AlertLevel.subito, 'ALR-REP-003', rank: 1);
     } else if (tinyPuppy &&
         (neuro.isNotEmpty || seiz24.isNotEmpty || downEvent24)) {
-      add(
-        AlertLevel.subito,
-        'Cucciolo debole o tremante',
-        'Nei cuccioli piccoli può essere un\'ipoglicemia. Se è cosciente '
-            'strofina un po\' di miele sulle gengive, poi vai subito dal '
-            'veterinario.',
-        rank: 2,
-      );
+      add(AlertLevel.subito, 'ALR-NEU-002', rank: 2);
     } else if (seiz24.isNotEmpty) {
       final long = seiz24.any(
         (l) => (l.value ?? 0) >= 5 || hasSign(l, Sign.nonSiRiprende),
       );
       if (diabetic) {
-        add(
-          AlertLevel.subito,
-          'Convulsione in un cane diabetico',
-          'Può essere un\'ipoglicemia. Se è cosciente strofina un po\' di '
-              'miele o glucosio sulle gengive (mai liquidi in bocca a un cane '
-              'incosciente) e vai subito dal veterinario.',
-          rank: 3,
-        );
+        add(AlertLevel.subito, 'ALR-NEU-003', rank: 3);
       } else if (long || seiz24.length >= 2) {
         add(
           AlertLevel.subito,
-          long
-              ? 'Convulsione lunga o senza ripresa'
-              : '${seiz24.length} convulsioni in 24 ore',
-          'Crisi oltre 5 minuti, crisi a grappolo o mancata ripresa sono '
-          'un\'emergenza.',
+          long ? 'ALR-NEU-004a' : 'ALR-NEU-004b',
+          p: {'count': '${seiz24.length}'},
           rank: 3,
         );
       } else if (seizures.length == 1) {
-        add(
-          AlertLevel.oggi,
-          'Prima convulsione',
-          'Una prima crisi va sempre valutata dal veterinario. Annota durata '
-              'e cosa è successo prima e dopo.',
-        );
+        add(AlertLevel.oggi, 'ALR-NEU-005');
       }
     }
     final perMonth = Modules.seizuresPerMonth(logs, dog.id, now, months: 4);
@@ -1012,9 +733,8 @@ class AlertEngine {
       if (cur >= 2 && cur > prevAvg * 1.5 && seiz24.isEmpty) {
         add(
           AlertLevel.attenzione,
-          'Crisi più frequenti questo mese',
-          '$cur crisi questo mese contro una media di ${prevAvg.toStringAsFixed(1)}: '
-              'parlane con il veterinario, la terapia potrebbe andare rivista.',
+          'ALR-NEU-006',
+          p: {'count': '$cur', 'average': prevAvg.toStringAsFixed(1)},
         );
       }
     }
@@ -1022,22 +742,13 @@ class AlertEngine {
     // Tremori, barcollamento, testa inclinata.
     if (neuro.isNotEmpty && seiz24.isEmpty && !lactating && !tinyPuppy) {
       if (diabetic) {
-        add(
-          AlertLevel.subito,
-          'Possibile ipoglicemia',
-          'Tremori o barcollamento in un cane diabetico: se è cosciente '
-              'strofina miele o glucosio sulle gengive e vai subito dal '
-              'veterinario.',
-          rank: 3,
-        );
+        add(AlertLevel.subito, 'ALR-DIA-006', rank: 3);
       } else {
         add(
           neuro.any((l) => hasSign(l, Sign.improvviso))
               ? AlertLevel.subito
               : AlertLevel.oggi,
-          'Tremori, barcollamento o testa inclinata',
-          'Segni neurologici: se sono comparsi all\'improvviso è un\'urgenza. '
-              'Pensa anche a possibili sostanze ingerite.',
+          'ALR-NEU-007',
         );
       }
     }
@@ -1051,20 +762,12 @@ class AlertEngine {
       if (t >= 41 || t < 37) {
         add(
           AlertLevel.subito,
-          'Temperatura ${t.toStringAsFixed(1)} °C',
-          t >= 41
-              ? 'Temperatura molto alta: possibile colpo di calore. '
-                    'Raffreddalo subito con acqua fresca o fredda e fai aria, '
-                    'poi vai subito dal veterinario.'
-              : 'Temperatura troppo bassa: tienilo al caldo e vai subito dal veterinario.',
+          t >= 41 ? 'ALR-TMP-001a' : 'ALR-TMP-001b',
+          p: {'temp': t.toStringAsFixed(1)},
           rank: 2,
         );
       } else if (t >= 39.5) {
-        add(
-          AlertLevel.oggi,
-          'Febbre (${t.toStringAsFixed(1)} °C)',
-          'Normale 38,0-39,2 °C. Non dare antipiretici per persone (sono tossici).',
-        );
+        add(AlertLevel.oggi, 'ALR-TMP-002', p: {'temp': t.toStringAsFixed(1)});
       }
     }
 
@@ -1081,41 +784,31 @@ class AlertEngine {
           ((senior || diabetic) && skipped24 > 0) ||
           (onNsaidOrSteroid && skipped24 > 0);
       if (urgent && !diabeticGI && !puppyGI) {
-        add(
-          AlertLevel.oggi,
-          'Non mangia',
-          diabetic
-              ? 'Se non ha mangiato o ha vomitato, non fare l\'insulina senza '
-                    'aver sentito il veterinario.'
-              : 'Pasti saltati: serve una visita oggi.',
-        );
+        add(AlertLevel.oggi, diabetic ? 'ALR-CIB-001a' : 'ALR-CIB-001b');
       } else if (!urgent && skipped24 >= mpd) {
-        add(
-          AlertLevel.attenzione,
-          'Ha saltato i pasti',
-          'Se non mangia da 24 ore senti il veterinario entro 1-2 giorni; '
-              'prima se vomita o è abbattuto.',
-          action: '',
-        );
+        add(AlertLevel.attenzione, 'ALR-CIB-002', action: '');
       }
     }
     if (downEvent24 && !puppyGI && !diabeticGI) {
       final other = vomit || diarrhea || inapp24;
       final fragile = puppy || diabetic || senior;
-      add(
-        other || fragile ? AlertLevel.oggi : AlertLevel.attenzione,
-        'Abbattuto',
-        other || fragile
-            ? 'Abbattimento ${other ? 'insieme ad altri segni' : 'in un cane ${puppy
-                            ? 'cucciolo'
-                            : diabetic
-                            ? 'diabetico'
-                            : 'anziano'}'}: '
-                  'contatta il veterinario oggi.'
-            : 'Osservalo: se non torna vivace entro la giornata, o compaiono '
-                  'vomito, diarrea, febbre o gengive pallide, senti il veterinario.',
-        action: other || fragile ? null : '',
-      );
+      if (other || fragile) {
+        add(
+          AlertLevel.oggi,
+          'ALR-CIB-003a',
+          p: {
+            'reason': other
+                ? 'signs'
+                : puppy
+                ? 'puppy'
+                : diabetic
+                ? 'diabetic'
+                : 'other',
+          },
+        );
+      } else {
+        add(AlertLevel.attenzione, 'ALR-CIB-003b', action: '');
+      }
     }
 
     // Diabete: insulina senza pasto (07 N15).
@@ -1123,14 +816,7 @@ class AlertEngine {
         h12.any(
           (l) => l.type == LogType.insulina && hasSign(l, Sign.nonHaMangiato),
         )) {
-      add(
-        AlertLevel.oggi,
-        'Insulina fatta senza che abbia mangiato',
-        'Chiama ora il veterinario e chiedi come comportarti. Nelle prossime '
-            'ore offrigli il suo pasto e osservalo: se compaiono debolezza, '
-            'tremori o barcollamento strofina miele sulle gengive e vai subito '
-            'dal veterinario.',
-      );
+      add(AlertLevel.oggi, 'ALR-DIA-007');
     }
 
     // Urina scura (07 aggiunta N6).
@@ -1140,14 +826,15 @@ class AlertEngine {
     if (darkUrine) {
       final fever = temps.any((l) => l.value! >= 39.5);
       final tickSeason = now.month >= 3 && now.month <= 11;
+      final urgent = down24 || fever;
       add(
-        down24 || fever ? AlertLevel.oggi : AlertLevel.attenzione,
-        'Urina scura o color caffè',
-        'Urine scure, soprattutto con abbattimento, possono indicare una '
-            'distruzione dei globuli rossi (es. malattie trasmesse dalle zecche '
-            'come la babesiosi) o un danno muscolare. '
-            '${tickSeason ? 'Hai trovato zecche di recente? Dillo al veterinario. ' : ''}'
-            '${down24 || fever ? 'Con abbattimento o febbre serve una visita oggi.' : 'Se si ripete, senti il veterinario.'}',
+        urgent ? AlertLevel.oggi : AlertLevel.attenzione,
+        'ALR-URI-015',
+        p: {
+          'variant': tickSeason
+              ? (urgent ? 'tickUrgent' : 'tick')
+              : (urgent ? 'urgent' : 'other'),
+        },
       );
     }
 
@@ -1158,12 +845,7 @@ class AlertEngine {
           'pastore inglese|whippet|silken|pastore svizzero|mcnab|'
           'pastore scozzese',
         ).hasMatch(dog.breed.toLowerCase())) {
-      add(
-        AlertLevel.attenzione,
-        'Loperamide in una razza a rischio MDR1',
-        'Nelle razze con possibile mutazione MDR1 la loperamide può dare '
-            'effetti neurologici: verifica con il veterinario.',
-      );
+      add(AlertLevel.attenzione, 'ALR-FAR-005');
     }
 
     // Dopo il parto (07 aggiunta N3).
@@ -1179,39 +861,22 @@ class AlertEngine {
             (hasSign(l, Sign.maleodoranti) || hasSign(l, Sign.pus)),
       );
       if (fever || smelly || down24) {
-        add(
-          AlertLevel.oggi,
-          'Malessere nella prima settimana dopo il parto',
-          'Febbre, perdite maleodoranti o abbattimento dopo il parto possono '
-              'indicare un\'infezione dell\'utero: contatta il veterinario oggi.',
-        );
+        add(AlertLevel.oggi, 'ALR-REP-004');
       }
     }
     if (!male && h24.any((l) => l.type == LogType.mammelle)) {
-      add(
-        AlertLevel.oggi,
-        'Mammelle gonfie, calde o dolenti',
-        'Può essere una mastite: contatta il veterinario oggi. Non '
-            'spremere le mammelle.',
-      );
+      add(AlertLevel.oggi, 'ALR-REP-005');
     }
     final dueSoon = Modules.dueDate(dog, repro, now);
     if (dueSoon != null && dueSoon.difference(now).inDays <= 7) {
       final low = temps.where((l) => l.value! < 37.5).toList();
       if (low.isNotEmpty) {
         final hrs = now.difference(low.first.time).inHours;
-        add(
-          hrs > 24 ? AlertLevel.oggi : AlertLevel.info,
-          hrs > 24
-              ? 'Temperatura calata da oltre 24 ore senza parto'
-              : 'Parto atteso entro circa 24 ore',
-          hrs > 24
-              ? 'Il calo di temperatura sotto 37,5 °C precede il parto: se dopo '
-                    '24 ore non è iniziato il travaglio, chiama il veterinario.'
-              : 'La temperatura sotto 37,5 °C di solito precede il parto di '
-                    'circa 24 ore. Prepara la cassa parto.',
-          action: hrs > 24 ? null : '',
-        );
+        if (hrs > 24) {
+          add(AlertLevel.oggi, 'ALR-REP-006a');
+        } else {
+          add(AlertLevel.info, 'ALR-REP-006b', action: '');
+        }
       }
     }
 
@@ -1224,26 +889,12 @@ class AlertEngine {
     if (limp.any(
       (l) => hasSign(l, Sign.nonCarica) && now.difference(l.time).inHours <= 24,
     )) {
-      add(
-        AlertLevel.oggi,
-        'Non appoggia la zampa',
-        'Non caricare l\'arto è un segno di dolore importante: visita oggi. '
-            'Non dare antidolorifici per persone.',
-      );
+      add(AlertLevel.oggi, 'ALR-ALT-001');
     } else if (limp.isNotEmpty && now.difference(limp.first.time).inDays >= 3) {
-      add(
-        AlertLevel.attenzione,
-        'Zoppia da più giorni',
-        'Una zoppia che dura da 3-5 giorni va vista dal veterinario.',
-      );
+      add(AlertLevel.attenzione, 'ALR-ALT-002');
     }
     if (typeIn(h48, LogType.pelle)) {
-      add(
-        AlertLevel.attenzione,
-        'Prurito, pelle o orecchie',
-        'Senti il veterinario entro qualche giorno; prima se si gratta fino '
-            'a ferirsi o scuote molto la testa.',
-      );
+      add(AlertLevel.attenzione, 'ALR-ALT-003');
     }
     final teeth = mine
         .where(
@@ -1256,23 +907,14 @@ class AlertEngine {
           hasSign(l, Sign.gengiveSanguinanti) ||
           hasSign(l, Sign.masticaMale),
     )) {
-      add(
-        AlertLevel.attenzione,
-        'Problema ai denti',
-        'Alito cattivo, gengive che sanguinano o fatica a masticare: '
-            'controllo dentale al prossimo appuntamento, prima se mangia poco.',
-      );
+      add(AlertLevel.attenzione, 'ALR-ALT-004');
     }
     final brushed = teeth.where((l) => hasSign(l, Sign.spazzolati)).length;
     if (mine.any(
           (l) => l.type == LogType.denti && hasSign(l, Sign.spazzolati),
         ) &&
         brushed < 3) {
-      add(
-        AlertLevel.info,
-        'Denti: $brushed spazzolature in 7 giorni',
-        'Ideale ogni giorno, almeno 3 volte a settimana (AAHA 2019).',
-      );
+      add(AlertLevel.info, 'ALR-ALT-005', p: {'count': '$brushed'});
     }
 
     // Perdite a riposo (incontinenza) e perdite vulvari.
@@ -1280,12 +922,7 @@ class AlertEngine {
       (l) =>
           l.type == LogType.perditaRiposo && now.difference(l.time).inDays <= 7,
     )) {
-      add(
-        AlertLevel.attenzione,
-        'Perdite di urina a riposo',
-        'Perdite mentre dorme o riposa: spesso è un problema curabile '
-            '(incontinenza). Parlane con il veterinario. Non ridurre l\'acqua.',
-      );
+      add(AlertLevel.attenzione, 'ALR-URI-016');
     }
     if (vulvar7 &&
         (male ||
@@ -1301,21 +938,9 @@ class AlertEngine {
             (hasSign(l, Sign.pus) || hasSign(l, Sign.maleodoranti)),
       );
       if (purulent && !dog.neutered) {
-        add(
-          AlertLevel.oggi,
-          'Perdite purulente',
-          'Perdite purulente in una femmina non sterilizzata possono indicare '
-              'un\'infezione dell\'utero: contatta il veterinario oggi stesso.',
-          rank: 12,
-        );
+        add(AlertLevel.oggi, 'ALR-REP-007', rank: 12);
       } else if (!inHeatNow) {
-        add(
-          purulent ? AlertLevel.oggi : AlertLevel.attenzione,
-          'Perdite vulvari',
-          'Perdite fuori dal calore vanno valutate dal veterinario entro '
-              '1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite '
-              'sono purulente.',
-        );
+        add(purulent ? AlertLevel.oggi : AlertLevel.attenzione, 'ALR-REP-008');
       }
     }
 
@@ -1340,12 +965,7 @@ class AlertEngine {
         nightsWithPee(0, 6) >= 2 &&
         nightsWithPee(7, 20) == 0 &&
         pees.any((l) => now.difference(l.time).inDays >= 14)) {
-      add(
-        AlertLevel.attenzione,
-        'Pipì di notte, prima non succedeva',
-        'Due o più notti su 7 con pipì notturna: può essere un segno di '
-            'sete aumentata o di un problema urinario. Prenota una visita.',
-      );
+      add(AlertLevel.attenzione, 'ALR-URI-017');
     }
 
     // Riproduzione.
@@ -1353,29 +973,18 @@ class AlertEngine {
     if (due != null) {
       final daysFromMating = 63 - due.difference(now).inDays;
       if (daysFromMating > 70) {
-        add(
-          AlertLevel.oggi,
-          'Gravidanza oltre i 70 giorni',
-          'Il parto non è ancora avvenuto: contatta il veterinario oggi.',
-        );
+        add(AlertLevel.oggi, 'ALR-REP-009');
       } else if (daysFromMating >= 58) {
         add(
           AlertLevel.info,
-          'Parto vicino (presunto il ${due.day}/${due.month})',
-          'Prepara la cassa parto. Chiama subito il veterinario se: '
-              'contrazioni forti per oltre 30 minuti senza cuccioli, oltre 2 ore '
-              'tra un cucciolo e l\'altro, perdite verdi o nere senza cuccioli.',
+          'ALR-REP-010',
+          p: {'date': '${due.day}/${due.month}'},
           action: '',
         );
       }
     }
     if (Modules.longHeat(dog, repro, now)) {
-      add(
-        AlertLevel.attenzione,
-        'Calore che dura da oltre 4 settimane',
-        'Un calore persistente va valutato dal veterinario. Se è già finito, '
-            'registra "Fine calore".',
-      );
+      add(AlertLevel.attenzione, 'ALR-REP-011');
     }
 
     // Dosi non confermate da oltre 2 ore.
@@ -1383,25 +992,23 @@ class AlertEngine {
         .where((p) => now.difference(p.at).inMinutes >= 120)
         .toList();
     if (late.isNotEmpty) {
+      final at = late.first.at;
       add(
         AlertLevel.attenzione,
-        'Dose non confermata: ${late.first.record.title}',
-        'Prevista alle ${late.first.at.hour.toString().padLeft(2, '0')}:'
-            '${late.first.at.minute.toString().padLeft(2, '0')}. Se l\'hai '
-            'saltata, non raddoppiare la successiva: chiedi al veterinario '
-            'cosa fare.',
+        'ALR-FAR-006',
+        p: {
+          'drug': late.first.record.title,
+          'time':
+              '${at.hour.toString().padLeft(2, '0')}:'
+              '${at.minute.toString().padLeft(2, '0')}',
+        },
         action: '',
       );
     }
 
     // Feci troppo dure (scala Purina 1).
     if (h48.any((l) => l.type == LogType.cacca && l.value == 1)) {
-      add(
-        AlertLevel.info,
-        'Feci molto dure',
-        'Punteggio 1 della scala fecale: controlla che beva abbastanza. Se si '
-            'sforza senza risultato, senti il veterinario.',
-      );
+      add(AlertLevel.info, 'ALR-GI-014');
     }
 
     // Modalità post-operatoria (07 aggiunta N8).
@@ -1426,27 +1033,14 @@ class AlertEngine {
     if (wound.any(
       (l) => hasSign(l, Sign.deiscenza) || hasSign(l, Sign.sanguinamento),
     )) {
-      add(
-        AlertLevel.oggi,
-        'Ferita aperta o che sanguina',
-        'Punti aperti o sanguinamento della ferita: copri con una garza '
-            'pulita, impedisci che si lecchi e contatta il veterinario oggi. '
-            'Subito se il sanguinamento è abbondante o si vede tessuto interno.',
-        rank: 7,
-      );
+      add(AlertLevel.oggi, 'ALR-CHI-001', rank: 7);
     } else if (wound.any(
       (l) =>
           hasSign(l, Sign.arrossamento) ||
           hasSign(l, Sign.gonfiore) ||
           hasSign(l, Sign.secrezione),
     )) {
-      add(
-        AlertLevel.attenzione,
-        'Ferita arrossata, gonfia o con secrezione',
-        'Può essere un\'infiammazione o un\'infezione della ferita: '
-            'mantieni il collare elisabettiano e senti il veterinario entro '
-            '1-2 giorni; prima se peggiora o compare febbre.',
-      );
+      add(AlertLevel.attenzione, 'ALR-CHI-002');
     }
     if (surgeries.isNotEmpty) {
       final s0 = surgeries.first.date;
@@ -1456,12 +1050,7 @@ class AlertEngine {
       );
       final active = mine.any((l) => l.time.isAfter(s0));
       if (hrs >= 48 && !ateSince && active) {
-        add(
-          AlertLevel.oggi,
-          'Non ha ancora mangiato dopo l\'intervento',
-          'L\'appetito di solito torna entro 24-48 ore dall\'intervento: '
-              'contatta il veterinario oggi.',
-        );
+        add(AlertLevel.oggi, 'ALR-CHI-003');
       }
     }
 
@@ -1475,13 +1064,7 @@ class AlertEngine {
             hasSign(l, Sign.starnuti),
       );
       if (fox) {
-        add(
-          AlertLevel.oggi,
-          'Possibile forasacco',
-          'In stagione dei forasacchi, scuotere la testa o starnutire '
-              'all\'improvviso dopo un prato richiede una visita oggi: prima si '
-              'toglie, meno danni fa.',
-        );
+        add(AlertLevel.oggi, 'ALR-ALT-006');
       }
     }
 
@@ -1496,31 +1079,34 @@ class AlertEngine {
           d.record.title.toLowerCase().contains('core'),
     );
     if (puppy && coreOverdue) {
-      add(
-        AlertLevel.attenzione,
-        'Ciclo vaccinale non completo',
-        'Finché non è completo, evita aree frequentate da cani sconosciuti e '
-            'chiama il veterinario per fissare la dose.',
-      );
+      add(AlertLevel.attenzione, 'ALR-PRV-001');
     }
     if (overdue.isNotEmpty) {
       add(
         AlertLevel.info,
-        overdue.length == 1
-            ? 'Una scadenza superata'
-            : '${overdue.length} scadenze superate',
-        overdue.take(3).map((d) => d.record.title).join(' · '),
+        'ALR-PRV-002',
+        p: {
+          'count': overdue.length,
+          'items': overdue.take(3).map((d) => d.record.title).join(' · '),
+        },
         action: '',
       );
     }
 
-    // Ordine: livello, poi priorità clinica (07 N25), senza duplicati.
+    return sortAndDedup(out);
+  }
+
+  /// Ordine: livello, poi priorità clinica (07 N25). Gli avvisi con lo
+  /// stesso ID del catalogo compaiono una volta sola, con il livello più
+  /// alto. Prima il confronto era sul titolo, che contiene numeri e cambia
+  /// con la lingua (ricerca/15 §3.3).
+  static List<HealthAlert> sortAndDedup(List<HealthAlert> out) {
     out.sort((a, b) {
       final c = b.level.index.compareTo(a.level.index);
       return c != 0 ? c : a.rank.compareTo(b.rank);
     });
     final seen = <String>{};
-    out.retainWhere((a) => seen.add(a.title));
+    out.retainWhere((a) => seen.add(a.id.isEmpty ? 'titolo:${a.title}' : a.id));
     return out;
   }
 }

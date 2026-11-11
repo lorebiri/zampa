@@ -1,15 +1,12 @@
+import '../l10n/clinical_text.dart';
 import '../models.dart';
 import 'potty_predictor.dart';
 
 /// Piano di prevenzione per l'Italia: WSAVA 2024 (vaccini), ESCCAP Italia
 /// (parassiti), con le correzioni della revisione veterinaria (ricerca/06).
 /// Le date proposte vanno sempre confermate con il veterinario: l'app
-/// propone, il veterinario decide.
-const _cats =
-    'Gli spot-on e alcuni collari per cani contengono permetrina, molto '
-    'tossica per i gatti: se in casa c\'è un gatto chiedi al veterinario un '
-    'prodotto adatto e tienili separati finché il prodotto è asciutto.';
-
+/// propone, il veterinario decide. Titoli e note sono voci del catalogo
+/// clinico (PRV-001…016): il titolo diventa il nome della voce in cartella.
 class PreventionPlanner {
   /// Inizio della stagione di profilassi della filariosi per area.
   static DateTime heartwormStart(Dog dog, int year) =>
@@ -30,7 +27,14 @@ class PreventionPlanner {
           r.title.toLowerCase().contains(part) &&
           (type == null || r.type == type),
     );
-    void add(RecordType t, String title, DateTime date, String notes) {
+    void add(
+      RecordType t,
+      String id,
+      DateTime date, [
+      Map<String, Object> p = const {},
+    ]) {
+      final text = ClinicalText(id, p);
+      final title = text.title;
       if (has(title)) return;
       if (date.isBefore(now.subtract(const Duration(days: 7)))) return;
       out.add(
@@ -41,7 +45,7 @@ class PreventionPlanner {
           title: title,
           date: date,
           done: false,
-          notes: notes,
+          notes: text.text,
         ),
       );
     }
@@ -55,110 +59,41 @@ class PreventionPlanner {
     // --- Microchip e anagrafe ---------------------------------------------
     if (dog.microchip.trim().isEmpty) {
       final due = birth.add(const Duration(days: 60));
-      add(
-        RecordType.visita,
-        'Microchip e iscrizione all\'anagrafe canina',
-        due.isAfter(today) ? due : today,
-        'Obbligatoria per legge (L. 281/1991, O.M. 6/8/2008, anagrafe '
-            'SINAC): entro 60 giorni dalla nascita e comunque prima della '
-            'cessione. Se hai adottato il cane, verifica che sia intestato a te.',
-      );
+      add(RecordType.visita, 'PRV-001', due.isAfter(today) ? due : today);
     } else {
-      add(
-        RecordType.visita,
-        'Verifica che l\'anagrafe sia intestata a te',
-        today.add(const Duration(days: 14)),
-        'Controlla sul portale dell\'anagrafe canina della tua Regione (o '
-            'SINAC) che il microchip ${dog.microchip} sia intestato a te e '
-            'che indirizzo e telefono siano aggiornati.',
-      );
+      add(RecordType.visita, 'PRV-002', today.add(const Duration(days: 14)), {
+        'microchip': dog.microchip,
+      });
     }
 
     // --- Vaccini ------------------------------------------------------------
-    const core = 'Vaccino core (cimurro, epatite, parvovirosi)';
     final hasCore = hasLike('core', type: RecordType.vaccino);
     if (ageWeeks < 16) {
-      add(
-        RecordType.vaccino,
-        '$core – 1ª dose',
-        weeks(8),
-        'WSAVA: prima dose a 6-8 settimane.',
-      );
-      add(
-        RecordType.vaccino,
-        '$core – 2ª dose',
-        weeks(12),
-        'Ogni 2-4 settimane fino a 16 settimane o più.',
-      );
-      add(
-        RecordType.vaccino,
-        '$core – 3ª dose',
-        weeks(16),
-        'L\'ultima dose non prima delle 16 settimane.',
-      );
+      add(RecordType.vaccino, 'PRV-003', weeks(8), {'dose': 'first'});
+      add(RecordType.vaccino, 'PRV-003', weeks(12), {'dose': 'second'});
+      add(RecordType.vaccino, 'PRV-003', weeks(16), {'dose': 'third'});
     } else if (!hasCore) {
-      add(
-        RecordType.vaccino,
-        '$core – verifica il libretto',
-        today,
-        'Nessun vaccino core registrato. Se non trovi il libretto, il '
-            'veterinario può fare una dose (WSAVA considera protettiva una dose '
-            'dei vaccini core vivi attenuati nell\'adulto) oppure dosare gli '
-            'anticorpi.',
-      );
+      add(RecordType.vaccino, 'PRV-004', today);
     }
     if (ageWeeks < 26) {
-      add(
-        RecordType.vaccino,
-        '$core – richiamo',
-        weeks(26),
-        'WSAVA 2024: richiamo a 26 settimane (oppure a 12 mesi secondo il '
-            'veterinario), poi ogni 3 anni se il vaccino usato lo prevede.',
-      );
+      add(RecordType.vaccino, 'PRV-005', weeks(26));
     }
     final hasLepto = hasLike('lepto', type: RecordType.vaccino);
     if (ageWeeks < 26 && !hasLepto) {
       final first = ageWeeks < 8 ? weeks(8) : today;
-      add(
-        RecordType.vaccino,
-        'Leptospirosi – 1ª dose',
-        first,
-        'Consigliata in Italia: 2 dosi a 2-4 settimane di distanza, poi '
-            'richiamo annuale.',
-      );
-      add(
-        RecordType.vaccino,
-        'Leptospirosi – 2ª dose',
-        first.add(const Duration(days: 28)),
-        'Completa l\'avvio vaccinale.',
-      );
+      add(RecordType.vaccino, 'PRV-006', first, {'dose': 'first'});
+      add(RecordType.vaccino, 'PRV-006', first.add(const Duration(days: 28)), {
+        'dose': 'second',
+      });
     } else if (!hasLepto) {
-      add(
-        RecordType.vaccino,
-        'Leptospirosi',
-        today.add(const Duration(days: 30)),
-        'Se non è mai stato vaccinato servono 2 dosi a 2-4 settimane; poi '
-            'richiamo annuale. Verifica il libretto.',
-      );
+      add(RecordType.vaccino, 'PRV-007', today.add(const Duration(days: 30)));
     }
 
     // --- Vermi intestinali (ESCCAP GL1) -------------------------------------
     if (ageMonths < 6) {
-      add(
-        RecordType.antiparassitario,
-        'Sverminazione cucciolo',
-        today,
-        'Ogni 2 settimane fino a 2 settimane dopo lo svezzamento, poi ogni '
-            'mese fino a 6 mesi.',
-      );
+      add(RecordType.antiparassitario, 'PRV-008', today);
     } else {
-      add(
-        RecordType.esame,
-        'Esame delle feci',
-        today.add(const Duration(days: 30)),
-        'Da 1 a 4 volte l\'anno secondo lo stile di vita (o sverminazione '
-            'periodica secondo il veterinario).',
-      );
+      add(RecordType.esame, 'PRV-009', today.add(const Duration(days: 30)));
     }
 
     // --- Filariosi ------------------------------------------------------------
@@ -172,44 +107,27 @@ class PreventionPlanner {
     final start = heartwormStart(dog, seasonYear);
     final inSeason = now.month >= start.month && now.month <= 12;
     if (inSeason && !protectedRecently && now.month <= 10 && ageWeeks >= 6) {
-      add(
-        RecordType.antiparassitario,
-        'Prevenzione filariosi (stagione ${now.year})',
-        today,
-        'ESCCAP Italia: profilassi mensile fino a dicembre (un mese dopo la '
-            'fine della stagione delle zanzare). Se non era protetto, chiedi al '
-            'veterinario se serve prima un test.',
-      );
+      add(RecordType.antiparassitario, 'PRV-010', today, {
+        'year': '${now.year}',
+      });
     } else if ((now.month == 11 || now.month == 12) &&
         !protectedRecently &&
         ageMonths >= 7) {
-      add(
-        RecordType.visita,
-        'Filariosi: chiedi al veterinario se fare una dose ora e il test',
-        today,
-        'Se non era protetto quest\'estate, il veterinario valuterà un test '
-            '(antigene + microfilarie) prima di iniziare; il test affidabile si '
-            'fa in primavera.',
-      );
+      add(RecordType.visita, 'PRV-011', today);
     }
     if (ageMonths + (start.difference(now).inDays / 30) >= 7) {
       add(
         RecordType.esame,
-        'Test filariosi e leishmaniosi annuale (${start.year})',
+        'PRV-012',
         DateTime(start.year, start.month - 1, 15),
-        'Prima di iniziare la profilassi: antigene della filaria e, nelle '
-            'zone a rischio, test per la leishmania.',
+        {'year': '${start.year}'},
       );
     }
     if (start.difference(birth).inDays >= 42) {
-      add(
-        RecordType.antiparassitario,
-        'Inizio profilassi filariosi ${start.year}',
-        start,
-        'Mensile fino a dicembre${dog.region == Region.sud ? ' (al Sud valuta con il veterinario la copertura tutto l\'anno)' : ''}. '
-            'Nel cucciolo dalle 6-8 settimane, secondo il prodotto. Esistono '
-            'anche iniezioni a lento rilascio da 6 o 12 mesi.',
-      );
+      add(RecordType.antiparassitario, 'PRV-013', start, {
+        'year': '${start.year}',
+        'south': yesNo(dog.region == Region.sud),
+      });
     }
 
     // --- Flebotomi (leishmaniosi), zecche e pulci ---------------------------
@@ -220,33 +138,17 @@ class PreventionPlanner {
     final sandfly = DateTime(sandflyYear, 4, 1);
     add(
       RecordType.antiparassitario,
-      'Repellente anti-pappataci (leishmaniosi) ${sandfly.year}',
+      'PRV-014',
       sandfly.isBefore(today) ? today : sandfly,
-      'Da aprile a novembre per tutti i cani, anche al Nord: la '
-          'leishmaniosi è ormai presente in molte aree. Il collare dura secondo '
-          'il prodotto, lo spot-on 3-4 settimane. $_cats',
+      {'year': '${sandfly.year}'},
     );
-    add(
-      RecordType.antiparassitario,
-      'Antiparassitario esterno (zecche e pulci)',
-      today,
-      'Frequenza secondo il prodotto (1-3 mesi). Al Centro-Sud anche tutto '
-          'l\'anno. $_cats',
-    );
+    add(RecordType.antiparassitario, 'PRV-015', today);
 
     // --- Visite ---------------------------------------------------------------
     final stage = lifeStageOf(dog, now);
-    add(
-      RecordType.visita,
-      stage == LifeStage.anziano
-          ? 'Controllo geriatrico semestrale'
-          : 'Visita di controllo annuale',
-      today.add(const Duration(days: 30)),
-      stage == LifeStage.anziano
-          ? 'Per i cani anziani: visita ed esami del sangue e delle urine ogni '
-                '6 mesi.'
-          : 'Visita generale, peso, denti, richiami.',
-    );
+    add(RecordType.visita, 'PRV-016', today.add(const Duration(days: 30)), {
+      'senior': yesNo(stage == LifeStage.anziano),
+    });
     return out;
   }
 

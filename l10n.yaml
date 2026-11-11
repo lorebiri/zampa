@@ -1,0 +1,10 @@
+# Catalogo dei testi (gen-l10n). Fonte: lib/l10n/app_it.arb.
+# Ogni voce clinica ha l'ID del catalogo (docs/clinica/testi-clinici-v1.md)
+# come prima parola della descrizione; la chiave è l'ID in camelCase più la
+# parte (ALR-URI-001 → alrUri001Title / alrUri001Text).
+# Dopo una modifica all'ARB: flutter gen-l10n && dart run tool/gen_clinical_catalog.dart
+arb-dir: lib/l10n
+template-arb-file: app_it.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false
