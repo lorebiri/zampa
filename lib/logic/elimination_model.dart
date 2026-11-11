@@ -1101,7 +1101,32 @@ class EliminationModel {
       now.add(const Duration(days: 2)),
       now,
     );
-    final halfLife = dog.ageInMonths(now) < 6 ? 5.0 : 14.0;
+    var halfLife = dog.ageInMonths(now) < 6 ? 5.0 : 14.0;
+    // R7 (ricerca/12 §6): adattamento rapido. Se la mediana degli intervalli
+    // da sveglio degli ultimi 3 giorni è < 0,7× o > 1,4× quella dei 14
+    // giorni, i dati recenti pesano molto di più (emivita 3 giorni, 05
+    // §P12). Gli allarmi «fa pipì più spesso» restano separati e invariati.
+    {
+      final g14 = <double>[], g3 = <double>[];
+      for (var i = 1; i < ctx.outings.length; i++) {
+        final a = ctx.outings[i - 1], b = ctx.outings[i];
+        if (b.isAfter(now) || now.difference(b).inDays >= 14) continue;
+        if (PottyPredictor.inSleepWindow(dog, a) ||
+            PottyPredictor.inSleepWindow(dog, b)) {
+          continue;
+        }
+        final g = b.difference(a).inMinutes.toDouble();
+        if (g < need.clusterMinutes || g > literature.maxDay * 1.5) continue;
+        g14.add(g);
+        if (now.difference(b).inHours < 72) g3.add(g);
+      }
+      if (g14.length >= 8 && g3.length >= 3) {
+        g14.sort();
+        g3.sort();
+        final ratio = g3[g3.length ~/ 2] / g14[g14.length ~/ 2];
+        if (ratio < 0.7 || ratio > 1.4) halfLife = 3.0;
+      }
+    }
 
     // 0) Bayes empirico: il centro del prior si sposta dal valore di
     //    letteratura al ritmo osservato del cane, in proporzione ai dati
