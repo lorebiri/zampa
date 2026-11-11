@@ -1,6 +1,5 @@
-{"tag": "R3", "shadow": true, "of": 4,
+{"tag": "R4", "shadow": true, "of": 4,
  "jobs": [
-  {"scenario": "realistico"},
   {"scenario": "realistico", "grid": true},
   {"scenario": "pulito", "every": 3},
   {"scenario": "orari_padrone", "every": 3},

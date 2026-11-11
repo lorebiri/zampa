@@ -558,9 +558,100 @@ class Accuracy {
   final double inWindowRate;
 }
 
+/// R6 (ricerca/12 §6): la previsione in ombra fatta subito dopo un evento,
+/// registrata per misurare il modello FUORI campione e per calibrarlo (R4,
+/// R5). Va salvata alla registrazione di ogni pipì (persistenza a cura
+/// dell'app) e ripassata a [FittedModel.forecast] come `history`.
+class ShadowRecord {
+  const ShadowRecord({
+    required this.origin,
+    required this.last,
+    required this.q10,
+    required this.q25,
+    required this.median,
+    required this.q75,
+    required this.q90,
+    required this.morning,
+    required this.expectedAt,
+    required this.c10,
+    required this.c90,
+  });
+
+  /// Momento della previsione e ultimo evento su cui si basava.
+  final DateTime origin, last;
+
+  /// Quantili GREZZI del modello (prima della calibrazione): servono a
+  /// calcolare il PIT dell'evento vero senza circolarità.
+  final DateTime q10, q25, median, q75, q90;
+
+  /// True se la mediana grezza cadeva nella finestra di sonno.
+  final bool morning;
+
+  /// Previsione calibrata mostrabile: orario puntuale e intervallo all'80%.
+  final DateTime expectedAt, c10, c90;
+
+  /// Valore della funzione di ripartizione grezza in [x] (interpolazione
+  /// lineare tra i quantili; oltre il 90° coda esponenziale).
+  double pit(DateTime x) {
+    final pts = [
+      (last, 0.0),
+      (q10, 0.1),
+      (q25, 0.25),
+      (median, 0.5),
+      (q75, 0.75),
+      (q90, 0.9),
+    ];
+    if (!x.isAfter(last)) return 0;
+    for (var k = 1; k < pts.length; k++) {
+      final (a, pa) = pts[k - 1];
+      final (b, pb) = pts[k];
+      if (!x.isAfter(b)) {
+        final span = b.difference(a).inSeconds;
+        final f = span <= 0 ? 1.0 : x.difference(a).inSeconds / span;
+        return pa + (pb - pa) * f;
+      }
+    }
+    final scale = math.max(30.0, q90.difference(median).inMinutes.toDouble());
+    final over = x.difference(q90).inMinutes / scale;
+    return 0.9 + 0.1 * (1 - math.exp(-over));
+  }
+
+  Map<String, Object> toJson() => {
+    'origin': origin.toIso8601String(),
+    'last': last.toIso8601String(),
+    'q10': q10.toIso8601String(),
+    'q25': q25.toIso8601String(),
+    'median': median.toIso8601String(),
+    'q75': q75.toIso8601String(),
+    'q90': q90.toIso8601String(),
+    'morning': morning,
+    'expectedAt': expectedAt.toIso8601String(),
+    'c10': c10.toIso8601String(),
+    'c90': c90.toIso8601String(),
+  };
+
+  static ShadowRecord fromJson(Map<String, dynamic> j) {
+    DateTime d(String k) => DateTime.parse(j[k] as String);
+    return ShadowRecord(
+      origin: d('origin'),
+      last: d('last'),
+      q10: d('q10'),
+      q25: d('q25'),
+      median: d('median'),
+      q75: d('q75'),
+      q90: d('q90'),
+      morning: j['morning'] as bool,
+      expectedAt: d('expectedAt'),
+      c10: d('c10'),
+      c90: d('c90'),
+    );
+  }
+}
+
 /// Previsione del modello statistico calcolata «in ombra» (piano CEO 11.3):
 /// non si mostra e non guida le notifiche; serve al banco di prova
-/// (ricerca/23) e alla telemetria dello studio.
+/// (ricerca/23) e alla telemetria dello studio. I quantili sono calibrati
+/// sugli scarti fuori campione del cane (R4, R5) quando c'è una `history`.
 class ShadowForecast {
   const ShadowForecast({
     required this.q10,
@@ -571,14 +662,24 @@ class ShadowForecast {
     required this.expectedAt,
     required this.probNextHour,
     required this.pastProb,
+    required this.record,
+    this.calibratedOn = 0,
   });
   final DateTime q10, q25, median, q75, q90;
 
-  /// Orario puntuale del modello: la mediana, spostata al risveglio se cade
-  /// nella finestra di sonno (come faceva la previsione prima del Ciclo 2).
+  /// Orario puntuale del modello: la mediana, spostata al risveglio
+  /// (appreso, R3) se cade nella finestra di sonno.
   final DateTime expectedAt;
+
+  /// Probabilità nella prossima ora (grezza del modello).
   final double probNextHour;
   final double pastProb;
+
+  /// Da salvare (R6) per le previsioni successive.
+  final ShadowRecord record;
+
+  /// Numero di eventi passati su cui è calibrata (0 = nessuna calibrazione).
+  final int calibratedOn;
 }
 
 class Forecast {
@@ -1403,7 +1504,11 @@ class FittedModel {
     );
   }
 
-  Forecast forecast(DateTime now, {bool withAccuracy = true}) {
+  Forecast forecast(
+    DateTime now, {
+    bool withAccuracy = true,
+    List<ShadowRecord> history = const [],
+  }) {
     final c = _withFuture(now);
     final li = c.lastOutingIndex(now);
     final reasons = BioParams.modifier(need, dog, _model.records, now).reasons;
@@ -1440,23 +1545,7 @@ class FittedModel {
         ? _quantiles(c, last, now, [0.1, 0.25, 0.5, 0.75, 0.9])
         : null;
     ShadowForecast? shadow;
-    if (r != null) {
-      var e = r.q[0.5]!;
-      // R3: di notte, al risveglio appreso (feriali e fine settimana).
-      if (c.asleep(dog, e)) {
-        e = c.nextWake(dog, e).add(Duration(minutes: prior.wake.peak.round()));
-      }
-      shadow = ShadowForecast(
-        q10: r.q[0.1]!,
-        q25: r.q[0.25]!,
-        median: r.q[0.5]!,
-        q75: r.q[0.75]!,
-        q90: r.q[0.9]!,
-        expectedAt: e,
-        probNextHour: r.probNextHour,
-        pastProb: r.pastProb,
-      );
-    }
+    if (r != null) shadow = _shadow(c, last, now, r, history);
     final pastTimes = [
       for (final t in _ctx.outings)
         if (!t.isAfter(now)) t,
@@ -1622,7 +1711,7 @@ class FittedModel {
           'segnale.';
     }
 
-    final acc = withAccuracy && shadowFitted ? accuracy(now) : null;
+    final acc = withAccuracy && shadowFitted ? accuracy(now, history) : null;
     final conf = learnedDays < 2
         ? Confidence.bassa
         : (acc != null && acc.n >= 8 && acc.inWindowRate >= 0.55)
@@ -1651,6 +1740,125 @@ class FittedModel {
     );
   }
 
+  /// Previsione in ombra calibrata (R4 intervalli, R5 probabilità).
+  ///
+  /// Ricalibrazione per PIT (Kuleshov et al. 2018): con gli eventi passati
+  /// registrati nella `history` (R6) si calcola dove sono caduti gli eventi
+  /// veri nella distribuzione grezza del modello (PIT). La loro funzione di
+  /// ripartizione empirica G, ristretta verso la diagonale con 10
+  /// pseudo-eventi, corregge tutta la distribuzione: il quantile p mostrato
+  /// è il quantile grezzo G⁻¹(p), e la probabilità nella prossima ora è
+  /// calcolata con G. Previsioni del mattino e di giorno sono separate se ce
+  /// ne sono almeno 10 dello stesso tipo. Con meno di 5 eventi: intervallo
+  /// allargato ×1,2 sulla scala logaritmica, come prudenza.
+  ShadowForecast _shadow(
+    _Context c,
+    DateTime last,
+    DateTime now,
+    ({
+      Map<double, DateTime> q,
+      double pastProb,
+      double probNextHour,
+      List<(DateTime, double)> curve,
+    })
+    r,
+    List<ShadowRecord> history,
+  ) {
+    final rawMorning = c.asleep(dog, r.q[0.5]!);
+    // PIT degli eventi passati (solo quelli con esito noto a [now]).
+    final pits = <(bool, double)>[];
+    final outs = _ctx.outings;
+    for (final h in history.reversed) {
+      if (pits.length >= 40) break;
+      if (!h.origin.isBefore(now)) continue;
+      final li = outs.indexWhere((o) => o.isAfter(h.last));
+      if (li < 0) continue;
+      final actual = outs[li];
+      if (actual.isAfter(now) || !actual.isAfter(h.origin)) continue;
+      if (actual.difference(h.last).inHours >= 30) continue;
+      pits.add((h.morning, h.pit(actual)));
+    }
+    var u = [
+      for (final p in pits)
+        if (p.$1 == rawMorning) p.$2,
+    ];
+    if (u.length < 10) u = [for (final p in pits) p.$2];
+    u.sort();
+    const k = 10.0;
+    double g(double x) {
+      if (u.length < 5) return x;
+      var below = 0;
+      for (final v in u) {
+        if (v <= x) below++;
+      }
+      return (below + k * x) / (u.length + k);
+    }
+
+    double gInv(double p) {
+      var lo = 0.0, hi = 1.0;
+      for (var it = 0; it < 40; it++) {
+        final m = (lo + hi) / 2;
+        if (g(m) < p) {
+          lo = m;
+        } else {
+          hi = m;
+        }
+      }
+      return (lo + hi) / 2;
+    }
+
+    Map<double, DateTime> q;
+    if (u.length >= 5) {
+      const ps = [0.1, 0.25, 0.5, 0.75, 0.9];
+      final us = [for (final p in ps) gInv(p).clamp(0.005, 0.995)];
+      final rq = _quantiles(c, last, now, us);
+      q = {for (var i = 0; i < ps.length; i++) ps[i]: rq.q[us[i]]!};
+    } else {
+      // Prudenza fissa ×1,2 sulla scala logaritmica attorno alla mediana.
+      final med = r.q[0.5]!;
+      final m = math.max(1.0, med.difference(last).inMinutes.toDouble());
+      DateTime widen(DateTime x) {
+        final v = math.max(1.0, x.difference(last).inMinutes.toDouble());
+        final w = m * math.pow(v / m, 1.2);
+        return last.add(Duration(minutes: w.round()));
+      }
+
+      q = {for (final e in r.q.entries) e.key: widen(e.value)};
+    }
+    // R5 (probabilità nella prossima ora ricalibrata): non ancora.
+    final pNext = r.probNextHour;
+
+    var e = q[0.5]!;
+    // R3: di notte, al risveglio appreso (feriali e fine settimana).
+    if (c.asleep(dog, e)) {
+      e = c.nextWake(dog, e).add(Duration(minutes: prior.wake.peak.round()));
+    }
+    return ShadowForecast(
+      q10: q[0.1]!,
+      q25: q[0.25]!,
+      median: q[0.5]!,
+      q75: q[0.75]!,
+      q90: q[0.9]!,
+      expectedAt: e,
+      probNextHour: pNext.toDouble(),
+      pastProb: r.pastProb,
+      calibratedOn: u.length >= 5 ? u.length : 0,
+      record: ShadowRecord(
+        origin: now,
+        last: last,
+        q10: r.q[0.1]!,
+        q25: r.q[0.25]!,
+        median: r.q[0.5]!,
+        q75: r.q[0.75]!,
+        q90: r.q[0.9]!,
+        morning: rawMorning,
+        expectedAt: e,
+        c10: q[0.1]!,
+        c90: q[0.9]!,
+      ),
+    );
+  }
+
   /// Intervallo mediano previsto da sveglio senza inneschi (ore centrali).
   double typicalInterval(DateTime now) {
     final base = DateTime(now.year, now.month, now.day, 10);
@@ -1667,38 +1875,31 @@ class FittedModel {
     return r.q[0.5]!.difference(base).inMinutes.toDouble();
   }
 
-  /// Verifica a posteriori: per ciascuno degli ultimi eventi reali,
-  /// cosa avrebbe previsto il modello subito dopo l'evento precedente?
-  Accuracy? accuracy(DateTime now) {
+  /// R6 (ricerca/12 §6): accuratezza FUORI campione. Per ciascuno degli
+  /// ultimi 20 eventi dei 14 giorni, la previsione in ombra fatta (e
+  /// registrata in [history]) subito dopo l'evento precedente: errore
+  /// dell'orario puntuale e quota di eventi nell'intervallo all'80%.
+  /// Sostituisce la vecchia verifica in campione, che rivalutava gli eventi
+  /// con coefficienti stimati anche su di essi ed era ottimista. Null con
+  /// meno di 3 eventi valutabili.
+  Accuracy? accuracy(DateTime now, [List<ShadowRecord> history = const []]) {
     final outs = _ctx.outings;
     final errors = <double>[];
-    var inWindow = 0;
-    for (var i = math.max(1, outs.length - 20); i < outs.length; i++) {
-      final prev = outs[i - 1];
-      final actual = outs[i];
+    var inside = 0;
+    for (final h in history.reversed) {
+      if (errors.length >= 20) break;
+      final li = outs.indexWhere((o) => o.isAfter(h.last));
+      if (li < 0) continue;
+      final actual = outs[li];
+      if (actual.isAfter(now) || !actual.isAfter(h.origin)) continue;
       if (now.difference(actual).inDays > 14) continue;
-      final gap = actual.difference(prev).inMinutes;
-      if (gap > prior.maxDay * 1.5 + 600) continue;
-      final from = prev.add(const Duration(minutes: 1));
-      final r = _quantiles(_ctx, prev, from, [
-        0.25,
-        0.5,
-        0.75,
-      ], horizonHours: 30);
-      final med = r.q[0.5]!;
-      errors.add(actual.difference(med).inMinutes.abs().toDouble());
-      if (!actual.isBefore(r.q[0.25]!.subtract(const Duration(minutes: 15))) &&
-          !actual.isAfter(r.q[0.75]!.add(const Duration(minutes: 15)))) {
-        inWindow++;
-      }
+      errors.add(actual.difference(h.expectedAt).inMinutes.abs().toDouble());
+      if (!actual.isBefore(h.c10) && !actual.isAfter(h.c90)) inside++;
     }
     if (errors.length < 3) return null;
+    final n = errors.length;
     errors.sort();
-    return Accuracy(
-      errors.length,
-      errors[errors.length ~/ 2],
-      inWindow / errors.length,
-    );
+    return Accuracy(n, errors[n ~/ 2], inside / n);
   }
 
   /// Quantile della prudenza, con le restrizioni cliniche: «Meno uscite» solo

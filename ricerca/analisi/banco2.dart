@@ -16,11 +16,18 @@ class Rec2 {
 /// - `base`: la previsione mostrata (expectedAt; finestra windowStart-End);
 /// - `ombra`: il modello in ombra (mediana; intervalli 10-90 e 25-75; PIT).
 /// Con [shadow] falso il modello non viene addestrato (veloce).
-({List<Rec2> base, List<Rec2> ombra}) evaluatePair(
+({
+  List<Rec2> base,
+  List<Rec2> ombra,
+  List<GridRec> grid,
+  List<ShadowRecord> history,
+})
+evaluatePair(
   Truth tr,
   Need need, {
   int every = 1,
   bool shadow = true,
+  int gridStepH = 0,
 }) {
   final cluster = need.clusterMinutes;
   final outs = PottyPredictor.outings(
@@ -33,13 +40,60 @@ class Rec2 {
   final changeAt = simStart.add(const Duration(days: 14));
   final engine = EliminationModel();
   final base = <Rec2>[], ombra = <Rec2>[];
+  final grid = <GridRec>[];
+  // R6: previsioni in ombra registrate, ripassate al modello (R4, R5).
+  final history = <ShadowRecord>[];
+  // Origini: dopo ogni evento valutato (indice i) e, con [gridStepH], a
+  // orari fissi (indice -1), in ordine di tempo.
+  final origins = <(DateTime, int)>[];
   var idx = 0;
   for (var i = 1; i < outs.length; i++) {
-    final actual = outs[i];
-    if (actual.isBefore(evalFrom)) continue;
+    if (outs[i].isBefore(evalFrom)) continue;
     if (idx++ % every != 0) continue;
+    origins.add((outs[i - 1].add(const Duration(minutes: 1)), i));
+  }
+  if (gridStepH > 0) {
+    for (var d = evalFromDay; d < simDays; d++) {
+      final day = simStart.add(Duration(days: d));
+      for (var h = tr.dog.wakeHour + 2; h <= 21; h += gridStepH) {
+        origins.add((DateTime(day.year, day.month, day.day, h), -1));
+      }
+    }
+  }
+  origins.sort((a, b) => a.$1.compareTo(b.$1));
+  for (final (origin, i) in origins) {
+    if (i < 0) {
+      final visible = tr.logged.where((l) => !l.time.isAfter(origin)).toList();
+      final f = engine
+          .fit(tr.dog, need, visible, const [], origin)
+          .forecast(origin, withAccuracy: false, history: history);
+      final until = origin.add(const Duration(minutes: 60));
+      final y = outs.any((o) => o.isAfter(origin) && !o.isAfter(until)) ? 1 : 0;
+      final yt = trueOuts.any((o) => o.isAfter(origin) && !o.isAfter(until))
+          ? 1
+          : 0;
+      var hit = 0, n = 0;
+      for (var k = 1; k <= 14; k++) {
+        final o2 = origin.subtract(Duration(days: k));
+        if (o2.isBefore(simStart)) continue;
+        n++;
+        final u2 = o2.add(const Duration(minutes: 60));
+        if (outs.any((o) => o.isAfter(o2) && !o.isAfter(u2))) hit++;
+      }
+      grid.add(
+        GridRec(
+          tr.spec.id,
+          tr.spec.group,
+          f.shadow?.probNextHour ?? f.probNextHour,
+          (hit + 0.5) / (n + 1),
+          y,
+          yt,
+        ),
+      );
+      continue;
+    }
+    final actual = outs[i];
     final prev = outs[i - 1];
-    final origin = prev.add(const Duration(minutes: 1));
     final visible = tr.logged.where((l) => !l.time.isAfter(origin)).toList();
     // T1: nessun log futuro nella previsione.
     if (visible.any((l) => l.time.isAfter(origin))) {
@@ -48,7 +102,8 @@ class Rec2 {
     final prior = BioParams.forNeed(need, tr.dog, origin);
     final f = engine
         .fit(tr.dog, need, visible, const [], origin, shadow: shadow)
-        .forecast(origin, withAccuracy: false);
+        .forecast(origin, withAccuracy: false, history: history);
+    if (f.shadow != null) history.add(f.shadow!.record);
 
     // Riferimenti (come in evaluateEvents).
     final past = outs.where((e) => !e.isAfter(origin)).toList();
@@ -150,7 +205,7 @@ class Rec2 {
       );
     }
   }
-  return (base: base, ombra: ombra);
+  return (base: base, ombra: ombra, grid: grid, history: history);
 }
 
 bool _capOk(Dog dog, Forecast f, double maxDay, DateTime origin) {
@@ -382,24 +437,18 @@ void runShard(
     final base = <Map<String, Object>>[], ombra = <Map<String, Object>>[];
     final grid = <Map<String, Object>>[];
     for (var i = shard; i < bench.length; i += of) {
-      if (j.grid) {
-        grid.addAll(
-          evaluateGrid(
-            bench[i],
-            j.need,
-            stepH: j.need == Need.pipi ? 4 : 6,
-          ).map(gridToJson),
-        );
-      } else {
-        final r = evaluatePair(
-          bench[i],
-          j.need,
-          every: j.every,
-          shadow: shadow,
-        );
-        base.addAll(r.base.map((e) => e.m));
-        ombra.addAll(r.ombra.map((e) => e.m));
-      }
+      // Con la griglia gli eventi e gli orari fissi si valutano insieme,
+      // in ordine di tempo, con la stessa storia delle previsioni (R6).
+      final r = evaluatePair(
+        bench[i],
+        j.need,
+        every: j.every,
+        shadow: shadow,
+        gridStepH: j.grid ? (j.need == Need.pipi ? 4 : 6) : 0,
+      );
+      base.addAll(r.base.map((e) => e.m));
+      ombra.addAll(r.ombra.map((e) => e.m));
+      grid.addAll(r.grid.map(gridToJson));
       // ignore: avoid_print
       print('$tag ${j.label} ${bench[i].spec.id}');
     }
@@ -434,13 +483,12 @@ String mergeShards(String tag, List<Job> jobs, int of) {
     if (missing == of) continue;
     final b = StringBuffer();
     if (missing > 0) b.writeln('ATTENZIONE: $missing frammenti mancanti');
-    if (j.grid) {
+    if (grid.isNotEmpty) {
       b.writeln(render('$tag ${j.label} ombra (tutti)', summarizeGrid(grid)));
-    } else {
-      b.writeln(report2('$tag ${j.label} BASE', base));
-      if (ombra.isNotEmpty) {
-        b.writeln(report2('$tag ${j.label} OMBRA', ombra, shadow: true));
-      }
+    }
+    if (base.isNotEmpty) b.writeln(report2('$tag ${j.label} BASE', base));
+    if (ombra.isNotEmpty) {
+      b.writeln(report2('$tag ${j.label} OMBRA', ombra, shadow: true));
     }
     saveText('${tag}_${j.label}', b.toString());
     all.write(b);
