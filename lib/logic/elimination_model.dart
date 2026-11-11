@@ -671,7 +671,7 @@ class ShadowForecast {
   /// (appreso, R3) se cade nella finestra di sonno.
   final DateTime expectedAt;
 
-  /// Probabilità nella prossima ora (grezza del modello).
+  /// Probabilità nella prossima ora, ricalibrata (R5), mai oltre il 90%.
   final double probNextHour;
   final double pastProb;
 
@@ -1745,8 +1745,8 @@ class FittedModel {
   /// Ricalibrazione per PIT (Kuleshov et al. 2018): con gli eventi passati
   /// registrati nella `history` (R6) si calcola dove sono caduti gli eventi
   /// veri nella distribuzione grezza del modello (PIT). La loro funzione di
-  /// ripartizione empirica G, ristretta verso la diagonale con 10
-  /// pseudo-eventi, corregge tutta la distribuzione: il quantile p mostrato
+  /// ripartizione empirica G degli ultimi 60, ristretta verso la diagonale
+  /// con 5 pseudo-eventi, corregge tutta la distribuzione: il quantile p mostrato
   /// è il quantile grezzo G⁻¹(p), e la probabilità nella prossima ora è
   /// calcolata con G. Previsioni del mattino e di giorno sono separate se ce
   /// ne sono almeno 10 dello stesso tipo. Con meno di 5 eventi: intervallo
@@ -1769,7 +1769,7 @@ class FittedModel {
     final pits = <(bool, double)>[];
     final outs = _ctx.outings;
     for (final h in history.reversed) {
-      if (pits.length >= 40) break;
+      if (pits.length >= 60) break;
       if (!h.origin.isBefore(now)) continue;
       final li = outs.indexWhere((o) => o.isAfter(h.last));
       if (li < 0) continue;
@@ -1784,7 +1784,7 @@ class FittedModel {
     ];
     if (u.length < 10) u = [for (final p in pits) p.$2];
     u.sort();
-    const k = 10.0;
+    const k = 5.0;
     double g(double x) {
       if (u.length < 5) return x;
       var below = 0;
@@ -1825,8 +1825,13 @@ class FittedModel {
 
       q = {for (final e in r.q.entries) e.key: widen(e.value)};
     }
-    // R5 (probabilità nella prossima ora ricalibrata): non ancora.
-    final pNext = r.probNextHour;
+    // R5: probabilità nella prossima ora con la stessa correzione G:
+    // P = (G(F(adesso + 1 h)) − G(F(adesso))) / (1 − G(F(adesso))), dove F è
+    // la ripartizione grezza. Mai oltre il 90%.
+    final u0 = r.pastProb;
+    final u1 = 1 - (1 - r.pastProb) * (1 - r.probNextHour);
+    final g0 = g(u0), g1 = g(u1);
+    final pNext = g0 >= 1 ? 0.9 : ((g1 - g0) / (1 - g0)).clamp(0.0, 0.9);
 
     var e = q[0.5]!;
     // R3: di notte, al risveglio appreso (feriali e fine settimana).
