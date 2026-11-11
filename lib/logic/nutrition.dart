@@ -68,6 +68,21 @@ class Nutrition {
     return 2;
   }
 
+  /// Mese in cui finisce la crescita. Le taglie grandi e giganti crescono
+  /// più a lungo (06 §22). Dalla taglia adulta prevista (07 N32), altrimenti
+  /// stimata dal peso attuale.
+  static int growthEndMonths(Dog dog) =>
+      dog.adultSize?.growthEndMonths ??
+      (dog.weightKg >= 40
+          ? 18
+          : dog.weightKg >= 25
+          ? 15
+          : 12);
+
+  /// Il cane non ha ancora finito di crescere.
+  static bool isGrowing(Dog dog, [DateTime? now]) =>
+      dog.ageInMonths(now) < growthEndMonths(dog);
+
   static ({double factor, String reason, bool useIdeal}) merFactor(
     Dog dog, [
     DateTime? now,
@@ -88,17 +103,7 @@ class Nutrition {
     if (m < 4) {
       return (factor: 3.0, reason: _reason(4), useIdeal: false);
     }
-    // Le taglie grandi e giganti crescono più a lungo (06 §22).
-    // Fine crescita dalla taglia adulta prevista (07 N32), altrimenti
-    // stimata dal peso attuale.
-    final growthEnd =
-        dog.adultSize?.growthEndMonths ??
-        (dog.weightKg >= 40
-            ? 18
-            : dog.weightKg >= 25
-            ? 15
-            : 12);
-    if (m < growthEnd) {
+    if (m < growthEndMonths(dog)) {
       return (factor: 2.0, reason: _reason(5), useIdeal: false);
     }
     if (dog.bodyCondition >= 7) {

@@ -7,17 +7,20 @@ import 'package:url_launcher/url_launcher.dart';
 import '../logic/alerts.dart';
 import '../logic/bio_params.dart';
 import '../logic/elimination_model.dart';
+import '../logic/modules.dart';
 import '../logic/potty_predictor.dart';
 import '../logic/prevention.dart';
 import '../logic/seasonal.dart';
 import '../logic/weather.dart';
 import '../brand.dart';
+import '../l10n/clinical_text.dart';
 import '../models.dart';
 import '../notifications.dart';
 import '../store.dart';
 import 'common.dart';
 import 'avatar_editor.dart';
 import 'dog_wizard.dart';
+import 'health_screen.dart';
 import 'avatar.dart';
 import 'log_sheet.dart';
 import 'theme.dart';
@@ -149,10 +152,41 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SectionTitle('Registra con un tocco'),
         QuickActions(dog: dog),
+        // «Sì, le aggiungo dopo» nella procedura guidata (ricerca/26 A6).
+        if (dog.medsToAdd &&
+            !store.records.any(
+              (r) => r.dogId == dog.id && r.type == RecordType.farmaco,
+            ))
+          NoticeCard(
+            'Aggiungi le medicine di ${dog.name}: alcune cambiano quanto beve e '
+            'quanto spesso deve uscire.',
+            level: AlertLevel.info,
+            child: Wrap(
+              spacing: Space.m,
+              runSpacing: Space.s,
+              children: [
+                FilledButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text('Aggiungi una medicina'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          RecordFormPage(dog: dog, therapyOnly: true),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => store.upsertDog(dog..medsToAdd = false),
+                  child: const Text('Chiudi'),
+                ),
+              ],
+            ),
+          ),
         if (pending.isNotEmpty) ...[
           const SectionTitle('Dosi da confermare'),
           for (final p in pending)
             _DoseCard(
+              drug: p.record.title,
               text:
                   '${p.record.title}${p.record.dose.isNotEmpty ? ' · ${p.record.dose}' : ''}\n'
                   'prevista ${whenLabel(p.at, now)}',
@@ -367,11 +401,16 @@ class DogHeader extends StatelessWidget {
 /// regge il testo al 200% e "Saltato" non si tocca per sbaglio (P1, P11).
 class _DoseCard extends StatelessWidget {
   const _DoseCard({
+    required this.drug,
     required this.text,
     required this.late,
     required this.onGiven,
     required this.onSkipped,
   });
+
+  /// Nome del farmaco: sceglie il testo della conferma (insulina,
+  /// antiepilettico o generico, ricerca/26 A7).
+  final String drug;
   final String text;
   final bool late;
   final VoidCallback onGiven;
@@ -380,11 +419,12 @@ class _DoseCard extends StatelessWidget {
   /// «Saltato» chiede conferma: una dose segnata saltata per sbaglio falsa il
   /// diario della terapia. «Dato» resta con un solo tocco.
   Future<void> _confirmSkip(BuildContext context) async {
+    final t = ClinicalText('UI-DOS-001', {'kind': Modules.doseKind(drug)});
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Dose saltata?'),
-        content: const Text('Confermi che questa dose non è stata data?'),
+        title: Text(t.title),
+        content: Text(t.text),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

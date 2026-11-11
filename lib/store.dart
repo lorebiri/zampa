@@ -7,9 +7,11 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'l10n/clinical_text.dart';
 import 'logic/alerts.dart';
 import 'logic/bio_params.dart';
 import 'logic/elimination_model.dart';
+import 'logic/modules.dart';
 import 'logic/nutrition.dart';
 import 'logic/potty_predictor.dart';
 import 'logic/prevention.dart';
@@ -608,7 +610,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
 
       // Dosi delle prossime 72 ore e conferma dopo 2 ore.
       var t = 0;
-      final confirmAt = <DateTime>[];
+      final confirmAt = <({DateTime at, HealthRecord record})>[];
       // Anche le terapie che iniziano più avanti: altrimenti la prima dose
       // e le successive non sono avvisate finché non si riapre l'app dopo
       // l'inizio (rapporto 10, difetto A1).
@@ -637,17 +639,20 @@ class AppStore extends ChangeNotifier implements SyncTarget {
           next = nextDose(r, next.add(const Duration(minutes: 1)));
         }
         final nd = nextDose(r, now.subtract(const Duration(hours: 2)));
-        if (nd != null) confirmAt.add(nd.add(const Duration(hours: 2)));
+        if (nd != null) {
+          confirmAt.add((at: nd.add(const Duration(hours: 2)), record: r));
+        }
       }
-      confirmAt.sort();
+      confirmAt.sort((a, b) => a.at.compareTo(b.at));
       for (var k = 0; k < 3 && k < confirmAt.length; k++) {
+        // Testi propri per insulina e antiepilettici (ricerca/26 A7).
+        final kind = Modules.doseKind(confirmAt[k].record.title);
         out.add(
           PlannedNotification(
             base + 97 + k,
-            confirmAt[k],
-            '💊 Dose confermata per ${d.name}?',
-            'Apri $appName e segna "Dato" o "Saltato". Se l\'hai saltata non '
-                'raddoppiare la successiva: chiedi al veterinario.',
+            confirmAt[k].at,
+            ClinicalText('UI-DOS-002', {'kind': kind, 'name': d.name}).title,
+            ClinicalText('UI-DOS-002', {'kind': kind, 'app': appName}).text,
             1,
             exact: true,
           ),

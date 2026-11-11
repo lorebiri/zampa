@@ -96,7 +96,10 @@ class Weather {
           '${risk ? '${d.name} è più a rischio di colpo di calore. ' : ''}'
           'Fai un\'uscita breve all\'ombra, porta acqua, evita asfalto e sforzi; '
           'la passeggiata lunga nelle ore fresche. Asfalto: se non riesci a '
-          'tenerci il dorso della mano per 7 secondi è troppo caldo per le zampe.';
+          'tenerci il dorso della mano per 7 secondi è troppo caldo per le zampe. '
+          // Soglie prudenziali, non validate come limiti (ricerca/26 C5).
+          'Sono soglie prudenziali, non un limite sicuro: anche sotto, '
+          'osserva come respira.';
     } catch (_) {
       return null;
     }

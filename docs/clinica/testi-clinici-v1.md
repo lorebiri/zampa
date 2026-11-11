@@ -5,6 +5,30 @@ Estratto il 10/11/2026 dal codice dell'app (cartella `lib/`, sola lettura). Vers
 Preparato dalla redazione di Zampa. Chi l'ha preparato **non è un medico veterinario abilitato**: questo documento serve a raccogliere la revisione e la firma di un professionista iscritto all'Ordine.  
 Gemello in formato tabella: `docs/clinica/testi-clinici-v1.csv` (stesse righe, stessi ID).
 
+## Terza revisione veterinaria (ricerca/26, 11/11/2026): approvate con modifica, da firmare
+
+Il veterinario-revisore del progetto (non il veterinario abilitato: la firma resta quella della Parte «Firma della revisione») ha rivisto la v1.0-rc in `ricerca/26`. Nessuna proposta è respinta. I testi qui sotto sono già nell'app; in ogni voce sono segnati con «**Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare**». Il testo «Testo» di ogni voce resta quello della v1, come per le proposte v1.0-rc. Nessuna soglia e nessuna condizione degli avvisi è cambiata.
+
+| ID | Correzione | Cosa cambia |
+|---|---|---|
+| VIA-004 | — | Approvata senza modifiche |
+| VIA-005 | A8 | Testo: il trattamento lo fa e lo registra il veterinario; «da 1 a 5 giorni» |
+| EMG-019 | A8 | Variante Italia: «Non provocare il vomito», partire subito con segni neurologici o respiratori |
+| ALR-LIV-005 (nuova) | A8 | Frase d'azione comune «chiama prima» (ACT-CALL-FIRST) per ALR-TOX-001, ALR-DIA-002, ALR-DIA-005, ALR-FAR-001, ALR-FAR-004, ALR-GI-007a |
+| ALR-DIA-002, ALR-DIA-005 | A8 | Testo completato |
+| ALR-FAR-001 | A4 | Trilostano: non dare la prossima dose prima di aver sentito il veterinario |
+| ALR-FAR-004, ALR-GI-007a | A5 | Testi separati per FANS e cortisone |
+| ALR-URI-006 | A9 | Testo urgente a livello SUBITO |
+| UI-DOS-001, UI-DOS-002 (nuove) | A7 | Dialogo «Saltato» e promemoria a 2 ore: testi per insulina e antiepilettici |
+| ALR-PES-007 | B7 | Variante per il cane in crescita |
+| ALR-REP-008 | B8 | Varianti per la femmina sterilizzata |
+| ALR-RES-002 | B10 | Raffreddare solo dopo caldo o sforzo |
+| ALR-URI-008 | B11 | Testo nuovo, nessuna frase d'azione |
+| TOS-004 | C4 | Testo con le quantità |
+| MET-002, STG-003 | C5 | Soglie prudenziali; «circa 3 su 4» al posto del 74% |
+
+Non ancora fatte (non sono solo testi, o toccano la previsione): A1, A2, A3, A10, B1-B6, B9, C1-C3, C6 (PRV-001, in attesa del parere legale), C7. Il nuovo passo «Prende medicine?» della procedura guidata (A6) non è un testo clinico da firmare.
+
 ## Versione v1.0-rc (11/11/2026): modifiche proposte, da approvare
 
 Questa revisione è la **v1.0-rc da far firmare al veterinario**. I testi qui sotto restano quelli della v1; le modifiche sono segnate in ogni voce con «**v1.0-rc — proposta, da approvare**». Nessuna soglia clinica è cambiata. Nessun testo è «approvato» finché il veterinario non firma.
@@ -24,7 +48,7 @@ Questa revisione è la **v1.0-rc da far firmare al veterinario**. I testi qui so
 **Osservazioni per il veterinario e lo sviluppatore** (nessuna modifica fatta):
 - ALR-REP-006a («Temperatura calata da oltre 24 ore senza parto») con la logica attuale non scatta mai: la temperatura è letta solo nelle ultime 24 ore.
 - ALR-CIB-003a, variante «in un cane diabetico»: non scatta mai, perché un diabetico abbattuto riceve già ALR-DIA-001.
-- I punti di `ricerca/15` §3.2 (ALR-RES-002, ALR-ALT-006, ALR-REP-008, ALR-URI-008, ALR-PES-007, TOS-004, MET-002, STG-003, PRV-001, fonti) restano domande per il veterinario: non sono stati cambiati.
+- I punti di `ricerca/15` §3.2 (ALR-RES-002, ALR-ALT-006, ALR-REP-008, ALR-URI-008, ALR-PES-007, TOS-004, MET-002, STG-003, PRV-001, fonti) restavano domande per il veterinario: `ricerca/26` §6 ha risposto. Testi cambiati: vedi «Terza revisione veterinaria» sopra.
 
 **Nuovi ID tecnici nel catalogo** (testi non clinici, già nell'app, invariati, non da firmare): NUT-FAT-001…013 (motivo del fabbisogno in Nutrizione), LAB-001…017 (nomi degli esami suggeriti), UI-EMG-001…011 (titoli della scheda Emergenze e righe del promemoria EMG-021).
 
@@ -44,15 +68,15 @@ Il file `lib/logic/alerts.dart` contiene **99 chiamate `add(`** che producono un
 
 | Parte | Contenuto | Voci |
 |---|---|---|
-| 0 | Frasi d'azione dei livelli | 4 |
+| 0 | Frasi d'azione dei livelli | 5 |
 | 1 | Scheda Emergenze e avvertenza | 22 |
 | 2 | SUBITO: avvisi automatici 27, altri testi 6 | 33 |
 | 3 | OGGI: avvisi automatici 36, altri testi 1 | 37 |
 | 4 | ATTENZIONE: avvisi automatici 31, altri testi 4 | 35 |
 | 5 | INFO: avvisi automatici 11, altri testi 0 | 11 |
-| 6 | Altri testi informativi (prevenzione, nutrizione, stagioni, razze, viaggi, promemoria, diari) | 73 |
+| 6 | Altri testi informativi (prevenzione, nutrizione, stagioni, razze, viaggi, promemoria, diari) | 75 |
 | 7 | Tabelle: alimenti pericolosi (21) e scale di valutazione (33) | 54 |
-| | **Totale** | **269** |
+| | **Totale** | **272** |
 
 ---
 
@@ -88,6 +112,15 @@ Il file `lib/logic/alerts.dart` contiene **99 chiamate `add(`** che producono un
 - **Quando scatta:** Sotto ogni avviso di livello INFO, salvo dove la colonna «Frase d'azione» dice «nessuna».
 - **Testo:** «Parlane alla prossima visita.»
 - **Fonte:** ricerca/06 §35 · `lib/logic/alerts.dart:18`
+- **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
+- **Note del veterinario:** ______________________________________________
+
+#### ALR-LIV-005 · SUBITO (frase comune «chiama prima»)
+
+- **Quando scatta:** Sotto gli avvisi SUBITO in cui la prima azione utile è una telefonata: ALR-TOX-001, ALR-DIA-002, ALR-DIA-005, ALR-FAR-001, ALR-FAR-004, ALR-GI-007a, al posto della frase del livello SUBITO. Chiave della revisione: ACT-CALL-FIRST.
+- **Testo:** «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.»
+- **Fonte:** ricerca/26 §3.4 (sostituisce la proposta v1.0-rc «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.») · `lib/logic/alerts.dart`
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** testo esatto della revisione (A8).
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -266,6 +299,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Fonte:** ricerca/07 N35 (numero del CAV tolto) · `lib/ui/emergency_screen.dart:157`
 - **Nota per la traduzione:** Qui andrà il numero del centro antiveleni del paese, se verificato (vedi ricerca/15).
 - **v1.0-rc — proposta, da approvare:** Solo se il Paese del cane è l'Italia: «Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.» Il riquadro diventa toccabile e chiama il numero. Numero verificato il 10/11/2026 (centroantiveleni.org, ospedaleniguarda.it); da riverificare a ogni rilascio pubblico e almeno ogni 6 mesi (un test lo impone). Negli altri Paesi resta il testo v1. (piano CEO 10.5; ricerca/15 §3.1 punto 3)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A8) Variante Italia: «Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), {telefono}, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell'etichetta. Se ha convulsioni, respira male o non è ben sveglio, parti subito per il pronto soccorso veterinario e chiama durante il tragitto.» Altri Paesi: invariato.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -338,6 +372,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** (nessuna frase d'azione)
 - **Fonte:** ricerca/07 N8-N9 · `lib/logic/alerts.dart:180`
 - **v1.0-rc — proposta, da approvare:** Quando sale a SUBITO (maschio con sforzo nelle 24 ore) compare la frase d'azione del livello: «Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.». A livello ATTENZIONE resta senza frase d'azione. (ricerca/15 §3.1 punto 5)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A9) A livello SUBITO (maschio con sforzo o gocce nelle 24 ore) testo urgente al posto di «Portalo fuori e osserva…»: «{nome} è un maschio, si è sforzato a urinare nelle ultime 24 ore e da {ore} ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato.» Con un intervento alla colonna negli ultimi 14 giorni segue la frase «Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica.» Frase d'azione: quella del livello SUBITO. A livello ATTENZIONE: testo invariato, nessuna frase d'azione.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -391,6 +426,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Fonte:** ricerca/07 · `lib/logic/alerts.dart:314`
 - **Nota per la traduzione:** «Cushing»: in alcune lingue «iperadrenocorticismo».
 - **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A4, A8) Testo: «Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo. Non dare la prossima dose finché non hai parlato con il veterinario, e chiamalo subito.» Frase d'azione: «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.» (ALR-LIV-005, frase comune). Da confrontare con il foglietto illustrativo vigente di Vetoryl prima della firma.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -402,6 +438,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:352`
 - **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A5, A8) Testo secondo la terapia. Solo FANS: «Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l'hai sentito, e non aggiungere altri farmaci (mai antidolorifici per persone).» Solo cortisone: «Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere il cortisone di colpo e non aggiungere altri farmaci: chiedi a lui cosa fare.» Entrambi (testo composto dalle due varianti approvate, da verificare alla firma): «Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l'hai sentito, non sospendere il cortisone di colpo e non aggiungere altri farmaci (mai antidolorifici per persone).» Frase d'azione: «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.» (ALR-LIV-005, frase comune).
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -413,6 +450,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:388`
 - **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A5, A8) Testo: «Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario[se c'è un FANS: «; non dare la prossima dose di antinfiammatorio finché non l'hai sentito»].» Frase d'azione: «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.» (ALR-LIV-005, frase comune).
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -425,6 +463,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Fonte:** ricerca/06; ricerca/07 N19 · `lib/logic/alerts.dart:723`
 - **Nota per la traduzione:** «Centro antiveleni»: servizio e numero diversi per paese; non tradurre con un numero.
 - **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (al posto di «Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.»). Per un'ingestione si chiama prima: il veterinario o il centro antiveleni dicono se e dove andare. (ricerca/15 §3.1 punto 4)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A8) Testo invariato. Frase d'azione: «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.» (ALR-LIV-005, frase comune).
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -445,6 +484,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono indicare un colpo di calore o uno shock: raffreddalo con acqua (vedi Emergenze) e vai subito dal veterinario.»
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:757`
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (B10) Testo: «Gengive rosso scuro possono indicare un colpo di calore, un'infezione grave o uno shock. Se ha preso caldo o ha fatto sforzi, inizia subito a raffreddarlo con acqua fresca (vedi Emergenze) e poi parti; negli altri casi parti subito per il veterinario.»
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -477,6 +517,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Fonte:** AAHA 2018 (diabete); ricerca/07 N2 · `lib/logic/alerts.dart:893`
 - **Nota per la traduzione:** mg/dL: in molti paesi si usa mmol/L (÷ 18). Le soglie vanno convertite, non solo l'etichetta.
 - **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A8) Testo: «Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Se trema, barcolla, ha convulsioni o non è ben sveglio, vai direttamente al pronto soccorso veterinario. Non fare la prossima insulina senza averlo sentito.» Frase d'azione: «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.» (ALR-LIV-005, frase comune).
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -488,6 +529,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/07 aggiunta N2 · `lib/logic/alerts.dart:932`
 - **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A8) Testo: «Due dosi di insulina registrate a {x} ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Intanto offrigli il suo pasto e non lasciarlo solo. Se è un errore di registrazione, cancellane una.» Frase d'azione: «Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.» (ALR-LIV-005, frase comune).
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -961,6 +1003,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente.»
 - **Frase d'azione sotto l'avviso:** OGGI: «Contatta il veterinario oggi stesso.» / ATTENZIONE: «Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.»
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:1314`
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (B8) In una femmina sterilizzata. OGGI (perdite con pus o cattivo odore): «In una femmina sterilizzata, perdite con pus o cattivo odore possono indicare un'infezione della vagina o di ciò che resta dell'utero: contatta il veterinario oggi.» ATTENZIONE: «Perdite dalla vulva in una femmina sterilizzata vanno fatte vedere nei prossimi giorni. Se sono sangue e lei si comporta come in calore, dillo al veterinario: a volte resta un pezzetto di ovaio. Oggi stesso se è abbattuta, beve molto o compaiono pus o cattivo odore.» Femmina intera: invariato. Livelli e condizioni invariati.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -1363,6 +1406,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Alle {ora}:00 sono previsti {t} °C percepiti[se umidità ≥ 70%: « con umidità alta»]. [se a rischio: «{nome} è più a rischio di colpo di calore. »]Fai un'uscita breve all'ombra, porta acqua, evita asfalto e sforzi; la passeggiata lunga nelle ore fresche. Asfalto: se non riesci a tenerci il dorso della mano per 7 secondi è troppo caldo per le zampe.»
 - **Fonte:** ricerca/06 aggiunta 20; Hall et al. 2020 (fattori di rischio) · `lib/logic/weather.dart:97`
 - **Nota per la traduzione:** Soglie in °C; «regola dei 7 secondi» è un consiglio divulgativo, non uno studio.
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (C5) In coda al testo: «Sono soglie prudenziali, non un limite sicuro: anche sotto, osserva come respira.» Soglie invariate.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -1375,6 +1419,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «In calore è normale una perdita di sangue dalla vulva. Se il sangue è nelle urine stesse, se si sforza o se il calore dura più di 3-4 settimane, senti il veterinario.»
 - **Frase d'azione sotto l'avviso:** Parlane alla prossima visita.
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:212`
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (B11) Testo: «Durante il calore è normale una perdita di sangue dalla vulva, che può macchiare la pipì. Senti il veterinario nei prossimi giorni se il calore dura più di 3-4 settimane o se la pipì resta rossa anche dopo; oggi stesso se si sforza a urinare, va molto spesso o è abbattuta.» Frase d'azione: nessuna. Livello INFO invariato.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -1416,6 +1461,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Parlane alla prossima visita.
 - **Fonte:** WSAVA BCS · `lib/logic/alerts.dart:691`
 - **Nota per la traduzione:** «Body Condition Score»: termine tecnico, lasciare in inglese con spiegazione.
+- **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (B7) Se non ha finito di crescere (fine crescita dalla taglia adulta o dal peso, come in Nutrizione): «Body Condition Score {bcs}/9: per un cucciolo è sopra l'ideale. Non ridurre il cibo da solo: durante la crescita la razione va decisa con il veterinario, controllando la curva di crescita.» Adulti: invariato.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -1511,6 +1557,8 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 | UI-HOM-001 | Home, sotto le dosi da confermare. | Se hai saltato una dose non raddoppiare la successiva: chiedi al veterinario cosa fare. | ricerca/07 · `lib/ui/home_screen.dart:162` | ☐A ☐M ☐E | |
 | UI-HOM-002 | Terapia diuretica con dose serale (dalle 18). | Non spostare né saltare il diuretico per ridurre le uscite notturne: chiedi al veterinario se si può dare al mattino. | ricerca/07 tabella I · `lib/ui/home_screen.dart:188` | ☐A ☐M ☐E | |
 | UI-HOM-003 | Nei 14 giorni dopo un intervento (scheda «Convalescenza: giorno N di 14»). | **Convalescenza: giorno {n} di 14** — • Riposo: uscite brevi al guinzaglio solo per i bisogni, niente corse, salti o scale.<br>• Collare elisabettiano (o body) finché il veterinario non dice di toglierlo: non deve leccare la ferita.<br>• Controlla la ferita due volte al giorno e registrala.<br>• Prima pipì entro 24 ore; appetito di solito entro 24-48 ore.<br>• Somministra solo i farmaci prescritti. | ricerca/07 aggiunta N8 · `lib/ui/home_screen.dart:526` | ☐A ☐M ☐E | |
+| UI-DOS-001 | Home, dialogo di conferma di «Saltato» su una dose (titolo «Dose saltata?»). | Generale: «Confermi che questa dose non è stata data? Non raddoppiare la prossima: chiedi al veterinario cosa fare.» / Insulina (nome con insulin, caninsulin, vetsulin, prozinc, lantus, glargin): «Confermi che l'insulina non è stata fatta? Non farla in ritardo e non raddoppiare la prossima senza aver sentito il veterinario. Se non sei sicuro che sia stata fatta, non rifarla.» / Antiepilettici (fenobarbital, levetiracetam, bromuro di potassio o di sodio, imepitoina, zonisamide e nomi commerciali): «Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.» **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare (A7).** | ricerca/26 §5.1; AAHA 2018; ACVIM 2016 · `lib/ui/home_screen.dart` (`_DoseCard`) | ☐A ☐M ☐E | |
+| UI-DOS-002 | Notifica 2 ore dopo una dose non confermata (al massimo 3 per cane). | Generale (invariato): **💊 Dose confermata per {nome}?** — Apri Zampa e segna "Dato" o "Saltato". Se l'hai saltata non raddoppiare la successiva: chiedi al veterinario. / Insulina: **💉 Insulina di {nome}: segnata?** — Se è stata fatta, segna "Dato". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario. **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare (A7).** / Antiepilettici: **💊 Dose confermata per {nome}?** — Apri Zampa e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso. **Testo ricavato dal testo approvato del dialogo (ricerca/26 §5.1), da firmare.** | ricerca/26 §5.1, §5.3 · `lib/store.dart` (`planNotifications`) | ☐A ☐M ☐E | |
 
 ### Promemoria uscite
 
@@ -1536,7 +1584,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 |---|---|---|---|---|---|
 | STG-001 | Febbraio-maggio. | **Stagione della processionaria** — Evita le pinete e i nidi bianchi sui pini. Se il cane la tocca con la bocca (salivazione, lingua gonfia): subito dal veterinario, senza strofinare. | ricerca/06 · `lib/logic/seasonal.dart:21` | ☐A ☐M ☐E | |
 | STG-002 | Maggio-agosto. | **Stagione dei forasacchi** — Dopo i prati controlla orecchie, zampe (tra le dita) e narici. Se scuote la testa o starnutisce all'improvviso, senti il veterinario. | ricerca/07 aggiunta N9 · `lib/logic/seasonal.dart:32` | ☐A ☐M ☐E | |
-| STG-003 | Giugno-settembre; la prima frase solo per brachicefali, anziani, BCS ≥ 7 o cardiopatici. | **Caldo: rischio colpo di calore** — [se a rischio: «Per {nome} il rischio è più alto. »]Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo. | Hall, Carter, O'Neill 2020, Animals 10:1324 (74,2% da sforzo, Regno Unito) · `lib/logic/seasonal.dart:49` | ☐A ☐M ☐E | |
+| STG-003 | Giugno-settembre; la prima frase solo per brachicefali, anziani, BCS ≥ 7 o cardiopatici. | **Caldo: rischio colpo di calore** — [se a rischio: «Per {nome} il rischio è più alto. »]Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo. **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (C5) L'ultima frase diventa: «Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.» | Hall, Carter, O'Neill 2020, Animals 10:1324 (74,2% da sforzo, Regno Unito) · `lib/logic/seasonal.dart:49` | ☐A ☐M ☐E | |
 | STG-004 | Ottobre-aprile. | **Veleni per lumache e topi** — In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine. | ricerca/06 · `lib/logic/seasonal.dart:57` | ☐A ☐M ☐E | |
 | STG-005 | Giugno-novembre. | **Acqua stagnante e leptospirosi** — Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi. | ricerca/06 · `lib/logic/seasonal.dart:66` | ☐A ☐M ☐E | |
 | STG-006 | Dicembre-febbraio; la prima frase per cani sotto 10 kg, anziani o cuccioli. | **Freddo** — [se fragile: «Per {nome} il freddo pesa di più. »]Uscite brevi quando gela, cappottino per i cani a pelo raso o piccoli; asciugalo dopo la pioggia; attenzione al sale antighiaccio sui polpastrelli (sciacquali al rientro). | — · `lib/logic/seasonal.dart:83` | ☐A ☐M ☐E | |
@@ -1611,8 +1659,8 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 | VIA-001 | Checklist viaggio, sempre. | **Età minima** — Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età. | Reg. (UE) 2016/429; Reg. delegato (UE) 2026/131; Reg. delegato (UE) 2020/688 all. VII · `lib/logic/modules.dart:172` | ☐A ☐M ☐E | |
 | VIA-002 | Checklist viaggio, sempre. | **Microchip registrato** — Obbligatorio e impiantato prima del vaccino antirabbico. | vedi VIA-001 · `lib/logic/modules.dart:178` | ☐A ☐M ☐E | |
 | VIA-003 | Checklist viaggio, sempre. | **Vaccino antirabbico valido** — Nessun antirabbico in cartella. / La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: {data}). | vedi VIA-001; ricerca/07 N51 · `lib/logic/modules.dart:185` | ☐A ☐M ☐E | |
-| VIA-004 | Checklist viaggio, sempre. | **Passaporto europeo per animali** — Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute. **v1.0-rc — proposta, da approvare:** Testo: «Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.» (norma vigente; ricerca/15 §3.1 punto 1) | ricerca/07 §18 · `lib/logic/modules.dart:193` | ☐A ☐M ☐E | |
-| VIA-005 | Checklist viaggio, sempre. | **Trattamento contro Echinococcus** — Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta. **v1.0-rc — proposta, da approvare:** Testo: «Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).» (elenco dei Paesi non verificato; ricerca/15 §3.1 punto 2) | Reg. delegato (UE) 2026/131 art. 8 · `lib/logic/modules.dart:200` | ☐A ☐M ☐E | |
+| VIA-004 | Checklist viaggio, sempre. | **Passaporto europeo per animali** — Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute. **v1.0-rc — proposta, da approvare:** Testo: «Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.» (norma vigente; ricerca/15 §3.1 punto 1) **Approvata senza modifiche dal veterinario-revisore (ricerca/26 §3.1), da firmare (la parte normativa resta di competenza legale).** | ricerca/07 §18 · `lib/logic/modules.dart:193` | ☐A ☐M ☐E | |
+| VIA-005 | Checklist viaggio, sempre. | **Trattamento contro Echinococcus** — Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta. **v1.0-rc — proposta, da approvare:** Testo: «Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).» (elenco dei Paesi non verificato; ricerca/15 §3.1 punto 2) **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (A8) **Trattamento contro la tenia Echinococcus** — «Va fatto da un veterinario e registrato sul passaporto 24-120 ore (da 1 a 5 giorni) prima dell'ingresso nei Paesi indenni. Verifica l'elenco aggiornato prima di partire, con il veterinario o sul sito del Ministero della Salute.» | Reg. delegato (UE) 2026/131 art. 8 · `lib/logic/modules.dart:200` | ☐A ☐M ☐E | |
 | VIA-006 | Checklist viaggio, sempre. | **Rischi parassitari della destinazione** — Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi. | — · `lib/logic/modules.dart:205` | ☐A ☐M ☐E | |
 | VIA-007 | Checklist viaggio, nota in fondo. | Le regole cambiano spesso e variano per paese: verifica sempre con il veterinario e sul sito del Ministero della Salute prima di partire. | — · `lib/ui/diaries_screen.dart:912` | ☐A ☐M ☐E | |
 
@@ -1627,7 +1675,7 @@ Ogni riga mostra: alimento — pericolo · rischio (grave, moderata, lieve). Fon
 | TOS-001 | Sempre, schermata Nutrizione. | **Xilitolo (gomme e dolci "senza zucchero", dentifricio per persone, burro di arachidi light, integratori)** — ipoglicemia e danno al fegato anche a piccole dosi · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:237` | ☐A ☐M ☐E | |
 | TOS-002 | Sempre, schermata Nutrizione. | **Uva e uvetta** — insufficienza renale acuta, dose imprevedibile · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:242` | ☐A ☐M ☐E | |
 | TOS-003 | Sempre, schermata Nutrizione. | **Cioccolato e cacao (più è fondente, più è pericoloso)** — teobromina: vomito, agitazione, aritmie, convulsioni · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:247` | ☐A ☐M ☐E | |
-| TOS-004 | Sempre, schermata Nutrizione. | **Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere)** — anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:252` | ☐A ☐M ☐E | |
+| TOS-004 | Sempre, schermata Nutrizione. | **Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere)** — anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo · rischio grave **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare:** (C4) **Cipolla, aglio, porro, erba cipollina (anche cotti, in polvere o nei sughi)** — «possono causare anemia. Già da circa 5 g di cipolla per kg di peso, cioè mezza cipolla piccola per un cane di 10 kg, e meno per l'aglio. Piccole quantità ripetute si sommano. I segni possono comparire dopo 1-5 giorni.» · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:252` | ☐A ☐M ☐E | |
 | TOS-005 | Sempre, schermata Nutrizione. | **Farmaci per persone: paracetamolo, ibuprofene, naprossene, ketoprofene, aspirina** — ulcere, danno a reni e fegato, anemia · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:258` | ☐A ☐M ☐E | |
 | TOS-006 | Sempre, schermata Nutrizione. | **Altri farmaci umani: antidepressivi, farmaci per ADHD, farmaci per il cuore** — agitazione, aritmie, convulsioni · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:263` | ☐A ☐M ☐E | |
 | TOS-007 | Sempre, schermata Nutrizione. | **Veleni per topi (anticoagulanti, colecalciferolo)** — emorragie anche dopo 3-5 giorni; danno renale · rischio grave | ricerca/06 §25 · `lib/logic/nutrition.dart:268` | ☐A ☐M ☐E | |

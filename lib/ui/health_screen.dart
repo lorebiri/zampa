@@ -467,16 +467,33 @@ class _WeightPainter extends CustomPainter {
 }
 
 class RecordFormPage extends StatefulWidget {
-  const RecordFormPage({super.key, required this.dog, this.record});
+  const RecordFormPage({
+    super.key,
+    required this.dog,
+    this.record,
+    this.therapyOnly = false,
+    this.onSave,
+  });
   final Dog dog;
   final HealthRecord? record;
+
+  /// Solo una terapia (procedura guidata, scheda «Aggiungi le medicine»):
+  /// tipo fisso «Farmaco» e «Ogni quante ore» obbligatorio, così la voce
+  /// diventa una terapia in corso con i suoi promemoria.
+  final bool therapyOnly;
+
+  /// Se c'è, riceve la voce al posto del salvataggio nell'archivio (la
+  /// procedura guidata salva le terapie insieme al cane).
+  final Future<void> Function(HealthRecord record)? onSave;
 
   @override
   State<RecordFormPage> createState() => _RecordFormPageState();
 }
 
 class _RecordFormPageState extends State<RecordFormPage> {
-  late RecordType type = widget.record?.type ?? RecordType.vaccino;
+  late RecordType type =
+      widget.record?.type ??
+      (widget.therapyOnly ? RecordType.farmaco : RecordType.vaccino);
   late final title = TextEditingController(text: widget.record?.title ?? '');
   late final dose = TextEditingController(text: widget.record?.dose ?? '');
   late final notes = TextEditingController(text: widget.record?.notes ?? '');
@@ -531,9 +548,15 @@ class _RecordFormPageState extends State<RecordFormPage> {
     final presets = _presets[type] ?? const <String>[];
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.record == null ? 'Nuova voce' : 'Modifica voce'),
+        title: Text(
+          widget.therapyOnly
+              ? 'Nuova medicina'
+              : widget.record == null
+              ? 'Nuova voce'
+              : 'Modifica voce',
+        ),
         actions: [
-          if (widget.record != null)
+          if (widget.record != null && widget.onSave == null)
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: () async {
@@ -545,23 +568,29 @@ class _RecordFormPageState extends State<RecordFormPage> {
       ),
       body: PageBody(
         children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final rt in RecordType.values)
-                ChoiceChip(
-                  avatar: Icon(rt.icon, size: 18),
-                  label: Text(rt.label),
-                  selected: type == rt,
-                  onSelected: (_) => setState(() => type = rt),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
+          if (!widget.therapyOnly) ...[
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final rt in RecordType.values)
+                  ChoiceChip(
+                    avatar: Icon(rt.icon, size: 18),
+                    label: Text(rt.label),
+                    selected: type == rt,
+                    onSelected: (_) => setState(() => type = rt),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
           TextField(
             controller: title,
-            decoration: const InputDecoration(labelText: 'Titolo / nome'),
+            decoration: InputDecoration(
+              labelText: widget.therapyOnly
+                  ? 'Nome della medicina'
+                  : 'Titolo / nome',
+            ),
             onChanged: (v) {
               if (isTherapy) setState(() => effect = DrugEffectLabel.guess(v));
             },
@@ -596,20 +625,23 @@ class _RecordFormPageState extends State<RecordFormPage> {
               ),
             ),
           const SizedBox(height: 12),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: const Text('Già fatto'),
-            subtitle: Text(
-              done ? 'Voce della cartella' : 'Appuntamento futuro',
+          if (!widget.therapyOnly)
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Già fatto'),
+              subtitle: Text(
+                done ? 'Voce della cartella' : 'Appuntamento futuro',
+              ),
+              value: done,
+              onChanged: (v) => setState(() => done = v),
             ),
-            value: done,
-            onChanged: (v) => setState(() => done = v),
-          ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.event),
             title: Text(
-              '${done ? 'Data' : 'Previsto il'}: ${dmy(date)}${isTherapy ? ' ${hm(date)}' : ''}',
+              widget.therapyOnly
+                  ? 'Inizio (prima dose): ${dmy(date)} ${hm(date)}'
+                  : '${done ? 'Data' : 'Previsto il'}: ${dmy(date)}${isTherapy ? ' ${hm(date)}' : ''}',
             ),
             onTap: () async {
               final d = isTherapy
@@ -724,7 +756,17 @@ class _RecordFormPageState extends State<RecordFormPage> {
           FilledButton(
             onPressed: () async {
               if (title.text.trim().isEmpty) {
-                toast(context, 'Inserisci un titolo');
+                toast(
+                  context,
+                  widget.therapyOnly
+                      ? 'Inserisci il nome della medicina'
+                      : 'Inserisci un titolo',
+                );
+                return;
+              }
+              final hours = int.tryParse(every.text.trim());
+              if (widget.therapyOnly && (hours == null || hours <= 0)) {
+                toast(context, 'Indica ogni quante ore la prende');
                 return;
               }
               final r =
@@ -749,7 +791,12 @@ class _RecordFormPageState extends State<RecordFormPage> {
                 ..notes = notes.text.trim()
                 ..vet = vet.text.trim()
                 ..cost = double.tryParse(cost.text.replaceAll(',', '.'));
-              await StoreScope.read(context).upsertRecord(r);
+              final onSave = widget.onSave;
+              if (onSave != null) {
+                await onSave(r);
+              } else {
+                await StoreScope.read(context).upsertRecord(r);
+              }
               if (context.mounted) Navigator.pop(context);
             },
             child: const Text('Salva'),

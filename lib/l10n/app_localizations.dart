@@ -118,6 +118,12 @@ abstract class AppLocalizations {
   /// **'Parlane alla prossima visita.'**
   String get alrLiv004Text;
 
+  /// ALR-LIV-005 · testo · frase d'azione comune «chiama prima» (ACT-CALL-FIRST) di ALR-TOX-001, ALR-DIA-002, ALR-DIA-005, ALR-FAR-001, ALR-FAR-004, ALR-GI-007a · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario. Se non risponde entro pochi minuti, o se il cane peggiora, vai al pronto soccorso veterinario, anche di notte.'**
+  String get alrLiv005Text;
+
   /// ALR-URI-001 · titolo
   ///
   /// In it, this message translates to:
@@ -178,17 +184,17 @@ abstract class AppLocalizations {
   /// **'Se {name} non ha davvero urinato (e non è solo una registrazione mancante), è un\'urgenza, specie nei maschi. Se escono solo gocce, conta come se non avesse urinato.'**
   String alrUri005Text(String name);
 
-  /// ALR-URI-006 · titolo · spine = yes se intervento alla colonna negli ultimi 14 giorni
+  /// ALR-URI-006 · titolo
   ///
   /// In it, this message translates to:
   /// **'Nessuna pipì registrata da {hours} ore'**
   String alrUri006Title(String hours);
 
-  /// ALR-URI-006 · testo · spine = yes se intervento alla colonna negli ultimi 14 giorni
+  /// ALR-URI-006 · testo · variant = strain (SUBITO: maschio con sforzo o gocce nelle 24 ore), spine (intervento alla colonna negli ultimi 14 giorni), strainSpine (entrambi), other · varianti strain e strainSpine ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A9)
   ///
   /// In it, this message translates to:
-  /// **'{spine, select, yes{Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.} other{Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.}}'**
-  String alrUri006Text(String spine);
+  /// **'{variant, select, strainSpine{{name} è un maschio, si è sforzato a urinare nelle ultime 24 ore e da {hours} ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un\'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato. Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica.} strain{{name} è un maschio, si è sforzato a urinare nelle ultime 24 ore e da {hours} ore non risulta nessuna pipì: può essere un blocco delle vie urinarie. Non aspettare di vedere se la fa: è un\'urgenza, anche di notte. Se escono solo gocce, conta come se non avesse urinato.} spine{Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.} other{Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un\'urgenza.}}'**
+  String alrUri006Text(String variant, String name, String hours);
 
   /// ALR-URI-007 · titolo
   ///
@@ -208,10 +214,10 @@ abstract class AppLocalizations {
   /// **'Sangue durante il calore'**
   String get alrUri008Title;
 
-  /// ALR-URI-008 · testo
+  /// ALR-URI-008 · testo · nessuna frase d'azione · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (B11)
   ///
   /// In it, this message translates to:
-  /// **'In calore è normale una perdita di sangue dalla vulva. Se il sangue è nelle urine stesse, se si sforza o se il calore dura più di 3-4 settimane, senti il veterinario.'**
+  /// **'Durante il calore è normale una perdita di sangue dalla vulva, che può macchiare la pipì. Senti il veterinario nei prossimi giorni se il calore dura più di 3-4 settimane o se la pipì resta rossa anche dopo; oggi stesso se si sforza a urinare, va molto spesso o è abbattuta.'**
   String get alrUri008Text;
 
   /// ALR-URI-009 · titolo
@@ -292,17 +298,11 @@ abstract class AppLocalizations {
   /// **'Malessere durante la terapia per il Cushing'**
   String get alrFar001Title;
 
-  /// ALR-FAR-001 · testo
+  /// ALR-FAR-001 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A4)
   ///
   /// In it, this message translates to:
-  /// **'Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito.'**
+  /// **'Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo. Non dare la prossima dose finché non hai parlato con il veterinario, e chiamalo subito.'**
   String get alrFar001Text;
-
-  /// ALR-FAR-001 · frase d'azione · v1.0-rc: proposta, da approvare
-  ///
-  /// In it, this message translates to:
-  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
-  String get alrFar001Action;
 
   /// ALR-FAR-002 · titolo
   ///
@@ -346,17 +346,11 @@ abstract class AppLocalizations {
   /// **'Vomito durante la terapia con antinfiammatori o cortisone'**
   String get alrFar004Title;
 
-  /// ALR-FAR-004 · testo
+  /// ALR-FAR-004 · testo · drug = fans (solo FANS), cortisone (solo cortisone), entrambi · varianti fans e cortisone ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A5); variante entrambi composta dalle due, da firmare
   ///
   /// In it, this message translates to:
-  /// **'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.'**
-  String get alrFar004Text;
-
-  /// ALR-FAR-004 · frase d'azione · v1.0-rc: proposta, da approvare
-  ///
-  /// In it, this message translates to:
-  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
-  String get alrFar004Action;
+  /// **'{drug, select, fans{Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l\'hai sentito, e non aggiungere altri farmaci (mai antidolorifici per persone).} cortisone{Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere il cortisone di colpo e non aggiungere altri farmaci: chiedi a lui cosa fare.} other{Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non dare la prossima dose di antinfiammatorio finché non l\'hai sentito, non sospendere il cortisone di colpo e non aggiungere altri farmaci (mai antidolorifici per persone).}}'**
+  String alrFar004Text(String drug);
 
   /// ALR-GI-004 · titolo
   ///
@@ -400,17 +394,11 @@ abstract class AppLocalizations {
   /// **'Feci nere'**
   String get alrGi007aTitle;
 
-  /// ALR-GI-007a · testo
+  /// ALR-GI-007a · testo · nsaid = yes se tra le terapie c'è un FANS · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A5)
   ///
   /// In it, this message translates to:
-  /// **'Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.'**
-  String get alrGi007aText;
-
-  /// ALR-GI-007a · frase d'azione · v1.0-rc: proposta, da approvare
-  ///
-  /// In it, this message translates to:
-  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
-  String get alrGi007aAction;
+  /// **'{nsaid, select, yes{Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario; non dare la prossima dose di antinfiammatorio finché non l\'hai sentito.} other{Feci nere durante una terapia con antinfiammatori o cortisone: potrebbe essere un sanguinamento dello stomaco. Chiama subito il veterinario.}}'**
+  String alrGi007aText(String nsaid);
 
   /// ALR-GI-007b · titolo
   ///
@@ -646,11 +634,11 @@ abstract class AppLocalizations {
   /// **'Sovrappeso'**
   String get alrPes007Title;
 
-  /// ALR-PES-007 · testo
+  /// ALR-PES-007 · testo · growing = yes se non ha finito di crescere · variante yes ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (B7)
   ///
   /// In it, this message translates to:
-  /// **'Body Condition Score {bcs}/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane.'**
-  String alrPes007Text(String bcs);
+  /// **'{growing, select, yes{Body Condition Score {bcs}/9: per un cucciolo è sopra l\'ideale. Non ridurre il cibo da solo: durante la crescita la razione va decisa con il veterinario, controllando la curva di crescita.} other{Body Condition Score {bcs}/9: la razione in Nutrizione è calcolata per un dimagrimento graduale. Prima di iniziare fai visitare il cane.}}'**
+  String alrPes007Text(String growing, String bcs);
 
   /// ALR-PES-008 · titolo
   ///
@@ -675,12 +663,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell\'etichetta.'**
   String get alrTox001Text;
-
-  /// ALR-TOX-001 · frase d'azione · v1.0-rc: proposta, da approvare
-  ///
-  /// In it, this message translates to:
-  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
-  String get alrTox001Action;
 
   /// ALR-TOX-002 · titolo · date = giorno/mese
   ///
@@ -712,10 +694,10 @@ abstract class AppLocalizations {
   /// **'Gengive rosso scuro'**
   String get alrRes002Title;
 
-  /// ALR-RES-002 · testo
+  /// ALR-RES-002 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (B10)
   ///
   /// In it, this message translates to:
-  /// **'Gengive rosso scuro, soprattutto dopo caldo o sforzo, possono indicare un colpo di calore o uno shock: raffreddalo con acqua (vedi Emergenze) e vai subito dal veterinario.'**
+  /// **'Gengive rosso scuro possono indicare un colpo di calore, un\'infezione grave o uno shock. Se ha preso caldo o ha fatto sforzi, inizia subito a raffreddarlo con acqua fresca (vedi Emergenze) e poi parti; negli altri casi parti subito per il veterinario.'**
   String get alrRes002Text;
 
   /// ALR-RES-003 · titolo
@@ -832,17 +814,11 @@ abstract class AppLocalizations {
   /// **'Glicemia bassa ({value} mg/dL)'**
   String alrDia002Title(String value);
 
-  /// ALR-DIA-002 · testo
+  /// ALR-DIA-002 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
   ///
   /// In it, this message translates to:
-  /// **'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito.'**
+  /// **'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Se trema, barcolla, ha convulsioni o non è ben sveglio, vai direttamente al pronto soccorso veterinario. Non fare la prossima insulina senza averlo sentito.'**
   String get alrDia002Text;
-
-  /// ALR-DIA-002 · frase d'azione · v1.0-rc: proposta, da approvare
-  ///
-  /// In it, this message translates to:
-  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
-  String get alrDia002Action;
 
   /// ALR-DIA-003 · titolo
   ///
@@ -874,17 +850,11 @@ abstract class AppLocalizations {
   /// **'Due dosi di insulina ravvicinate'**
   String get alrDia005Title;
 
-  /// ALR-DIA-005 · testo
+  /// ALR-DIA-005 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
   ///
   /// In it, this message translates to:
-  /// **'Due dosi di insulina registrate a {hours} ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una.'**
+  /// **'Due dosi di insulina registrate a {hours} ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Intanto offrigli il suo pasto e non lasciarlo solo. Se è un errore di registrazione, cancellane una.'**
   String alrDia005Text(String hours);
-
-  /// ALR-DIA-005 · frase d'azione · v1.0-rc: proposta, da approvare
-  ///
-  /// In it, this message translates to:
-  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
-  String get alrDia005Action;
 
   /// ALR-REP-003 · titolo
   ///
@@ -1264,11 +1234,11 @@ abstract class AppLocalizations {
   /// **'Perdite vulvari'**
   String get alrRep008Title;
 
-  /// ALR-REP-008 · testo
+  /// ALR-REP-008 · testo · variant = spayedPus (sterilizzata, perdite purulente o maleodoranti), spayed (sterilizzata), other · varianti spayed e spayedPus ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (B8)
   ///
   /// In it, this message translates to:
-  /// **'Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente.'**
-  String get alrRep008Text;
+  /// **'{variant, select, spayedPus{In una femmina sterilizzata, perdite con pus o cattivo odore possono indicare un\'infezione della vagina o di ciò che resta dell\'utero: contatta il veterinario oggi.} spayed{Perdite dalla vulva in una femmina sterilizzata vanno fatte vedere nei prossimi giorni. Se sono sangue e lei si comporta come in calore, dillo al veterinario: a volte resta un pezzetto di ovaio. Oggi stesso se è abbattuta, beve molto o compaiono pus o cattivo odore.} other{Perdite fuori dal calore vanno valutate dal veterinario entro 1-2 giorni; oggi stesso se è abbattuta, beve molto o le perdite sono purulente.}}'**
+  String alrRep008Text(String variant);
 
   /// ALR-URI-017 · titolo
   ///
@@ -1804,16 +1774,16 @@ abstract class AppLocalizations {
   /// **'teobromina: vomito, agitazione, aritmie, convulsioni'**
   String get tos003Text;
 
-  /// TOS-004 · titolo · titolo = alimento, testo = pericolo
+  /// TOS-004 · titolo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (C4)
   ///
   /// In it, this message translates to:
-  /// **'Cipolla, aglio, porro, erba cipollina (anche cotti o in polvere)'**
+  /// **'Cipolla, aglio, porro, erba cipollina (anche cotti, in polvere o nei sughi)'**
   String get tos004Title;
 
-  /// TOS-004 · testo · titolo = alimento, testo = pericolo
+  /// TOS-004 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (C4)
   ///
   /// In it, this message translates to:
-  /// **'anemia: alterazioni del sangue da circa 5 g/kg, effetto cumulativo'**
+  /// **'possono causare anemia. Già da circa 5 g di cipolla per kg di peso, cioè mezza cipolla piccola per un cane di 10 kg, e meno per l\'aglio. Piccole quantità ripetute si sommano. I segni possono comparire dopo 1-5 giorni.'**
   String get tos004Text;
 
   /// TOS-005 · titolo · titolo = alimento, testo = pericolo
@@ -2050,10 +2020,10 @@ abstract class AppLocalizations {
   /// **'Caldo: rischio colpo di calore'**
   String get stg003Title;
 
-  /// STG-003 · testo
+  /// STG-003 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (C5)
   ///
   /// In it, this message translates to:
-  /// **'{atRisk, select, yes{Per {name} il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.} other{Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Il 74% dei colpi di calore avviene durante lo sforzo.}}'**
+  /// **'{atRisk, select, yes{Per {name} il rischio è più alto. Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.} other{Passeggiate nelle ore fresche, mai lasciarlo in auto, sempre acqua fresca. Nel Regno Unito circa 3 colpi di calore su 4 avvengono durante lo sforzo: nei giorni caldi, passeggiate brevi e nelle ore fresche.}}'**
   String stg003Text(String atRisk, String name);
 
   /// STG-004 · titolo
@@ -2332,16 +2302,16 @@ abstract class AppLocalizations {
   /// **'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.'**
   String get via004Text;
 
-  /// VIA-005 · titolo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 2)
+  /// VIA-005 · titolo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
   ///
   /// In it, this message translates to:
-  /// **'Trattamento contro Echinococcus'**
+  /// **'Trattamento contro la tenia Echinococcus'**
   String get via005Title;
 
-  /// VIA-005 · testo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 2)
+  /// VIA-005 · testo · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
   ///
   /// In it, this message translates to:
-  /// **'Obbligatorio 24-120 ore prima dell\'ingresso nei Paesi indenni (verifica l\'elenco aggiornato con il veterinario).'**
+  /// **'Va fatto da un veterinario e registrato sul passaporto 24-120 ore (da 1 a 5 giorni) prima dell\'ingresso nei Paesi indenni. Verifica l\'elenco aggiornato prima di partire, con il veterinario o sul sito del Ministero della Salute.'**
   String get via005Text;
 
   /// VIA-006 · titolo
@@ -2758,16 +2728,16 @@ abstract class AppLocalizations {
   /// **'Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.'**
   String get emg018Text;
 
-  /// EMG-019 · titolo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); v1.0-rc: variante yes proposta, da approvare (piano CEO 10.5)
+  /// EMG-019 · titolo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); variante yes ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
   ///
   /// In it, this message translates to:
   /// **'Sospetto avvelenamento'**
   String get emg019Title;
 
-  /// EMG-019 · testo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); v1.0-rc: variante yes proposta, da approvare (piano CEO 10.5)
+  /// EMG-019 · testo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); variante yes ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A8)
   ///
   /// In it, this message translates to:
-  /// **'{cav, select, yes{Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), {phone}, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell\'etichetta.} other{Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.}}'**
+  /// **'{cav, select, yes{Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), {phone}, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell\'etichetta. Se ha convulsioni, respira male o non è ben sveglio, parti subito per il pronto soccorso veterinario e chiama durante il tragitto.} other{Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.}}'**
   String emg019Text(String cav, String phone);
 
   /// EMG-020 · titolo
@@ -2867,6 +2837,30 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Cosa è successo e da quando; come respira; colore delle gengive.'**
   String get uiEmg011Text;
+
+  /// UI-DOS-001 · titolo · dialogo di conferma di «Saltato» (Home, dosi da confermare) · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A7)
+  ///
+  /// In it, this message translates to:
+  /// **'Dose saltata?'**
+  String get uiDos001Title;
+
+  /// UI-DOS-001 · testo · kind = insulin (insulina), antiepileptic (farmaci per le convulsioni), other · ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A7)
+  ///
+  /// In it, this message translates to:
+  /// **'{kind, select, insulin{Confermi che l\'insulina non è stata fatta? Non farla in ritardo e non raddoppiare la prossima senza aver sentito il veterinario. Se non sei sicuro che sia stata fatta, non rifarla.} antiepileptic{Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.} other{Confermi che questa dose non è stata data? Non raddoppiare la prossima: chiedi al veterinario cosa fare.}}'**
+  String uiDos001Text(String kind);
+
+  /// UI-DOS-002 · titolo · promemoria di conferma 2 ore dopo la dose · kind = insulin (insulina), antiepileptic (farmaci per le convulsioni), other · variante insulin ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A7)
+  ///
+  /// In it, this message translates to:
+  /// **'{kind, select, insulin{💉 Insulina di {name}: segnata?} other{💊 Dose confermata per {name}?}}'**
+  String uiDos002Title(String kind, String name);
+
+  /// UI-DOS-002 · testo · kind = insulin (insulina), antiepileptic (farmaci per le convulsioni), other · variante insulin ricerca/26: approvata con modifica dal veterinario-revisore, da firmare (A7); variante antiepileptic ricavata dal testo approvato del dialogo (ricerca/26 §5.1), da firmare; other invariata
+  ///
+  /// In it, this message translates to:
+  /// **'{kind, select, insulin{Se è stata fatta, segna \"Dato\". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario.} antiepileptic{Apri {app} e segna \"Dato\" o \"Saltato\". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l\'hai saltata, chiama il veterinario oggi per sapere se darla adesso.} other{Apri {app} e segna \"Dato\" o \"Saltato\". Se l\'hai saltata non raddoppiare la successiva: chiedi al veterinario.}}'**
+  String uiDos002Text(String kind, String app);
 }
 
 class _AppLocalizationsDelegate

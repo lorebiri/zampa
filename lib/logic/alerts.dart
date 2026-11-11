@@ -124,6 +124,9 @@ class AlertEngine {
         activeDrugs.contains(DrugEffect.fans) ||
         activeDrugs.contains(DrugEffect.cortisonico);
     final depressed24 = h24.any((l) => hasSign(l, Sign.abbattimento));
+    // Frase d'azione comune «chiama prima» (ricerca/26 §3.4, ACT-CALL-FIRST)
+    // degli avvisi SUBITO in cui la prima azione utile è una telefonata.
+    final callFirst = const ClinicalText('ALR-LIV-005').text;
 
     // 1. Sforzo a urinare (possibile ostruzione nel maschio: emergenza).
     bool strain(LogEntry l) =>
@@ -177,7 +180,15 @@ class AlertEngine {
         add(
           strainMale ? AlertLevel.subito : AlertLevel.attenzione,
           'ALR-URI-006',
-          p: {'hours': '${hours.round()}', 'spine': yesNo(spine)},
+          p: {
+            'hours': '${hours.round()}',
+            'name': name,
+            // A SUBITO un testo urgente, non condizionale (ricerca/26 §3.5):
+            // la frase sulla colonna va dopo.
+            'variant': strainMale
+                ? (spine ? 'strainSpine' : 'strain')
+                : (spine ? 'spine' : 'other'),
+          },
           // v1.0-rc (ricerca/15 §3.1 punto 5): quando sale a SUBITO mostra
           // la frase d'azione del livello; altrimenti nessuna.
           action: strainMale ? null : '',
@@ -198,7 +209,8 @@ class AlertEngine {
       if (vomitOrDown) {
         add(AlertLevel.oggi, 'ALR-URI-007');
       } else if (inHeat && strain24 == 0) {
-        add(AlertLevel.info, 'ALR-URI-008');
+        // Il testo dice già quando chiamare: nessuna frase d'azione (B11).
+        add(AlertLevel.info, 'ALR-URI-008', action: '');
       } else {
         add(AlertLevel.attenzione, 'ALR-URI-009');
       }
@@ -265,7 +277,7 @@ class AlertEngine {
     }
     if (activeDrugs.contains(DrugEffect.trilostano) &&
         (vomit || diarrhea || down24 || inapp24)) {
-      add(AlertLevel.subito, 'ALR-FAR-001', rank: 9);
+      add(AlertLevel.subito, 'ALR-FAR-001', action: callFirst, rank: 9);
     }
     if (onNsaidOrSteroid && !vomit && (inapp24 || down24)) {
       add(AlertLevel.oggi, 'ALR-FAR-002');
@@ -279,8 +291,20 @@ class AlertEngine {
       add(AlertLevel.oggi, 'ALR-GI-003');
     }
     final tiny = puppy || dog.weightKg < 5;
+    final onNsaid = activeDrugs.contains(DrugEffect.fans);
+    final onSteroid = activeDrugs.contains(DrugEffect.cortisonico);
     if (onNsaidOrSteroid && vomits24.isNotEmpty) {
-      add(AlertLevel.subito, 'ALR-FAR-004');
+      // Testi diversi per FANS e cortisone (ricerca/26 A5).
+      add(
+        AlertLevel.subito,
+        'ALR-FAR-004',
+        p: {
+          'drug': onNsaid && onSteroid
+              ? 'entrambi'
+              : (onNsaid ? 'fans' : 'cortisone'),
+        },
+        action: callFirst,
+      );
     } else if (!bloodVomit && !gdv && !puppyGI && !diabeticGI) {
       if (tiny && vomits24.length >= 2) {
         add(AlertLevel.oggi, 'ALR-GI-004');
@@ -301,6 +325,8 @@ class AlertEngine {
       add(
         onNsaidOrSteroid ? AlertLevel.subito : AlertLevel.oggi,
         onNsaidOrSteroid ? 'ALR-GI-007a' : 'ALR-GI-007b',
+        p: onNsaidOrSteroid ? {'nsaid': yesNo(onNsaid)} : const {},
+        action: onNsaidOrSteroid ? callFirst : null,
       );
     }
     if (bloodStool) {
@@ -519,7 +545,15 @@ class AlertEngine {
     if (ageM >= 12 && dog.bodyCondition <= 3) {
       add(AlertLevel.attenzione, 'ALR-PES-006');
     } else if (dog.bodyCondition >= 7) {
-      add(AlertLevel.info, 'ALR-PES-007', p: {'bcs': '${dog.bodyCondition}'});
+      add(
+        AlertLevel.info,
+        'ALR-PES-007',
+        p: {
+          'bcs': '${dog.bodyCondition}',
+          // Nel cucciolo niente dimagrimento fai da te (ricerca/26 B7).
+          'growing': yesNo(Nutrition.isGrowing(dog, now)),
+        },
+      );
     } else if (dog.bodyCondition == 6) {
       add(AlertLevel.info, 'ALR-PES-008');
     }
@@ -541,7 +575,13 @@ class AlertEngine {
       final last = ingest.last;
       final note = {'hasNote': yesNo(last.note.isNotEmpty), 'note': last.note};
       if (now.difference(last.time).inHours < 12) {
-        add(AlertLevel.subito, 'ALR-TOX-001', p: note, rank: 3);
+        add(
+          AlertLevel.subito,
+          'ALR-TOX-001',
+          p: note,
+          action: callFirst,
+          rank: 3,
+        );
       } else {
         add(
           AlertLevel.attenzione,
@@ -652,6 +692,7 @@ class AlertEngine {
           AlertLevel.subito,
           'ALR-DIA-002',
           p: {'value': '${g.round()}'},
+          action: callFirst,
           rank: 2,
         );
       } else if (g < 80) {
@@ -683,6 +724,7 @@ class AlertEngine {
           AlertLevel.subito,
           'ALR-DIA-005',
           p: {'hours': gapH.toStringAsFixed(1)},
+          action: callFirst,
           rank: 2,
         );
       }
@@ -940,7 +982,16 @@ class AlertEngine {
       if (purulent && !dog.neutered) {
         add(AlertLevel.oggi, 'ALR-REP-007', rank: 12);
       } else if (!inHeatNow) {
-        add(purulent ? AlertLevel.oggi : AlertLevel.attenzione, 'ALR-REP-008');
+        add(
+          purulent ? AlertLevel.oggi : AlertLevel.attenzione,
+          'ALR-REP-008',
+          // Nella sterilizzata non si parla di calore (ricerca/26 B8).
+          p: {
+            'variant': !male && dog.neutered
+                ? (purulent ? 'spayedPus' : 'spayed')
+                : 'other',
+          },
+        );
       }
     }
 

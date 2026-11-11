@@ -94,9 +94,11 @@ void main() {
   test(
     'frase d\'azione «chiama» per gli avvisi SUBITO che dicono di chiamare',
     () {
+      // Frase comune approvata con modifica (ricerca/26 §3.4).
       const call =
-          'Chiama subito il veterinario; se non risponde, vai al pronto '
-          'soccorso veterinario.';
+          'Chiama subito il veterinario. Se non risponde entro pochi minuti, '
+          'o se il cane peggiora, vai al pronto soccorso veterinario, anche '
+          'di notte.';
       const ids = {
         'ALR-TOX-001',
         'ALR-DIA-002',

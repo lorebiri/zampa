@@ -4,9 +4,13 @@ import '../models.dart';
 import '../store.dart';
 import 'common.dart';
 import 'dog_form.dart';
+import 'health_screen.dart';
 import 'theme.dart';
 
-/// Procedura guidata per il primo cane: quattro passi brevi, un concetto per
+/// Risposta a «Prende medicine?» (ricerca/26 A6).
+enum MedsAnswer { no, now, later }
+
+/// Procedura guidata per il primo cane: cinque passi brevi, un concetto per
 /// schermata, pulsanti grandi (ricerca/16, ricerca/22 §8). Chiede solo quello
 /// che serve per partire; il resto sta nel modulo completo («Altri dettagli»).
 /// Le regole sono quelle del modulo: nome, data di nascita (mai futura) e
@@ -14,7 +18,7 @@ import 'theme.dart';
 class DogWizardPage extends StatefulWidget {
   const DogWizardPage({super.key});
 
-  static const steps = 4;
+  static const steps = 5;
 
   @override
   State<DogWizardPage> createState() => _DogWizardPageState();
@@ -35,6 +39,10 @@ class _DogWizardPageState extends State<DogWizardPage> {
   // Orari proposti: gli stessi valori predefiniti del modulo completo.
   int wakeHour = 7;
   int sleepHour = 23;
+  // Terapie in corso (ricerca/26 A6): salvate insieme al cane.
+  final dogId = newId();
+  MedsAnswer? meds;
+  final therapies = <HealthRecord>[];
 
   /// Il passo ha già provato ad andare avanti: da qui si mostrano gli errori.
   final tried = <int>{};
@@ -82,7 +90,7 @@ class _DogWizardPageState extends State<DogWizardPage> {
     setState(() => saving = true);
     final store = StoreScope.read(context);
     final dog = Dog(
-      id: newId(),
+      id: dogId,
       name: name.text.trim(),
       birthDate: birth!,
       sex: sex,
@@ -95,8 +103,17 @@ class _DogWizardPageState extends State<DogWizardPage> {
       photoId: photoId,
       // Taglia del compagno coerente con il peso indicato.
       look: AvatarLook.forWeight(kg),
+      // «Le aggiungo dopo» (o «ora» senza averne aggiunte): scheda in Home.
+      medsToAdd:
+          meds == MedsAnswer.later ||
+          (meds == MedsAnswer.now && therapies.isEmpty),
     );
-    await saveDogWithFirstDogPrompts(context, store, dog);
+    await saveDogWithFirstDogPrompts(
+      context,
+      store,
+      dog,
+      records: meds == MedsAnswer.now ? therapies : const [],
+    );
     if (!mounted) return;
     final nav = Navigator.of(context);
     if (moreDetails) {
@@ -127,6 +144,13 @@ class _DogWizardPageState extends State<DogWizardPage> {
         'Salute',
         'Facoltativo: puoi completarlo anche più avanti.',
         _stepHealth(),
+      ),
+      3 => (
+        'Prende medicine?',
+        'Alcune medicine cambiano quanto beve e quanto spesso deve uscire, e '
+            'alcuni segni vanno presi più sul serio durante una terapia. Se non '
+            'lo sai ora, puoi aggiungerle dopo.',
+        _stepMeds(),
       ),
       _ => (
         'La sua giornata',
@@ -363,6 +387,94 @@ class _DogWizardPageState extends State<DogWizardPage> {
       ),
     ),
   ];
+
+  /// Il cane non è ancora salvato: il modulo della terapia riceve un cane
+  /// provvisorio con l'ID definitivo.
+  Dog get _draftDog => Dog(
+    id: dogId,
+    name: name.text.trim(),
+    birthDate: birth ?? DateTime.now(),
+    sex: sex,
+    weightKg: parseDogWeight(weight.text) ?? 10,
+  );
+
+  /// Il modulo della terapia della scheda Salute, in modalità «solo terapia».
+  Future<void> _addTherapy() => Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (_) => RecordFormPage(
+        dog: _draftDog,
+        therapyOnly: true,
+        onSave: (r) async => setState(() => therapies.add(r)),
+      ),
+    ),
+  );
+
+  Future<void> _choose(MedsAnswer a) async {
+    setState(() => meds = a);
+    if (a == MedsAnswer.now && therapies.isEmpty) await _addTherapy();
+  }
+
+  List<Widget> _stepMeds() {
+    final t = Theme.of(context);
+    return [
+      Wrap(
+        spacing: Space.s,
+        runSpacing: Space.s,
+        children: [
+          for (final (a, label) in [
+            (MedsAnswer.no, 'No'),
+            (MedsAnswer.now, 'Sì, le aggiungo ora'),
+            (MedsAnswer.later, 'Sì, le aggiungo dopo'),
+          ])
+            ChoiceChip(
+              label: Text(label),
+              selected: meds == a,
+              onSelected: (_) => _choose(a),
+            ),
+        ],
+      ),
+      if (meds == MedsAnswer.now) ...[
+        const SizedBox(height: Space.l),
+        for (final r in therapies)
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.medication_outlined),
+              title: Text(
+                '${r.title}${r.dose.isNotEmpty ? ' · ${r.dose}' : ''}',
+              ),
+              subtitle: Text(
+                'Ogni ${r.everyHours} ore, dal ${dmy(r.date)} '
+                        '${r.endDate == null ? '' : 'al ${dmy(r.endDate!)}'}'
+                    .trim(),
+              ),
+              trailing: IconButton(
+                tooltip: 'Togli ${r.title}',
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () => setState(() => therapies.remove(r)),
+              ),
+            ),
+          ),
+        OutlinedButton.icon(
+          icon: const Icon(Icons.add),
+          label: Text(
+            therapies.isEmpty
+                ? 'Aggiungi una medicina'
+                : 'Aggiungi un\'altra medicina',
+          ),
+          onPressed: _addTherapy,
+        ),
+      ],
+      if (meds == MedsAnswer.later) ...[
+        const SizedBox(height: Space.l),
+        Text(
+          'Troverai in Home un promemoria per aggiungerle.',
+          style: t.textTheme.bodyMedium?.copyWith(
+            color: t.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    ];
+  }
 
   List<Widget> _stepRoutine() => [
     HourPicker(

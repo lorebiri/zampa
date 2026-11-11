@@ -241,6 +241,7 @@ class Dog {
     this.prudence = Prudence.normale,
     this.poopRemindersOn = true,
     this.photoId,
+    this.medsToAdd = false,
     AvatarLook? look,
   }) : look = look ?? AvatarLook.forWeight(weightKg);
 
@@ -300,6 +301,11 @@ class Dog {
 
   /// Foto del cane, facoltativa (salvata a parte con AppStore.savePhoto).
   String? photoId;
+
+  /// Nella procedura guidata ha risposto «Sì, le aggiungo dopo» a «Prende
+  /// medicine?»: la Home mostra «Aggiungi le medicine di …» finché non ne
+  /// registra una o chiude la scheda (ricerca/26 A6).
+  bool medsToAdd;
 
   /// Stato riproduttivo effettivo a una data (il calore dura ~3 settimane,
   /// la gravidanza ~9 settimane, l'allattamento ~7 settimane).
@@ -372,6 +378,7 @@ class Dog {
     'prudence': prudence.name,
     'poopRemindersOn': poopRemindersOn,
     'photoId': photoId,
+    'medsToAdd': medsToAdd,
   };
 
   factory Dog.fromJson(Map<String, Object?> j) => Dog(
@@ -420,6 +427,7 @@ class Dog {
     prudence: Prudence.values.byName((j['prudence'] as String?) ?? 'normale'),
     poopRemindersOn: (j['poopRemindersOn'] as bool?) ?? true,
     photoId: j['photoId'] as String?,
+    medsToAdd: (j['medsToAdd'] as bool?) ?? false,
   );
 }
 
