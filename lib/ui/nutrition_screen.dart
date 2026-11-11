@@ -247,22 +247,30 @@ class _FoodFormState extends State<_FoodForm> {
         ),
         const SizedBox(height: 12),
         DropdownButtonFormField<DietType>(
+          isExpanded: true,
           initialValue: d.diet,
           decoration: const InputDecoration(labelText: 'Tipo di dieta'),
           items: [
             for (final x in DietType.values)
-              DropdownMenuItem(value: x, child: Text(x.label)),
+              DropdownMenuItem(
+                value: x,
+                child: Text(x.label, overflow: TextOverflow.ellipsis),
+              ),
           ],
           onChanged: (v) => d.diet = v ?? d.diet,
         ),
         const SizedBox(height: 12),
         DropdownButtonFormField<int>(
+          isExpanded: true,
           initialValue: d.mealsPerDay.clamp(0, 5),
           decoration: const InputDecoration(labelText: 'Pasti al giorno'),
           items: [
             DropdownMenuItem(
               value: 0,
-              child: Text('Automatico per età (${Nutrition.mealsFor(d)})'),
+              child: Text(
+                'Automatico per età (${Nutrition.mealsFor(d)})',
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             for (var i = 1; i <= 5; i++)
               DropdownMenuItem(value: i, child: Text('$i')),

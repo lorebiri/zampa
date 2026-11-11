@@ -295,7 +295,12 @@ class Forecast {
     required this.coefficients,
     this.accuracy,
     this.usualMinutes = const [],
+    this.measuredIntervals = 0,
   });
+
+  /// Intervalli osservati su cui si basa la previsione di base (0-3: valori
+  /// di partenza dalla letteratura, non misure del cane).
+  final int measuredIntervals;
 
   /// Orari abituali (minuti dalla mezzanotte) dalla previsione di base.
   final List<int> usualMinutes;
@@ -1146,6 +1151,7 @@ class FittedModel {
       coefficients: beta,
       accuracy: acc,
       usualMinutes: base.habitualMinutes,
+      measuredIntervals: base.nIntervals,
     );
   }
 

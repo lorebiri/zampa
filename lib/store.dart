@@ -797,7 +797,9 @@ class AppStore extends ChangeNotifier implements SyncTarget {
       'Razza: ${d.breed.isEmpty ? '-' : d.breed}  ·  Sesso: ${d.sex.name}'
       '${d.neutered ? ' (sterilizzato/a)' : ''}',
     );
-    b.writeln('Nato il: ${dmy(d.birthDate)} (${ageLabel(d, now)})');
+    b.writeln(
+      '${d.g('Nato', 'Nata')} il: ${dmy(d.birthDate)} (${ageLabel(d, now)})',
+    );
     b.writeln('Microchip: ${d.microchip.isEmpty ? '-' : d.microchip}');
     b.writeln(
       'Peso: ${d.weightKg.toStringAsFixed(1)} kg  ·  BCS ${d.bodyCondition}/9',

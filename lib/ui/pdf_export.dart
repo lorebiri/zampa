@@ -217,7 +217,7 @@ Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
         ),
         p(
           '${dog.breed.isEmpty ? 'Razza n.d.' : dog.breed} · ${dog.sex.name}${dog.neutered ? ' (sterilizzato/a)' : ''} · '
-          'nato il ${dmy(dog.birthDate)} (${ageLabel(dog, now)}) · ${dog.weightKg.toStringAsFixed(1)} kg · BCS ${dog.bodyCondition}/9',
+          '${dog.g('nato', 'nata')} il ${dmy(dog.birthDate)} (${ageLabel(dog, now)}) · ${dog.weightKg.toStringAsFixed(1)} kg · BCS ${dog.bodyCondition}/9',
         ),
         p(
           'Microchip: ${dog.microchip.isEmpty ? '-' : dog.microchip} · Allergie: ${dog.allergies.isEmpty ? '-' : dog.allergies}',
@@ -269,8 +269,12 @@ Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
           ],
         ),
         p(
-          'Intervallo tipico tra le pipì da sveglio: ${pf.typicalIntervalMin.round()} min '
-          '(mediana degli ultimi 14 giorni registrati in $appName).',
+          pf.measuredIntervals >= 4
+              ? 'Intervallo tipico tra le pipì da sveglio: ${pf.typicalIntervalMin.round()} min '
+                    '(mediana degli ultimi 14 giorni registrati in $appName).'
+              : 'Intervallo tipico tra le pipì da sveglio: non ancora misurato '
+                    '(servono più pipì registrate); valore di partenza per età e '
+                    'taglia ${pf.typicalIntervalMin.round()} min.',
           size: 8,
         ),
         if (therapies.isNotEmpty) ...[

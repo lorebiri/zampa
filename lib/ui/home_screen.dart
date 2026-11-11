@@ -97,7 +97,13 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
     final due = dueItems(store.records, dog.id).take(3).toList();
     final therapies = store.records
-        .where((r) => r.dogId == dog.id && r.isActiveTherapy(now))
+        .where(
+          (r) =>
+              r.dogId == dog.id &&
+              (r.isActiveTherapy(now) ||
+                  // Terapie che iniziano più avanti (rapporto 10, B1).
+                  (r.date.isAfter(now) && r.isActiveTherapy(r.date))),
+        )
         .toList();
 
     return PageBody(
