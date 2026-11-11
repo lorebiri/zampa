@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../brand.dart';
 import '../store.dart';
@@ -7,6 +6,7 @@ import 'common.dart';
 import 'account_screen.dart';
 import 'avatar.dart';
 import 'dog_form.dart';
+import 'privacy_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -62,22 +62,31 @@ class ProfileScreen extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => const AccountScreen())),
           ),
         ),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.privacy_tip_outlined),
+            title: const Text('Privacy'),
+            subtitle: const Text(
+              'Informativa, studio e rapporti di errore, i tuoi dati',
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const PrivacyScreen())),
+          ),
+        ),
         const SectionTitle('I tuoi dati'),
         Card(
           child: Column(
             children: [
-              ListTile(
-                leading: const Icon(Icons.download_outlined),
-                title: const Text('Esporta tutti i dati (JSON)'),
-                subtitle: const Text('Copia un backup completo negli appunti'),
-                onTap: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: store.exportJson()),
-                  );
-                  if (context.mounted) {
-                    toast(context, 'Backup copiato negli appunti');
-                  }
-                },
+              Builder(
+                builder: (tileContext) => ListTile(
+                  leading: const Icon(Icons.download_outlined),
+                  title: const Text('Esporta tutti i dati (JSON)'),
+                  subtitle: const Text(
+                    'Salva un file con un backup completo: scegli tu dove',
+                  ),
+                  onTap: () => exportBackup(tileContext, store),
+                ),
               ),
               if (store.dog != null)
                 ListTile(
@@ -98,11 +107,7 @@ class ProfileScreen extends StatelessWidget {
                   color: t.colorScheme.error,
                 ),
                 title: const Text('Cancella tutti i dati'),
-                onTap: () => _confirm(
-                  context,
-                  'Cancellare tutti i cani e tutti i dati da questo dispositivo? Non si può annullare.',
-                  store.wipe,
-                ),
+                onTap: () => confirmWipe(context, store),
               ),
             ],
           ),
@@ -120,8 +125,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 const Text(
-                  'I dati restano solo su questo dispositivo: nessun account, nessun server, nessuna pubblicità. '
-                  'Solo se attivi l\'avviso caldo, la città viene inviata al servizio meteo Open-Meteo.',
+                  'Senza account i dati restano solo su questo dispositivo. L\'account è facoltativo. '
+                  'Nessuna pubblicità. Solo se attivi l\'avviso caldo, la città viene inviata al '
+                  'servizio meteo Open-Meteo.',
                 ),
                 const SizedBox(height: 6),
                 const Text(

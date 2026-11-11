@@ -130,8 +130,9 @@ Per esercitare i diritti scrivi a `[[email privacy]]`. Rispondiamo entro un mese
 - Inviti monouso con scadenza decisa dal server; blocco dopo 5 codici sbagliati.
 - Nell'app c'è solo la chiave pubblica del servizio, nessuna chiave segreta.
 
-**Attenzione:** il backup JSON viene copiato negli appunti del telefono. Incollalo subito
-in un posto sicuro e non lasciarlo negli appunti.
+**Attenzione:** il backup JSON è un file con tutti i dati dei tuoi cani. L'app non lo
+copia negli appunti: sei tu a scegliere dove salvarlo o a chi mandarlo. Conservalo in un
+posto sicuro.
 
 ## 9. Età minima
 
