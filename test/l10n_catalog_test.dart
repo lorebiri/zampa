@@ -216,9 +216,8 @@ void main() {
   test('la tabella generata è aggiornata (dart run tool/gen_clinical_catalog.dart)', () {
     final source = File(gen.sourcePath).readAsStringSync();
     // Confronto senza spazi: il file è passato da dart format.
-    String squash(String s) => s
-        .replaceAll(RegExp(r'\s+'), '')
-        .replaceAll(RegExp(r',(?=[)\]}])'), '');
+    String squash(String s) =>
+        s.replaceAll(RegExp(r'\s+'), '').replaceAll(RegExp(r',(?=[)\]}])'), '');
     expect(
       squash(File(gen.outputPath).readAsStringSync()),
       squash(gen.generate(source)),
@@ -295,6 +294,32 @@ void main() {
     const unreachable = {'ALR-REP-006a'};
     expect(alerts.difference(seen).difference(unreachable), isEmpty);
     expect(seen.intersection(unreachable), isEmpty);
+  });
+
+  test('gli avvisi duplicati si eliminano per ID, non per titolo', () {
+    HealthAlert al(AlertLevel l, String id, String title) =>
+        HealthAlert(l, title, 'testo', id: id);
+    final out = AlertEngine.sortAndDedup([
+      al(AlertLevel.attenzione, 'ALR-X-001', 'Stesso titolo'),
+      al(AlertLevel.oggi, 'ALR-X-002', 'Stesso titolo'),
+      al(AlertLevel.info, 'ALR-X-003', 'Titolo A'),
+      al(AlertLevel.subito, 'ALR-X-003', 'Titolo B'),
+    ]);
+    expect(out.map((a) => a.id), ['ALR-X-003', 'ALR-X-002', 'ALR-X-001']);
+    expect(out.first.level, AlertLevel.subito);
+    // Negli scenari nessun avviso compare due volte.
+    for (final s in alertScenarios()) {
+      final ids = AlertEngine.compute(
+        dog: s.dog,
+        logs: s.logs,
+        records: s.records,
+        weights: s.weights,
+        now: s.now,
+        repro: s.repro,
+        pendingDoses: s.pending,
+      ).map((a) => a.id).toList();
+      expect(ids.toSet().length, ids.length, reason: s.name);
+    }
   });
 
   test('nessuna stringa visibile in lib/logic/ fuori dal catalogo', () {

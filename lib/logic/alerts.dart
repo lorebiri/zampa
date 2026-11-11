@@ -1091,13 +1091,20 @@ class AlertEngine {
       );
     }
 
-    // Ordine: livello, poi priorità clinica (07 N25), senza duplicati.
+    return sortAndDedup(out);
+  }
+
+  /// Ordine: livello, poi priorità clinica (07 N25). Gli avvisi con lo
+  /// stesso ID del catalogo compaiono una volta sola, con il livello più
+  /// alto. Prima il confronto era sul titolo, che contiene numeri e cambia
+  /// con la lingua (ricerca/15 §3.3).
+  static List<HealthAlert> sortAndDedup(List<HealthAlert> out) {
     out.sort((a, b) {
       final c = b.level.index.compareTo(a.level.index);
       return c != 0 ? c : a.rank.compareTo(b.rank);
     });
     final seen = <String>{};
-    out.retainWhere((a) => seen.add(a.title));
+    out.retainWhere((a) => seen.add(a.id.isEmpty ? 'titolo:${a.title}' : a.id));
     return out;
   }
 }

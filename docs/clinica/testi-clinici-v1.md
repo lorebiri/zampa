@@ -13,7 +13,7 @@ Gemello in formato tabella: `docs/clinica/testi-clinici-v1.csv` (stesse righe, s
 - **Livelli.** SUBITO, OGGI, ATTENZIONE, INFO. Alcuni avvisi cambiano livello secondo la situazione («variabile»): sono messi nella parte del livello più alto.
 - **Frase d'azione.** Sotto ogni avviso l'app aggiunge la frase fissa del suo livello (Parte 0), salvo dove è scritto «nessuna frase d'azione».
 - **Esito.** Per ogni voce: ☐ Approvato, ☐ Modificare (scrivere il testo nuovo nelle note), ☐ Eliminare. Si possono annotare anche le soglie in «Quando scatta».
-- **Avvisi duplicati.** Se due avvisi hanno lo stesso titolo, l'app mostra solo quello di livello più alto.
+- **Avvisi duplicati.** Se lo stesso avviso (stesso ID) scatta due volte, l'app lo mostra una volta sola, con il livello più alto. Fino al catalogo v1 il confronto era sul titolo.
 
 ## Conteggio
 
