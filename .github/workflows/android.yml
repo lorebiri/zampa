@@ -26,10 +26,15 @@ jobs:
       # sul Play Store (serve la chiave di caricamento, dopo il nome).
       - run: flutter build apk --release
       - run: cp build/app/outputs/flutter-apk/app-release.apk zampa.apk
+      # Versione leggera per i telefoni degli ultimi anni (arm64).
+      - run: flutter build apk --release --split-per-abi --target-platform android-arm64
+      - run: cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk zampa-arm64.apk
       - uses: actions/upload-artifact@v4
         with:
           name: zampa-android
-          path: zampa.apk
+          path: |
+            zampa.apk
+            zampa-arm64.apk
           retention-days: 30
 
   emulatore:
