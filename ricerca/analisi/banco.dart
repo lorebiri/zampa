@@ -19,6 +19,8 @@ import 'package:zampa/logic/elimination_model.dart';
 import 'package:zampa/logic/potty_predictor.dart';
 import 'package:zampa/models.dart';
 
+part 'banco2.dart';
+
 // ---------------------------------------------------------------------------
 // Scenari e cani.
 // ---------------------------------------------------------------------------
@@ -204,8 +206,8 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
     SchedMode.mix => s.scheduled,
   };
   final puppy = s.ageMonths < 6;
-  final senior = s.group == 'anziano' ||
-      s.ageMonths >= seniorStartMonths(s.weightKg);
+  final senior =
+      s.group == 'anziano' || s.ageMonths >= seniorStartMonths(s.weightKg);
   final kg = s.weightKg;
   final sizeScale = math.pow(kg / 15, -0.25).toDouble();
   // Volume a uno svuotamento normale (05 §P2), ml/kg.
@@ -225,9 +227,7 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
   final dog = Dog(
     id: s.id,
     name: s.id,
-    birthDate: simStart.subtract(
-      Duration(days: (s.ageMonths * 30.44).round()),
-    ),
+    birthDate: simStart.subtract(Duration(days: (s.ageMonths * 30.44).round())),
     sex: s.sex,
     neutered: r.nextBool(),
     weightKg: kg,
@@ -286,8 +286,10 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
       ));
     }
     for (var k = 0; k < 2; k++) {
-      drinks.add((at(day, wake + 1 + r.nextDouble() * (bed - wake - 2)), 4.0 *
-          waterScale));
+      drinks.add((
+        at(day, wake + 1 + r.nextDouble() * (bed - wake - 2)),
+        4.0 * waterScale,
+      ));
     }
   }
   planned.sort((a, b) => a.$1.compareTo(b.$1));
@@ -353,8 +355,7 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
     if (outEnd == null) {
       DateTime? startNow;
       var len = 10;
-      if (nextPlanned < planned.length &&
-          !planned[nextPlanned].$1.isAfter(t)) {
+      if (nextPlanned < planned.length && !planned[nextPlanned].$1.isAfter(t)) {
         startNow = t;
         len = planned[nextPlanned].$2;
         nextPlanned++;
@@ -452,9 +453,8 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
   // Registrazione da parte del padrone.
   final logged = <LogEntry>[];
   var id = 0;
-  DateTime jit(DateTime t) => sc.jitter
-      ? t.add(Duration(minutes: r.nextInt(21) - 10))
-      : t;
+  DateTime jit(DateTime t) =>
+      sc.jitter ? t.add(Duration(minutes: r.nextInt(21) - 10)) : t;
   void log(LogType type, DateTime t, {bool indoor = false, double? ml}) =>
       logged.add(
         LogEntry(
@@ -486,11 +486,7 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
   }
   for (final (t, ml) in drinks) {
     if (r.nextDouble() < (sc.missing ? 0.25 : 1.0)) {
-      log(
-        LogType.acqua,
-        t,
-        ml: r.nextBool() || !sc.missing ? ml * kg : null,
-      );
+      log(LogType.acqua, t, ml: r.nextBool() || !sc.missing ? ml * kg : null);
     }
   }
   for (final w in wakes) {
@@ -569,7 +565,11 @@ class GridRec {
 
 /// Quantile [q] della curva cumulata (interpolazione lineare); null se la
 /// curva non lo raggiunge entro il suo orizzonte (12 ore).
-DateTime? curveQuantile(List<(DateTime, double)> curve, DateTime now, double q) {
+DateTime? curveQuantile(
+  List<(DateTime, double)> curve,
+  DateTime now,
+  double q,
+) {
   var prevT = now, prevP = 0.0;
   for (final (t, p) in curve) {
     if (p >= q) {
@@ -670,10 +670,7 @@ List<EventRec> evaluateEvents(
     type: need.logType,
     clusterMinutes: cluster,
   ).map((o) => o.time).toList();
-  final trueOuts = _cluster(
-    need == Need.pipi ? tr.pees : tr.poops,
-    cluster,
-  );
+  final trueOuts = _cluster(need == Need.pipi ? tr.pees : tr.poops, cluster);
   final evalFrom = from ?? simStart.add(const Duration(days: evalFromDay));
   final changeAt = simStart.add(const Duration(days: 14));
   final engine = EliminationModel();
@@ -744,19 +741,36 @@ List<EventRec> evaluateEvents(
         ? simStart
         : tr.logged.first.time;
     final weekday =
-        _habitPrediction(past, prev, cluster, [7, 14, 21], first,
-            minOffset: minOff) ??
-        _habitPrediction(past, prev, cluster, [1, 2, 3, 4, 5, 6, 7], first,
-            minOffset: minOff) ??
+        _habitPrediction(
+          past,
+          prev,
+          cluster,
+          [7, 14, 21],
+          first,
+          minOffset: minOff,
+        ) ??
+        _habitPrediction(
+          past,
+          prev,
+          cluster,
+          [1, 2, 3, 4, 5, 6, 7],
+          first,
+          minOffset: minOff,
+        ) ??
         timer;
     final habit =
-        _habitPrediction(past, prev, cluster, [1, 2, 3, 4, 5, 6, 7], first,
-            minOffset: minOff) ??
+        _habitPrediction(
+          past,
+          prev,
+          cluster,
+          [1, 2, 3, 4, 5, 6, 7],
+          first,
+          minOffset: minOff,
+        ) ??
         timer;
     // Evento vero successivo: oltre il margine del jitter (±10 min).
     final trueNext =
-        _nextAfter(trueOuts, origin.add(const Duration(minutes: 11))) ??
-        actual;
+        _nextAfter(trueOuts, origin.add(const Duration(minutes: 11))) ?? actual;
     recs.add(
       EventRec(
         dog: tr.spec.id,
@@ -766,8 +780,7 @@ List<EventRec> evaluateEvents(
         afterChange: !actual.isBefore(changeAt),
         puActive: tr.puFrom != null && !actual.isBefore(tr.puFrom!),
         overnight:
-            actual.difference(prev).inHours >= 6 &&
-            actual.day != prev.day,
+            actual.difference(prev).inHours >= 6 && actual.day != prev.day,
         errModel: err.abs(),
         errTimer: actual.difference(timer).inMinutes.abs().toDouble(),
         errWeekday: actual.difference(weekday).inMinutes.abs().toDouble(),
@@ -803,10 +816,7 @@ List<GridRec> evaluateGrid(Truth tr, Need need, {int stepH = 2}) {
     type: need.logType,
     clusterMinutes: cluster,
   ).map((o) => o.time).toList();
-  final trueOuts = _cluster(
-    need == Need.pipi ? tr.pees : tr.poops,
-    cluster,
-  );
+  final trueOuts = _cluster(need == Need.pipi ? tr.pees : tr.poops, cluster);
   final engine = EliminationModel();
   final recs = <GridRec>[];
   for (var d = evalFromDay; d < simDays; d++) {
@@ -833,7 +843,9 @@ List<GridRec> evaluateGrid(Truth tr, Need need, {int stepH = 2}) {
         if (outs.any((o) => o.isAfter(o2) && !o.isAfter(u2))) hit++;
       }
       final pClim = (hit + 0.5) / (n + 1);
-      recs.add(GridRec(tr.spec.id, tr.spec.group, f.probNextHour, pClim, y, yt));
+      recs.add(
+        GridRec(tr.spec.id, tr.spec.group, f.probNextHour, pClim, y, yt),
+      );
     }
   }
   return recs;
@@ -934,10 +946,13 @@ double fracDogsBetter(List<EventRec> r, double Function(EventRec) base) {
   return w / byDog.length;
 }
 
-String fmt(({double est, double lo, double hi}) x, {int dp = 0, bool pct = false}) {
-  String f(double v) => pct
-      ? '${(v * 100).toStringAsFixed(dp)}%'
-      : v.toStringAsFixed(dp);
+String fmt(
+  ({double est, double lo, double hi}) x, {
+  int dp = 0,
+  bool pct = false,
+}) {
+  String f(double v) =>
+      pct ? '${(v * 100).toStringAsFixed(dp)}%' : v.toStringAsFixed(dp);
   return '${f(x.est)} [${f(x.lo)}–${f(x.hi)}]';
 }
 
@@ -1024,7 +1039,8 @@ double brier(List<GridRec> g, {bool clim = false, bool truth = false}) {
 
 Map<String, String> summarizeGrid(List<GridRec> g) {
   final out = <String, String>{
-    'n previsioni / cani': '${g.length} / ${g.map((e) => e.dog).toSet().length}',
+    'n previsioni / cani':
+        '${g.length} / ${g.map((e) => e.dog).toSet().length}',
     'frequenza osservata': (g.where((e) => e.y == 1).length / g.length)
         .toStringAsFixed(3),
     'Brier modello': fmt(bootstrapGrid(g, brier), dp: 3),
@@ -1058,7 +1074,8 @@ Map<String, String> summarizeGrid(List<GridRec> g) {
         '[${(ci.lo * 100).toStringAsFixed(0)}–${(ci.hi * 100).toStringAsFixed(0)}%] '
         'scarto ${((mo - mp) * 100).toStringAsFixed(0)} punti';
   }
-  out['ECE (errore medio di calibrazione)'] = '${(ece * 100).toStringAsFixed(1)} punti';
+  out['ECE (errore medio di calibrazione)'] =
+      '${(ece * 100).toStringAsFixed(1)} punti';
   return out;
 }
 
@@ -1089,7 +1106,8 @@ String outDir() {
 
 void saveEvents(String name, List<EventRec> r) {
   File('${outDir()}/$name.json').writeAsStringSync(
-    const JsonEncoder.withIndent(' ').convert(r.map((e) => e.toJson()).toList()),
+    const JsonEncoder.withIndent(' ')
+        .convert(r.map((e) => e.toJson()).toList()),
   );
 }
 
@@ -1145,11 +1163,19 @@ void runScenario(
       print('$label ${t.spec.id}');
     }
     b.writeln(render('$label (tutti)', summarizeGrid(g)));
-    for (final grp in ['cucciolo', 'adulto', 'anziano', 'cronico', 'poliuria']) {
+    for (final grp in [
+      'cucciolo',
+      'adulto',
+      'anziano',
+      'cronico',
+      'poliuria',
+    ]) {
       final s = g.where((e) => e.group == grp).toList();
       if (s.isEmpty) continue;
-      b.writeln('- $grp: Brier ${brier(s).toStringAsFixed(3)} vs clim '
-          '${brier(s, clim: true).toStringAsFixed(3)} (n=${s.length})');
+      b.writeln(
+        '- $grp: Brier ${brier(s).toStringAsFixed(3)} vs clim '
+        '${brier(s, clim: true).toStringAsFixed(3)} (n=${s.length})',
+      );
     }
   } else {
     final r = <EventRec>[];
@@ -1166,7 +1192,13 @@ void runScenario(
       b.writeln(render('$label — $title', summarize(s)));
     }
 
-    for (final grp in ['cucciolo', 'adulto', 'anziano', 'cronico', 'poliuria']) {
+    for (final grp in [
+      'cucciolo',
+      'adulto',
+      'anziano',
+      'cronico',
+      'poliuria',
+    ]) {
       sub('gruppo $grp', (e) => e.group == grp);
     }
     sub('orari decisi dal padrone', (e) => e.scheduled);
@@ -1249,7 +1281,13 @@ String mergeBaselines(
   final base = <EventRec>[];
   for (final t in bench) {
     base.addAll(
-      evaluateEvents(t, need, leakyOrigin: leaky, every: every, skipModel: true),
+      evaluateEvents(
+        t,
+        need,
+        leakyOrigin: leaky,
+        every: every,
+        skipModel: true,
+      ),
     );
   }
   if (base.length != saved.length) {

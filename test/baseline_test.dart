@@ -99,6 +99,54 @@ void main() {
     }
   });
 
+  test('una malattia già presente non accorcia due volte l\'intervallo', () {
+    // ricerca/23: il diabete dichiarato è già dentro gli intervalli
+    // osservati; il fattore 0,4 non va applicato di nuovo.
+    final now = DateTime(2026, 10, 15, 9, 0);
+    final logs = _pees(start, 14, (_) => 150);
+    final last = logs.lastWhere((l) => !l.time.isAfter(now)).time;
+    final sick = Dog(
+      id: 'b',
+      name: 'Base',
+      birthDate: now.subtract(const Duration(days: 365 * 5)),
+      sex: Sex.femmina,
+      weightKg: 15,
+      wakeHour: 7,
+      sleepStartHour: 23,
+      conditions: 'diabete',
+    );
+    final f = EliminationModel()
+        .fit(sick, Need.pipi, logs, const [], now, shadow: false)
+        .forecast(now, withAccuracy: false);
+    expect(f.typicalIntervalMin, closeTo(150, 25));
+    expect(f.expectedAt.difference(last).inMinutes, greaterThan(110));
+  });
+
+  test('un cortisonico appena iniziato accorcia l\'intervallo di base', () {
+    final now = DateTime(2026, 10, 15, 9, 0);
+    final logs = _pees(start, 14, (_) => 240);
+    final dog = _dog(now);
+    final drug = HealthRecord(
+      id: 'x',
+      dogId: 'b',
+      type: RecordType.farmaco,
+      title: 'Prednisolone',
+      date: now.subtract(const Duration(hours: 12)),
+      everyHours: 24,
+      endDate: now.add(const Duration(days: 5)),
+    );
+    final plain = EliminationModel()
+        .fit(dog, Need.pipi, logs, const [], now, shadow: false)
+        .forecast(now, withAccuracy: false);
+    final withDrug = EliminationModel()
+        .fit(dog, Need.pipi, logs, [drug], now, shadow: false)
+        .forecast(now, withAccuracy: false);
+    expect(
+      withDrug.typicalIntervalMin,
+      lessThan(plain.typicalIntervalMin * 0.8),
+    );
+  });
+
   test('orari abituali: un cane portato fuori sempre alle stesse ore', () {
     final logs = <LogEntry>[];
     var id = 0;
