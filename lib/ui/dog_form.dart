@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../brand.dart';
 import '../models.dart';
@@ -48,6 +49,7 @@ class _DogFormPageState extends State<DogFormPage> {
   late bool heat = d?.heatAlertsOn ?? false;
   late final city = TextEditingController(text: d?.city ?? '');
   late final emergency = TextEditingController(text: d?.emergencyPhone ?? '');
+  late String? photoId = d?.photoId;
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +60,17 @@ class _DogFormPageState extends State<DogFormPage> {
       ),
       body: PageBody(
         children: [
-          _Labeled(
+          DogPhotoField(
+            photoId: photoId,
+            onChanged: (id) => setState(() => photoId = id),
+          ),
+          const SizedBox(height: 12),
+          LabeledField(
             label: 'Nome *',
             child: TextField(controller: name),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Razza o tipo',
             child: TextField(controller: breed),
           ),
@@ -80,24 +87,11 @@ class _DogFormPageState extends State<DogFormPage> {
               'Se non la sai, una data approssimativa va bene',
             ),
             onTap: () async {
-              final r = await pickDate(
-                context,
-                birth ?? DateTime.now().subtract(const Duration(days: 90)),
-                lastDate: DateTime.now(),
-              );
+              final r = await pickBirthDate(context, birth);
               if (r != null) setState(() => birth = r);
             },
           ),
-          _Labeled(
-            label: 'Peso *',
-            child: TextField(
-              controller: weight,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              decoration: const InputDecoration(suffixText: 'kg'),
-            ),
-          ),
+          DogWeightField(controller: weight),
           const SizedBox(height: 12),
           SegmentedButton<Sex>(
             segments: const [
@@ -113,7 +107,7 @@ class _DogFormPageState extends State<DogFormPage> {
             value: neutered,
             onChanged: (v) => setState(() => neutered = v),
           ),
-          _Labeled(
+          LabeledField(
             label: 'Taglia adulta prevista',
             child: DropdownButtonFormField<AdultSize?>(
               isExpanded: true,
@@ -133,7 +127,7 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Livello di attività',
             child: DropdownButtonFormField<ActivityLevel>(
               isExpanded: true,
@@ -160,7 +154,7 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Alimentazione',
             child: DropdownButtonFormField<DietType>(
               isExpanded: true,
@@ -174,7 +168,7 @@ class _DogFormPageState extends State<DogFormPage> {
           ),
           if (sex == Sex.femmina) ...[
             const SizedBox(height: 12),
-            _Labeled(
+            LabeledField(
               label: 'Stato riproduttivo',
               child: DropdownButtonFormField<ReproState>(
                 isExpanded: true,
@@ -219,24 +213,24 @@ class _DogFormPageState extends State<DogFormPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: _hourPicker(
-                  'Si sveglia alle',
-                  wakeHour,
-                  (v) => setState(() => wakeHour = v),
+                child: HourPicker(
+                  label: 'Si sveglia alle',
+                  value: wakeHour,
+                  onChanged: (v) => setState(() => wakeHour = v),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _hourPicker(
-                  'Dorme dalle',
-                  sleepHour,
-                  (v) => setState(() => sleepHour = v),
+                child: HourPicker(
+                  label: 'Dorme dalle',
+                  value: sleepHour,
+                  onChanged: (v) => setState(() => sleepHour = v),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Prudenza delle uscite',
             child: DropdownButtonFormField<Prudence>(
               isExpanded: true,
@@ -266,7 +260,7 @@ class _DogFormPageState extends State<DogFormPage> {
             value: poopRem,
             onChanged: (v) => setState(() => poopRem = v),
           ),
-          _Labeled(
+          LabeledField(
             label: 'Avvisami prima di',
             child: DropdownButtonFormField<int>(
               isExpanded: true,
@@ -289,12 +283,12 @@ class _DogFormPageState extends State<DogFormPage> {
             onChanged: (v) => setState(() => heat = v),
           ),
           if (heat)
-            _Labeled(
+            LabeledField(
               label: 'Città',
               child: TextField(controller: city),
             ),
           const SectionTitle('Dati sanitari'),
-          _Labeled(
+          LabeledField(
             label: 'Microchip',
             child: TextField(
               controller: chip,
@@ -307,12 +301,12 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Veterinario di fiducia',
             child: TextField(controller: vetName),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Telefono del veterinario',
             child: TextField(
               controller: vetPhone,
@@ -320,7 +314,7 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Pronto soccorso veterinario h24 di riferimento',
             child: TextField(
               controller: emergency,
@@ -331,7 +325,7 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Dove vive',
             child: DropdownButtonFormField<Region>(
               isExpanded: true,
@@ -347,12 +341,12 @@ class _DogFormPageState extends State<DogFormPage> {
             ),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Allergie e intolleranze',
             child: TextField(controller: allergies),
           ),
           const SizedBox(height: 12),
-          _Labeled(
+          LabeledField(
             label: 'Patologie note',
             child: TextField(
               controller: conditions,
@@ -368,23 +362,9 @@ class _DogFormPageState extends State<DogFormPage> {
     );
   }
 
-  Widget _hourPicker(String label, int value, ValueChanged<int> onChanged) =>
-      _Labeled(
-        label: label,
-        child: DropdownButtonFormField<int>(
-          isExpanded: true,
-          initialValue: value,
-          items: [
-            for (var h = 0; h < 24; h++)
-              DropdownMenuItem(value: h, child: Text('${two(h)}:00')),
-          ],
-          onChanged: (v) => onChanged(v ?? value),
-        ),
-      );
-
   Future<void> _save() async {
-    final kg = double.tryParse(weight.text.replaceAll(',', '.'));
-    if (name.text.trim().isEmpty || kg == null || kg <= 0 || birth == null) {
+    final kg = parseDogWeight(weight.text);
+    if (name.text.trim().isEmpty || kg == null || birth == null) {
       toast(context, 'Servono almeno nome, data di nascita e peso');
       return;
     }
@@ -426,7 +406,8 @@ class _DogFormPageState extends State<DogFormPage> {
       ..region = region
       ..adultSize = adultSize
       ..emergencyPhone = emergency.text.trim()
-      ..heatAlertsOn = heat;
+      ..heatAlertsOn = heat
+      ..photoId = photoId;
     if (heat && city.text.trim().isNotEmpty && city.text.trim() != dog.city) {
       try {
         final g = await Weather.geocode(city.text.trim());
@@ -442,68 +423,10 @@ class _DogFormPageState extends State<DogFormPage> {
         if (mounted) toast(context, 'Meteo non raggiungibile ora');
       }
     }
-    // «Primo cane vero»: il cane di esempio non conta (CEO 11.4), altrimenti
-    // chi prova l'esempio non riceverebbe mai la richiesta del permesso.
-    final firstReal = !isDemoId(dog.id) && !store.hasRealDog;
-    await store.upsertDog(dog);
-    if (firstReal && store.demoDogs.isNotEmpty && mounted) {
-      final names = store.demoDogs.map((d) => d.name).join(', ');
-      final drop = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Eliminare il cane di esempio?'),
-          content: Text(
-            '$names serviva solo per provare l\'app. Se lo elimini, restano '
-            'solo i dati di ${dog.name}.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Tienilo'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Elimina l\'esempio'),
-            ),
-          ],
-        ),
-      );
-      if (drop == true) {
-        await store.removeDemo();
-        await store.selectDog(dog.id);
-      }
-    }
-    if (firstReal &&
-        Notifier.instance.supported &&
-        Notifier.instance.allowed.value != true &&
-        mounted) {
-      // Permesso notifiche dopo il primo cane, spiegando perché (CEO C1-3).
-      final go = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Attivare le notifiche?'),
-          content: Text(
-            'Servono per avvisarti quando ${dog.name} deve uscire, quando è ora '
-            'di una medicina o di un vaccino e, soprattutto, se qualcosa nei dati '
-            'registrati richiede di sentire il veterinario. Puoi cambiarle quando vuoi.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Non ora'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Attiva'),
-            ),
-          ],
-        ),
-      );
-      if (go == true) {
-        await Notifier.instance.requestPermissions();
-        // Riprogramma le notifiche ora che sono permesse.
-        await store.upsertDog(dog);
-      }
+    if (mounted) {
+      await saveDogWithFirstDogPrompts(context, store, dog);
+    } else {
+      await store.upsertDog(dog);
     }
     if (weightChanged) await store.addWeight(dog.id, kg, DateTime.now());
     if (mounted) Navigator.pop(context);
@@ -513,8 +436,8 @@ class _DogFormPageState extends State<DogFormPage> {
 /// Etichetta sopra il campo, non dentro il bordo: va a capo con il testo al
 /// 200% invece di essere troncata (ricerca/22 §8). MergeSemantics la lega al
 /// campo, così il lettore di schermo la legge insieme al valore.
-class _Labeled extends StatelessWidget {
-  const _Labeled({required this.label, required this.child});
+class LabeledField extends StatelessWidget {
+  const LabeledField({super.key, required this.label, required this.child});
   final String label;
   final Widget child;
 
@@ -537,6 +460,253 @@ class _Labeled extends StatelessWidget {
           child,
         ],
       ),
+    );
+  }
+}
+
+/// Peso scritto dall'utente, con la virgola o con il punto. Null se manca o
+/// non è positivo: è la stessa regola per il modulo e la procedura guidata.
+double? parseDogWeight(String text) {
+  final kg = double.tryParse(text.replaceAll(',', '.'));
+  return kg == null || kg <= 0 ? null : kg;
+}
+
+/// Data di nascita: mai nel futuro. Senza data, il calendario parte da tre
+/// mesi fa (nessun valore viene però scelto al posto dell'utente).
+Future<DateTime?> pickBirthDate(BuildContext context, DateTime? current) =>
+    pickDate(
+      context,
+      current ?? DateTime.now().subtract(const Duration(days: 90)),
+      lastDate: DateTime.now(),
+    );
+
+/// Salva [dog] e, se è il primo cane vero, nell'ordine:
+/// 1. propone di eliminare il cane di esempio, se c'è;
+/// 2. chiede il permesso delle notifiche, spiegando perché.
+/// Condivisa dal modulo completo e dalla procedura guidata.
+Future<void> saveDogWithFirstDogPrompts(
+  BuildContext context,
+  AppStore store,
+  Dog dog,
+) async {
+  // «Primo cane vero»: il cane di esempio non conta (CEO 11.4), altrimenti
+  // chi prova l'esempio non riceverebbe mai la richiesta del permesso.
+  final firstReal = !isDemoId(dog.id) && !store.hasRealDog;
+  await store.upsertDog(dog);
+  if (firstReal && store.demoDogs.isNotEmpty && context.mounted) {
+    final names = store.demoDogs.map((d) => d.name).join(', ');
+    final drop = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Eliminare il cane di esempio?'),
+        content: Text(
+          '$names serviva solo per provare l\'app. Se lo elimini, restano '
+          'solo i dati di ${dog.name}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Tienilo'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Elimina l\'esempio'),
+          ),
+        ],
+      ),
+    );
+    if (drop == true) {
+      await store.removeDemo();
+      await store.selectDog(dog.id);
+    }
+  }
+  if (firstReal &&
+      Notifier.instance.supported &&
+      Notifier.instance.allowed.value != true &&
+      context.mounted) {
+    // Permesso notifiche dopo il primo cane, spiegando perché (CEO C1-3).
+    final go = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Attivare le notifiche?'),
+        content: Text(
+          'Servono per avvisarti quando ${dog.name} deve uscire, quando è ora '
+          'di una medicina o di un vaccino e, soprattutto, se qualcosa nei dati '
+          'registrati richiede di sentire il veterinario. Puoi cambiarle quando vuoi.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Non ora'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Attiva'),
+          ),
+        ],
+      ),
+    );
+    if (go == true) {
+      await Notifier.instance.requestPermissions();
+      // Riprogramma le notifiche ora che sono permesse.
+      await store.upsertDog(dog);
+    }
+  }
+}
+
+/// Peso in kg con l'etichetta sopra. L'unità è sempre visibile: con
+/// «suffixText», che compare e scompare con il fuoco, MergeSemantics manda in
+/// errore la semantica quando il campo cambia o sparisce.
+class DogWeightField extends StatelessWidget {
+  const DogWeightField({
+    super.key,
+    required this.controller,
+    this.onChanged,
+    this.errorText,
+  });
+  final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
+  final String? errorText;
+
+  @override
+  Widget build(BuildContext context) => LabeledField(
+    label: 'Peso *',
+    child: TextField(
+      controller: controller,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        suffixIcon: const ExcludeSemantics(
+          child: Padding(
+            padding: EdgeInsetsDirectional.only(end: 16),
+            child: Text('kg'),
+          ),
+        ),
+        suffixIconConstraints: const BoxConstraints(),
+        errorText: errorText,
+      ),
+    ),
+  );
+}
+
+/// Ora intera (00:00-23:00) con l'etichetta sopra il campo.
+class HourPicker extends StatelessWidget {
+  const HourPicker({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+  final String label;
+  final int value;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) => LabeledField(
+    label: label,
+    child: DropdownButtonFormField<int>(
+      isExpanded: true,
+      initialValue: value,
+      items: [
+        for (var h = 0; h < 24; h++)
+          DropdownMenuItem(value: h, child: Text('${two(h)}:00')),
+      ],
+      onChanged: (v) => onChanged(v ?? value),
+    ),
+  );
+}
+
+/// Foto facoltativa del cane: anteprima rotonda, «Aggiungi», «Cambia» e
+/// «Togli». Se la fotocamera non c'è, un avviso e nessun errore.
+class DogPhotoField extends StatelessWidget {
+  const DogPhotoField({
+    super.key,
+    required this.photoId,
+    required this.onChanged,
+  });
+  final String? photoId;
+  final ValueChanged<String?> onChanged;
+
+  Future<void> _pick(BuildContext context) async {
+    final store = StoreScope.read(context);
+    try {
+      final source = await showModalBottomSheet<ImageSource>(
+        context: context,
+        builder: (ctx) => SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera_outlined),
+                title: const Text('Scatta una foto'),
+                onTap: () => Navigator.pop(ctx, ImageSource.camera),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('Scegli dalla galleria'),
+                onTap: () => Navigator.pop(ctx, ImageSource.gallery),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (source == null) return;
+      final x = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 600,
+        imageQuality: 70,
+      );
+      if (x == null) return;
+      onChanged(await store.savePhoto(await x.readAsBytes()));
+    } catch (_) {
+      if (context.mounted) {
+        toast(context, 'Foto non disponibile su questo dispositivo');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context);
+    final bytes = photoId == null
+        ? null
+        : StoreScope.read(context).photo(photoId!);
+    return Wrap(
+      spacing: 16,
+      runSpacing: 12,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Semantics(
+          image: true,
+          label: bytes == null ? 'Nessuna foto' : 'Foto del cane',
+          child: CircleAvatar(
+            radius: 40,
+            backgroundColor: t.colorScheme.secondaryContainer,
+            foregroundImage: bytes == null ? null : MemoryImage(bytes),
+            child: ExcludeSemantics(
+              child: Icon(
+                Icons.pets,
+                size: 36,
+                color: t.colorScheme.onSecondaryContainer,
+              ),
+            ),
+          ),
+        ),
+        OutlinedButton.icon(
+          icon: Icon(
+            bytes == null
+                ? Icons.add_a_photo_outlined
+                : Icons.photo_camera_outlined,
+          ),
+          label: Text(bytes == null ? 'Aggiungi una foto' : 'Cambia foto'),
+          onPressed: () => _pick(context),
+        ),
+        if (bytes != null)
+          TextButton(
+            onPressed: () => onChanged(null),
+            child: const Text('Togli la foto'),
+          ),
+      ],
     );
   }
 }

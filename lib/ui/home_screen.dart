@@ -17,7 +17,7 @@ import '../notifications.dart';
 import '../store.dart';
 import 'common.dart';
 import 'avatar_editor.dart';
-import 'dog_form.dart';
+import 'dog_wizard.dart';
 import 'avatar.dart';
 import 'log_sheet.dart';
 import 'theme.dart';
@@ -798,7 +798,7 @@ class _DemoBanner extends StatelessWidget {
         label: const Text('Aggiungi il tuo cane'),
         onPressed: () =>
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => const DogFormPage())),
+                .push(MaterialPageRoute(builder: (_) => const DogWizardPage())),
       ),
     ),
   );

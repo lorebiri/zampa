@@ -239,6 +239,7 @@ class Dog {
     this.reproSince,
     this.prudence = Prudence.normale,
     this.poopRemindersOn = true,
+    this.photoId,
     AvatarLook? look,
   }) : look = look ?? AvatarLook.forWeight(weightKg);
 
@@ -290,6 +291,9 @@ class Dog {
   DateTime? reproSince;
   Prudence prudence;
   bool poopRemindersOn;
+
+  /// Foto del cane, facoltativa (salvata a parte con AppStore.savePhoto).
+  String? photoId;
 
   /// Stato riproduttivo effettivo a una data (il calore dura ~3 settimane,
   /// la gravidanza ~9 settimane, l'allattamento ~7 settimane).
@@ -360,6 +364,7 @@ class Dog {
     'reproSince': _iso(reproSince),
     'prudence': prudence.name,
     'poopRemindersOn': poopRemindersOn,
+    'photoId': photoId,
   };
 
   factory Dog.fromJson(Map<String, Object?> j) => Dog(
@@ -406,6 +411,7 @@ class Dog {
     reproSince: _date(j['reproSince']),
     prudence: Prudence.values.byName((j['prudence'] as String?) ?? 'normale'),
     poopRemindersOn: (j['poopRemindersOn'] as bool?) ?? true,
+    photoId: j['photoId'] as String?,
   );
 }
 
