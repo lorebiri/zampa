@@ -113,15 +113,8 @@ class Baseline {
     required this.habitualMinutes,
     required this.nIntervals,
     required this.adaptedRecent,
-    this.bioRatio = 1,
     this.firstMinutes = const [],
   });
-
-  /// Fattore biologico di adesso diviso quello tipico degli intervalli su cui
-  /// si basa la previsione. Vale 1 se nulla è cambiato (una condizione già
-  /// presente è già dentro gli intervalli osservati: non va contata due
-  /// volte); è < 1 se, per esempio, è appena iniziato un cortisonico.
-  final double bioRatio;
 
   /// Prima uscita dopo la notte negli ultimi 14 giorni: (fine settimana?,
   /// minuti dalla mezzanotte).
@@ -162,7 +155,6 @@ class Baseline {
     required double prudenceQuantile,
     required double maxGapMin,
     double minGapMin = 15,
-    double Function(DateTime)? factorAt,
     double lowQuantile = 0.1,
     double highQuantile = 0.9,
     double adaptBelow = 0.85,
@@ -216,12 +208,6 @@ class Baseline {
         }
       }
     }
-    var bioRatio = 1.0;
-    if (factorAt != null && all.length >= 4) {
-      final fs = [for (final e in all) factorAt(e.$1)]..sort();
-      final typical = _quantile(fs, 0.5);
-      if (typical > 0) bioRatio = factorAt(now) / typical;
-    }
     // Prima uscita di ogni giorno dopo la pausa della notte (≥ 5 ore, con
     // l'uscita precedente il giorno prima).
     final firsts = <(bool, int)>[];
@@ -233,7 +219,6 @@ class Baseline {
       firsts.add((t.weekday >= 6, t.hour * 60 + t.minute));
     }
     return Baseline(
-      bioRatio: bioRatio,
       firstMinutes: firsts,
       intervalMin: interval,
       recommendedAfterMin: math.min(qRec, interval),

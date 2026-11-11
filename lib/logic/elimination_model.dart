@@ -915,6 +915,7 @@ class FittedModel {
   })
   _basePoint(List<DateTime> times, DateTime now, double qRec, double bioNow) {
     final last = times.last;
+    final bio = BioParams.modifier(need, dog, _model.records, now);
     final base = Baseline.compute(
       dog: dog,
       times: times,
@@ -923,14 +924,15 @@ class FittedModel {
       prudenceQuantile: qRec,
       maxGapMin: prior.maxDay * 1.5,
       minGapMin: need.clusterMinutes.toDouble(),
-      factorAt: _model.mod,
     );
-    // Farmaci o malattie che aumentano la pipì: l'intervallo personale si
-    // accorcia subito, senza aspettare 3 giorni di dati (verso prudente).
-    // Conta solo ciò che è cambiato rispetto agli intervalli osservati: una
-    // condizione già presente (o la taglia) è già dentro i dati del cane.
+    // Terza revisione veterinaria (ricerca/26, A1): con intervalli misurati
+    // si accorcia solo per i farmaci iniziati da meno di 14 giorni e per la
+    // finestra dopo la dose di diuretico, mai sotto 0,5. Taglia, dieta e
+    // malattie già note sono dentro gli intervalli del cane: contarle di
+    // nuovo vorrebbe dire contarle due volte. Senza dati il fattore intero
+    // è già nel valore di partenza (fallbackMin).
     final k = need == Need.pipi && base.nIntervals >= 4 && !base.adaptedRecent
-        ? math.min(1.0, base.bioRatio)
+        ? bio.recent
         : 1.0;
     DateTime at(double m) => last.add(Duration(minutes: (m * k).round()));
     var expected = at(base.intervalMin);
@@ -1138,20 +1140,8 @@ class FittedModel {
       );
     }
     final last = c.outings[li];
-    final accidents = _ctx.indoor.indexed
-        .where((e) => e.$2 && now.difference(_ctx.outings[e.$1]).inDays <= 14)
-        .length;
     final bio = BioParams.modifier(need, dog, _model.records, now);
-    var prudence = dog.prudence;
-    // "Meno uscite" solo per adulti sani (revisione veterinaria 06 §30).
-    if (prudence == Prudence.bassa &&
-        (lifeStageOf(dog, now) != LifeStage.adulto ||
-            dog.conditions.trim().isNotEmpty ||
-            bio.factor < 0.95)) {
-      prudence = Prudence.normale;
-    }
-    var qRec = prudence.quantile;
-    if (need == Need.pipi && accidents > 0) qRec = math.min(qRec, 0.15);
+    final qRec = _prudenceQuantile(now, bio.clinical);
     // Il modello resta calcolato "in ombra" (curva e coefficienti, per il
     // banco di prova), ma ciò che si mostra viene dalla previsione di base
     // finché il modello non supera il collaudo (piano CEO 11.3, ricerca/12).
@@ -1196,6 +1186,11 @@ class FittedModel {
     var reason = base.nIntervals < 4
         ? 'Sto ancora imparando il ritmo di ${dog.name}: per ora uso valori '
               'tipici per età e taglia.'
+        : k < 1
+        // L'intervallo mostrato è quello usato (ricerca/26, A1 punto 6).
+        ? 'In base al suo intervallo abituale da sveglio, accorciato per '
+              '${bio.recentReasons.join(' e ')}: circa '
+              '${_dur(base.intervalMin * k)}.'
         : 'In base al suo intervallo abituale da sveglio '
               '(circa ${_dur(base.intervalMin)}).';
     if (need == Need.cacca) {
@@ -1246,7 +1241,8 @@ class FittedModel {
     // Il tetto per età si accorcia con malattie e farmaci che aumentano la
     // pipì, mai sotto i 120 minuti (revisione veterinaria 06 §27-28).
     DateTime? latest;
-    final f = bio.factor < 1 ? bio.factor : 1.0;
+    // Tetti: solo i fattori clinici, mai taglia e dieta (ricerca/26, A1).
+    final f = bio.clinical < 1 ? bio.clinical : 1.0;
     final dayCapMin = math.max(120.0, prior.maxDay * f);
     final nightCapMin = math.max(180.0, prior.maxNight * f);
     String dur(double m) => _dur(m);
@@ -1260,8 +1256,8 @@ class FittedModel {
         recommended = passed ? now : latest;
         reason = passed
             ? 'Ha superato ${dur(dayCapMin)} dall\'ultima pipì: portalo fuori adesso.'
-            : f < 1 && bio.reasons.isNotEmpty
-            ? 'Con ${bio.reasons.join(', ')} ha bisogno di uscire più spesso: '
+            : f < 1 && bio.clinicalReasons.isNotEmpty
+            ? 'Con ${bio.clinicalReasons.join(', ')} ha bisogno di uscire più spesso: '
                   'non farlo aspettare oltre ${dur(dayCapMin)}.'
             : 'Non conviene aspettare oltre: è il limite consigliato per '
                   'la sua età (un tetto, non un obiettivo).';
@@ -1416,28 +1412,80 @@ class FittedModel {
     );
   }
 
+  /// Quantile della prudenza, con le restrizioni cliniche: «Meno uscite» solo
+  /// per adulti sani (06 §30; il fattore clinico, non taglia e dieta,
+  /// ricerca/26 A1); dopo incidenti in casa nei 14 giorni, più prudente.
+  double _prudenceQuantile(DateTime now, double clinical) {
+    var prudence = dog.prudence;
+    if (prudence == Prudence.bassa &&
+        (lifeStageOf(dog, now) != LifeStage.adulto ||
+            dog.conditions.trim().isNotEmpty ||
+            clinical < 0.95)) {
+      prudence = Prudence.normale;
+    }
+    var qRec = prudence.quantile;
+    final accidents = _ctx.indoor.indexed
+        .where((e) => e.$2 && now.difference(_ctx.outings[e.$1]).inDays <= 14)
+        .length;
+    if (need == Need.pipi && accidents > 0) qRec = math.min(qRec, 0.15);
+    return qRec;
+  }
+
+  /// Tetto diurno (minuti) con i soli fattori clinici (06 §27-28; A1).
+  double dayCapMinutes(DateTime now) {
+    final clinical = BioParams.modifier(
+      need,
+      dog,
+      _model.records,
+      now,
+    ).clinical;
+    return math.max(120.0, prior.maxDay * (clinical < 1 ? clinical : 1.0));
+  }
+
   /// Piano delle uscite consigliate per la giornata di [day].
+  ///
+  /// Terza revisione veterinaria (ricerca/26, A10): il piano viene dalla
+  /// previsione di base, come i promemoria, non dal modello statistico:
+  /// stesso intervallo personale con lo stesso fattore k, stessa prudenza
+  /// corretta e stesso tetto clinico. La cacca mostra solo gli orari
+  /// abituali.
   List<DateTime> dailyPlan(DateTime day) {
     final wake = DateTime(day.year, day.month, day.day, dog.wakeHour);
+    final bio = BioParams.modifier(need, dog, _model.records, day);
+    final qRec = _prudenceQuantile(day, bio.clinical);
+    final base = Baseline.compute(
+      dog: dog,
+      times: [
+        for (final t in _ctx.outings)
+          if (!t.isAfter(day)) t,
+      ],
+      now: day,
+      fallbackMin: prior.median * bio.factor,
+      prudenceQuantile: qRec,
+      maxGapMin: prior.maxDay * 1.5,
+      minGapMin: need.clusterMinutes.toDouble(),
+    );
+    if (need == Need.cacca) {
+      return [
+        for (final m in base.habitualMinutes)
+          DateTime(day.year, day.month, day.day, m ~/ 60, m % 60),
+      ];
+    }
+    final k = base.nIntervals >= 4 && !base.adaptedRecent ? bio.recent : 1.0;
+    final step = math.max(
+      30.0,
+      math.min(base.recommendedAfterMin * k, dayCapMinutes(day)),
+    );
     var t = wake.add(Duration(minutes: prior.wake.peak.round()));
     final plan = <DateTime>[t];
     var guard = 0;
-    while (guard++ < 20) {
-      final c = _withFuture(t, extraOuting: t);
-      final r = _quantiles(c, t, t, [dog.prudence.quantile], horizonHours: 24);
-      var next = r.q[dog.prudence.quantile]!;
-      if (need == Need.pipi) {
-        final cap = t.add(Duration(minutes: prior.maxDay.round()));
-        if (next.isAfter(cap)) next = cap;
-      }
-      if (next.difference(t).inMinutes < 30) {
-        next = t.add(const Duration(minutes: 30));
-      }
+    while (guard++ < 30) {
+      final next = t.add(Duration(minutes: step.round()));
       if (PottyPredictor.inSleepWindow(dog, next)) break;
       plan.add(next);
       t = next;
     }
-    if (need == Need.pipi) {
+    {
       final bedH = dog.sleepStartHour;
       final bed = DateTime(day.year, day.month, day.day, bedH)
           .add(Duration(days: bedH < dog.wakeHour ? 1 : 0))

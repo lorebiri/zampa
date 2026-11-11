@@ -478,9 +478,16 @@ class AlertEngine {
     }
 
     final last3 = avg(1, 3), base = avg(4, 17);
-    final bioFactor = BioParams.modifier(Need.pipi, dog, records, now).factor;
     // Con farmaci o malattie che aumentano la pipì la soglia sale (06 §PU).
-    final expectedRise = bioFactor < 0.8 ? 2.5 : 1.5;
+    // Solo il fattore clinico: taglia e dieta non giustificano una soglia
+    // più alta (terza revisione veterinaria, ricerca/26 A2).
+    final clinicalFactor = BioParams.modifier(
+      Need.pipi,
+      dog,
+      records,
+      now,
+    ).clinical;
+    final expectedRise = clinicalFactor < 0.8 ? 2.5 : 1.5;
     var moreUrine = false;
     if (last3 > 0 &&
         base > 0 &&

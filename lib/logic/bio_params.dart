@@ -212,17 +212,42 @@ class BioParams {
 
   /// Moltiplicatore dell'intervallo tipico (< 1 = bisogni più frequenti)
   /// dovuto a fattori biologici e ambientali al tempo [t].
-  static ({double factor, List<String> reasons}) modifier(
-    Need need,
-    Dog dog,
-    List<HealthRecord> records,
-    DateTime t,
-  ) {
-    var f = 1.0;
-    final why = <String>[];
-    void apply(double x, String r) {
+  ///
+  /// Terza revisione veterinaria (ricerca/26, A1): il prodotto [factor] si
+  /// separa in due parti.
+  /// - `constitutional`: taglia e dieta. Valgono per tutta la vita del cane
+  ///   e sono già dentro i suoi intervalli misurati.
+  /// - `clinical`: calore, gravidanza, allattamento, malattie, farmaci. Con
+  ///   [clinicalReasons] le sue cause.
+  /// - `recent`: la sola parte clinica che non può essere già nei dati
+  ///   misurati: farmaci iniziati da meno di 14 giorni e la finestra di 6 ore
+  ///   dopo la dose di diuretico (effetto di orario). Mai sotto 0,5. Le
+  ///   malattie scritte nel testo libero non hanno una data e non entrano.
+  static ({
+    double factor,
+    List<String> reasons,
+    double constitutional,
+    double clinical,
+    List<String> clinicalReasons,
+    double recent,
+    List<String> recentReasons,
+  })
+  modifier(Need need, Dog dog, List<HealthRecord> records, DateTime t) {
+    var f = 1.0, constitutional = 1.0, recent = 1.0;
+    final why = <String>[], clinicalWhy = <String>[], recentWhy = <String>[];
+    void apply(double x, String r, {bool body = false}) {
       f *= x;
       why.add(r);
+      if (body) {
+        constitutional *= x;
+      } else {
+        clinicalWhy.add(r);
+      }
+    }
+
+    void applyRecent(double x, String r) {
+      recent *= x;
+      recentWhy.add(r);
     }
 
     final cond = dog.conditions.toLowerCase();
@@ -231,12 +256,14 @@ class BioParams {
         k.any((w) => RegExp('(^|[^a-zà-ù])$w').hasMatch(cond));
     if (need == Need.pipi) {
       // Cani piccoli: più acqua per kg (∝ BW^-0,25, NRC 2006) [C].
-      if (dog.weightKg < 10) apply(0.85, 'taglia piccola');
+      if (dog.weightKg < 10) apply(0.85, 'taglia piccola', body: true);
       // Cibo umido: più urina nei piccoli, quasi nulla nei grandi
       // (Stevenson 2003) [E].
       final wet = dog.weightKg < 10 ? 0.8 : (dog.weightKg > 25 ? 0.95 : 0.88);
-      if (dog.diet == DietType.umido) apply(wet, 'cibo umido');
-      if (dog.diet == DietType.misto) apply((1 + wet) / 2, 'dieta mista');
+      if (dog.diet == DietType.umido) apply(wet, 'cibo umido', body: true);
+      if (dog.diet == DietType.misto) {
+        apply((1 + wet) / 2, 'dieta mista', body: true);
+      }
       switch (dog.reproAt(t)) {
         case ReproState.calore:
           apply(0.9, 'calore');
@@ -285,20 +312,34 @@ class BioParams {
       final eff = r.drugEffect == DrugEffect.nessuno
           ? DrugEffectLabel.guess(r.title)
           : r.drugEffect;
+      // Iniziato da meno di 14 giorni: non può essere già nei dati (A1).
+      final isNew = t.difference(r.date).inDays < 14;
+      final drug = r.title.trim().toLowerCase();
       if (need == Need.pipi) {
         switch (eff) {
           case DrugEffect.diuretico:
             // Furosemide: picco 1-2 h, durata ~6 h dalla dose [E].
             final since = _hoursSinceDose(r, t);
             if (since != null && since < 6) {
-              apply(since < 2 ? 0.35 : 0.6, 'diuretico (${r.title})');
+              final x = since < 2 ? 0.35 : 0.6;
+              apply(x, 'diuretico (${r.title})');
+              applyRecent(x, 'la dose di $drug presa da poco');
             } else {
               apply(0.85, 'diuretico (${r.title})');
+              if (isNew) {
+                applyRecent(0.85, 'la terapia con $drug iniziata da poco');
+              }
             }
           case DrugEffect.cortisonico:
             apply(0.67, 'cortisonico (${r.title})');
+            if (isNew) {
+              applyRecent(0.67, 'la terapia con $drug iniziata da poco');
+            }
           case DrugEffect.poliuria:
             apply(0.77, r.title);
+            if (isNew) {
+              applyRecent(0.77, 'la terapia con $drug iniziata da poco');
+            }
           default:
             break;
         }
@@ -315,7 +356,15 @@ class BioParams {
         }
       }
     }
-    return (factor: f.clamp(0.2, 3.0), reasons: why);
+    return (
+      factor: f.clamp(0.2, 3.0),
+      reasons: why,
+      constitutional: constitutional,
+      clinical: (f / constitutional).clamp(0.2, 3.0),
+      clinicalReasons: clinicalWhy,
+      recent: recent.clamp(0.5, 1.0),
+      recentReasons: recentWhy,
+    );
   }
 
   static double? _hoursSinceDose(HealthRecord r, DateTime t) {
