@@ -371,6 +371,29 @@ class _DoseCard extends StatelessWidget {
   final VoidCallback onGiven;
   final VoidCallback onSkipped;
 
+  /// «Saltato» chiede conferma: una dose segnata saltata per sbaglio falsa il
+  /// diario della terapia. «Dato» resta con un solo tocco.
+  Future<void> _confirmSkip(BuildContext context) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Dose saltata?'),
+        content: const Text('Confermi che questa dose non è stata data?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Annulla'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Sì, saltata'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) onSkipped();
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
@@ -385,7 +408,10 @@ class _DoseCard extends StatelessWidget {
             label: const Text('Dato'),
             onPressed: onGiven,
           ),
-          OutlinedButton(onPressed: onSkipped, child: const Text('Saltato')),
+          OutlinedButton(
+            onPressed: () => _confirmSkip(context),
+            child: const Text('Saltato'),
+          ),
         ],
       ),
     );

@@ -53,6 +53,8 @@ List<HealthAlert> run(
 );
 
 void main() {
+  // Il PDF carica Atkinson dagli asset (C2-9).
+  TestWidgetsFlutterBinding.ensureInitialized();
   test('N8 ferita con punti aperti → oggi; arrossata → attenzione', () {
     final r = [surgery(const Duration(days: 3))];
     expect(

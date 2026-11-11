@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../logic/prevention.dart';
 import '../models.dart';
 import '../store.dart';
+import 'chart_summary.dart';
 import 'common.dart';
 import 'diaries_screen.dart';
 
@@ -336,12 +337,21 @@ class _WeightTab extends StatelessWidget {
                 if (ws.length >= 2)
                   SizedBox(
                     height: 150,
-                    child: CustomPaint(
-                      size: Size.infinite,
-                      painter: _WeightPainter(
-                        ws,
-                        t.colorScheme.primary,
-                        t.textTheme.bodySmall!,
+                    child: Semantics(
+                      container: true,
+                      label: seriesSummary(
+                        'Andamento del peso',
+                        [for (final w in ws) w.kg],
+                        dates: [for (final w in ws) w.date],
+                        unit: 'kg',
+                      ),
+                      child: CustomPaint(
+                        size: Size.infinite,
+                        painter: _WeightPainter(
+                          ws,
+                          t.colorScheme.primary,
+                          t.textTheme.bodySmall!,
+                        ),
                       ),
                     ),
                   )

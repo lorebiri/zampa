@@ -9,6 +9,7 @@ import '../logic/modules.dart';
 import '../logic/potty_predictor.dart';
 import '../models.dart';
 import '../store.dart';
+import 'chart_summary.dart';
 import 'common.dart';
 import 'theme.dart';
 import 'log_sheet.dart';
@@ -336,7 +337,15 @@ class DiabetesPage extends StatelessWidget {
             const SectionTitle('Glicemie'),
             SizedBox(
               height: 120,
-              child: _Spark(values: glu.reversed.map((l) => l.value!).toList()),
+              child: _Spark(
+                values: glu.reversed.map((l) => l.value!).toList(),
+                summary: seriesSummary(
+                  'Glicemie',
+                  glu.reversed.map((l) => l.value!).toList(),
+                  dates: glu.reversed.map((l) => l.time).toList(),
+                  unit: 'mg/dL',
+                ),
+              ),
             ),
           ],
           const SectionTitle('Somministrazioni'),
@@ -647,6 +656,13 @@ class _QolPageState extends State<QolPage> {
                 minY: 0,
                 maxY: 70,
                 threshold: 35,
+                summary: seriesSummary(
+                  'Qualità di vita',
+                  history.map((q) => q.total.toDouble()).toList(),
+                  dates: history.map((q) => q.date).toList(),
+                  unit: 'su 70',
+                  extra: 'Linea di riferimento a 35.',
+                ),
               ),
             ),
           ],
@@ -711,6 +727,12 @@ class LabsPage extends StatelessWidget {
                         height: 80,
                         child: _Spark(
                           values: e.value.map((l) => l.value).toList(),
+                          summary: seriesSummary(
+                            e.key,
+                            e.value.map((l) => l.value).toList(),
+                            dates: e.value.map((l) => l.date).toList(),
+                            unit: e.value.last.unit,
+                          ),
                         ),
                       ),
                     for (final l in e.value.reversed)
@@ -979,22 +1001,35 @@ class ExpensesPage extends StatelessWidget {
 
 // ---------------------------------------------------------------------------
 class _Spark extends StatelessWidget {
-  const _Spark({required this.values, this.minY, this.maxY, this.threshold});
+  const _Spark({
+    required this.values,
+    required this.summary,
+    this.minY,
+    this.maxY,
+    this.threshold,
+  });
   final List<double> values;
+
+  /// Riassunto per i lettori di schermo (vedi chart_summary.dart).
+  final String summary;
   final double? minY;
   final double? maxY;
   final double? threshold;
 
   @override
-  Widget build(BuildContext context) => CustomPaint(
-    size: Size.infinite,
-    painter: _SparkPainter(
-      values,
-      Theme.of(context).colorScheme.primary,
-      minY,
-      maxY,
-      threshold,
-      Theme.of(context).colorScheme.error,
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    label: summary,
+    child: CustomPaint(
+      size: Size.infinite,
+      painter: _SparkPainter(
+        values,
+        Theme.of(context).colorScheme.primary,
+        minY,
+        maxY,
+        threshold,
+        Theme.of(context).colorScheme.error,
+      ),
     ),
   );
 }

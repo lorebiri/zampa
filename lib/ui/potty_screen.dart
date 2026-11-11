@@ -6,6 +6,7 @@ import '../logic/bio_params.dart';
 import '../logic/potty_predictor.dart';
 import '../models.dart';
 import '../store.dart';
+import 'chart_summary.dart';
 import 'common.dart';
 import 'home_screen.dart';
 import 'log_sheet.dart';
@@ -134,10 +135,20 @@ class _PottyScreenState extends State<PottyScreen> {
               padding: const EdgeInsets.all(12),
               child: SizedBox(
                 height: 120,
-                child: _DayBars(
-                  perDay: perDay,
-                  now: now,
-                  color: t.colorScheme.primary,
+                child: Semantics(
+                  container: true,
+                  label: dayBarsSummary(
+                    perDay,
+                    now,
+                    what: need == Need.pipi ? 'pipì' : 'cacche',
+                  ),
+                  child: ExcludeSemantics(
+                    child: _DayBars(
+                      perDay: perDay,
+                      now: now,
+                      color: t.colorScheme.primary,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -231,20 +242,32 @@ class _DayBars extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
+                // Con il testo grande i numeri si rimpiccioliscono e le barre
+                // usano lo spazio che resta: niente overflow al 200%.
                 children: [
-                  Text('${perDay[d] ?? ''}', style: small),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('${perDay[d] ?? ''}', style: small),
+                  ),
                   const SizedBox(height: 2),
-                  Container(
-                    height: 70 * (perDay[d] ?? 0) / maxV,
-                    decoration: BoxDecoration(
-                      color: color.withValues(
-                        alpha: d.day == now.day ? 1 : 0.55,
+                  Flexible(
+                    child: FractionallySizedBox(
+                      heightFactor: (perDay[d] ?? 0) / maxV,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: color.withValues(
+                            alpha: d.day == now.day ? 1 : 0.55,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text('${d.day}', style: small),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('${d.day}', style: small),
+                  ),
                 ],
               ),
             ),
