@@ -78,8 +78,10 @@ class Notifier {
       ok = await android.requestNotificationsPermission() ?? false;
       if (ok) await requestExactAlarms();
     }
-    await refreshAllowed();
-    return ok;
+    // La risposta del plugin a volte è «no» anche se l'utente ha toccato
+    // «Consenti» (rapporto 10, C5): conta lo stato reale del sistema.
+    final real = await refreshAllowed();
+    return ok || real == true;
   }
 
   /// Su Android 12+ chiede di consentire le sveglie esatte (urgenze e dosi).
