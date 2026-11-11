@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/clinical_text.dart';
+import '../l10n/country_pack.dart';
 import '../models.dart';
 import '../store.dart';
 import 'common.dart';
@@ -25,6 +26,7 @@ class EmergencyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = StoreScope.of(context);
     final dog = store.dog;
+    final cav = dog == null ? null : poisonCentreFor(dog.country);
     final t = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(const ClinicalText('UI-EMG-001').text)),
@@ -67,13 +69,21 @@ class EmergencyScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Il numero di un centro antiveleni va mostrato solo dopo averne
-          // verificato la disponibilità per gli animali (07 N35).
+          // Il numero di un centro antiveleni si mostra solo se verificato
+          // per gli animali (07 N35) e solo nel Paese del cane (piano CEO
+          // 10.5): oggi il CAV di Milano per l'Italia.
           Card(
             child: ListTile(
               leading: const Icon(Icons.science_outlined),
               title: Text(const ClinicalText('EMG-019').title),
-              subtitle: Text(const ClinicalText('EMG-019').text),
+              subtitle: Text(
+                ClinicalText('EMG-019', {
+                  'cav': yesNo(cav != null),
+                  'phone': cav?.phone ?? '',
+                }).text,
+              ),
+              trailing: cav == null ? null : const Icon(Icons.call),
+              onTap: cav == null ? null : () => callNumber(context, cav.phone),
             ),
           ),
           if (dog != null) _PhoneScript(dog: dog),

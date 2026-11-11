@@ -224,6 +224,7 @@ class Dog {
     this.foodKcalPer100g = 360,
     this.mealsPerDay = 0,
     this.region = Region.centro,
+    this.country = 'IT',
     this.adultSize,
     this.emergencyPhone = '',
     this.city = '',
@@ -265,6 +266,11 @@ class Dog {
   /// 0 = automatico in base all'età.
   int mealsPerDay;
   Region region;
+
+  /// Paese del cane (codice ISO 3166-1, es. «IT»): sceglie il pacchetto
+  /// Paese, per esempio il numero del centro antiveleni. Oggi l'app è solo
+  /// per l'Italia e non c'è ancora un campo per cambiarlo.
+  String country;
 
   /// Taglia adulta prevista (per la crescita dei cuccioli, 07 N32).
   AdultSize? adultSize;
@@ -344,6 +350,7 @@ class Dog {
     'foodKcalPer100g': foodKcalPer100g,
     'mealsPerDay': mealsPerDay,
     'region': region.name,
+    'country': country,
     'adultSize': adultSize?.name,
     'emergencyPhone': emergencyPhone,
     'city': city,
@@ -384,6 +391,7 @@ class Dog {
     foodKcalPer100g: ((j['foodKcalPer100g'] as num?) ?? 360).toDouble(),
     mealsPerDay: (j['mealsPerDay'] as int?) ?? 0,
     region: Region.values.byName((j['region'] as String?) ?? 'centro'),
+    country: (j['country'] as String?) ?? 'IT',
     adultSize: j['adultSize'] == null
         ? null
         : AdultSize.values.byName(j['adultSize'] as String),

@@ -937,6 +937,7 @@ List<Scenario> travelScenarios() => [
 List<(String, Dog?)> emergencyDogs() => [
   ('nessun cane', null),
   ('cane senza numeri', mkDog()),
+  ('cane in Svizzera', mkDog()..country = 'CH'),
   (
     'cane con numeri',
     Dog(

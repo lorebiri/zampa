@@ -143,6 +143,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito.';
 
   @override
+  String get alrFar001Action =>
+      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+
+  @override
   String get alrFar002Title =>
       'Non mangia o è abbattuto durante antinfiammatori/cortisone';
 
@@ -173,6 +177,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.';
 
   @override
+  String get alrFar004Action =>
+      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+
+  @override
   String get alrGi004Title => 'Vomito ripetuto in un cane piccolo';
 
   @override
@@ -200,6 +208,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get alrGi007aText =>
       'Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.';
+
+  @override
+  String get alrGi007aAction =>
+      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
 
   @override
   String get alrGi007bTitle => 'Feci nere';
@@ -392,6 +404,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell\'etichetta.';
 
   @override
+  String get alrTox001Action =>
+      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+
+  @override
   String get alrTox002Title => 'Sorveglianza dopo un\'ingestione';
 
   @override
@@ -495,6 +511,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito.';
 
   @override
+  String get alrDia002Action =>
+      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
+
+  @override
   String alrDia003Title(String value) {
     return 'Glicemia al limite basso ($value mg/dL)';
   }
@@ -519,6 +539,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String alrDia005Text(String hours) {
     return 'Due dosi di insulina registrate a $hours ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una.';
   }
+
+  @override
+  String get alrDia005Action =>
+      'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.';
 
   @override
   String get alrRep003Title => 'Tremori in una cagna che allatta';
@@ -1483,14 +1507,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get via004Text =>
-      'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute.';
+      'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.';
 
   @override
   String get via005Title => 'Trattamento contro Echinococcus';
 
   @override
   String get via005Text =>
-      'Obbligatorio 24-120 h prima dell\'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.';
+      'Obbligatorio 24-120 ore prima dell\'ingresso nei Paesi indenni (verifica l\'elenco aggiornato con il veterinario).';
 
   @override
   String get via006Title => 'Rischi parassitari della destinazione';
@@ -1731,8 +1755,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get emg019Title => 'Sospetto avvelenamento';
 
   @override
-  String get emg019Text =>
-      'Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.';
+  String emg019Text(String cav, String phone) {
+    String _temp0 = intl.Intl.selectLogic(cav, {
+      'yes':
+          'Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), $phone, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell\'etichetta.',
+      'other': 'Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get emg020Title => 'Aggiungi i numeri utili';

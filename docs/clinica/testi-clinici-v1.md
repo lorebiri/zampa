@@ -5,6 +5,29 @@ Estratto il 10/11/2026 dal codice dell'app (cartella `lib/`, sola lettura). Vers
 Preparato dalla redazione di Zampa. Chi l'ha preparato **non è un medico veterinario abilitato**: questo documento serve a raccogliere la revisione e la firma di un professionista iscritto all'Ordine.  
 Gemello in formato tabella: `docs/clinica/testi-clinici-v1.csv` (stesse righe, stessi ID).
 
+## Versione v1.0-rc (11/11/2026): modifiche proposte, da approvare
+
+Questa revisione è la **v1.0-rc da far firmare al veterinario**. I testi qui sotto restano quelli della v1; le modifiche sono segnate in ogni voce con «**v1.0-rc — proposta, da approvare**». Nessuna soglia clinica è cambiata. Nessun testo è «approvato» finché il veterinario non firma.
+
+| ID | Modifica proposta (da approvare) |
+|---|---|
+| VIA-004 | Norma vigente: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, dal 22/4/2026 |
+| VIA-005 | Testo prudente: «Paesi indenni», elenco da verificare con il veterinario |
+| EMG-019 | Numero del CAV di Milano (Niguarda) 02 6610 1029, **solo se il Paese del cane è l'Italia**, con chiamata diretta; verificato il 10/11/2026 |
+| ALR-TOX-001, ALR-DIA-002, ALR-DIA-005, ALR-FAR-001, ALR-FAR-004, ALR-GI-007a | Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» al posto di quella del livello SUBITO |
+| ALR-URI-006 | Frase d'azione del livello SUBITO quando l'avviso sale a SUBITO |
+
+**Dove stanno i testi.** Dal Ciclo 2 i testi non sono più nel codice: sono nel catalogo `lib/l10n/app_it.arb`, una voce per ID (la chiave è l'ID in camelCase: ALR-URI-001 → `alrUri001Title`, `alrUri001Text`, `alrUri001Action`). I riferimenti `file:riga` di questo documento sono quelli dell'estrazione v1. Le parti condizionali sono ora frasi intere per variante (`select` ICU), con lo stesso testo di prima. Un test d'identità (`test/clinical_texts_snapshot_test.dart`) confronta tutti i testi prodotti dalle regole con un'istantanea: ogni modifica futura si vede nel diff.
+
+**Avvisi duplicati.** Si eliminano per ID e non più per titolo (vedi «Come leggere»).
+
+**Osservazioni per il veterinario e lo sviluppatore** (nessuna modifica fatta):
+- ALR-REP-006a («Temperatura calata da oltre 24 ore senza parto») con la logica attuale non scatta mai: la temperatura è letta solo nelle ultime 24 ore.
+- ALR-CIB-003a, variante «in un cane diabetico»: non scatta mai, perché un diabetico abbattuto riceve già ALR-DIA-001.
+- I punti di `ricerca/15` §3.2 (ALR-RES-002, ALR-ALT-006, ALR-REP-008, ALR-URI-008, ALR-PES-007, TOS-004, MET-002, STG-003, PRV-001, fonti) restano domande per il veterinario: non sono stati cambiati.
+
+**Nuovi ID tecnici nel catalogo** (testi non clinici, già nell'app, invariati, non da firmare): NUT-FAT-001…013 (motivo del fabbisogno in Nutrizione), LAB-001…017 (nomi degli esami suggeriti), UI-EMG-001…011 (titoli della scheda Emergenze e righe del promemoria EMG-021).
+
 ## Come leggere questo documento
 
 - **Ordine di revisione.** Parte 1 Emergenze, Parte 2 SUBITO, Parte 3 OGGI: è la parte prioritaria (tempo stimato 2½-3 ore). Le parti 4-7 si possono rivedere in un secondo momento.
@@ -242,6 +265,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell'etichetta.»
 - **Fonte:** ricerca/07 N35 (numero del CAV tolto) · `lib/ui/emergency_screen.dart:157`
 - **Nota per la traduzione:** Qui andrà il numero del centro antiveleni del paese, se verificato (vedi ricerca/15).
+- **v1.0-rc — proposta, da approvare:** Solo se il Paese del cane è l'Italia: «Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), 02 6610 1029, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.» Il riquadro diventa toccabile e chiama il numero. Numero verificato il 10/11/2026 (centroantiveleni.org, ospedaleniguarda.it); da riverificare a ogni rilascio pubblico e almeno ogni 6 mesi (un test lo impone). Negli altri Paesi resta il testo v1. (piano CEO 10.5; ricerca/15 §3.1 punto 3)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -313,6 +337,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «[se intervento alla colonna negli ultimi 14 giorni: «Dopo una chirurgia della colonna, se non riesce a urinare da solo chiama il veterinario oggi: alcuni cani devono essere aiutati a svuotare la vescica. »]Portalo fuori e osserva: se prova a urinare senza riuscirci, è abbattuto o vomita, contatta subito il veterinario. Se non urina entro 24 ore in totale è comunque un'urgenza.»
 - **Frase d'azione sotto l'avviso:** (nessuna frase d'azione)
 - **Fonte:** ricerca/07 N8-N9 · `lib/logic/alerts.dart:180`
+- **v1.0-rc — proposta, da approvare:** Quando sale a SUBITO (maschio con sforzo nelle 24 ore) compare la frase d'azione del livello: «Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.». A livello ATTENZIONE resta senza frase d'azione. (ricerca/15 §3.1 punto 5)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -365,6 +390,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/07 · `lib/logic/alerts.dart:314`
 - **Nota per la traduzione:** «Cushing»: in alcune lingue «iperadrenocorticismo».
+- **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -375,6 +401,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.»
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:352`
+- **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -385,6 +412,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.»
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/06 · `lib/logic/alerts.dart:388`
+- **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -396,6 +424,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/06; ricerca/07 N19 · `lib/logic/alerts.dart:723`
 - **Nota per la traduzione:** «Centro antiveleni»: servizio e numero diversi per paese; non tradurre con un numero.
+- **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (al posto di «Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.»). Per un'ingestione si chiama prima: il veterinario o il centro antiveleni dicono se e dove andare. (ricerca/15 §3.1 punto 4)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -447,6 +476,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** AAHA 2018 (diabete); ricerca/07 N2 · `lib/logic/alerts.dart:893`
 - **Nota per la traduzione:** mg/dL: in molti paesi si usa mmol/L (÷ 18). Le soglie vanno convertite, non solo l'etichetta.
+- **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -457,6 +487,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 - **Testo:** «Due dosi di insulina registrate a {x} ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una.»
 - **Frase d'azione sotto l'avviso:** Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
 - **Fonte:** ricerca/07 aggiunta N2 · `lib/logic/alerts.dart:932`
+- **v1.0-rc — proposta, da approvare:** Frase d'azione specifica: «Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.» (il testo dice di chiamare; ricerca/15 §3.1 punto 4)
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
 - **Note del veterinario:** ______________________________________________
 
@@ -1580,8 +1611,8 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 | VIA-001 | Checklist viaggio, sempre. | **Età minima** — Antirabbico da 12 settimane + 21 giorni: in genere non si viaggia prima delle 15 settimane di età. | Reg. (UE) 2016/429; Reg. delegato (UE) 2026/131; Reg. delegato (UE) 2020/688 all. VII · `lib/logic/modules.dart:172` | ☐A ☐M ☐E | |
 | VIA-002 | Checklist viaggio, sempre. | **Microchip registrato** — Obbligatorio e impiantato prima del vaccino antirabbico. | vedi VIA-001 · `lib/logic/modules.dart:178` | ☐A ☐M ☐E | |
 | VIA-003 | Checklist viaggio, sempre. | **Vaccino antirabbico valido** — Nessun antirabbico in cartella. / La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: {data}). | vedi VIA-001; ricerca/07 N51 · `lib/logic/modules.dart:185` | ☐A ☐M ☐E | |
-| VIA-004 | Checklist viaggio, sempre. | **Passaporto europeo per animali** — Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute. | ricerca/07 §18 · `lib/logic/modules.dart:193` | ☐A ☐M ☐E | |
-| VIA-005 | Checklist viaggio, sempre. | **Trattamento contro Echinococcus** — Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta. | Reg. delegato (UE) 2026/131 art. 8 · `lib/logic/modules.dart:200` | ☐A ☐M ☐E | |
+| VIA-004 | Checklist viaggio, sempre. | **Passaporto europeo per animali** — Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute. **v1.0-rc — proposta, da approvare:** Testo: «Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.» (norma vigente; ricerca/15 §3.1 punto 1) | ricerca/07 §18 · `lib/logic/modules.dart:193` | ☐A ☐M ☐E | |
+| VIA-005 | Checklist viaggio, sempre. | **Trattamento contro Echinococcus** — Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta. **v1.0-rc — proposta, da approvare:** Testo: «Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).» (elenco dei Paesi non verificato; ricerca/15 §3.1 punto 2) | Reg. delegato (UE) 2026/131 art. 8 · `lib/logic/modules.dart:200` | ☐A ☐M ☐E | |
 | VIA-006 | Checklist viaggio, sempre. | **Rischi parassitari della destinazione** — Chiedi al veterinario: filaria, leishmania e zecche variano molto tra paesi. | — · `lib/logic/modules.dart:205` | ☐A ☐M ☐E | |
 | VIA-007 | Checklist viaggio, nota in fondo. | Le regole cambiano spesso e variano per paese: verifica sempre con il veterinario e sul sito del Ministero della Salute prima di partire. | — · `lib/ui/diaries_screen.dart:912` | ☐A ☐M ☐E | |
 

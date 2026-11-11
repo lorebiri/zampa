@@ -298,6 +298,12 @@ abstract class AppLocalizations {
   /// **'Durante la terapia per il Cushing questi segni possono indicare un calo eccessivo del cortisolo: sospendi la prossima dose solo se te lo dice il veterinario e chiamalo subito.'**
   String get alrFar001Text;
 
+  /// ALR-FAR-001 · frase d'azione · v1.0-rc: proposta, da approvare
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
+  String get alrFar001Action;
+
   /// ALR-FAR-002 · titolo
   ///
   /// In it, this message translates to:
@@ -346,6 +352,12 @@ abstract class AppLocalizations {
   /// **'Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.'**
   String get alrFar004Text;
 
+  /// ALR-FAR-004 · frase d'azione · v1.0-rc: proposta, da approvare
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
+  String get alrFar004Action;
+
   /// ALR-GI-004 · titolo
   ///
   /// In it, this message translates to:
@@ -393,6 +405,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.'**
   String get alrGi007aText;
+
+  /// ALR-GI-007a · frase d'azione · v1.0-rc: proposta, da approvare
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
+  String get alrGi007aAction;
 
   /// ALR-GI-007b · titolo
   ///
@@ -658,6 +676,12 @@ abstract class AppLocalizations {
   /// **'Chiama subito il veterinario o un centro antiveleni, anche se sta bene. Non provocare il vomito di tua iniziativa. Tieni a portata la confezione o una foto dell\'etichetta.'**
   String get alrTox001Text;
 
+  /// ALR-TOX-001 · frase d'azione · v1.0-rc: proposta, da approvare
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
+  String get alrTox001Action;
+
   /// ALR-TOX-002 · titolo · date = giorno/mese
   ///
   /// In it, this message translates to:
@@ -814,6 +838,12 @@ abstract class AppLocalizations {
   /// **'Possibile ipoglicemia. Se è cosciente strofina miele o glucosio sulle gengive (mai liquidi in bocca a un cane incosciente) e chiama subito il veterinario. Non fare la prossima insulina senza averlo sentito.'**
   String get alrDia002Text;
 
+  /// ALR-DIA-002 · frase d'azione · v1.0-rc: proposta, da approvare
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
+  String get alrDia002Action;
+
   /// ALR-DIA-003 · titolo
   ///
   /// In it, this message translates to:
@@ -849,6 +879,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Due dosi di insulina registrate a {hours} ore di distanza. Se le hai fatte davvero, chiama subito il veterinario: rischio di ipoglicemia. Se è un errore di registrazione, cancellane una.'**
   String alrDia005Text(String hours);
+
+  /// ALR-DIA-005 · frase d'azione · v1.0-rc: proposta, da approvare
+  ///
+  /// In it, this message translates to:
+  /// **'Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.'**
+  String get alrDia005Action;
 
   /// ALR-REP-003 · titolo
   ///
@@ -2284,28 +2320,28 @@ abstract class AppLocalizations {
   /// **'{hasRabies, select, yes{La prima vaccinazione è valida dopo 21 giorni; i richiami fatti in tempo valgono subito. Durata 1-3 anni secondo la scheda tecnica (ultimo: {date}).} other{Nessun antirabbico in cartella.}}'**
   String via003Text(String hasRabies, String date);
 
-  /// VIA-004 · titolo
+  /// VIA-004 · titolo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 1)
   ///
   /// In it, this message translates to:
   /// **'Passaporto europeo per animali'**
   String get via004Title;
 
-  /// VIA-004 · testo
+  /// VIA-004 · testo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 1)
   ///
   /// In it, this message translates to:
-  /// **'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute.'**
+  /// **'Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.'**
   String get via004Text;
 
-  /// VIA-005 · titolo
+  /// VIA-005 · titolo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 2)
   ///
   /// In it, this message translates to:
   /// **'Trattamento contro Echinococcus'**
   String get via005Title;
 
-  /// VIA-005 · testo
+  /// VIA-005 · testo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 2)
   ///
   /// In it, this message translates to:
-  /// **'Obbligatorio 24-120 h prima dell\'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.'**
+  /// **'Obbligatorio 24-120 ore prima dell\'ingresso nei Paesi indenni (verifica l\'elenco aggiornato con il veterinario).'**
   String get via005Text;
 
   /// VIA-006 · titolo
@@ -2722,17 +2758,17 @@ abstract class AppLocalizations {
   /// **'Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.'**
   String get emg018Text;
 
-  /// EMG-019 · titolo
+  /// EMG-019 · titolo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); v1.0-rc: variante yes proposta, da approvare (piano CEO 10.5)
   ///
   /// In it, this message translates to:
   /// **'Sospetto avvelenamento'**
   String get emg019Title;
 
-  /// EMG-019 · testo
+  /// EMG-019 · testo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); v1.0-rc: variante yes proposta, da approvare (piano CEO 10.5)
   ///
   /// In it, this message translates to:
-  /// **'Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.'**
-  String get emg019Text;
+  /// **'{cav, select, yes{Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), {phone}, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell\'etichetta.} other{Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell\'etichetta.}}'**
+  String emg019Text(String cav, String phone);
 
   /// EMG-020 · titolo
   ///

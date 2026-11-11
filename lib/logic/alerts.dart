@@ -178,7 +178,9 @@ class AlertEngine {
           strainMale ? AlertLevel.subito : AlertLevel.attenzione,
           'ALR-URI-006',
           p: {'hours': '${hours.round()}', 'spine': yesNo(spine)},
-          action: '',
+          // v1.0-rc (ricerca/15 §3.1 punto 5): quando sale a SUBITO mostra
+          // la frase d'azione del livello; altrimenti nessuna.
+          action: strainMale ? null : '',
           rank: 6,
         );
       }

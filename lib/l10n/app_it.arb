@@ -171,6 +171,10 @@
   "@alrFar001Text": {
     "description": "ALR-FAR-001 · testo"
   },
+  "alrFar001Action": "Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.",
+  "@alrFar001Action": {
+    "description": "ALR-FAR-001 · frase d'azione · v1.0-rc: proposta, da approvare"
+  },
   "alrFar002Title": "Non mangia o è abbattuto durante antinfiammatori/cortisone",
   "@alrFar002Title": {
     "description": "ALR-FAR-002 · titolo"
@@ -202,6 +206,10 @@
   "alrFar004Text": "Chiama subito il veterinario: può essere un effetto collaterale sullo stomaco. Non sospendere né aggiungere farmaci di tua iniziativa.",
   "@alrFar004Text": {
     "description": "ALR-FAR-004 · testo"
+  },
+  "alrFar004Action": "Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.",
+  "@alrFar004Action": {
+    "description": "ALR-FAR-004 · frase d'azione · v1.0-rc: proposta, da approvare"
   },
   "alrGi004Title": "Vomito ripetuto in un cane piccolo",
   "@alrGi004Title": {
@@ -239,6 +247,10 @@
   "alrGi007aText": "Feci nere durante una terapia con antinfiammatori o cortisone: chiama subito il veterinario, potrebbe trattarsi di un sanguinamento dello stomaco.",
   "@alrGi007aText": {
     "description": "ALR-GI-007a · testo"
+  },
+  "alrGi007aAction": "Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.",
+  "@alrGi007aAction": {
+    "description": "ALR-GI-007a · frase d'azione · v1.0-rc: proposta, da approvare"
   },
   "alrGi007bTitle": "Feci nere",
   "@alrGi007bTitle": {
@@ -485,6 +497,10 @@
   "@alrTox001Text": {
     "description": "ALR-TOX-001 · testo"
   },
+  "alrTox001Action": "Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.",
+  "@alrTox001Action": {
+    "description": "ALR-TOX-001 · frase d'azione · v1.0-rc: proposta, da approvare"
+  },
   "alrTox002Title": "Sorveglianza dopo un'ingestione",
   "@alrTox002Title": {
     "description": "ALR-TOX-002 · titolo · date = giorno/mese"
@@ -618,6 +634,10 @@
   "@alrDia002Text": {
     "description": "ALR-DIA-002 · testo"
   },
+  "alrDia002Action": "Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.",
+  "@alrDia002Action": {
+    "description": "ALR-DIA-002 · frase d'azione · v1.0-rc: proposta, da approvare"
+  },
   "alrDia003Title": "Glicemia al limite basso ({value} mg/dL)",
   "@alrDia003Title": {
     "description": "ALR-DIA-003 · titolo",
@@ -656,6 +676,10 @@
         "type": "String"
       }
     }
+  },
+  "alrDia005Action": "Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario.",
+  "@alrDia005Action": {
+    "description": "ALR-DIA-005 · frase d'azione · v1.0-rc: proposta, da approvare"
   },
   "alrRep003Title": "Tremori in una cagna che allatta",
   "@alrRep003Title": {
@@ -1782,19 +1806,19 @@
   },
   "via004Title": "Passaporto europeo per animali",
   "@via004Title": {
-    "description": "VIA-004 · titolo"
+    "description": "VIA-004 · titolo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 1)"
   },
-  "via004Text": "Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 576/2013 e successive modifiche; verifica prima di partire sul sito del Ministero della Salute.",
+  "via004Text": "Rilasciato dal veterinario ASL o autorizzato. Regole UE: Reg. (UE) 2016/429 e Reg. delegato (UE) 2026/131, in vigore dal 22 aprile 2026; i passaporti rilasciati prima restano validi. Verifica prima di partire sul sito del Ministero della Salute.",
   "@via004Text": {
-    "description": "VIA-004 · testo"
+    "description": "VIA-004 · testo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 1)"
   },
   "via005Title": "Trattamento contro Echinococcus",
   "@via005Title": {
-    "description": "VIA-005 · titolo"
+    "description": "VIA-005 · titolo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 2)"
   },
-  "via005Text": "Obbligatorio 24-120 h prima dell'ingresso in Regno Unito, Irlanda, Finlandia, Norvegia e Malta.",
+  "via005Text": "Obbligatorio 24-120 ore prima dell'ingresso nei Paesi indenni (verifica l'elenco aggiornato con il veterinario).",
   "@via005Text": {
-    "description": "VIA-005 · testo"
+    "description": "VIA-005 · testo · v1.0-rc: testo proposto, da approvare (ricerca/15 §3.1 punto 2)"
   },
   "via006Title": "Rischi parassitari della destinazione",
   "@via006Title": {
@@ -2074,11 +2098,19 @@
   },
   "emg019Title": "Sospetto avvelenamento",
   "@emg019Title": {
-    "description": "EMG-019 · titolo"
+    "description": "EMG-019 · titolo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); v1.0-rc: variante yes proposta, da approvare (piano CEO 10.5)"
   },
-  "emg019Text": "Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell'etichetta.",
+  "emg019Text": "{cav, select, yes{Chiama subito il tuo veterinario o il pronto soccorso veterinario. Per sapere quanto è pericoloso ciò che ha ingerito puoi chiamare anche il Centro Antiveleni di Milano (Ospedale Niguarda), {phone}, 24 ore su 24: risponde anche per gli animali e ti chiederà nome e recapiti. Tieni a portata la confezione o una foto dell'etichetta.} other{Chiama subito il tuo veterinario o il pronto soccorso h24: sapranno contattare un centro antiveleni. Tieni a portata la confezione o una foto dell'etichetta.}}",
   "@emg019Text": {
-    "description": "EMG-019 · testo"
+    "description": "EMG-019 · testo · cav = yes solo se il Paese del cane è l'Italia (pacchetto Paese, numero e data di verifica in lib/l10n/country_pack.dart); v1.0-rc: variante yes proposta, da approvare (piano CEO 10.5)",
+    "placeholders": {
+      "cav": {
+        "type": "String"
+      },
+      "phone": {
+        "type": "String"
+      }
+    }
   },
   "emg020Title": "Aggiungi i numeri utili",
   "@emg020Title": {
