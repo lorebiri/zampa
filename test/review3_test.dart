@@ -190,6 +190,45 @@ void main() {
     });
   });
 
+  testWidgets('A6: scheda «Aggiungi le medicine» in Home finché serve', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(420, 2400));
+    final store = await _openDemo(tester);
+    final dog = store.dog!;
+    store.records.removeWhere(
+      (r) => r.dogId == dog.id && r.type == RecordType.farmaco,
+    );
+    await tester.runAsync(() => store.upsertDog(dog..medsToAdd = true));
+    await tester.pump();
+    final card = find.textContaining('Aggiungi le medicine di ${dog.name}');
+    expect(card, findsOneWidget);
+
+    // Con una terapia registrata la scheda sparisce.
+    await tester.runAsync(
+      () =>
+          store.upsertRecord(therapy('Metacam', DateTime.now(), dogId: dog.id)),
+    );
+    await tester.pump();
+    expect(card, findsNothing);
+
+    // Senza terapie torna; «Chiudi» la toglie per sempre.
+    store.records.removeWhere((r) => r.dogId == dog.id);
+    await tester.runAsync(() => store.upsertDog(dog));
+    await tester.pump();
+    expect(card, findsOneWidget);
+    await tester.ensureVisible(find.text('Chiudi'));
+    await tester.pump();
+    await tester.tap(find.text('Chiudi'));
+    await tester.runAsync(() async {});
+    await tester.pump();
+    expect(card, findsNothing);
+    expect(store.dog!.medsToAdd, isFalse);
+    expect(Dog.fromJson(store.dog!.toJson()).medsToAdd, isFalse);
+    expect(Dog.fromJson(dog.toJson()..remove('medsToAdd')).medsToAdd, isFalse);
+    await tester.binding.setSurfaceSize(null);
+  });
+
   group('A4, A5, A9: varianti degli avvisi', () {
     List<HealthAlert> run(Scenario s) => AlertEngine.compute(
       dog: s.dog,

@@ -10,6 +10,7 @@ import 'package:zampa/store.dart';
 import 'package:zampa/ui/common.dart';
 import 'package:zampa/ui/dog_form.dart';
 import 'package:zampa/ui/dog_wizard.dart';
+import 'package:zampa/ui/health_screen.dart';
 import 'package:zampa/ui/theme.dart';
 
 Future<AppStore> _store(WidgetTester tester, {bool demo = false}) async {
@@ -99,19 +100,25 @@ void main() {
   ) async {
     final store = await _store(tester);
     await _open(tester, store);
-    expect(find.text('Passo 1 di 4'), findsOneWidget);
-    expect(find.bySemanticsLabel('Passo 1 di 4'), findsOneWidget);
+    expect(find.text('Passo 1 di 5'), findsOneWidget);
+    expect(find.bySemanticsLabel('Passo 1 di 5'), findsOneWidget);
 
     await _fillFirstTwo(tester);
-    expect(find.text('Passo 3 di 4'), findsOneWidget);
+    expect(find.text('Passo 3 di 5'), findsOneWidget);
     expect(find.text('Sterilizzata'), findsOneWidget);
     await tester.tap(find.byType(SwitchListTile));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'diabete');
     await _tap(tester, 'Avanti');
 
-    // Passo 4: orari proposti, poi «Fatto».
-    expect(find.text('Passo 4 di 4'), findsOneWidget);
+    // Passo 4: medicine. «No»: nessuna terapia, nessuna scheda in Home.
+    expect(find.text('Passo 4 di 5'), findsOneWidget);
+    expect(find.text('Prende medicine?'), findsOneWidget);
+    await _tap(tester, 'No');
+    await _tap(tester, 'Avanti');
+
+    // Passo 5: orari proposti, poi «Fatto».
+    expect(find.text('Passo 5 di 5'), findsOneWidget);
     expect(find.text('07:00'), findsOneWidget);
     expect(find.text('23:00'), findsOneWidget);
     expect(find.text('Altri dettagli'), findsOneWidget);
@@ -147,17 +154,19 @@ void main() {
     expect(dog.poopRemindersOn, isTrue);
     expect(dog.reminderLeadMinutes, 10);
     expect(dog.heatAlertsOn, isFalse);
+    expect(dog.medsToAdd, isFalse);
+    expect(store.records, isEmpty);
   });
 
   testWidgets('senza nome non si va avanti', (tester) async {
     final store = await _store(tester);
     await _open(tester, store);
     await _tap(tester, 'Avanti');
-    expect(find.text('Passo 1 di 4'), findsOneWidget);
+    expect(find.text('Passo 1 di 5'), findsOneWidget);
     expect(find.text('Scrivi il nome del cane'), findsOneWidget);
     await tester.enterText(find.byType(TextField), '   ');
     await _tap(tester, 'Avanti');
-    expect(find.text('Passo 1 di 4'), findsOneWidget);
+    expect(find.text('Passo 1 di 5'), findsOneWidget);
   });
 
   testWidgets('data di nascita obbligatoria e mai futura, peso positivo', (
@@ -170,7 +179,7 @@ void main() {
 
     // Niente data e niente peso: si resta al passo 2, con gli errori.
     await _tap(tester, 'Avanti');
-    expect(find.text('Passo 2 di 4'), findsOneWidget);
+    expect(find.text('Passo 2 di 5'), findsOneWidget);
     expect(find.text('Serve la data di nascita'), findsOneWidget);
     expect(find.text('Scrivi il peso in kg, per esempio 12,5'), findsOneWidget);
 
@@ -187,15 +196,15 @@ void main() {
     for (final bad in ['0', '-3', 'tanti']) {
       await tester.enterText(find.byType(TextField), bad);
       await _tap(tester, 'Avanti');
-      expect(find.text('Passo 2 di 4'), findsOneWidget, reason: bad);
+      expect(find.text('Passo 2 di 5'), findsOneWidget, reason: bad);
     }
     await tester.enterText(find.byType(TextField), '12.5');
     await _tap(tester, 'Avanti');
-    expect(find.text('Passo 3 di 4'), findsOneWidget);
+    expect(find.text('Passo 3 di 5'), findsOneWidget);
 
     // «Indietro» torna al passo precedente senza perdere i dati.
     await _tap(tester, 'Indietro');
-    expect(find.text('Passo 2 di 4'), findsOneWidget);
+    expect(find.text('Passo 2 di 5'), findsOneWidget);
     expect(find.text('12.5'), findsOneWidget);
   });
 
@@ -206,6 +215,7 @@ void main() {
     expect(store.demoDogs, hasLength(1));
     await _open(tester, store);
     await _fillFirstTwo(tester);
+    await _tap(tester, 'Avanti');
     await _tap(tester, 'Avanti');
     await _finish(tester, 'Fatto');
 
@@ -228,6 +238,7 @@ void main() {
     await _open(tester, store);
     await _fillFirstTwo(tester);
     await _tap(tester, 'Avanti');
+    await _tap(tester, 'Avanti');
     await _finish(tester, 'Altri dettagli');
     await _finish(tester, 'Non ora');
 
@@ -235,6 +246,96 @@ void main() {
     expect(find.byType(DogFormPage), findsOneWidget);
     expect(find.text('Modifica Birba'), findsOneWidget);
     expect(find.byType(DogWizardPage), findsNothing);
+  });
+
+  testWidgets('«Sì, le aggiungo ora» crea terapie vere, come in Salute', (
+    tester,
+  ) async {
+    final store = await _store(tester);
+    await _open(tester, store);
+    await _fillFirstTwo(tester);
+    await _tap(tester, 'Avanti');
+    expect(find.text('Passo 4 di 5'), findsOneWidget);
+
+    // La scelta apre il modulo della terapia della scheda Salute.
+    await _tap(tester, 'Sì, le aggiungo ora');
+    expect(find.byType(RecordFormPage), findsOneWidget);
+    expect(find.text('Nuova medicina'), findsOneWidget);
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Nome della medicina'),
+      'Metacam',
+    );
+    await tester.pumpAndSettle();
+    // Senza «ogni quante ore» non è una terapia: non si salva.
+    await _tap(tester, 'Salva');
+    expect(find.byType(RecordFormPage), findsOneWidget);
+    expect(find.text('Indica ogni quante ore la prende'), findsOneWidget);
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Ogni quante ore'),
+      '24',
+    );
+    await _tap(tester, 'Salva');
+    expect(find.byType(RecordFormPage), findsNothing);
+    expect(find.text('Passo 4 di 5'), findsOneWidget);
+    expect(find.text('Metacam'), findsOneWidget);
+    // Niente è salvato prima di «Fatto».
+    expect(store.records, isEmpty);
+
+    // Una seconda medicina, poi la si toglie.
+    await _tap(tester, 'Aggiungi un\'altra medicina');
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Nome della medicina'),
+      'Prednicortone',
+    );
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Ogni quante ore'),
+      '12',
+    );
+    await _tap(tester, 'Salva');
+    expect(find.text('Prednicortone'), findsOneWidget);
+    await _tap(tester, 'Avanti');
+    await _tap(tester, 'Indietro');
+    await tester.tap(find.byTooltip('Togli Prednicortone'));
+    await tester.pumpAndSettle();
+    expect(find.text('Prednicortone'), findsNothing);
+
+    await _tap(tester, 'Avanti');
+    await _finish(tester, 'Fatto');
+    await _finish(tester, 'Non ora');
+    final dog = store.dogs.single;
+    expect(dog.medsToAdd, isFalse);
+    final r = store.records.single;
+    expect(r.dogId, dog.id);
+    expect(r.type, RecordType.farmaco);
+    expect(r.title, 'Metacam');
+    expect(r.everyHours, 24);
+    expect(r.endDate, isNull);
+    // Nome riconosciuto come in Salute (DrugEffect.guess).
+    expect(r.drugEffect, DrugEffect.fans);
+    final now = DateTime.now();
+    expect(r.isActiveTherapy(now.add(const Duration(minutes: 1))), isTrue);
+    // È una terapia vera: genera le dosi e i promemoria.
+    expect(AppStore.nextDose(r, now), isNotNull);
+  });
+
+  testWidgets('«Sì, le aggiungo dopo»: nessuna terapia, scheda in Home', (
+    tester,
+  ) async {
+    final store = await _store(tester);
+    await _open(tester, store);
+    await _fillFirstTwo(tester);
+    await _tap(tester, 'Avanti');
+    await _tap(tester, 'Sì, le aggiungo dopo');
+    expect(find.byType(RecordFormPage), findsNothing);
+    expect(
+      find.text('Troverai in Home un promemoria per aggiungerle.'),
+      findsOneWidget,
+    );
+    await _tap(tester, 'Avanti');
+    await _finish(tester, 'Fatto');
+    await _finish(tester, 'Non ora');
+    expect(store.dogs.single.medsToAdd, isTrue);
+    expect(store.records, isEmpty);
   });
 
   testWidgets(
@@ -273,7 +374,10 @@ void main() {
       await _tap(tester, 'Avanti');
       check('passo 3');
       await _tap(tester, 'Avanti');
+      await _tap(tester, 'Sì, le aggiungo dopo');
       check('passo 4');
+      await _tap(tester, 'Avanti');
+      check('passo 5');
       expect(find.text('Fatto'), findsOneWidget);
 
       await tester.binding.setSurfaceSize(null);

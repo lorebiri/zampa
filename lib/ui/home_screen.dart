@@ -20,6 +20,7 @@ import '../store.dart';
 import 'common.dart';
 import 'avatar_editor.dart';
 import 'dog_wizard.dart';
+import 'health_screen.dart';
 import 'avatar.dart';
 import 'log_sheet.dart';
 import 'theme.dart';
@@ -151,6 +152,36 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SectionTitle('Registra con un tocco'),
         QuickActions(dog: dog),
+        // «Sì, le aggiungo dopo» nella procedura guidata (ricerca/26 A6).
+        if (dog.medsToAdd &&
+            !store.records.any(
+              (r) => r.dogId == dog.id && r.type == RecordType.farmaco,
+            ))
+          NoticeCard(
+            'Aggiungi le medicine di ${dog.name}: alcune cambiano quanto beve e '
+            'quanto spesso deve uscire.',
+            level: AlertLevel.info,
+            child: Wrap(
+              spacing: Space.m,
+              runSpacing: Space.s,
+              children: [
+                FilledButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text('Aggiungi una medicina'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          RecordFormPage(dog: dog, therapyOnly: true),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => store.upsertDog(dog..medsToAdd = false),
+                  child: const Text('Chiudi'),
+                ),
+              ],
+            ),
+          ),
         if (pending.isNotEmpty) ...[
           const SectionTitle('Dosi da confermare'),
           for (final p in pending)

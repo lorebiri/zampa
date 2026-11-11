@@ -487,12 +487,17 @@ Future<DateTime?> pickBirthDate(BuildContext context, DateTime? current) =>
 Future<void> saveDogWithFirstDogPrompts(
   BuildContext context,
   AppStore store,
-  Dog dog,
-) async {
+  Dog dog, {
+  List<HealthRecord> records = const [],
+}) async {
   // «Primo cane vero»: il cane di esempio non conta (CEO 11.4), altrimenti
   // chi prova l'esempio non riceverebbe mai la richiesta del permesso.
   final firstReal = !isDemoId(dog.id) && !store.hasRealDog;
   await store.upsertDog(dog);
+  // Terapie indicate nella procedura guidata (ricerca/26 A6).
+  for (final r in records) {
+    await store.upsertRecord(r);
+  }
   if (firstReal && store.demoDogs.isNotEmpty && context.mounted) {
     final names = store.demoDogs.map((d) => d.name).join(', ');
     final drop = await showDialog<bool>(
