@@ -171,6 +171,67 @@ class _AccountScreenState extends State<AccountScreen> {
     ],
   );
 
+  static const _fieldNames = {
+    'name': 'nome',
+    'weightKg': 'peso',
+    'idealWeightKg': 'peso ideale',
+    'birthDate': 'data di nascita',
+    'breed': 'razza',
+    'neutered': 'sterilizzazione',
+    'microchip': 'microchip',
+    'vetName': 'veterinario',
+    'vetPhone': 'telefono del veterinario',
+    'allergies': 'allergie',
+    'conditions': 'patologie',
+    'foodName': 'alimento',
+    'mealsPerDay': 'pasti al giorno',
+    'emergencyPhone': 'telefono d\'emergenza',
+  };
+
+  /// Modifiche sostituite da quelle di un altro telefono: l'utente le vede
+  /// (rapporto 11, A5).
+  Widget _conflicts(AppStore store, ThemeData t) {
+    final lines = [
+      for (final c in store.syncConflicts)
+        if (c.kind == 'dog')
+          '${c.local['name'] ?? 'Cane'}: '
+              '${c.fields.map((f) => _fieldNames[f] ?? f).join(', ')}'
+        else
+          'Una voce del diario di '
+              '${store.dogs.where((d) => d.id == c.dogId).firstOrNull?.name ?? 'un cane'}',
+    ];
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Modificati in contemporanea da un altro telefono',
+              style: t.textTheme.titleSmall,
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Queste modifiche fatte qui non sono state salvate, perché '
+              'nello stesso momento un familiare o un altro tuo dispositivo '
+              'aveva cambiato gli stessi dati. È rimasta la loro versione: '
+              'controlla e, se serve, correggi.',
+            ),
+            const SizedBox(height: 8),
+            for (final l in lines) Text('• $l'),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: store.clearSyncConflicts,
+                child: const Text('Ho capito'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _signedIn(AuthService auth, AppStore store, ThemeData t) {
     final engine = store.syncEngine;
     final dog = store.dog;
@@ -195,6 +256,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
           ),
         ),
+        if (store.syncConflicts.isNotEmpty) _conflicts(store, t),
         FilledButton.tonalIcon(
           icon: const Icon(Icons.sync),
           label: const Text('Sincronizza ora'),

@@ -157,6 +157,16 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   Timer? _syncTimer;
   String? lastSyncError;
 
+  /// Modifiche fatte su questo telefono e sostituite da quelle di un altro
+  /// dispositivo (stesso campo cambiato in contemporanea): si mostrano
+  /// all'utente finché non le ha viste, mai perse in silenzio (rapporto 11).
+  final syncConflicts = <SyncConflict>[];
+
+  void clearSyncConflicts() {
+    syncConflicts.clear();
+    notifyListeners();
+  }
+
   /// Sincronizza qualche secondo dopo l'ultima modifica (raggruppa i tocchi).
   void _scheduleSync() {
     if (syncEngine?.backend.userId == null) return;
@@ -169,6 +179,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     if (e == null) return null;
     try {
       final r = await e.sync();
+      if (r != null) syncConflicts.addAll(r.conflicts);
       lastSyncError = null;
       notifyListeners();
       return r;
