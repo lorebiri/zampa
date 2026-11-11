@@ -1,0 +1,12 @@
+{"tag": "basefin", "shadow": false, "of": 4,
+ "jobs": [
+  {"scenario": "realistico"},
+  {"scenario": "pulito"},
+  {"scenario": "mancanti"},
+  {"scenario": "jitter"},
+  {"scenario": "orari_padrone"},
+  {"scenario": "weekend"},
+  {"scenario": "cambio_routine"},
+  {"scenario": "poliuria"},
+  {"scenario": "realistico", "need": "cacca"}
+ ]}

@@ -1,0 +1,17 @@
+## R3 realistico_pipi_griglia ombra (tutti)
+- n previsioni / cani: 2520 / 32
+- frequenza osservata: 0.217
+- Brier modello: 0.157 [0.140–0.177]
+- Brier climatologia del cane (stessa ora, 14 gg): 0.155 [0.141–0.170]
+- Brier skill score vs climatologia: -0.01 [-0.05–0.03]
+- Brier modello vs eventi VERI: 0.182
+- fascia 0.0-0.1: n=1153 dichiarata 3% osservata 11% [9–13%] scarto 8 punti
+- fascia 0.1-0.2: n=437 dichiarata 15% osservata 18% [14–23%] scarto 3 punti
+- fascia 0.2-0.3: n=277 dichiarata 25% osservata 21% [17–26%] scarto -3 punti
+- fascia 0.3-0.4: n=203 dichiarata 35% osservata 38% [31–45%] scarto 4 punti
+- fascia 0.4-0.5: n=194 dichiarata 45% osservata 41% [33–49%] scarto -4 punti
+- fascia 0.5-0.6: n=139 dichiarata 55% osservata 47% [38–54%] scarto -8 punti
+- fascia 0.6-0.8: n=110 dichiarata 68% osservata 53% [42–61%] scarto -15 punti
+- fascia 0.8-1.0: n=7 dichiarata 84% osservata 57% [29–86%] scarto -27 punti
+- ECE (errore medio di calibrazione): 6.3 punti
+

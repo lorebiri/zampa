@@ -31,7 +31,7 @@ import 'potty_predictor.dart';
 /// L'accuratezza viene misurata a posteriori sugli ultimi eventi reali.
 
 const int _binMin = 15;
-const int _nFeat = 16;
+const int _nFeat = 17;
 
 const featureNames = [
   'base',
@@ -50,6 +50,7 @@ const featureNames = [
   'acqua',
   'attività',
   'passeggiata',
+  'uscita abituale',
 ];
 
 class _Ev {
@@ -57,6 +58,162 @@ class _Ev {
   final DateTime time;
   final double amount;
   final bool scheduled;
+}
+
+/// Inneschi abituali (R1, ricerca/12 §6): orari ricorrenti negli ultimi 14
+/// giorni (gruppi entro 90 minuti presenti in almeno il 40% dei giorni in
+/// cui quel tipo di evento è registrato, e in almeno 2). Restituisce
+/// (minuti dalla mezzanotte, quantità tipica).
+List<(int, double)> _habitualOf(List<_Ev> evs, DateTime now) {
+  final recent = [
+    for (final e in evs)
+      if (!e.time.isAfter(now) && now.difference(e.time).inDays < 14) e,
+  ]..sort((a, b) => _mod(a.time).compareTo(_mod(b.time)));
+  if (recent.isEmpty) return const [];
+  final days = {
+    for (final e in recent) DateTime(e.time.year, e.time.month, e.time.day),
+  }.length;
+  if (days < 3) return const [];
+  final clusters = <List<_Ev>>[];
+  for (final e in recent) {
+    if (clusters.isEmpty || _mod(e.time) - _mod(clusters.last.last.time) > 90) {
+      clusters.add([e]);
+    } else {
+      clusters.last.add(e);
+    }
+  }
+  final need = math.max(2.0, days * 0.4);
+  return [
+    for (final c in clusters)
+      if (c.length >= need)
+        (
+          _mod(c[c.length ~/ 2].time),
+          ([for (final e in c) e.amount]..sort())[c.length ~/ 2],
+        ),
+  ];
+}
+
+int _mod(DateTime t) => t.hour * 60 + t.minute;
+
+int _dayKey(DateTime t) => t.year * 400 + t.month * 32 + t.day;
+
+/// R3: risveglio appreso per ogni giorno tra [from] e [to], dai 14 giorni
+/// precedenti dello stesso tipo (fine settimana / feriali; tutti se meno di
+/// 3): mediana dei risvegli registrati se almeno 3, altrimenti della prima
+/// pipì del giorno (dopo almeno 5 ore, prima delle 14) meno 15 minuti.
+Map<int, int> _wakesByDay(
+  Dog dog,
+  List<DateTime> logged,
+  List<DateTime> pees,
+  DateTime from,
+  DateTime to,
+) {
+  final firsts = <DateTime>[];
+  for (var i = 1; i < pees.length; i++) {
+    final t = pees[i], p = pees[i - 1];
+    if (t.difference(p).inHours < 5 || t.hour >= 14) continue;
+    if (p.day == t.day && p.month == t.month) continue;
+    firsts.add(t.subtract(const Duration(minutes: 15)));
+  }
+  int? med(List<DateTime> xs, DateTime d) {
+    final lo = d.subtract(const Duration(days: 14));
+    final win = [
+      for (final t in xs)
+        if (!t.isBefore(lo) && t.isBefore(d)) t,
+    ];
+    final we = d.weekday >= 6;
+    var use = [
+      for (final t in win)
+        if ((t.weekday >= 6) == we) _mod(t),
+    ];
+    if (use.length < 3) use = [for (final t in win) _mod(t)];
+    if (use.length < 3) return null;
+    use.sort();
+    return use[use.length ~/ 2];
+  }
+
+  final res = <int, int>{};
+  for (
+    var d = DateTime(from.year, from.month, from.day);
+    d.isBefore(to);
+    d = DateTime(d.year, d.month, d.day + 1)
+  ) {
+    final m = med(logged, d) ?? med(firsts, d);
+    // Entro ±3 ore dal profilo: un dato strano non sposta la notte.
+    if (m != null && (m - dog.wakeHour * 60).abs() <= 180) {
+      res[_dayKey(d)] = m;
+    }
+  }
+  return res;
+}
+
+/// R2: per ogni giorno tra [from] e [to], gli orari ricorrenti delle uscite
+/// nei 14 giorni precedenti (gruppi entro 45 minuti presenti in almeno il
+/// 40% dei giorni con dati e in almeno 3). Fine settimana e feriali sono
+/// separati quando ci sono almeno 3 giorni dello stesso tipo.
+Map<int, List<int>> _habitsByDay(
+  List<DateTime> outs,
+  DateTime from,
+  DateTime to,
+) {
+  final res = <int, List<int>>{};
+  for (
+    var d = DateTime(from.year, from.month, from.day);
+    d.isBefore(to);
+    d = DateTime(d.year, d.month, d.day + 1)
+  ) {
+    final lo = d.subtract(const Duration(days: 14));
+    final win = [
+      for (final t in outs)
+        if (!t.isBefore(lo) && t.isBefore(d)) t,
+    ];
+    if (win.isEmpty) continue;
+    final we = d.weekday >= 6;
+    var use = [
+      for (final t in win)
+        if ((t.weekday >= 6) == we) t,
+    ];
+    final sameDays = {for (final t in use) _dayKey(t)}.length;
+    if (sameDays < 3) use = win;
+    final days = {for (final t in use) _dayKey(t)}.length;
+    if (days < 3) continue;
+    final mins = [for (final t in use) _mod(t)]..sort();
+    final clusters = <List<int>>[];
+    for (final m in mins) {
+      if (clusters.isEmpty || m - clusters.last.last > 45) {
+        clusters.add([m]);
+      } else {
+        clusters.last.add(m);
+      }
+    }
+    final need = math.max(3, (days * 0.4).ceil());
+    final hs = [
+      for (final c in clusters)
+        if (c.length >= need) c[c.length ~/ 2],
+    ];
+    if (hs.isNotEmpty) res[_dayKey(d)] = hs;
+  }
+  return res;
+}
+
+/// Eventi attesi agli orari abituali, uno per giorno tra [from] e [to].
+List<_Ev> _expectedEvents(
+  List<(int, double)> habits,
+  DateTime from,
+  DateTime to,
+) {
+  final out = <_Ev>[];
+  for (
+    var d = DateTime(from.year, from.month, from.day);
+    d.isBefore(to);
+    d = DateTime(d.year, d.month, d.day + 1)
+  ) {
+    for (final (m, a) in habits) {
+      out.add(_Ev(DateTime(d.year, d.month, d.day, m ~/ 60, m % 60), a));
+    }
+  }
+  out.sort((a, b) => a.time.compareTo(b.time));
+  return out;
 }
 
 /// Eventi del cane già ordinati, pronti per il calcolo delle covariate.
@@ -69,7 +226,69 @@ class _Context {
     required this.wakes,
     required this.plays,
     required this.walks,
+    this.expMeals = const [],
+    this.expWaters = const [],
+    this.expPlays = const [],
+    this.expWalks = const [],
+    this.habitMin = const {},
+    this.wakeMin = const {},
   });
+
+  /// R3: risveglio appreso per giorno (minuti dalla mezzanotte): mediana dei
+  /// risvegli registrati, o della prima pipì del mattino meno 15 minuti,
+  /// nei 14 giorni precedenti dello stesso tipo (feriali / fine settimana).
+  /// Senza dati vale l'ora del profilo.
+  final Map<int, int> wakeMin;
+
+  int wakeFor(Dog dog, DateTime day) =>
+      wakeMin[_dayKey(day)] ?? dog.wakeHour * 60;
+
+  /// Finestra di sonno con il risveglio appreso (solo dentro il modello).
+  bool asleep(Dog dog, DateTime t) {
+    final h = t.hour * 60 + t.minute;
+    final sl = dog.sleepStartHour * 60;
+    final w = wakeFor(dog, t);
+    if (sl == w) return false;
+    return sl > w ? (h >= sl || h < w) : (h >= sl && h < w);
+  }
+
+  /// Prossimo risveglio appreso dopo [t].
+  DateTime nextWake(Dog dog, DateTime t) {
+    var d = DateTime(t.year, t.month, t.day);
+    for (var k = 0; k < 2; k++) {
+      final w = d.add(Duration(minutes: wakeFor(dog, d)));
+      if (w.isAfter(t)) return w;
+      d = DateTime(d.year, d.month, d.day + 1);
+    }
+    return d.add(Duration(minutes: wakeFor(dog, d)));
+  }
+
+  /// R2: orari abituali delle uscite per giorno (minuti dalla mezzanotte),
+  /// calcolati per ciascun giorno solo sui 14 giorni precedenti, separando
+  /// feriali e fine settimana. Vuoto nel simulatore del prior.
+  final Map<int, List<int>> habitMin;
+
+  /// Vicinanza a un orario abituale di uscita (0-1, kernel di 30 minuti).
+  double habitAt(DateTime t) {
+    final hs = habitMin[_dayKey(t)];
+    if (hs == null || hs.isEmpty) return 0;
+    final m = t.hour * 60 + t.minute;
+    var best = 0.0;
+    for (final h in hs) {
+      final z = (m - h) / 30;
+      final v = math.exp(-0.5 * z * z);
+      if (v > best) best = v;
+    }
+    return best;
+  }
+
+  /// Inneschi attesi agli orari abituali (R1): contano solo dopo il
+  /// momento della previsione, e solo se non è già stato registrato un
+  /// evento dello stesso tipo nei 90 minuti prima.
+  final List<_Ev> expMeals;
+  final List<_Ev> expWaters;
+  final List<_Ev> expPlays;
+  final List<_Ev> expWalks;
 
   final List<DateTime> outings;
   final List<bool> indoor;
@@ -85,6 +304,7 @@ class _Context {
     List<LogEntry> logs,
     DateTime from,
     DateTime to,
+    DateTime now,
   ) {
     // Le pipì con solo gocce non sono una minzione: non azzerano il timer
     // (revisione veterinaria 07 N5).
@@ -108,15 +328,26 @@ class _Context {
         .toList();
 
     final loggedWakes = evs(LogType.risveglio);
-    // Risvegli: quelli registrati + l'orario abituale nei giorni senza
-    // registrazione.
+    // R3: risveglio appreso per giorno (feriali e fine settimana separati).
+    final peeTimes = PottyPredictor.outings(mine).map((o) => o.time).toList();
+    final wakeMin = _wakesByDay(
+      dog,
+      [for (final e in loggedWakes) e.time],
+      peeTimes,
+      from,
+      to,
+    );
+    // Risvegli: quelli registrati + l'orario abituale (appreso) nei giorni
+    // senza registrazione.
     final wakes = <_Ev>[...loggedWakes];
     for (
       var d = DateTime(from.year, from.month, from.day);
       d.isBefore(to);
       d = DateTime(d.year, d.month, d.day + 1)
     ) {
-      final w = DateTime(d.year, d.month, d.day, dog.wakeHour);
+      final w = d.add(
+        Duration(minutes: wakeMin[_dayKey(d)] ?? dog.wakeHour * 60),
+      );
       final logged = loggedWakes.any(
         (e) => e.time.difference(w).inMinutes.abs() < 180,
       );
@@ -132,14 +363,25 @@ class _Context {
         2.5,
       ),
     );
+    final meals = evs(LogType.pasto);
+    final plays = evs(LogType.gioco);
+    final walks = evs(LogType.passeggiata);
+    List<_Ev> exp(List<_Ev> e) =>
+        _expectedEvents(_habitualOf(e, now), from, to);
     return _Context(
       outings: outs.map((o) => o.time).toList(),
       indoor: outs.map((o) => o.indoor).toList(),
-      meals: evs(LogType.pasto),
+      meals: meals,
       waters: waters,
       wakes: wakes,
-      plays: evs(LogType.gioco),
-      walks: evs(LogType.passeggiata),
+      plays: plays,
+      walks: walks,
+      expMeals: exp(meals),
+      expWaters: exp(waters),
+      expPlays: exp(plays),
+      expWalks: exp(walks),
+      habitMin: _habitsByDay(outs.map((o) => o.time).toList(), from, to),
+      wakeMin: wakeMin,
     );
   }
 
@@ -157,6 +399,46 @@ class _Context {
     }
     return ans;
   }
+}
+
+/// Somma dei kernel di un innesco: eventi registrati noti a [cutoff] più
+/// eventi attesi agli orari abituali dopo [cutoff] (R1).
+double _triggerSum(
+  List<_Ev> evs,
+  List<_Ev> expected,
+  DateTime t,
+  DateTime cutoff,
+  Trigger tr,
+  double cap,
+) {
+  var s = _kernelSum(evs, t, cutoff, tr, double.infinity);
+  if (expected.isNotEmpty && t.isAfter(cutoff)) {
+    // Ultimo evento registrato noto al momento della previsione.
+    DateTime? lastReal;
+    var lo = 0, hi = evs.length - 1;
+    while (lo <= hi) {
+      final mid = (lo + hi) >> 1;
+      if (!evs[mid].time.isAfter(cutoff)) {
+        lastReal = evs[mid].time;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    final horizon = tr.peak + 4 * tr.width;
+    for (var i = expected.length - 1; i >= 0; i--) {
+      final e = expected[i];
+      if (e.time.isAfter(t)) continue;
+      if (!e.time.isAfter(cutoff)) break;
+      final dt = t.difference(e.time).inSeconds / 60.0;
+      if (dt > horizon) break;
+      if (lastReal != null && e.time.difference(lastReal).inMinutes < 90) {
+        continue;
+      }
+      s += e.amount * BioParams.kernel(dt, tr);
+    }
+  }
+  return math.min(s, cap);
 }
 
 double _kernelSum(
@@ -225,12 +507,13 @@ class _Model {
       math.max(0, u - 0.5),
       math.sin(ang),
       math.cos(ang),
-      PottyPredictor.inSleepWindow(dog, mid) ? 1 : 0,
+      c.asleep(dog, mid) ? 1 : 0,
       _kernelSum(c.wakes, mid, cutoff, pr.wake, 1),
-      _kernelSum(c.meals, mid, cutoff, pr.meal, 1.5),
-      _kernelSum(c.waters, mid, cutoff, pr.water, 2.5),
-      _kernelSum(c.plays, mid, cutoff, pr.play, 1),
-      _kernelSum(c.walks, mid, cutoff, pr.walk, 1),
+      _triggerSum(c.meals, c.expMeals, mid, cutoff, pr.meal, 1.5),
+      _triggerSum(c.waters, c.expWaters, mid, cutoff, pr.water, 2.5),
+      _triggerSum(c.plays, c.expPlays, mid, cutoff, pr.play, 1),
+      _triggerSum(c.walks, c.expWalks, mid, cutoff, pr.walk, 1),
+      c.habitAt(mid),
     ];
   }
 }
@@ -275,6 +558,130 @@ class Accuracy {
   final double inWindowRate;
 }
 
+/// R6 (ricerca/12 §6): la previsione in ombra fatta subito dopo un evento,
+/// registrata per misurare il modello FUORI campione e per calibrarlo (R4,
+/// R5). Va salvata alla registrazione di ogni pipì (persistenza a cura
+/// dell'app) e ripassata a [FittedModel.forecast] come `history`.
+class ShadowRecord {
+  const ShadowRecord({
+    required this.origin,
+    required this.last,
+    required this.q10,
+    required this.q25,
+    required this.median,
+    required this.q75,
+    required this.q90,
+    required this.morning,
+    required this.expectedAt,
+    required this.c10,
+    required this.c90,
+  });
+
+  /// Momento della previsione e ultimo evento su cui si basava.
+  final DateTime origin, last;
+
+  /// Quantili GREZZI del modello (prima della calibrazione): servono a
+  /// calcolare il PIT dell'evento vero senza circolarità.
+  final DateTime q10, q25, median, q75, q90;
+
+  /// True se la mediana grezza cadeva nella finestra di sonno.
+  final bool morning;
+
+  /// Previsione calibrata mostrabile: orario puntuale e intervallo all'80%.
+  final DateTime expectedAt, c10, c90;
+
+  /// Valore della funzione di ripartizione grezza in [x] (interpolazione
+  /// lineare tra i quantili; oltre il 90° coda esponenziale).
+  double pit(DateTime x) {
+    final pts = [
+      (last, 0.0),
+      (q10, 0.1),
+      (q25, 0.25),
+      (median, 0.5),
+      (q75, 0.75),
+      (q90, 0.9),
+    ];
+    if (!x.isAfter(last)) return 0;
+    for (var k = 1; k < pts.length; k++) {
+      final (a, pa) = pts[k - 1];
+      final (b, pb) = pts[k];
+      if (!x.isAfter(b)) {
+        final span = b.difference(a).inSeconds;
+        final f = span <= 0 ? 1.0 : x.difference(a).inSeconds / span;
+        return pa + (pb - pa) * f;
+      }
+    }
+    final scale = math.max(30.0, q90.difference(median).inMinutes.toDouble());
+    final over = x.difference(q90).inMinutes / scale;
+    return 0.9 + 0.1 * (1 - math.exp(-over));
+  }
+
+  Map<String, Object> toJson() => {
+    'origin': origin.toIso8601String(),
+    'last': last.toIso8601String(),
+    'q10': q10.toIso8601String(),
+    'q25': q25.toIso8601String(),
+    'median': median.toIso8601String(),
+    'q75': q75.toIso8601String(),
+    'q90': q90.toIso8601String(),
+    'morning': morning,
+    'expectedAt': expectedAt.toIso8601String(),
+    'c10': c10.toIso8601String(),
+    'c90': c90.toIso8601String(),
+  };
+
+  static ShadowRecord fromJson(Map<String, dynamic> j) {
+    DateTime d(String k) => DateTime.parse(j[k] as String);
+    return ShadowRecord(
+      origin: d('origin'),
+      last: d('last'),
+      q10: d('q10'),
+      q25: d('q25'),
+      median: d('median'),
+      q75: d('q75'),
+      q90: d('q90'),
+      morning: j['morning'] as bool,
+      expectedAt: d('expectedAt'),
+      c10: d('c10'),
+      c90: d('c90'),
+    );
+  }
+}
+
+/// Previsione del modello statistico calcolata «in ombra» (piano CEO 11.3):
+/// non si mostra e non guida le notifiche; serve al banco di prova
+/// (ricerca/23) e alla telemetria dello studio. I quantili sono calibrati
+/// sugli scarti fuori campione del cane (R4, R5) quando c'è una `history`.
+class ShadowForecast {
+  const ShadowForecast({
+    required this.q10,
+    required this.q25,
+    required this.median,
+    required this.q75,
+    required this.q90,
+    required this.expectedAt,
+    required this.probNextHour,
+    required this.pastProb,
+    required this.record,
+    this.calibratedOn = 0,
+  });
+  final DateTime q10, q25, median, q75, q90;
+
+  /// Orario puntuale del modello: la mediana, spostata al risveglio
+  /// (appreso, R3) se cade nella finestra di sonno.
+  final DateTime expectedAt;
+
+  /// Probabilità nella prossima ora, ricalibrata (R5), mai oltre il 90%.
+  final double probNextHour;
+  final double pastProb;
+
+  /// Da salvare (R6) per le previsioni successive.
+  final ShadowRecord record;
+
+  /// Numero di eventi passati su cui è calibrata (0 = nessuna calibrazione).
+  final int calibratedOn;
+}
+
 class Forecast {
   Forecast({
     required this.need,
@@ -296,11 +703,15 @@ class Forecast {
     this.accuracy,
     this.usualMinutes = const [],
     this.measuredIntervals = 0,
+    this.shadow,
   });
 
   /// Intervalli osservati su cui si basa la previsione di base (0-3: valori
   /// di partenza dalla letteratura, non misure del cane).
   final int measuredIntervals;
+
+  /// Modello statistico in ombra (null se non addestrato).
+  final ShadowForecast? shadow;
 
   /// Orari abituali (minuti dalla mezzanotte) dalla previsione di base.
   final List<int> usualMinutes;
@@ -372,28 +783,36 @@ class EliminationModel {
             ? first
             : first.add(Duration(minutes: span * i ~/ (mealsN - 1)));
         final jit = Duration(minutes: rnd.nextInt(31) - 15);
-        meals.add(_Ev(t.add(jit)));
+        meals.add(_Ev(t.add(jit), 1, true));
         waters.add(
           _Ev(
             t.add(jit).add(const Duration(minutes: 10)),
             drinkMl / (dog.weightKg * 10),
+            true,
           ),
         );
       }
+      // Nel prior la routine è nota in anticipo (eventi «scheduled»).
       waters.add(
         _Ev(
           DateTime(day.year, day.month, day.day, 13, rnd.nextInt(60)),
           drinkMl / (dog.weightKg * 10),
+          true,
         ),
       );
       waters.add(
         _Ev(
           DateTime(day.year, day.month, day.day, 17, rnd.nextInt(60)),
           drinkMl / (dog.weightKg * 10),
+          true,
         ),
       );
       plays.add(
-        _Ev(DateTime(day.year, day.month, day.day, 16, 30 + rnd.nextInt(60))),
+        _Ev(
+          DateTime(day.year, day.month, day.day, 16, 30 + rnd.nextInt(60)),
+          1,
+          true,
+        ),
       );
       // Passeggiate tipiche di chi vive in appartamento: al risveglio, a
       // metà giornata, nel tardo pomeriggio e prima di dormire.
@@ -403,6 +822,8 @@ class EliminationModel {
             wake.add(
               Duration(minutes: (h * 60).round() + rnd.nextInt(21) - 10),
             ),
+            1,
+            true,
           ),
         );
       }
@@ -524,8 +945,9 @@ class EliminationModel {
     Set<DateTime>? loggedDays,
     List<List<double>> xs,
     List<double> ys,
-    List<double> ws,
-  ) {
+    List<double> ws, {
+    bool withFeatures = true,
+  }) {
     if (c.outings.isEmpty) return;
     var t = _floorBin(from.isAfter(c.outings.first) ? from : c.outings.first)
         .add(const Duration(minutes: _binMin));
@@ -546,7 +968,14 @@ class EliminationModel {
               (li + 1 < c.outings.length && c.outings[li + 1].isBefore(end))
               ? 1.0
               : 0.0;
-          xs.add(model.features(c, t, last, t, pr));
+          // R1: in addestramento gli inneschi sono quelli noti all'ultimo
+          // evento (più quelli attesi agli orari abituali), come al momento
+          // della previsione. Prima il modello «vedeva» acqua, passeggiate e
+          // gioco successivi e al momento della previsione li dava per
+          // assenti: da qui il ritardo sistematico (ricerca/12 §3.5).
+          xs.add(
+            withFeatures ? model.features(c, t, last, last, pr) : const [],
+          );
           ys.add(y);
           ws.add(weightOf(t));
         }
@@ -654,13 +1083,18 @@ class EliminationModel {
   // ---------------------------------------------------------------------
 
   /// Addestra il modello del cane per il bisogno [need].
+  ///
+  /// Con [shadow] falso non addestra il modello statistico (che oggi lavora
+  /// solo in ombra): la previsione mostrata, che non ne dipende, costa
+  /// pochi millisecondi. Serve al banco di prova della previsione di base.
   FittedModel fit(
     Dog dog,
     Need need,
     List<LogEntry> logs,
     List<HealthRecord> records,
-    DateTime now,
-  ) {
+    DateTime now, {
+    bool shadow = true,
+  }) {
     final model = _Model(dog, need, records);
     final literature = BioParams.forNeed(need, dog, now);
     final from = now.subtract(Duration(days: historyDays));
@@ -670,8 +1104,34 @@ class EliminationModel {
       logs,
       from,
       now.add(const Duration(days: 2)),
+      now,
     );
-    final halfLife = dog.ageInMonths(now) < 6 ? 5.0 : 14.0;
+    var halfLife = dog.ageInMonths(now) < 6 ? 5.0 : 14.0;
+    // R7 (ricerca/12 §6): adattamento rapido. Se la mediana degli intervalli
+    // da sveglio degli ultimi 3 giorni è < 0,7× o > 1,4× quella dei 14
+    // giorni, i dati recenti pesano molto di più (emivita 3 giorni, 05
+    // §P12). Gli allarmi «fa pipì più spesso» restano separati e invariati.
+    {
+      final g14 = <double>[], g3 = <double>[];
+      for (var i = 1; i < ctx.outings.length; i++) {
+        final a = ctx.outings[i - 1], b = ctx.outings[i];
+        if (b.isAfter(now) || now.difference(b).inDays >= 14) continue;
+        if (PottyPredictor.inSleepWindow(dog, a) ||
+            PottyPredictor.inSleepWindow(dog, b)) {
+          continue;
+        }
+        final g = b.difference(a).inMinutes.toDouble();
+        if (g < need.clusterMinutes || g > literature.maxDay * 1.5) continue;
+        g14.add(g);
+        if (now.difference(b).inHours < 72) g3.add(g);
+      }
+      if (g14.length >= 8 && g3.length >= 3) {
+        g14.sort();
+        g3.sort();
+        final ratio = g3[g3.length ~/ 2] / g14[g14.length ~/ 2];
+        if (ratio < 0.7 || ratio > 1.4) halfLife = 3.0;
+      }
+    }
 
     // 0) Bayes empirico: il centro del prior si sposta dal valore di
     //    letteratura al ritmo osservato del cane, in proporzione ai dati
@@ -702,6 +1162,44 @@ class EliminationModel {
     final xs = <List<double>>[];
     final ys = <double>[];
     final ws = <double>[];
+    final loggedDays = {
+      for (final t in ctx.outings)
+        if (t.isAfter(from)) DateTime(t.year, t.month, t.day),
+    };
+    double realWeight(int fromIndex) {
+      var w = 0.0;
+      for (var i = fromIndex; i < ws.length; i++) {
+        w += ws[i];
+      }
+      return w * _binMin / 1440;
+    }
+
+    double recency(DateTime t) =>
+        math.pow(0.5, now.difference(t).inMinutes / 1440 / halfLife).toDouble();
+    if (!shadow) {
+      _rows(
+        model,
+        ctx,
+        pr,
+        from,
+        _floorBin(now),
+        recency,
+        loggedDays,
+        xs,
+        ys,
+        ws,
+        withFeatures: false,
+      );
+      return FittedModel._(
+        model,
+        ctx,
+        pr,
+        List<double>.filled(_nFeat, 0),
+        realWeight(0),
+        loggedDays.length,
+        shadowFitted: false,
+      );
+    }
 
     // 1) Prior: pseudo-dati dal simulatore, peso totale ≈ priorDays giorni.
     final sim = _simulate(dog, need, pr, model);
@@ -722,35 +1220,25 @@ class EliminationModel {
 
     // 2) Dati reali pesati per recenza (emivita più breve nei cuccioli,
     //    che cambiano in fretta).
-    final loggedDays = {
-      for (final t in ctx.outings)
-        if (t.isAfter(from)) DateTime(t.year, t.month, t.day),
-    };
     _rows(
       model,
       ctx,
       pr,
       from,
       _floorBin(now),
-      (t) => math
-          .pow(0.5, now.difference(t).inMinutes / 1440 / halfLife)
-          .toDouble(),
+      recency,
       loggedDays,
       xs,
       ys,
       ws,
     );
-    var realW = 0.0;
-    for (var i = nPrior; i < ws.length; i++) {
-      realW += ws[i];
-    }
     final beta = _fit(xs, ys, ws);
     return FittedModel._(
       model,
       ctx,
       pr,
       beta,
-      realW * _binMin / 1440,
+      realWeight(nPrior),
       loggedDays.length,
     );
   }
@@ -770,8 +1258,13 @@ class FittedModel {
     this.prior,
     this.beta,
     this.learnedDays,
-    this.daysWithData,
-  );
+    this.daysWithData, {
+    this.shadowFitted = true,
+  });
+
+  /// Falso se il modello statistico non è stato addestrato (fit con
+  /// `shadow: false`): niente curva né previsione in ombra.
+  final bool shadowFitted;
 
   final _Model _model;
   final _Context _ctx;
@@ -811,35 +1304,159 @@ class FittedModel {
     ];
   }
 
-  /// Contesto con i pasti futuri attesi (abitudini) a partire da [now].
+  /// Contesto per la previsione (gli inneschi attesi sono già nel
+  /// contesto, R1), con un'eventuale uscita in più per il piano del giorno.
   _Context _withFuture(DateTime now, {DateTime? extraOuting}) {
-    final meals = [..._ctx.meals];
-    for (final mm in habitualMealMinutes(now)) {
-      for (var d = 0; d <= 1; d++) {
-        final t = DateTime(now.year, now.month, now.day + d, mm ~/ 60, mm % 60);
-        if (!t.isAfter(now)) continue;
-        final already = _ctx.meals.any(
-          (e) => e.time.difference(t).inMinutes.abs() < 90,
-        );
-        if (!already) meals.add(_Ev(t, 1, true));
-      }
-    }
-    meals.sort((a, b) => a.time.compareTo(b.time));
-    final outs = [..._ctx.outings];
-    final indoor = [..._ctx.indoor];
-    if (extraOuting != null) {
-      outs.add(extraOuting);
-      indoor.add(false);
-    }
+    if (extraOuting == null) return _ctx;
     return _Context(
-      outings: outs,
-      indoor: indoor,
-      meals: meals,
+      outings: [..._ctx.outings, extraOuting],
+      indoor: [..._ctx.indoor, false],
+      meals: _ctx.meals,
       waters: _ctx.waters,
       wakes: _ctx.wakes,
       plays: _ctx.plays,
       walks: _ctx.walks,
+      expMeals: _ctx.expMeals,
+      expWaters: _ctx.expWaters,
+      expPlays: _ctx.expPlays,
+      expWalks: _ctx.expWalks,
+      habitMin: _ctx.habitMin,
+      wakeMin: _ctx.wakeMin,
     );
+  }
+
+  /// Previsione di base (C2-3) a [now] con le uscite [times] (≤ now): orario
+  /// atteso e finestra da intervalli, orari abituali e mattino abituale.
+  ({
+    Baseline base,
+    double k,
+    DateTime expected,
+    DateTime wStart,
+    DateTime wEnd,
+    bool morning,
+  })
+  _basePoint(List<DateTime> times, DateTime now, double qRec, double bioNow) {
+    final last = times.last;
+    final bio = BioParams.modifier(need, dog, _model.records, now);
+    final base = Baseline.compute(
+      dog: dog,
+      times: times,
+      now: now,
+      fallbackMin: prior.median * bioNow,
+      prudenceQuantile: qRec,
+      maxGapMin: prior.maxDay * 1.5,
+      minGapMin: need.clusterMinutes.toDouble(),
+    );
+    // Terza revisione veterinaria (ricerca/26, A1): con intervalli misurati
+    // si accorcia solo per i farmaci iniziati da meno di 14 giorni e per la
+    // finestra dopo la dose di diuretico, mai sotto 0,5. Taglia, dieta e
+    // malattie già note sono dentro gli intervalli del cane: contarle di
+    // nuovo vorrebbe dire contarle due volte. Senza dati il fattore intero
+    // è già nel valore di partenza (fallbackMin).
+    final k = need == Need.pipi && base.nIntervals >= 4 && !base.adaptedRecent
+        ? bio.recent
+        : 1.0;
+    DateTime at(double m) => last.add(Duration(minutes: (m * k).round()));
+    var expected = at(base.intervalMin);
+    var wStart = at(base.windowStartMin);
+    var wEnd = at(base.windowEndMin);
+    var morning = false;
+    if (need == Need.pipi) {
+      // Orario atteso: il prossimo orario abituale, se cade entro una volta
+      // e mezza l'intervallo (cani portati fuori a orari fissi; ricerca/23).
+      final interval = base.intervalMin * k;
+      final he = base.nextHabitual(
+        last.add(Duration(minutes: (interval * 0.5).round())),
+      );
+      if (he != null &&
+          !base.adaptedRecent &&
+          he.isAfter(now) &&
+          he.isBefore(last.add(Duration(minutes: (interval * 1.5).round())))) {
+        expected = he;
+        final lo = he.subtract(const Duration(minutes: 30));
+        final hi = he.add(const Duration(minutes: 30));
+        if (lo.isBefore(wStart)) wStart = lo;
+        if (hi.isAfter(wEnd)) wEnd = hi;
+      }
+      // Se l'orario atteso cade di notte, la prossima pipì è quella del
+      // mattino: si usa la sua ora abituale (giorni feriali e fine settimana
+      // separati), altrimenti il risveglio (ricerca/23).
+      if (PottyPredictor.inSleepWindow(dog, expected)) {
+        morning = true;
+        final wake = PottyPredictor.nextWake(dog, expected);
+        final u = base.usualFirst(wake);
+        if (u != null && u.at.isAfter(now)) {
+          expected = u.at;
+          wStart = u.from;
+          wEnd = u.to;
+        } else {
+          expected = wake.add(Duration(minutes: prior.wake.peak.round()));
+          wStart = wake;
+          wEnd = expected.add(const Duration(minutes: 45));
+        }
+      }
+    }
+    return (
+      base: base,
+      k: k,
+      expected: expected,
+      wStart: wStart,
+      wEnd: wEnd,
+      morning: morning,
+    );
+  }
+
+  /// Finestra empirica «di solito tra X e Y» (ricerca/23): per ciascuna delle
+  /// pipì degli ultimi 14 giorni rifà la previsione di base 1 minuto dopo la
+  /// pipì precedente, con i soli dati di allora, e misura lo scarto. La
+  /// finestra è l'orario atteso più il 7,5° e il 92,5° percentile degli scarti
+  /// (separati per le previsioni del mattino, se sono abbastanza). Null con
+  /// meno di 8 scarti.
+  (DateTime, DateTime)? _empiricalWindow(
+    List<DateTime> times,
+    DateTime now,
+    double qRec,
+    double bioNow,
+    ({
+      Baseline base,
+      double k,
+      DateTime expected,
+      DateTime wStart,
+      DateTime wEnd,
+      bool morning,
+    })
+    point,
+  ) {
+    final res = <(bool, double)>[];
+    for (var i = times.length - 1; i >= 1; i--) {
+      final actual = times[i], prev = times[i - 1];
+      if (now.difference(actual).inDays >= 14) break;
+      if (actual.difference(prev).inHours >= 18) continue;
+      final o = prev.add(const Duration(minutes: 1));
+      final p = _basePoint(times.sublist(0, i), o, qRec, _model.mod(o));
+      if (p.base.nIntervals < 4) continue;
+      res.add((p.morning, actual.difference(p.expected).inMinutes.toDouble()));
+    }
+    var r = [
+      for (final e in res)
+        if (e.$1 == point.morning) e.$2,
+    ];
+    if (r.length < 6) r = [for (final e in res) e.$2];
+    if (r.length < 8) return null;
+    r.sort();
+    double q(double p) {
+      final pos = p * (r.length - 1);
+      final lo = pos.floor(), hi = pos.ceil();
+      return r[lo] + (r[hi] - r[lo]) * (pos - lo);
+    }
+
+    final last = times.last;
+    var a = point.expected.add(Duration(minutes: q(0.075).round()));
+    var b = point.expected.add(Duration(minutes: q(0.925).round()));
+    final minStart = last.add(Duration(minutes: need.clusterMinutes.round()));
+    if (a.isBefore(minStart)) a = minStart;
+    if (b.difference(a).inMinutes < 30) b = a.add(const Duration(minutes: 30));
+    return (a, b);
   }
 
   double _hazard(_Context c, DateTime t, DateTime last, DateTime cutoff) =>
@@ -917,7 +1534,11 @@ class FittedModel {
     );
   }
 
-  Forecast forecast(DateTime now, {bool withAccuracy = true}) {
+  Forecast forecast(
+    DateTime now, {
+    bool withAccuracy = true,
+    List<ShadowRecord> history = const [],
+  }) {
     final c = _withFuture(now);
     final li = c.lastOutingIndex(now);
     final reasons = BioParams.modifier(need, dog, _model.records, now).reasons;
@@ -945,56 +1566,39 @@ class FittedModel {
       );
     }
     final last = c.outings[li];
-    final accidents = _ctx.indoor.indexed
-        .where((e) => e.$2 && now.difference(_ctx.outings[e.$1]).inDays <= 14)
-        .length;
     final bio = BioParams.modifier(need, dog, _model.records, now);
-    var prudence = dog.prudence;
-    // "Meno uscite" solo per adulti sani (revisione veterinaria 06 §30).
-    if (prudence == Prudence.bassa &&
-        (lifeStageOf(dog, now) != LifeStage.adulto ||
-            dog.conditions.trim().isNotEmpty ||
-            bio.factor < 0.95)) {
-      prudence = Prudence.normale;
-    }
-    var qRec = prudence.quantile;
-    if (need == Need.pipi && accidents > 0) qRec = math.min(qRec, 0.15);
+    final qRec = _prudenceQuantile(now, bio.clinical);
     // Il modello resta calcolato "in ombra" (curva e coefficienti, per il
     // banco di prova), ma ciò che si mostra viene dalla previsione di base
     // finché il modello non supera il collaudo (piano CEO 11.3, ricerca/12).
-    final r = _quantiles(c, last, now, [qRec, 0.25, 0.5, 0.75]);
-    final base = Baseline.compute(
-      dog: dog,
-      times: [
-        for (final t in _ctx.outings)
-          if (!t.isAfter(now)) t,
-      ],
-      now: now,
-      fallbackMin: prior.median * bio.factor,
-      prudenceQuantile: qRec,
-      maxGapMin: prior.maxDay * 1.5,
-      minGapMin: need.clusterMinutes.toDouble(),
-    );
-    // Farmaci o malattie che aumentano la pipì: l'intervallo personale si
-    // accorcia subito, senza aspettare 3 giorni di dati (verso prudente).
-    final k =
-        need == Need.pipi &&
-            bio.factor < 1 &&
-            base.nIntervals >= 4 &&
-            !base.adaptedRecent
-        ? bio.factor
-        : 1.0;
+    final r = shadowFitted
+        ? _quantiles(c, last, now, [0.1, 0.25, 0.5, 0.75, 0.9])
+        : null;
+    ShadowForecast? shadow;
+    if (r != null) shadow = _shadow(c, last, now, r, history);
+    final pastTimes = [
+      for (final t in _ctx.outings)
+        if (!t.isAfter(now)) t,
+    ];
+    final point = _basePoint(pastTimes, now, qRec, bio.factor);
+    final base = point.base;
+    final k = point.k;
     DateTime at(double m) => last.add(Duration(minutes: (m * k).round()));
     var recommended = at(base.recommendedAfterMin);
-    var expected = at(base.intervalMin);
-    var wStart = at(base.windowStartMin);
-    var wEnd = at(base.windowEndMin);
+    var expected = point.expected;
+    var wStart = point.wStart;
+    var wEnd = point.wEnd;
     String hm(int m) =>
         '${(m ~/ 60).toString().padLeft(2, '0')}:${(m % 60).toString().padLeft(2, '0')}';
     final usual = base.habitualMinutes.map(hm).join(', ');
     var reason = base.nIntervals < 4
         ? 'Sto ancora imparando il ritmo di ${dog.name}: per ora uso valori '
               'tipici per età e taglia.'
+        : k < 1
+        // L'intervallo mostrato è quello usato (ricerca/26, A1 punto 6).
+        ? 'In base al suo intervallo abituale da sveglio, accorciato per '
+              '${bio.recentReasons.join(' e ')}: circa '
+              '${_dur(base.intervalMin * k)}.'
         : 'In base al suo intervallo abituale da sveglio '
               '(circa ${_dur(base.intervalMin)}).';
     if (need == Need.cacca) {
@@ -1013,6 +1617,16 @@ class FittedModel {
       final h = base.nextHabitual(
         last.add(Duration(minutes: (base.intervalMin * 0.4).round())),
       );
+      // Finestra empirica: dove sono cadute davvero le pipì rispetto alla
+      // previsione di base rifatta, senza guardare avanti, dopo ciascuna
+      // delle pipì degli ultimi 14 giorni (7,5°-92,5° percentile degli
+      // scarti: un po' più largo del 10°-90° perché il ritmo del cane cambia
+      // nel tempo; sul banco la copertura resta vicina all'80%).
+      final w = _empiricalWindow(pastTimes, now, qRec, bio.factor, point);
+      if (w != null) {
+        wStart = w.$1;
+        wEnd = w.$2;
+      }
       if (h != null && h.isAfter(now) && h.isBefore(recommended)) {
         recommended = h;
         reason = 'È uno dei suoi orari abituali di uscita.';
@@ -1035,7 +1649,8 @@ class FittedModel {
     // Il tetto per età si accorcia con malattie e farmaci che aumentano la
     // pipì, mai sotto i 120 minuti (revisione veterinaria 06 §27-28).
     DateTime? latest;
-    final f = bio.factor < 1 ? bio.factor : 1.0;
+    // Tetti: solo i fattori clinici, mai taglia e dieta (ricerca/26, A1).
+    final f = bio.clinical < 1 ? bio.clinical : 1.0;
     final dayCapMin = math.max(120.0, prior.maxDay * f);
     final nightCapMin = math.max(180.0, prior.maxNight * f);
     String dur(double m) => _dur(m);
@@ -1049,8 +1664,8 @@ class FittedModel {
         recommended = passed ? now : latest;
         reason = passed
             ? 'Ha superato ${dur(dayCapMin)} dall\'ultima pipì: portalo fuori adesso.'
-            : f < 1 && bio.reasons.isNotEmpty
-            ? 'Con ${bio.reasons.join(', ')} ha bisogno di uscire più spesso: '
+            : f < 1 && bio.clinicalReasons.isNotEmpty
+            ? 'Con ${bio.clinicalReasons.join(', ')} ha bisogno di uscire più spesso: '
                   'non farlo aspettare oltre ${dur(dayCapMin)}.'
             : 'Non conviene aspettare oltre: è il limite consigliato per '
                   'la sua età (un tetto, non un obiettivo).';
@@ -1126,7 +1741,7 @@ class FittedModel {
           'segnale.';
     }
 
-    final acc = withAccuracy ? accuracy(now) : null;
+    final acc = withAccuracy && shadowFitted ? accuracy(now, history) : null;
     final conf = learnedDays < 2
         ? Confidence.bassa
         : (acc != null && acc.n >= 8 && acc.inWindowRate >= 0.55)
@@ -1140,18 +1755,143 @@ class FittedModel {
       windowStart: wStart,
       windowEnd: wEnd,
       latestAt: latest,
-      probNextHour: r.probNextHour,
+      probNextHour: r?.probNextHour ?? 0,
       overdue: overdue,
       reason: reason,
       factors: reasons,
       confidence: conf,
       learnedDays: learnedDays,
       typicalIntervalMin: base.intervalMin * k,
-      curve: r.curve,
+      curve: r?.curve ?? const [],
       coefficients: beta,
       accuracy: acc,
       usualMinutes: base.habitualMinutes,
       measuredIntervals: base.nIntervals,
+      shadow: shadow,
+    );
+  }
+
+  /// Previsione in ombra calibrata (R4 intervalli, R5 probabilità).
+  ///
+  /// Ricalibrazione per PIT (Kuleshov et al. 2018): con gli eventi passati
+  /// registrati nella `history` (R6) si calcola dove sono caduti gli eventi
+  /// veri nella distribuzione grezza del modello (PIT). La loro funzione di
+  /// ripartizione empirica G degli ultimi 60, ristretta verso la diagonale
+  /// con 5 pseudo-eventi, corregge tutta la distribuzione: il quantile p mostrato
+  /// è il quantile grezzo G⁻¹(p), e la probabilità nella prossima ora è
+  /// calcolata con G. Previsioni del mattino e di giorno sono separate se ce
+  /// ne sono almeno 10 dello stesso tipo. Con meno di 5 eventi: intervallo
+  /// allargato ×1,2 sulla scala logaritmica, come prudenza.
+  ShadowForecast _shadow(
+    _Context c,
+    DateTime last,
+    DateTime now,
+    ({
+      Map<double, DateTime> q,
+      double pastProb,
+      double probNextHour,
+      List<(DateTime, double)> curve,
+    })
+    r,
+    List<ShadowRecord> history,
+  ) {
+    final rawMorning = c.asleep(dog, r.q[0.5]!);
+    // PIT degli eventi passati (solo quelli con esito noto a [now]).
+    final pits = <(bool, double)>[];
+    final outs = _ctx.outings;
+    for (final h in history.reversed) {
+      if (pits.length >= 60) break;
+      if (!h.origin.isBefore(now)) continue;
+      final li = outs.indexWhere((o) => o.isAfter(h.last));
+      if (li < 0) continue;
+      final actual = outs[li];
+      if (actual.isAfter(now) || !actual.isAfter(h.origin)) continue;
+      if (actual.difference(h.last).inHours >= 30) continue;
+      pits.add((h.morning, h.pit(actual)));
+    }
+    var u = [
+      for (final p in pits)
+        if (p.$1 == rawMorning) p.$2,
+    ];
+    if (u.length < 10) u = [for (final p in pits) p.$2];
+    u.sort();
+    const k = 5.0;
+    double g(double x) {
+      if (u.length < 5) return x;
+      var below = 0;
+      for (final v in u) {
+        if (v <= x) below++;
+      }
+      return (below + k * x) / (u.length + k);
+    }
+
+    double gInv(double p) {
+      var lo = 0.0, hi = 1.0;
+      for (var it = 0; it < 40; it++) {
+        final m = (lo + hi) / 2;
+        if (g(m) < p) {
+          lo = m;
+        } else {
+          hi = m;
+        }
+      }
+      return (lo + hi) / 2;
+    }
+
+    Map<double, DateTime> q;
+    if (u.length >= 5) {
+      const ps = [0.1, 0.25, 0.5, 0.75, 0.9];
+      final us = [for (final p in ps) gInv(p).clamp(0.005, 0.995)];
+      final rq = _quantiles(c, last, now, us);
+      q = {for (var i = 0; i < ps.length; i++) ps[i]: rq.q[us[i]]!};
+    } else {
+      // Prudenza fissa ×1,2 sulla scala logaritmica attorno alla mediana.
+      final med = r.q[0.5]!;
+      final m = math.max(1.0, med.difference(last).inMinutes.toDouble());
+      DateTime widen(DateTime x) {
+        final v = math.max(1.0, x.difference(last).inMinutes.toDouble());
+        final w = m * math.pow(v / m, 1.2);
+        return last.add(Duration(minutes: w.round()));
+      }
+
+      q = {for (final e in r.q.entries) e.key: widen(e.value)};
+    }
+    // R5: probabilità nella prossima ora con la stessa correzione G:
+    // P = (G(F(adesso + 1 h)) − G(F(adesso))) / (1 − G(F(adesso))), dove F è
+    // la ripartizione grezza. Mai oltre il 90%.
+    final u0 = r.pastProb;
+    final u1 = 1 - (1 - r.pastProb) * (1 - r.probNextHour);
+    final g0 = g(u0), g1 = g(u1);
+    final pNext = g0 >= 1 ? 0.9 : ((g1 - g0) / (1 - g0)).clamp(0.0, 0.9);
+
+    var e = q[0.5]!;
+    // R3: di notte, al risveglio appreso (feriali e fine settimana).
+    if (c.asleep(dog, e)) {
+      e = c.nextWake(dog, e).add(Duration(minutes: prior.wake.peak.round()));
+    }
+    return ShadowForecast(
+      q10: q[0.1]!,
+      q25: q[0.25]!,
+      median: q[0.5]!,
+      q75: q[0.75]!,
+      q90: q[0.9]!,
+      expectedAt: e,
+      probNextHour: pNext.toDouble(),
+      pastProb: r.pastProb,
+      calibratedOn: u.length >= 5 ? u.length : 0,
+      record: ShadowRecord(
+        origin: now,
+        last: last,
+        q10: r.q[0.1]!,
+        q25: r.q[0.25]!,
+        median: r.q[0.5]!,
+        q75: r.q[0.75]!,
+        q90: r.q[0.9]!,
+        morning: rawMorning,
+        expectedAt: e,
+        c10: q[0.1]!,
+        c90: q[0.9]!,
+      ),
     );
   }
 
@@ -1171,62 +1911,107 @@ class FittedModel {
     return r.q[0.5]!.difference(base).inMinutes.toDouble();
   }
 
-  /// Verifica a posteriori: per ciascuno degli ultimi eventi reali,
-  /// cosa avrebbe previsto il modello subito dopo l'evento precedente?
-  Accuracy? accuracy(DateTime now) {
+  /// R6 (ricerca/12 §6): accuratezza FUORI campione. Per ciascuno degli
+  /// ultimi 20 eventi dei 14 giorni, la previsione in ombra fatta (e
+  /// registrata in [history]) subito dopo l'evento precedente: errore
+  /// dell'orario puntuale e quota di eventi nell'intervallo all'80%.
+  /// Sostituisce la vecchia verifica in campione, che rivalutava gli eventi
+  /// con coefficienti stimati anche su di essi ed era ottimista. Null con
+  /// meno di 3 eventi valutabili.
+  Accuracy? accuracy(DateTime now, [List<ShadowRecord> history = const []]) {
     final outs = _ctx.outings;
     final errors = <double>[];
-    var inWindow = 0;
-    for (var i = math.max(1, outs.length - 20); i < outs.length; i++) {
-      final prev = outs[i - 1];
-      final actual = outs[i];
+    var inside = 0;
+    for (final h in history.reversed) {
+      if (errors.length >= 20) break;
+      final li = outs.indexWhere((o) => o.isAfter(h.last));
+      if (li < 0) continue;
+      final actual = outs[li];
+      if (actual.isAfter(now) || !actual.isAfter(h.origin)) continue;
       if (now.difference(actual).inDays > 14) continue;
-      final gap = actual.difference(prev).inMinutes;
-      if (gap > prior.maxDay * 1.5 + 600) continue;
-      final from = prev.add(const Duration(minutes: 1));
-      final r = _quantiles(_ctx, prev, from, [
-        0.25,
-        0.5,
-        0.75,
-      ], horizonHours: 30);
-      final med = r.q[0.5]!;
-      errors.add(actual.difference(med).inMinutes.abs().toDouble());
-      if (!actual.isBefore(r.q[0.25]!.subtract(const Duration(minutes: 15))) &&
-          !actual.isAfter(r.q[0.75]!.add(const Duration(minutes: 15)))) {
-        inWindow++;
-      }
+      errors.add(actual.difference(h.expectedAt).inMinutes.abs().toDouble());
+      if (!actual.isBefore(h.c10) && !actual.isAfter(h.c90)) inside++;
     }
     if (errors.length < 3) return null;
+    final n = errors.length;
     errors.sort();
-    return Accuracy(
-      errors.length,
-      errors[errors.length ~/ 2],
-      inWindow / errors.length,
-    );
+    return Accuracy(n, errors[n ~/ 2], inside / n);
+  }
+
+  /// Quantile della prudenza, con le restrizioni cliniche: «Meno uscite» solo
+  /// per adulti sani (06 §30; il fattore clinico, non taglia e dieta,
+  /// ricerca/26 A1); dopo incidenti in casa nei 14 giorni, più prudente.
+  double _prudenceQuantile(DateTime now, double clinical) {
+    var prudence = dog.prudence;
+    if (prudence == Prudence.bassa &&
+        (lifeStageOf(dog, now) != LifeStage.adulto ||
+            dog.conditions.trim().isNotEmpty ||
+            clinical < 0.95)) {
+      prudence = Prudence.normale;
+    }
+    var qRec = prudence.quantile;
+    final accidents = _ctx.indoor.indexed
+        .where((e) => e.$2 && now.difference(_ctx.outings[e.$1]).inDays <= 14)
+        .length;
+    if (need == Need.pipi && accidents > 0) qRec = math.min(qRec, 0.15);
+    return qRec;
+  }
+
+  /// Tetto diurno (minuti) con i soli fattori clinici (06 §27-28; A1).
+  double dayCapMinutes(DateTime now) {
+    final clinical = BioParams.modifier(
+      need,
+      dog,
+      _model.records,
+      now,
+    ).clinical;
+    return math.max(120.0, prior.maxDay * (clinical < 1 ? clinical : 1.0));
   }
 
   /// Piano delle uscite consigliate per la giornata di [day].
+  ///
+  /// Terza revisione veterinaria (ricerca/26, A10): il piano viene dalla
+  /// previsione di base, come i promemoria, non dal modello statistico:
+  /// stesso intervallo personale con lo stesso fattore k, stessa prudenza
+  /// corretta e stesso tetto clinico. La cacca mostra solo gli orari
+  /// abituali.
   List<DateTime> dailyPlan(DateTime day) {
     final wake = DateTime(day.year, day.month, day.day, dog.wakeHour);
+    final bio = BioParams.modifier(need, dog, _model.records, day);
+    final qRec = _prudenceQuantile(day, bio.clinical);
+    final base = Baseline.compute(
+      dog: dog,
+      times: [
+        for (final t in _ctx.outings)
+          if (!t.isAfter(day)) t,
+      ],
+      now: day,
+      fallbackMin: prior.median * bio.factor,
+      prudenceQuantile: qRec,
+      maxGapMin: prior.maxDay * 1.5,
+      minGapMin: need.clusterMinutes.toDouble(),
+    );
+    if (need == Need.cacca) {
+      return [
+        for (final m in base.habitualMinutes)
+          DateTime(day.year, day.month, day.day, m ~/ 60, m % 60),
+      ];
+    }
+    final k = base.nIntervals >= 4 && !base.adaptedRecent ? bio.recent : 1.0;
+    final step = math.max(
+      30.0,
+      math.min(base.recommendedAfterMin * k, dayCapMinutes(day)),
+    );
     var t = wake.add(Duration(minutes: prior.wake.peak.round()));
     final plan = <DateTime>[t];
     var guard = 0;
-    while (guard++ < 20) {
-      final c = _withFuture(t, extraOuting: t);
-      final r = _quantiles(c, t, t, [dog.prudence.quantile], horizonHours: 24);
-      var next = r.q[dog.prudence.quantile]!;
-      if (need == Need.pipi) {
-        final cap = t.add(Duration(minutes: prior.maxDay.round()));
-        if (next.isAfter(cap)) next = cap;
-      }
-      if (next.difference(t).inMinutes < 30) {
-        next = t.add(const Duration(minutes: 30));
-      }
+    while (guard++ < 30) {
+      final next = t.add(Duration(minutes: step.round()));
       if (PottyPredictor.inSleepWindow(dog, next)) break;
       plan.add(next);
       t = next;
     }
-    if (need == Need.pipi) {
+    {
       final bedH = dog.sleepStartHour;
       final bed = DateTime(day.year, day.month, day.day, bedH)
           .add(Duration(days: bedH < dog.wakeHour ? 1 : 0))

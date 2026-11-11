@@ -1,0 +1,6 @@
+# Test lenti del banco di prova (ricerca/12 §7, ricerca/23), tag `banco`.
+# Nella suite normale e in CI sono saltati; per eseguirli:
+#   flutter test -j 4 --dart-define=BANCO=true test/banco
+tags:
+  banco:
+    timeout: none

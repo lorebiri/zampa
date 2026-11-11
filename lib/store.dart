@@ -588,9 +588,23 @@ class AppStore extends ChangeNotifier implements SyncTarget {
                       l.signs.contains(Sign.gocce)) &&
                   now.difference(l.time).inHours <= 24,
             );
+        // Dopo un intervento (3 giorni; 14 per la colonna) la ritenzione
+        // urinaria è frequente: 12 ore, come l'allarme in app (ricerca/26 A3).
+        final postOp = records.any(
+          (r) =>
+              r.dogId == d.id &&
+              r.type == RecordType.intervento &&
+              r.done &&
+              !r.date.isAfter(now) &&
+              now.difference(r.date).inDays <
+                  (RegExp('colonna|ernia|disc|spin')
+                          .hasMatch(r.title.toLowerCase())
+                      ? 14
+                      : 3),
+        );
         final hours = puppy
             ? (d.ageInMonths(now) < 4 ? 6 : 8)
-            : (strainMale ? 12 : 24);
+            : (strainMale || postOp ? 12 : 24);
         var at = last.add(Duration(hours: hours));
         if (puppy && PottyPredictor.inSleepWindow(d, at)) {
           at = PottyPredictor.nextWake(d, at).add(const Duration(hours: 1));
@@ -599,9 +613,16 @@ class AppStore extends ChangeNotifier implements SyncTarget {
           PlannedNotification(
             base + 96,
             at,
-            '🔴 ${d.name}: nessuna pipì da $hours ore?',
-            'Se non ha davvero urinato è un\'urgenza: contatta il veterinario. '
-                'Se l\'ha fatta, registrala.',
+            postOp && !puppy
+                ? '🔴 ${d.name}: nessuna pipì da 12 ore dopo l\'intervento?'
+                : '🔴 ${d.name}: nessuna pipì da $hours ore?',
+            postOp && !puppy
+                ? 'Dopo un\'anestesia alcuni cani non riescono a svuotare la '
+                      'vescica. Se non ha urinato, o ci prova senza riuscirci, '
+                      'chiama oggi il veterinario che l\'ha operato. Se l\'ha '
+                      'fatta, registrala.'
+                : 'Se non ha davvero urinato è un\'urgenza: contatta il '
+                      'veterinario. Se l\'ha fatta, registrala.',
             0,
             exact: true,
           ),

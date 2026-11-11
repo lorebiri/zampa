@@ -1,0 +1,192 @@
+## base0 poliuria_pipi BASE (tutti)
+- n eventi / cani: 5028 / 32
+- errore mediano (min): 44 [36–53]
+- errore mediano timer (min): 65 [54–81]
+- errore mediano stesso orario 7 gg (min): 35 [31–41]
+- R / timer (per cane): 0.66 [0.61–0.70]
+- R / stesso orario 7 gg: 1.34 [1.20–1.47]
+- R / stesso giorno sett.: 0.71 [0.67–0.75]
+- cani in cui batte il timer: 94% [89%–100%]
+- copertura della finestra mostrata: 55% [52%–57%]
+- ampiezza mediana della finestra (min): 107
+- errore con segno mediano (− = in ritardo): 8
+- errore mediano vs evento VERO (min): 44
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 2743 / 6
+- tetto da sveglio rispettato (T15): 4914/5028
+## base0 poliuria_pipi BASE — gruppo cucciolo
+- n eventi / cani: 1633 / 6
+- errore mediano (min): 24 [20–30]
+- errore mediano timer (min): 46 [42–59]
+- errore mediano stesso orario 7 gg (min): 27 [25–34]
+- R / timer (per cane): 0.48 [0.44–0.53]
+- R / stesso orario 7 gg: 0.86 [0.79–0.92]
+- R / stesso giorno sett.: 0.65 [0.59–0.73]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura della finestra mostrata: 57% [55%–58%]
+- ampiezza mediana della finestra (min): 68
+- errore con segno mediano (− = in ritardo): 5
+- errore mediano vs evento VERO (min): 24
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 933 / 4
+- tetto da sveglio rispettato (T15): 1629/1633
+
+## base0 poliuria_pipi BASE — gruppo adulto
+- n eventi / cani: 1600 / 14
+- errore mediano (min): 64 [56–73]
+- errore mediano timer (min): 83 [77–93]
+- errore mediano stesso orario 7 gg (min): 42 [37–48]
+- R / timer (per cane): 0.77 [0.70–0.83]
+- R / stesso orario 7 gg: 1.58 [1.38–1.80]
+- R / stesso giorno sett.: 0.71 [0.66–0.78]
+- cani in cui batte il timer: 86% [75%–100%]
+- copertura della finestra mostrata: 54% [51%–57%]
+- ampiezza mediana della finestra (min): 160
+- errore con segno mediano (− = in ritardo): 2
+- errore mediano vs evento VERO (min): 64
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 856 / 1
+- tetto da sveglio rispettato (T15): 1523/1600
+
+## base0 poliuria_pipi BASE — gruppo anziano
+- n eventi / cani: 866 / 6
+- errore mediano (min): 48 [43–54]
+- errore mediano timer (min): 87 [78–97]
+- errore mediano stesso orario 7 gg (min): 41 [39–43]
+- R / timer (per cane): 0.56 [0.54–0.59]
+- R / stesso orario 7 gg: 1.20 [1.07–1.34]
+- R / stesso giorno sett.: 0.72 [0.69–0.75]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura della finestra mostrata: 58% [56%–59%]
+- ampiezza mediana della finestra (min): 130
+- errore con segno mediano (− = in ritardo): 10
+- errore mediano vs evento VERO (min): 48
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 509 / 10
+- tetto da sveglio rispettato (T15): 857/866
+
+## base0 poliuria_pipi BASE — gruppo cronico
+- n eventi / cani: 583 / 3
+- errore mediano (min): 51 [45–55]
+- errore mediano timer (min): 72 [60–90]
+- errore mediano stesso orario 7 gg (min): 42 [38–54]
+- R / timer (per cane): 0.65 [0.53–0.75]
+- R / stesso orario 7 gg: 1.10 [0.89–1.31]
+- R / stesso giorno sett.: 0.85 [0.73–0.92]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura della finestra mostrata: 43% [39%–47%]
+- ampiezza mediana della finestra (min): 75
+- errore con segno mediano (− = in ritardo): 45
+- errore mediano vs evento VERO (min): 51
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 263 / 25
+- tetto da sveglio rispettato (T15): 583/583
+
+## base0 poliuria_pipi BASE — gruppo poliuria
+- n eventi / cani: 346 / 3
+- errore mediano (min): 57 [52–70]
+- errore mediano timer (min): 101 [91–108]
+- errore mediano stesso orario 7 gg (min): 40 [32–57]
+- R / timer (per cane): 0.58 [0.50–0.65]
+- R / stesso orario 7 gg: 1.40 [0.91–1.88]
+- R / stesso giorno sett.: 0.64 [0.46–0.98]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura della finestra mostrata: 61% [57%–65%]
+- ampiezza mediana della finestra (min): 212
+- errore con segno mediano (− = in ritardo): -6
+- errore mediano vs evento VERO (min): 57
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 182 / -1
+- tetto da sveglio rispettato (T15): 322/346
+
+## base0 poliuria_pipi BASE — a richiesta
+- n eventi / cani: 5028 / 32
+- errore mediano (min): 44 [36–53]
+- errore mediano timer (min): 65 [54–81]
+- errore mediano stesso orario 7 gg (min): 35 [31–41]
+- R / timer (per cane): 0.66 [0.61–0.70]
+- R / stesso orario 7 gg: 1.34 [1.20–1.47]
+- R / stesso giorno sett.: 0.71 [0.67–0.75]
+- cani in cui batte il timer: 94% [89%–100%]
+- copertura della finestra mostrata: 55% [52%–57%]
+- ampiezza mediana della finestra (min): 107
+- errore con segno mediano (− = in ritardo): 8
+- errore mediano vs evento VERO (min): 44
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 2743 / 6
+- tetto da sveglio rispettato (T15): 4914/5028
+
+## base0 poliuria_pipi BASE — fine settimana
+- n eventi / cani: 1525 / 32
+- errore mediano (min): 42 [34–52]
+- errore mediano timer (min): 65 [54–81]
+- errore mediano stesso orario 7 gg (min): 34 [30–41]
+- R / timer (per cane): 0.61 [0.56–0.67]
+- R / stesso orario 7 gg: 1.27 [1.14–1.42]
+- R / stesso giorno sett.: 0.68 [0.61–0.75]
+- cani in cui batte il timer: 94% [89%–100%]
+- copertura della finestra mostrata: 55% [53%–57%]
+- ampiezza mediana della finestra (min): 105
+- errore con segno mediano (− = in ritardo): 5
+- errore mediano vs evento VERO (min): 42
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 999 / 6
+- tetto da sveglio rispettato (T15): 1496/1525
+
+## base0 poliuria_pipi BASE — dopo il cambio di routine (g. 15-28)
+- n eventi / cani: 3831 / 32
+- errore mediano (min): 37 [31–46]
+- errore mediano timer (min): 67 [55–83]
+- errore mediano stesso orario 7 gg (min): 35 [30–41]
+- R / timer (per cane): 0.56 [0.51–0.60]
+- R / stesso orario 7 gg: 1.18 [1.05–1.29]
+- R / stesso giorno sett.: 0.57 [0.54–0.60]
+- cani in cui batte il timer: 97% [94%–100%]
+- copertura della finestra mostrata: 57% [55%–59%]
+- ampiezza mediana della finestra (min): 102
+- errore con segno mediano (− = in ritardo): 4
+- errore mediano vs evento VERO (min): 37
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 2743 / 6
+- tetto da sveglio rispettato (T15): 3747/3831
+
+## base0 poliuria_pipi BASE — poliuria in corso
+- n eventi / cani: 3864 / 32
+- errore mediano (min): 37 [31–45]
+- errore mediano timer (min): 69 [55–85]
+- errore mediano stesso orario 7 gg (min): 36 [31–42]
+- R / timer (per cane): 0.54 [0.49–0.58]
+- R / stesso orario 7 gg: 1.10 [0.99–1.21]
+- R / stesso giorno sett.: 0.53 [0.50–0.57]
+- cani in cui batte il timer: 97% [94%–100%]
+- copertura della finestra mostrata: 57% [55%–59%]
+- ampiezza mediana della finestra (min): 103
+- errore con segno mediano (− = in ritardo): 1
+- errore mediano vs evento VERO (min): 37
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 2743 / 6
+- tetto da sveglio rispettato (T15): 3784/3864
+
+## base0 poliuria_pipi BASE — solo di giorno (no notte)
+- n eventi / cani: 4370 / 32
+- errore mediano (min): 38 [31–46]
+- errore mediano timer (min): 73 [57–91]
+- errore mediano stesso orario 7 gg (min): 41 [34–51]
+- R / timer (per cane): 0.52 [0.48–0.55]
+- R / stesso orario 7 gg: 0.88 [0.82–0.94]
+- R / stesso giorno sett.: 0.50 [0.47–0.54]
+- cani in cui batte il timer: 97% [94%–100%]
+- copertura della finestra mostrata: 62% [59%–64%]
+- ampiezza mediana della finestra (min): 107
+- errore con segno mediano (− = in ritardo): 0
+- errore mediano vs evento VERO (min): 38
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 2445 / 1
+- tetto da sveglio rispettato (T15): 4362/4370
+
+## base0 poliuria_pipi BASE — prima pipì del mattino (dopo la notte)
+- n eventi / cani: 658 / 32
+- errore mediano (min): 419 [385–446]
+- errore mediano timer (min): 26 [19–33]
+- errore mediano stesso orario 7 gg (min): 15 [14–16]
+- R / timer (per cane): 13.05 [11.05–16.24]
+- R / stesso orario 7 gg: 22.83 [19.86–26.77]
+- R / stesso giorno sett.: 20.19 [17.16–24.35]
+- cani in cui batte il timer: 0% [0%–0%]
+- copertura della finestra mostrata: 10% [5%–15%]
+- ampiezza mediana della finestra (min): 113
+- errore con segno mediano (− = in ritardo): 419
+- errore mediano vs evento VERO (min): 419
+- poliuria da ≥ 4 giorni: n / errore con segno mediano: 298 / 424
+- tetto da sveglio rispettato (T15): 552/658
+
+

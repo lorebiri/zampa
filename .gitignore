@@ -65,3 +65,4 @@ GoogleService-Info.plist
 # Worktree degli agenti
 .claude/worktrees/
 consegna/
+ricerca/analisi/risultati/tmp/

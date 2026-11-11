@@ -113,7 +113,12 @@ class Baseline {
     required this.habitualMinutes,
     required this.nIntervals,
     required this.adaptedRecent,
+    this.firstMinutes = const [],
   });
+
+  /// Prima uscita dopo la notte negli ultimi 14 giorni: (fine settimana?,
+  /// minuti dalla mezzanotte).
+  final List<(bool, int)> firstMinutes;
 
   /// Intervallo tipico da sveglio (minuti).
   final double intervalMin;
@@ -150,6 +155,9 @@ class Baseline {
     required double prudenceQuantile,
     required double maxGapMin,
     double minGapMin = 15,
+    double lowQuantile = 0.1,
+    double highQuantile = 0.9,
+    double adaptBelow = 0.85,
   }) {
     final past = [
       for (final t in times)
@@ -184,13 +192,13 @@ class Baseline {
     } else {
       interval = _quantile(gaps, 0.5);
       qRec = _quantile(gaps, prudenceQuantile);
-      q20 = _quantile(gaps, 0.2);
-      q80 = _quantile(gaps, 0.8);
+      q20 = _quantile(gaps, lowQuantile);
+      q80 = _quantile(gaps, highQuantile);
       if (recent.length >= 3) {
         final r = _quantile(recent, 0.5);
         // Solo verso il più breve, e solo se il cambiamento è netto: un
         // cane che deve uscire più spesso non deve aspettare.
-        if (r < interval * 0.85) {
+        if (r < interval * adaptBelow) {
           final k = r / interval;
           interval *= k;
           qRec *= k;
@@ -200,7 +208,18 @@ class Baseline {
         }
       }
     }
+    // Prima uscita di ogni giorno dopo la pausa della notte (≥ 5 ore, con
+    // l'uscita precedente il giorno prima).
+    final firsts = <(bool, int)>[];
+    for (var i = 1; i < past.length; i++) {
+      final t = past[i], p = past[i - 1];
+      if (now.difference(t).inDays >= 14) continue;
+      if (t.difference(p).inHours < 5) continue;
+      if (t.hour >= 14 || (p.day == t.day && p.month == t.month)) continue;
+      firsts.add((t.weekday >= 6, t.hour * 60 + t.minute));
+    }
     return Baseline(
+      firstMinutes: firsts,
       intervalMin: interval,
       recommendedAfterMin: math.min(qRec, interval),
       windowStartMin: q20,
@@ -235,6 +254,28 @@ class Baseline {
       for (final c in clusters)
         if (c.length >= need) c[c.length ~/ 2],
     ];
+  }
+
+  /// Prima uscita abituale del mattino del giorno [day] (che conta come
+  /// fine settimana o no): mediana e 5°-95° percentile (±30 min) delle prime uscite
+  /// dopo la notte dello stesso tipo di giorno; con meno di 3 giorni dello
+  /// stesso tipo usa tutti i giorni; con meno di 3 in tutto, null.
+  ({DateTime at, DateTime from, DateTime to})? usualFirst(DateTime day) {
+    final we = day.weekday >= 6;
+    var m = [
+      for (final f in firstMinutes)
+        if (f.$1 == we) f.$2.toDouble(),
+    ];
+    if (m.length < 3) m = [for (final f in firstMinutes) f.$2.toDouble()];
+    if (m.length < 3) return null;
+    m.sort();
+    DateTime at(double x) =>
+        DateTime(day.year, day.month, day.day, 0, x.round());
+    return (
+      at: at(_quantile(m, 0.5)),
+      from: at(_quantile(m, 0.05) - 30),
+      to: at(_quantile(m, 0.95) + 30),
+    );
   }
 
   /// Prossimo orario abituale dopo [after] (entro 24 ore), o null.
