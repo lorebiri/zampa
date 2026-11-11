@@ -1,0 +1,259 @@
+## orari_padrone_pipi_finale (tutti)
+- n eventi / cani: 1017 / 32
+- errore mediano modello (min): 26 [23–29]
+- errore mediano timer (min): 35 [31–40]
+- errore mediano stesso giorno sett. (min): 15 [14–17]
+- errore mediano stesso orario 7 gg (min): 13 [13–14]
+- rapporto modello/timer (per cane): 0.71 [0.64–0.79]
+- rapporto modello/stesso giorno sett.: 1.81 [1.61–2.00]
+- rapporto modello/stesso orario 7 gg: 2.10 [1.87–2.33]
+- cani in cui il modello batte il timer: 81% [71%–91%]
+- cani in cui batte stesso orario 7 gg: 3% [0%–6%]
+- errore mediano vs evento VERO (min): 26 [23–29]
+- copertura finestra 25-75% (nominale 50%): 62% [58%–65%]
+- copertura 25-75% ±15 min (come in app): 78% [74%–82%]
+- copertura intervallo 10-90% (nominale 80%): 88% [85%–91%]
+- ampiezza mediana 25-75% (min): 84
+- ampiezza mediana 10-90% (min): 174
+- errore con segno mediano (+ = in ritardo sul modello): -3
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 6% / 7%
+## orari_padrone_pipi_finale — gruppo cucciolo
+- n eventi / cani: 281 / 6
+- errore mediano modello (min): 29 [25–35]
+- errore mediano timer (min): 31 [24–37]
+- errore mediano stesso giorno sett. (min): 19 [15–21]
+- errore mediano stesso orario 7 gg (min): 15 [13–17]
+- rapporto modello/timer (per cane): 1.03 [0.92–1.17]
+- rapporto modello/stesso giorno sett.: 1.65 [1.52–1.79]
+- rapporto modello/stesso orario 7 gg: 2.07 [1.82–2.33]
+- cani in cui il modello batte il timer: 33% [0%–67%]
+- cani in cui batte stesso orario 7 gg: 0% [0%–0%]
+- errore mediano vs evento VERO (min): 29 [25–32]
+- copertura finestra 25-75% (nominale 50%): 60% [54%–68%]
+- copertura 25-75% ±15 min (come in app): 73% [66%–81%]
+- copertura intervallo 10-90% (nominale 80%): 82% [79%–85%]
+- ampiezza mediana 25-75% (min): 76
+- ampiezza mediana 10-90% (min): 148
+- errore con segno mediano (+ = in ritardo sul modello): 7
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 10% / 8%
+
+## orari_padrone_pipi_finale — gruppo adulto
+- n eventi / cani: 392 / 14
+- errore mediano modello (min): 24 [20–28]
+- errore mediano timer (min): 35 [28–43]
+- errore mediano stesso giorno sett. (min): 14 [12–17]
+- errore mediano stesso orario 7 gg (min): 13 [12–14]
+- rapporto modello/timer (per cane): 0.64 [0.57–0.72]
+- rapporto modello/stesso giorno sett.: 1.67 [1.45–1.92]
+- rapporto modello/stesso orario 7 gg: 1.85 [1.60–2.12]
+- cani in cui il modello batte il timer: 93% [86%–100%]
+- cani in cui batte stesso orario 7 gg: 7% [0%–14%]
+- errore mediano vs evento VERO (min): 24 [20–28]
+- copertura finestra 25-75% (nominale 50%): 63% [59%–66%]
+- copertura 25-75% ±15 min (come in app): 81% [77%–84%]
+- copertura intervallo 10-90% (nominale 80%): 93% [90%–96%]
+- ampiezza mediana 25-75% (min): 93
+- ampiezza mediana 10-90% (min): 186
+- errore con segno mediano (+ = in ritardo sul modello): -8
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 3% / 5%
+
+## orari_padrone_pipi_finale — gruppo anziano
+- n eventi / cani: 168 / 6
+- errore mediano modello (min): 23 [17–29]
+- errore mediano timer (min): 37 [29–57]
+- errore mediano stesso giorno sett. (min): 14 [11–17]
+- errore mediano stesso orario 7 gg (min): 13 [9–16]
+- rapporto modello/timer (per cane): 0.55 [0.46–0.73]
+- rapporto modello/stesso giorno sett.: 1.60 [1.24–1.95]
+- rapporto modello/stesso orario 7 gg: 1.93 [1.45–2.46]
+- cani in cui il modello batte il timer: 100% [100%–100%]
+- cani in cui batte stesso orario 7 gg: 0% [0%–0%]
+- errore mediano vs evento VERO (min): 23 [17–29]
+- copertura finestra 25-75% (nominale 50%): 61% [53%–70%]
+- copertura 25-75% ±15 min (come in app): 83% [79%–87%]
+- copertura intervallo 10-90% (nominale 80%): 87% [81%–93%]
+- ampiezza mediana 25-75% (min): 67
+- ampiezza mediana 10-90% (min): 139
+- errore con segno mediano (+ = in ritardo sul modello): -2
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 2% / 11%
+
+## orari_padrone_pipi_finale — gruppo cronico
+- n eventi / cani: 92 / 3
+- errore mediano modello (min): 52 [40–59]
+- errore mediano timer (min): 58 [35–74]
+- errore mediano stesso giorno sett. (min): 13 [13–15]
+- errore mediano stesso orario 7 gg (min): 13 [12–14]
+- rapporto modello/timer (per cane): 1.02 [0.80–1.59]
+- rapporto modello/stesso giorno sett.: 3.76 [2.67–4.54]
+- rapporto modello/stesso orario 7 gg: 4.00 [3.33–4.40]
+- cani in cui il modello batte il timer: 67% [0%–100%]
+- cani in cui batte stesso orario 7 gg: 0% [0%–0%]
+- errore mediano vs evento VERO (min): 54 [41–60]
+- copertura finestra 25-75% (nominale 50%): 60% [42%–79%]
+- copertura 25-75% ±15 min (come in app): 67% [52%–85%]
+- copertura intervallo 10-90% (nominale 80%): 86% [74%–97%]
+- ampiezza mediana 25-75% (min): 135
+- ampiezza mediana 10-90% (min): 223
+- errore con segno mediano (+ = in ritardo sul modello): -30
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 10% / 4%
+
+## orari_padrone_pipi_finale — gruppo poliuria
+- n eventi / cani: 84 / 3
+- errore mediano modello (min): 21 [19–30]
+- errore mediano timer (min): 42 [38–43]
+- errore mediano stesso giorno sett. (min): 16 [14–19]
+- errore mediano stesso orario 7 gg (min): 13 [10–15]
+- rapporto modello/timer (per cane): 0.57 [0.49–0.70]
+- rapporto modello/stesso giorno sett.: 1.48 [1.28–1.59]
+- rapporto modello/stesso orario 7 gg: 1.79 [1.40–2.19]
+- cani in cui il modello batte il timer: 100% [100%–100%]
+- cani in cui batte stesso orario 7 gg: 0% [0%–0%]
+- errore mediano vs evento VERO (min): 21 [19–30]
+- copertura finestra 25-75% (nominale 50%): 64% [54%–75%]
+- copertura 25-75% ±15 min (come in app): 83% [79%–93%]
+- copertura intervallo 10-90% (nominale 80%): 87% [82%–93%]
+- ampiezza mediana 25-75% (min): 97
+- ampiezza mediana 10-90% (min): 192
+- errore con segno mediano (+ = in ritardo sul modello): -2
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 7% / 6%
+
+## orari_padrone_pipi_finale — orari decisi dal padrone
+- n eventi / cani: 1017 / 32
+- errore mediano modello (min): 26 [23–29]
+- errore mediano timer (min): 35 [31–40]
+- errore mediano stesso giorno sett. (min): 15 [14–17]
+- errore mediano stesso orario 7 gg (min): 13 [13–14]
+- rapporto modello/timer (per cane): 0.71 [0.64–0.79]
+- rapporto modello/stesso giorno sett.: 1.81 [1.61–2.00]
+- rapporto modello/stesso orario 7 gg: 2.10 [1.87–2.33]
+- cani in cui il modello batte il timer: 81% [71%–91%]
+- cani in cui batte stesso orario 7 gg: 3% [0%–6%]
+- errore mediano vs evento VERO (min): 26 [23–29]
+- copertura finestra 25-75% (nominale 50%): 62% [58%–65%]
+- copertura 25-75% ±15 min (come in app): 78% [74%–82%]
+- copertura intervallo 10-90% (nominale 80%): 88% [85%–91%]
+- ampiezza mediana 25-75% (min): 84
+- ampiezza mediana 10-90% (min): 174
+- errore con segno mediano (+ = in ritardo sul modello): -3
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 6% / 7%
+
+## orari_padrone_pipi_finale — fine settimana
+- n eventi / cani: 287 / 32
+- errore mediano modello (min): 26 [20–30]
+- errore mediano timer (min): 34 [28–43]
+- errore mediano stesso giorno sett. (min): 14 [13–17]
+- errore mediano stesso orario 7 gg (min): 14 [13–16]
+- rapporto modello/timer (per cane): 0.66 [0.57–0.76]
+- rapporto modello/stesso giorno sett.: 1.81 [1.48–2.11]
+- rapporto modello/stesso orario 7 gg: 2.04 [1.64–2.40]
+- cani in cui il modello batte il timer: 78% [68%–89%]
+- cani in cui batte stesso orario 7 gg: 16% [5%–25%]
+- errore mediano vs evento VERO (min): 26 [20–30]
+- copertura finestra 25-75% (nominale 50%): 59% [54%–64%]
+- copertura 25-75% ±15 min (come in app): 76% [71%–82%]
+- copertura intervallo 10-90% (nominale 80%): 86% [82%–90%]
+- ampiezza mediana 25-75% (min): 81
+- ampiezza mediana 10-90% (min): 170
+- errore con segno mediano (+ = in ritardo sul modello): 0
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 6% / 8%
+
+## orari_padrone_pipi_finale — giorni feriali
+- n eventi / cani: 730 / 32
+- errore mediano modello (min): 26 [23–29]
+- errore mediano timer (min): 35 [33–40]
+- errore mediano stesso giorno sett. (min): 15 [13–17]
+- errore mediano stesso orario 7 gg (min): 13 [12–14]
+- rapporto modello/timer (per cane): 0.73 [0.65–0.81]
+- rapporto modello/stesso giorno sett.: 1.84 [1.61–2.06]
+- rapporto modello/stesso orario 7 gg: 2.18 [1.92–2.44]
+- cani in cui il modello batte il timer: 78% [67%–90%]
+- cani in cui batte stesso orario 7 gg: 3% [0%–6%]
+- errore mediano vs evento VERO (min): 26 [23–29]
+- copertura finestra 25-75% (nominale 50%): 63% [59%–67%]
+- copertura 25-75% ±15 min (come in app): 79% [75%–83%]
+- copertura intervallo 10-90% (nominale 80%): 88% [85%–92%]
+- ampiezza mediana 25-75% (min): 86
+- ampiezza mediana 10-90% (min): 178
+- errore con segno mediano (+ = in ritardo sul modello): -4
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 6% / 6%
+
+## orari_padrone_pipi_finale — dopo il cambio di routine (g. 15-28)
+- n eventi / cani: 663 / 32
+- errore mediano modello (min): 25 [21–29]
+- errore mediano timer (min): 36 [32–42]
+- errore mediano stesso giorno sett. (min): 15 [13–17]
+- errore mediano stesso orario 7 gg (min): 14 [12–15]
+- rapporto modello/timer (per cane): 0.67 [0.61–0.75]
+- rapporto modello/stesso giorno sett.: 1.79 [1.63–1.95]
+- rapporto modello/stesso orario 7 gg: 2.00 [1.81–2.20]
+- cani in cui il modello batte il timer: 78% [67%–90%]
+- cani in cui batte stesso orario 7 gg: 6% [0%–11%]
+- errore mediano vs evento VERO (min): 25 [21–28]
+- copertura finestra 25-75% (nominale 50%): 64% [60%–68%]
+- copertura 25-75% ±15 min (come in app): 80% [75%–84%]
+- copertura intervallo 10-90% (nominale 80%): 88% [85%–92%]
+- ampiezza mediana 25-75% (min): 81
+- ampiezza mediana 10-90% (min): 170
+- errore con segno mediano (+ = in ritardo sul modello): -3
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 6% / 6%
+
+## orari_padrone_pipi_finale — prima del cambio (g. 8-14)
+- n eventi / cani: 354 / 32
+- errore mediano modello (min): 27 [23–33]
+- errore mediano timer (min): 33 [28–39]
+- errore mediano stesso giorno sett. (min): 17 [14–19]
+- errore mediano stesso orario 7 gg (min): 13 [11–15]
+- rapporto modello/timer (per cane): 0.83 [0.66–0.99]
+- rapporto modello/stesso giorno sett.: 1.87 [1.47–2.23]
+- rapporto modello/stesso orario 7 gg: 2.42 [1.88–2.90]
+- cani in cui il modello batte il timer: 75% [63%–86%]
+- cani in cui batte stesso orario 7 gg: 9% [0%–16%]
+- errore mediano vs evento VERO (min): 27 [23–33]
+- copertura finestra 25-75% (nominale 50%): 58% [52%–63%]
+- copertura 25-75% ±15 min (come in app): 75% [69%–80%]
+- copertura intervallo 10-90% (nominale 80%): 87% [82%–91%]
+- ampiezza mediana 25-75% (min): 92
+- ampiezza mediana 10-90% (min): 185
+- errore con segno mediano (+ = in ritardo sul modello): -3
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 5% / 8%
+
+## orari_padrone_pipi_finale — solo di giorno (no notte)
+- n eventi / cani: 773 / 32
+- errore mediano modello (min): 28 [23–32]
+- errore mediano timer (min): 46 [38–57]
+- errore mediano stesso giorno sett. (min): 14 [13–16]
+- errore mediano stesso orario 7 gg (min): 13 [12–14]
+- rapporto modello/timer (per cane): 0.55 [0.47–0.62]
+- rapporto modello/stesso giorno sett.: 2.05 [1.71–2.37]
+- rapporto modello/stesso orario 7 gg: 2.41 [2.04–2.75]
+- cani in cui il modello batte il timer: 94% [89%–100%]
+- cani in cui batte stesso orario 7 gg: 0% [0%–0%]
+- errore mediano vs evento VERO (min): 28 [23–32]
+- copertura finestra 25-75% (nominale 50%): 71% [67%–75%]
+- copertura 25-75% ±15 min (come in app): 82% [79%–86%]
+- copertura intervallo 10-90% (nominale 80%): 92% [89%–95%]
+- ampiezza mediana 25-75% (min): 92
+- ampiezza mediana 10-90% (min): 191
+- errore con segno mediano (+ = in ritardo sul modello): -7
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 7% / 1%
+
+## orari_padrone_pipi_finale — prima pipì del mattino (dopo la notte)
+- n eventi / cani: 244 / 32
+- errore mediano modello (min): 23 [18–28]
+- errore mediano timer (min): 18 [16–23]
+- errore mediano stesso giorno sett. (min): 18 [16–21]
+- errore mediano stesso orario 7 gg (min): 15 [13–16]
+- rapporto modello/timer (per cane): 1.25 [0.96–1.51]
+- rapporto modello/stesso giorno sett.: 1.49 [1.06–1.86]
+- rapporto modello/stesso orario 7 gg: 1.82 [1.28–2.30]
+- cani in cui il modello batte il timer: 56% [43%–70%]
+- cani in cui batte stesso orario 7 gg: 41% [28%–53%]
+- errore mediano vs evento VERO (min): 23 [18–28]
+- copertura finestra 25-75% (nominale 50%): 32% [25%–40%]
+- copertura 25-75% ±15 min (come in app): 64% [57%–72%]
+- copertura intervallo 10-90% (nominale 80%): 74% [67%–80%]
+- ampiezza mediana 25-75% (min): 23
+- ampiezza mediana 10-90% (min): 119
+- errore con segno mediano (+ = in ritardo sul modello): 7
+- PIT: quota < 0,1 / > 0,9 (attese 10%/10%): 2% / 24%
+

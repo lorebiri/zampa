@@ -1,0 +1,22 @@
+## realistico_pipi_griglia (tutti)
+- n previsioni / cani: 4536 / 32
+- frequenza osservata: 0.193
+- Brier modello: 0.155 [0.140–0.170]
+- Brier climatologia del cane (stessa ora, 14 gg): 0.146 [0.133–0.160]
+- Brier skill score vs climatologia: -0.06 [-0.11–-0.02]
+- Brier modello vs eventi VERI: 0.178
+- fascia 0.0-0.1: n=1697 dichiarata 4% osservata 8% [6–11%] scarto 5 punti
+- fascia 0.1-0.2: n=823 dichiarata 15% osservata 16% [13–18%] scarto 1 punti
+- fascia 0.2-0.3: n=699 dichiarata 25% osservata 25% [22–29%] scarto 0 punti
+- fascia 0.3-0.4: n=514 dichiarata 35% osservata 26% [21–32%] scarto -8 punti
+- fascia 0.4-0.5: n=352 dichiarata 44% osservata 32% [25–38%] scarto -12 punti
+- fascia 0.5-0.6: n=198 dichiarata 55% osservata 41% [32–49%] scarto -13 punti
+- fascia 0.6-0.8: n=171 dichiarata 68% osservata 39% [26–49%] scarto -29 punti
+- fascia 0.8-1.0: n=82 dichiarata 90% osservata 43% [29–59%] scarto -47 punti
+- ECE (errore medio di calibrazione): 6.3 punti
+
+- cucciolo: Brier 0.216 vs clim 0.203 (n=882)
+- adulto: Brier 0.130 vs clim 0.125 (n=1953)
+- anziano: Brier 0.152 vs clim 0.135 (n=861)
+- cronico: Brier 0.160 vs clim 0.151 (n=420)
+- poliuria: Brier 0.145 vs clim 0.143 (n=420)
