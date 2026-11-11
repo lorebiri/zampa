@@ -232,3 +232,49 @@ Le configurazioni le fai tu nel pannello di Supabase. Io non ho toccato nessun p
       `postgres` su `auth.users` in Supabase, e va verificato lì;
     - un invito si usa una sola volta;
     - il familiare non vede il pulsante "Elimina" sul cane altrui (dopo A8 e A12).
+
+---
+
+## 7. Nota di chiusura C2-5 (11 novembre 2026)
+
+Incarico C2-5 di `ricerca/08-piano-ceo.md` §11.5: priorità P1 della sincronizzazione.
+Autore: sviluppatore principale. Da rileggere a cura del revisore di sicurezza.
+
+**Chiusi in questo incarico**
+
+| # | Cosa è cambiato |
+|---|---|
+| A5 | Concorrenza ottimistica. L'ombra ricorda, per ogni oggetto, la versione del server su cui si basa (`updated_at` così come lo restituisce il server, microsecondi inclusi). Le modifiche a oggetti già sul server partono con questa base: `supabase_backend.dart` aggiorna con `.eq('id', id).eq('updated_at', base).select('id, updated_at')`. Zero righe con la riga ancora visibile = **conflitto**; zero righe con la riga invisibile = errore (resta la difesa di A6). In conflitto il motore riscarica e riapplica, fino a 3 giri per sincronizzazione: **cani uniti campo per campo** con l'ultima versione comune; **voci** con la versione del server. Se lo stesso campo è cambiato su due telefoni, vince chi ha scritto per primo sul server e la modifica sostituita **non si perde in silenzio**: finisce in `SyncResult.conflicts` e `AppStore.syncConflicts`, e la schermata Account mostra un avviso con i campi interessati. Le eliminazioni vincono sempre (lapidi senza condizione). `SyncBackend` ora restituisce `PushResult` (versioni scritte e conflitti). Gli stati salvati dalle versioni precedenti, senza versioni, restano validi: la versione si impara alla prima ricezione. |
+| A4 | Ombra vuota (dopo un reset o un cambio di account): per gli oggetti che il server ha già **vince la copia del server**; si inviano solo gli oggetti assenti dal server. |
+| A8 | Un familiare che elimina un cane condiviso chiama `leaveDog` e toglie dall'ombra il cane e le sue voci: nessuna lapide inviata. |
+
+**Già chiusi prima di C2-5** (verificati nel codice): A3 (`acceptInvite` gestisce `NULL`),
+A6 (`select('id')` dopo l'aggiornamento), A11 (`createInvite` usa la RPC `create_invite`),
+A12 (il pulsante «Smetti di condividere» compare solo a chi non è proprietario).
+
+**Prove**
+- `test/sync_test.dart`, 8 test nuovi con il finto backend (che ora simula
+  `.eq('updated_at', base)`): due telefoni modificano campi diversi dello stesso cane
+  (restano entrambe); lo stesso campo (vince il primo, conflitto segnalato all'altro);
+  scrittura concorrente tra ricezione e invio (si riscarica e si riapplica); la stessa voce
+  (vince il server, conflitto segnalato); eliminazione contro modifica; reset con la copia
+  del server più recente (vince il server, si invia solo la voce nuova); familiare che
+  elimina un cane condiviso; stato salvato senza versioni.
+- `supabase/` non è stato toccato. `supabase/tests/esegui.sh` su Postgres 16 locale:
+  79/79 verdi sia da zero sia dopo la migrazione.
+- Prova a mano sullo stesso Postgres, con RLS e i trigger dello schema: l'aggiornamento
+  con la base giusta (testo di `updated_at` con `Z`) tocca una riga, con la base vecchia
+  zero righe mentre la riga resta visibile; per un estraneo zero righe e riga invisibile.
+  Vale per `dogs` ed `entries`.
+
+**Resta da fare**
+- A7 (id casuali), A9 (paginazione per chiave), A10 (`applyRemote` tollerante), A13-A15:
+  invariati.
+- L'unione campo per campo è al primo livello del JSON: campi annidati (per esempio
+  `look`) si trattano come un valore unico.
+- Le modifiche a voci già sul server partono una per una (una richiesta ciascuna); le voci
+  nuove e le lapidi restano a blocchi da 500. Se servisse, una RPC di aggiornamento
+  condizionato in blocco.
+- Un'eliminazione vince su una modifica concorrente senza avviso a chi aveva modificato.
+- Da ripetere sul progetto Supabase vero (B6): un conflitto tra due account di prova e il
+  formato di `updated_at` restituito da PostgREST.
