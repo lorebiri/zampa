@@ -98,19 +98,14 @@ Codice in `lib/`, test in `test/`. Funziona offline: i dati restano sul disposit
    - diventa più prudente dopo un incidente in casa;
    - non supera l'attesa massima per l'età;
    - di notte, solo per i cuccioli, prevede l'uscita notturna.
-7. **Trasparenza**: l'app mostra a ogni previsione il motivo, i fattori considerati e l'accuratezza misurata sugli eventi reali, a differenza dei concorrenti.
+7. **Trasparenza**: l'app mostra a ogni previsione il motivo e i fattori considerati. L'accuratezza oggi mostrata è calcolata in campione e quindi ottimista: va sostituita con una misura fuori campione (correzione R6, Ciclo 2).
 
-**Validazione** (`test/model_validation_test.dart`):
-- **Protocollo:** un cane sintetico con un ritmo diverso da quello della letteratura; addestramento su 14 giorni e verifica sui 7 successivi. Ogni previsione usa solo le informazioni disponibili in quel momento.
-
-| | Errore mediano Zampa | Timer fisso (ciò che fanno molte app) | Eventi nella finestra prevista |
-|---|---|---|---|
-| Pipì | **18 min** | 26 min | 89% (finestra mediana 80 min) |
-| Cacca | **3 min** | 363 min | 100% (finestra mediana 31 min) |
-
-- **Cane di esempio dell'app**, che fa pipì ogni ~5 h: errore tipico ±14 minuti sulle ultime 20 uscite.
+**Validazione (aggiornata l'11/11/2026, `ricerca/12-protocollo-accuratezza.md`):**
+- **I numeri pubblicati in precedenza (pipì 18 contro 26 minuti del timer, cacca 3 contro 363 minuti, ±14 minuti sul cane di esempio) sono ritirati.** Erano artefatti: la previsione partiva pochi minuti prima dell'evento (in mediana 11 minuti prima della cacca) e l'accuratezza mostrata in app è calcolata sugli stessi eventi usati per stimare il modello. Non vanno più citati.
+- **Banco di prova realistico** (32 cani simulati, 4 settimane, pipì non registrate, orari decisi dal padrone, fine settimana, cambi di routine, poliuria): sulla pipì il modello **non batte il timer fisso**. Errore mediano 91 minuti contro 84, rapporto 1,08 [IC 95% 1,03–1,13] contro la soglia di lancio ≤ 0,80. La probabilità nella "prossima ora" non è calibrata e, con una poliuria nuova, la previsione arriva in ritardo, cioè nel verso pericoloso.
+- **Decisione del CEO** (`ricerca/08-piano-ceo.md`, §11): finché il modello non supera il banco e poi lo studio su cani veri, l'app mostra una previsione di base onesta (ritmo personale del cane e orari abituali, con il tetto di sicurezza per età invariato). Il modello lavora "in ombra" e si corregge (correzioni R1-R8 del rapporto 12). Nessuna affermazione di accuratezza, in app o nel marketing.
 - **Limiti onesti:**
-  - **Dati sintetici:** la validazione è su dati simulati. L'accuratezza su cani reali si potrà misurare solo con utenti veri, ed è il primo esperimento da fare con i beta tester.
+  - **Dati sintetici:** anche il banco di prova è una simulazione. L'accuratezza su cani reali si potrà misurare solo con utenti veri, ed è il primo esperimento da fare con i beta tester.
   - **Uscite decise dal padrone:** un cane educato elimina quando viene portato fuori. Gli eventi registrati riflettono quindi anche gli orari del padrone, e il modello lo compensa solo in parte con la covariata "passeggiata".
   - **Latenze stimate:** molte latenze in minuti sono stime dentro finestre fisiologiche misurate (rapporto 05). Nessuno ha mai misurato su larga scala la frequenza di pipì e cacca nei cani di casa. Con il consenso degli utenti, i dati di Zampa potrebbero diventare il primo dataset su questo, e quindi una pubblicazione scientifica.
 

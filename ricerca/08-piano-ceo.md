@@ -32,7 +32,7 @@ Il mandato di Lorenzo è *"un'app perfetta, funzionante, che mette al centro la 
 | Verifica | Esito |
 |---|---|
 | `flutter analyze` | **Nessun problema** [FATTO] |
-| `flutter test` | **76 test, tutti superati** [FATTO]. Validazione pipì: n=44, errore mediano 18 min contro 26 min del timer, 89% degli eventi nella finestra. Cacca: n=11, 3 min contro 363 min |
+| `flutter test` | **76 test, tutti superati** [FATTO]. Validazione pipì: n=44, errore mediano 18 min contro 26 min del timer, 89% degli eventi nella finestra. Cacca: n=11, 3 min contro 363 min. **[RITIRATO l'11/11/2026: artefatti dell'origine della previsione, vedi §11.3 e `ricerca/12` §3.6]** |
 | Controllo di versione | **Assente**: la cartella non è un repository git [FATTO]. Il codice esiste solo su OneDrive CNR |
 | Dimensione | circa 14.100 righe Dart in `lib/`; 28 tipi di evento in `LogType` (il dossier ne dice 24) [FATTO] |
 | Manifest Android | Non dichiara `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED` né i ricevitori `ScheduledNotificationReceiver` e `ScheduledNotificationBootReceiver`, che la documentazione di `flutter_local_notifications` chiede per le notifiche programmate [FATTO sul file; DA VERIFICARE sul dispositivo]. Etichetta dell'app: `zampa` in minuscolo |
@@ -43,7 +43,7 @@ Il mandato di Lorenzo è *"un'app perfetta, funzionante, che mette al centro la 
 | Database (`supabase/schema.sql`) | La policy `dogs_update` usa solo `using (is_member(id))`, senza `with check` sul campo `owner`: un familiare può riscrivere `owner` e diventare proprietario, cambiando cosa succede quando un account viene eliminato [FATTO sul testo, DA VERIFICARE su Postgres]. Gli inviti sono riutilizzabili per 7 giorni, non vengono consumati e non hanno limiti ai tentativi (codice di 8 caratteri su 32 simboli, circa 40 bit) [FATTO] |
 | Identificativo dell'app | `it.zampa.zampa` su iOS e Android [FATTO]. Dopo il primo caricamento sugli store **non si può più cambiare** |
 | Dossier | È in parte superato: dice "68 test" e, nella sezione 3, "non ci sono server" [FATTO] |
-| Validazione del modello | Usa **un** cane adulto sintetico con un solo seme casuale e log completi [FATTO]. Il risultato sulla cacca (3 min) è quasi certamente ottimistico: nel simulatore la cacca segue a breve distanza l'inizio della passeggiata, e il modello riceve proprio quell'evento come informazione [STIMA] |
+| Validazione del modello | Usa **un** cane adulto sintetico con un solo seme casuale e log completi [FATTO]. Il risultato sulla cacca (3 min) è quasi certamente ottimistico: nel simulatore la cacca segue a breve distanza l'inizio della passeggiata, e il modello riceve proprio quell'evento come informazione [STIMA; smentita in parte da `ricerca/12` §3.6: l'artefatto c'è, ma dipende dall'origine della previsione, non dalla passeggiata] |
 
 ### 1.2 Punti di forza (reali)
 
@@ -1287,3 +1287,137 @@ Matrice lingua × Paese × dispositivo:
    5. almeno una funzione nuova pronta per il Plus.
 
    Altrimenti si rivaluta al mese 12. **Effetto sulla tesi economica:** il percorso verso il milione (sezione 2) slitta di almeno 6 mesi. È un prezzo accettabile in cambio di un rischio legale molto più basso.
+
+---
+
+## 11. Chiusura del Ciclo 1 (11/11/2026)
+
+*Decisioni del CEO dopo la lettura integrale dei rapporti 11, 12, 13, 14, 15, 16, 20, 21 e 22, del test di integrazione `integration_test/app_test.dart` e del codice citato. Questa sezione prevale sulle precedenti in caso di contrasto, in particolare su 3.3 (frase guida), 3.4 (Premium) e sul calendario della sezione 4.*
+
+Verifiche fatte da me oggi: `flutter analyze` senza problemi; `flutter test` **83 test superati** [FATTO]. Test SQL del backend: 79 su 79, come riportato da `ricerca/11` (non li ho rieseguiti).
+
+### 11.1 Esito degli incarichi
+
+| Incarico | Esito | Prova |
+|---|---|---|
+| C1-1 repository, backup, CI | **Chiuso** | Repository privato `lorebiri/zampa`, CI verde, backup in `~/Backups` (10.1-1). B1 verde |
+| C1-2 QA su dispositivo | **In parte** | `integration_test/app_test.dart` passa sul simulatore iPhone 17 (iOS 27.2): avvio, avvertenza, cane di esempio, cinque schede, permesso, «Fatta fuori» con un tocco; dopo il permesso **13 notifiche in attesa** con dosi, uscita pipì, vaccino, cacca e allarme 24 h, entro il tetto di 60. **Mancano:** emulatore o telefono Android (Android SDK assente, 7,3 GB liberi sul Mac, disco al 97%); fotocamera; PDF; consegna effettiva di una notifica ad app chiusa e dopo un riavvio; prove b, d, g, h, i della matrice. **Manca il rapporto `ricerca/10-collaudo-dispositivo.md`**, che era la consegna |
+| C1-3 correzioni notifiche | **In parte** | Codice e test del tetto fatti (10.6). Su iOS confermato: notifiche programmate, dosi presenti, totale ≤ 60. **Nuovo difetto A** trovato da C1-2 e confermato da me nel codice (11.4). Android non verificato |
+| C1-4 sicurezza backend | **Chiuso** | `ricerca/11`, 79 test SQL, difetto `owner` e inviti chiusi, P0 di `lib/sync` applicati. Restano A4 e A5 (P1) per il Ciclo 2 |
+| C1-5 accuratezza | **Chiuso** (incarico); **esito negativo** per il modello | `ricerca/12`: protocollo v1.0 con soglie fissate e regola a quattro esiti; telemetria minima; T1-T18 pronti. Il modello della pipì non supera L2 né L3 sul banco realistico (11.3) |
+| C1-6 nome e marchio | **Chiuso** | `ricerca/13`: «Zampa» e «Lulù» a rischio alto; 4 candidati a rischio basso (Pellovi, Trotovi, Nasovi, Ossovi). Alcune verifiche sono marcate [M], da fare a mano |
+| C1-7 CNR e fisco | **Chiuso** | `ricerca/14`, bozza dell'email pronta. Non ancora inviata (azione di Lorenzo) |
+| C1-8 pacchetto veterinario | **Chiuso** | `docs/clinica/testi-clinici-v1.md` e `.csv` (269 testi, 99 su 99 chiamate coperte), lettera d'incarico, CAV di Milano verificato. `ricerca/15` §3 elenca 5 problemi da correggere e 10 da far valutare |
+| C1-9 audit UX | **Chiuso** | `ricerca/16`, 14 problemi con prova, piano per il Ciclo 3 |
+| Fuori incarico: voci utente, grafica | **Chiusi** | `ricerca/20`, `21`, `22`; `lib/ui/theme.dart` unito in main nel rispetto delle condizioni di 10.6 (SUBITO in cima, testi clinici invariati, WCAG AA con test, test verdi) |
+
+### 11.2 Giudizio sui criteri di uscita del Ciclo 1 (§5)
+
+| Criterio | Esito |
+|---|---|
+| 9 rapporti consegnati | ✘ **8 su 9**: manca `ricerca/10` |
+| Repository e CI attivi | ✔ |
+| App avviata su simulatore iOS ed emulatore Android | ✘ **Solo iOS** |
+| Difetti A delle notifiche corretti e coperti da test | ✔ per quelli noti a inizio ciclo (su iOS); ✘ per il nuovo difetto del percorso demo |
+| Protocollo di accuratezza con soglie fissate | ✔ |
+| Bozza della lettera al CNR | ✔ |
+| Pacchetto per il veterinario | ✔ |
+
+**Decisione: il Ciclo 1 si chiude oggi con una coda.** Tutto ciò che serve a decidere è sul tavolo, e il Ciclo 2 non dipende da Android. La regola di 10.1-6 però resta: **nessun criterio B2 o B3 diventa verde senza una prova su Android**. La coda (Android, prove mancanti, rapporto 10, nuovo difetto A) diventa l'incarico C2-1, con termine il **1° dicembre 2026**. Se a quella data Android non è provato, fermo il resto del Ciclo 2 finché non lo è.
+
+**Calendario:** il Ciclo 2 parte il **12/11** invece del 25/11 e finisce sempre il **15/12**. Le date dei cicli successivi non cambiano.
+
+### 11.3 Decisione sulle previsioni
+
+**I fatti** (`ricerca/12`, [MISURATO] su simulazione):
+- pipì, banco realistico: errore mediano 91 min contro 84 del timer fisso, R = 1,08 [1,03–1,13]; il riferimento «stesso orario degli ultimi 7 giorni» fa ancora meglio (72 min);
+- calibrazione della «probabilità nella prossima ora» sbagliata: a 60-80% dichiarato si osserva il 40%, a 80-100% il 48%; Brier peggiore della semplice frequenza oraria del cane;
+- con una poliuria nuova la previsione arriva in ritardo di 45-65 minuti, cioè **nel verso pericoloso**;
+- l'«accuratezza» e l'«Affidabilità alta» oggi mostrate in app sono calcolate sugli stessi eventi usati per la stima: sono ottimiste;
+- i numeri «18 contro 26 min» e «3 min» erano artefatti dell'origine della previsione. **Sono ritirati** dal piano (§1.1, marcati) e da `DOSSIER.md` (corretto oggi). `README.md` non li citava.
+
+**Decisione: il modello non guida più ciò che l'utente vede finché non si guadagna il posto. Si fanno entrambe le cose: previsione di base subito, correzioni R1-R8 in ombra.**
+
+1. **Cosa vede l'utente da subito (Ciclo 2, prima della beta): una «previsione di base» onesta.**
+   - **Pipì:** ultima pipì + intervallo mediano da sveglio del cane negli ultimi 14 giorni. Se la mediana degli ultimi 3 giorni differisce di oltre il 30%, vale quella dei 3 giorni (adattamento rapido: protegge nel caso della poliuria). Se il cane ha orari abituali stabili (uscite ricorrenti negli ultimi 7 giorni), si mostra il prossimo orario abituale quando cade prima (si sceglie sempre l'orario più prudente).
+   - **Finestra:** quantili empirici degli intervalli del cane, presentati come «di solito tra X e Y». Nessuna percentuale.
+   - **Tetto di sicurezza invariato:** l'uscita consigliata non supera mai `maxDay` per età e condizione (06 §27-28, 07 N8). Restano invariate anche la prudenza e l'uscita notturna dei cuccioli. Il tetto non dipende da nessun modello statistico.
+   - **Con meno di 4 intervalli** si usano i valori della letteratura (`BioParams`), con la scritta «Stima di partenza: impara dai prossimi giorni» e un orario arrotondato al quarto d'ora (rapporto 16, P8).
+   - **Cacca:** nessun orario puntuale. Si mostra «di solito dopo colazione / dopo cena» dagli orari abituali (correzione R8). I promemoria della cacca restano spenti di serie.
+   - **Si tolgono dall'interfaccia:** la «probabilità nella prossima ora», l'etichetta «Affidabilità alta/media» e le righe «Errore tipico» ed «Eventi caduti nella finestra» di `potty_screen.dart`. Tornano solo quando c'è una misura fuori campione (R6) e la calibrazione è superata (R5). La parola «stima» accompagna sempre l'orario.
+2. **Il modello lavora in ombra.** Viene calcolato e registrato in modo prequenziale (R6: si salva la previsione fatta all'evento precedente) per il banco e per la telemetria dello studio. Non si mostra e non guida le notifiche. Si corregge con R1-R7 nell'ordine di `ricerca/12` §6; R8 vale già per la presentazione della cacca.
+3. **Quando il modello torna visibile.** Solo se, dopo le correzioni, supera il **collaudo d'ingresso** di `ricerca/12` §6 sul banco realistico: R ≤ 0,85 contro il timer, R ≤ 1,00 contro «stesso orario», copertura all'80% tra 75% e 88%, nessuna fascia di calibrazione con n ≥ 50 oltre ±10 punti, e T14 (poliuria) e T15 (tetto) verdi. Lo decido io con un'annotazione in questo piano. Se non lo supera prima del Ciclo 4, la beta parte con la previsione di base.
+4. **Studio sui cani veri.** Il protocollo §4 di `ricerca/12` resta preregistrato. Il data scientist scrive **prima della beta** la versione 1.1, datata, con una sola modifica: il modello è valutato in ombra, accanto ai riferimenti. Va anche annotato il limite: le uscite seguono il promemoria mostrato (la previsione di base), e questo favorisce un po' il timer. È un vantaggio: il modello non può «autoavverarsi».
+5. **Sicurezza prima di tutto:** il ritardo con la poliuria è un rischio per il cane solo se qualcuno si fida dell'orario. Per questo l'adattamento rapido sta già nella previsione di base, e gli allarmi «fa pipì più spesso» restano separati e invariati.
+
+**Premium: cosa cambia.**
+- Resta valida la 10.7: si parte gratis. **Il promemoria di uscita, con qualunque motore, è gratis per sempre**: contiene il tetto di sicurezza ed è parte della cura del cane.
+- La regola a quattro esiti di `ricerca/12` §4.9 diventa **vincolante** e si applica al modello in ombra alla fine della beta. Decide due cose sole: (a) se il modello sostituisce la previsione di base nell'app gratuita; (b) se un futuro «Plus» può contenere comodità costruite sulla previsione (piano adattivo della giornata, curva di 24 h, widget). Con «Superato in parte», «Non superato» o «Dati insufficienti»: nessuna funzione Plus legata alla previsione e nessuna affermazione di accuratezza.
+- **Conseguenza per la tesi economica:** il motivo principale per pagare (2.3, condizione 1) oggi **non è dimostrato**, e la simulazione dice che il modello attuale perde. Il valore difendibile si sposta su ciò che è già forte: profondità clinica, cartella e PDF per il veterinario, famiglia, canale dei veterinari. La probabilità dello scenario da ≥ 1 M€ scende dall'1-3% a **circa l'1%** [STIMA]. Il piano non cambia direzione, perché era già tarato per fermarsi presto se i dati dicono di no.
+- **Frase guida (aggiorna 3.3):** fino a L2 superato si usa solo **«Accorgiti subito se qualcosa cambia»**. «Sappi quando deve uscire» è sospesa.
+
+**Frasi vietate** (in app, sugli store, nel sito, nei messaggi ai veterinari e ai beta tester), finché lo studio non dà «Superato» e io non lo annoto qui:
+- qualsiasi numero di accuratezza: minuti di errore («18 minuti», «3 minuti», «±14 min»), percentuali di eventi nella finestra, «90% di probabilità»;
+- «più preciso di un timer», «batte i timer», «la previsione più accurata», «previsione validata/scientifica/clinica»;
+- «sa quando deve fare pipì», «prevede quando deve uscire» come promessa, «niente più incidenti in casa», «mai più pipì in casa»;
+- «intelligenza artificiale», «IA che impara il tuo cane» (suona come una garanzia e aprirebbe domande sull'AI Act che nessuno ha ancora valutato);
+- «pensato con i veterinari», «approvato dai veterinari» prima della firma (già in 3.3); «diagnostica», «previene le malattie».
+
+**Ammesse:** «ti ricorda di uscire in base alle sue abitudini», «una stima basata sul suo ritmo», «si adatta ai suoi orari», «ti avvisa se qualcosa cambia», «gli allarmi sono gratis per sempre».
+
+### 11.4 Decisione sul permesso delle notifiche e il percorso demo
+
+**Fatti** [FATTO, codice e collaudo]:
+- su iOS, senza permesso, il sistema non conserva **nessuna** notifica: né promemoria, né dosi, né allarmi;
+- `store.loadDemo` (`lib/main.dart:245`, `lib/store.dart:822`) non chiede il permesso;
+- **più grave:** `dog_form.dart` chiede il permesso solo se `store.dogs.isEmpty`. Chi prova prima l'esempio e poi crea il proprio cane **non riceve mai la richiesta**: il suo cane vero resta senza promemoria, dosi e allarmi, senza che lui lo sappia. È un **difetto A**;
+- chi risponde «Non ora» non riceve più la richiesta, e l'app non segnala che le notifiche sono spente;
+- il cane di esempio programma notifiche vere (dosi, allarme «nessuna pipì») per un cane che non esiste (rapporto 16, P6).
+
+**Decisione:**
+1. **Il percorso demo non chiede il permesso** e il cane di esempio **non programma nessuna notifica**. Chiederlo lì sarebbe una richiesta a freddo per un cane finto: brucia l'unica richiesta di sistema che iOS concede e abbassa il KPI «notifiche consentite».
+2. **La richiesta si fa alla creazione del primo cane vero**, cioè del primo cane che non è un esempio, a prescindere dalla presenza dell'esempio. Prima della richiesta di sistema, la spiegazione già esistente. Alla creazione del primo cane vero l'esempio si cancella, con conferma.
+3. **Avviso di sicurezza permanente, gratuito:** se c'è almeno un cane vero e le notifiche non sono autorizzate (controllo all'avvio e al ritorno nell'app), la Home mostra in cima, sotto i soli allarmi SUBITO: «Notifiche spente: promemoria, dosi e allarmi non arriveranno sul telefono» con il pulsante «Attiva». Se il sistema non permette più la richiesta, il pulsante apre le impostazioni dell'app.
+4. **Banner fisso nell'esempio:** «Stai guardando un esempio · Crea il tuo cane».
+5. Vale anche per Android 13+ (`POST_NOTIFICATIONS`).
+
+Lo fa lo sviluppatore principale in C2-2; il QA lo verifica su iOS e Android.
+
+### 11.5 Ciclo 2 — Fondamenta sicure (12/11–15/12/2026), in ordine di priorità
+
+Regole: blocco delle funzioni (3.1) invariato; nessuna soglia clinica cambiata; `flutter analyze` pulito e test verdi a ogni commit; ogni incarico consegna un rapporto in `ricerca/` (numeri dal 23 in poi) o una nota in fondo al rapporto indicato.
+
+| # | Priorità | Chi | Cosa (file e funzioni) | Fatto quando |
+|---|---|---|---|---|
+| **C2-1** | **P0**, entro il 1/12 | QA su dispositivo + sviluppatore principale (DevOps) | **Coda del Ciclo 1: Android e prove mancanti.** (a) Nuovo workflow `.github/workflows/android.yml`: `flutter build apk --debug` come artefatto scaricabile, più `integration_test/app_test.dart` su un emulatore API 34 in GitHub Actions (runner Linux con emulatore). Così il disco del Mac non serve. (b) Installazione dell'APK sul telefono Android messo a disposizione da Lorenzo. (c) Prove mancanti della matrice C1-2: Android 13+ con permesso, app chiusa, riavvio, Doze (`adb` dal runner o dal telefono), fotocamera e galleria, PDF (generazione e condivisione), persistenza e backup, testo al 200%, pulsanti d'emergenza; su iOS, consegna reale di una notifica di prova ad app chiusa. (d) **Scrivere `ricerca/10-collaudo-dispositivo.md`** con matrice, tabella degli orari delle notifiche e difetti A/B/C | Rapporto 10 consegnato; integrazione Android verde in CI; 0 difetti A aperti; tabella B3 avviata. Se il telefono Android non arriva, l'emulatore in CI è il minimo accettabile per chiudere la coda, non per B2 |
+| **C2-2** | **P0** | Sviluppatore principale | **Permesso e demo (11.4).** `lib/store.dart`: escludere i cani `demo-` dalla pianificazione delle notifiche (`_reschedule` e funzione di piano); `lib/ui/dog_form.dart`: condizione «primo cane vero» al posto di `store.dogs.isEmpty`, cancellazione dell'esempio con conferma; `lib/notifications.dart`: stato del permesso (iOS e Android); `lib/ui/home_screen.dart`: avviso «Notifiche spente» e banner dell'esempio. Test: piano vuoto con il solo esempio; richiesta al primo cane vero anche dopo l'esempio; avviso visibile con permesso negato. Aggiornare `integration_test/app_test.dart` perché provi il percorso con un cane vero | Test verdi; sul simulatore iOS: esempio → 0 notifiche in attesa; esempio e poi cane vero → richiesta mostrata e 1-60 notifiche con le dosi; permesso negato → avviso visibile. Verifica QA su Android in C2-1 |
+| **C2-3** | **P0** | Data scientist (specifica e banco) + sviluppatore principale (codice) | **Previsione onesta (11.3, punto 1).** (a) Data scientist: specifica della previsione di base e suo banco in `ricerca/analisi/` su tutti gli scenari (attesi: R ≈ 1 contro il timer, migliore nei cani a orari fissi, copertura della finestra empirica 75-88%, ritardo con poliuria ≤ 20 min); protocollo v1.1 (11.3, punto 4). (b) Sviluppatore: previsione di base in `lib/logic/potty_predictor.dart` (nuova funzione, il modello resta in `elimination_model.dart`); `AppStore.forecast` e le notifiche di uscita in `store.dart` la usano; `home_screen.dart` e `potty_screen.dart` senza percentuali, senza «Affidabilità», senza accuratezza in campione; cacca solo come orario abituale. (c) Riscrivere `test/model_validation_test.dart` con l'origine onesta (T1, T17) e aggiungere T15 (tetto invariato) e T14 sulla previsione di base | Banco della previsione di base pubblicato in `ricerca/23`; nessuna percentuale né accuratezza in campione nell'interfaccia (controllo con `grep` nei test); T1, T14, T15, T17 verdi; testi clinici invariati |
+| **C2-4** | **P1** | Veterinario-editore + sviluppatore principale | **Testi clinici: catalogo, gen-l10n e incoerenze del rapporto 15.** Nell'ordine: (1) test d'identità con l'istantanea di tutti i testi (L-1, punto 3); (2) `l10n.yaml`, `lib/l10n/app_it.arb`, messaggi con ID del catalogo (`AlertText(id, params)`) per `alerts.dart`, `prevention.dart`, `nutrition.dart`, `seasonal.dart`, `emergency_screen.dart`, a testo invariato; (3) duplicati eliminati per ID e non per titolo (`alerts.dart:1522`); (4) **in un commit separato, come v1.0-rc da far firmare**: i 5 punti di `ricerca/15` §3.1. Cioè VIA-004 con le norme vigenti; VIA-005 con il testo prudente; frase d'azione specifica («Chiama subito il veterinario; se non risponde, vai al pronto soccorso veterinario») per ALR-TOX-001, ALR-DIA-002, ALR-DIA-005, ALR-FAR-001, ALR-FAR-004 e ALR-GI-007a; ALR-URI-006 con una frase d'azione quando sale a SUBITO; **numero del CAV di Milano solo per il Paese Italia** (10.5), con la data di verifica e un test che fallisce oltre i 6 mesi. Il veterinario-editore aggiorna `docs/clinica/testi-clinici-v1.*` con le modifiche marcate «proposta CEO, da approvare»; i punti di §3.2 e la proposta P3 del rapporto 16 (prima domanda neutra prima del 🔴 «nessuna pipì») vanno al veterinario abilitato come domande | Test d'identità verde sul 100% delle regole prima della modifica v1.0-rc; ogni ID nel codice esiste nell'ARB e viceversa; controllo automatico: nessuna stringa visibile in `lib/logic/` fuori da `lib/l10n/`; CAV visibile solo con Paese IT (test); pacchetto per il veterinario aggiornato. Questi testi non sono «approvati»: lo diventano solo con la firma (B5) |
+| **C2-5** | **P1** | Sviluppatore principale; rilettura del revisore di sicurezza | **Sincronizzazione P1 (`ricerca/11`).** A5, concorrenza ottimistica: `supabase_backend.dart` aggiorna con `.eq('updated_at', base)` e `select('id')`; se non risulta nessuna riga, riscarica e riapplica; per i cani, unione campo per campo dove possibile. A4, reset con ombra vuota: in `sync_engine.dart:168-179`, se l'ombra è vuota e il server ha l'oggetto, vince il server; si inviano solo gli oggetti assenti dal server. Se il tempo basta, A8, A11 e A12 (P2) | Test in `test/sync_test.dart` con il finto backend: due telefoni modificano lo stesso cane, nessuna modifica persa in silenzio; reset con la copia del server più recente, vince il server; 79 test SQL ancora verdi; nota del revisore in fondo a `ricerca/11` |
+| **C2-6** | **P1** | Sviluppatore principale + esperto privacy | **Backend reale, telemetria e crash.** Quando Lorenzo ha creato il progetto Supabase a Francoforte: migrazioni, test RLS sul progetto vero (B6). Telemetria opt-in secondo `ricerca/12` §5 (tabella separata, `pid` casuale, nessun orario assoluto), campo `createdAt` in `LogEntry` (non clinico). Raccolta dei crash con il fornitore scelto dall'esperto privacy | B6 verde sul progetto reale; B8 provato end-to-end su un dispositivo; nessun dato dell'esempio inviato. Se Lorenzo non ha ancora creato il progetto, si prova su Postgres locale e B6 resta giallo |
+| **C2-7** | **P1** | Esperto privacy e GDPR | Informativa per la beta, consenso separato alla telemetria, registro dei trattamenti, DPIA leggera, scelta dello strumento per i crash (regione UE), DPA di Supabase. File in `docs/` | B7 in bozza rivista; rapporto `ricerca/24` |
+| **C2-8** | **P1** | Legale e marchi | Seconda passata su Pellovi, Trotovi e Nasovi: le verifiche [M] (EUIPO eSearch, UIBM, App Store), conferma dei significati da madrelingua dove possibile, verifica se Lorenzo, come persona fisica, può accedere al **fondo EUIPO per le PMI** (scadenza 4/12/2026), identificativo e domini proposti per ciascuno. Scheda di decisione di una pagina per Lorenzo | Scheda consegnata entro il **1/12**; Lorenzo sceglie entro il 15/12 (B10) |
+| **C2-9** | **P2** | Designer visivo e UX + sviluppatore principale | Residui di `ricerca/22` §8 ammessi dal blocco: **conferma prima di «Saltato»** sulle dosi (sicurezza della terapia); **riassunti testuali** dei grafici per i lettori di schermo (`potty_screen.dart`, `health_screen.dart`, `diaries_screen.dart`); **Atkinson incluso nel PDF**, con «–» disegnato; etichette del modulo al 200%. Rimandati: procedura guidata del modulo del cane (Ciclo 3, con l'inserimento iniziale), icona e splash (dopo il nome) | Test di contrasto, testo al 200% e `Semantics` verdi; PDF di prova con «–» corretto, controllato a vista dal QA |
+| **C2-10** | **P2** | Sviluppatore principale | `DOSSIER.md`: numero dei test, previsione di base, catalogo clinico. I numeri di accuratezza sono già corretti l'11/11. Nessuna frase vietata (11.3) in `DOSSIER.md`, `README.md`, `web/` e nelle schede | Rilettura del CEO |
+
+**Criteri di accettazione del Ciclo 2** (aggiornano la sezione 4):
+- C2-1, C2-2 e C2-3 chiusi: sono le tre condizioni senza le quali nessuno può usare l'app sul proprio cane;
+- B1 e B4 verdi; B2 e B3 almeno avviati su un iPhone e un Android veri (servono i telefoni di Lorenzo); B6 verde se il progetto Supabase esiste;
+- test d'identità di C2-4 verde e pacchetto v1.0-rc pronto per il veterinario; B5 solo se il veterinario ha risposto;
+- B7 in bozza rivista; B10 (nome) scelto da Lorenzo.
+
+**Non entra nel Ciclo 2:** le correzioni R1-R7 sul modello. Partono quando C2-3 è chiuso e continuano nel Ciclo 3 (data scientist e sviluppatore), con i test T1-T18 portati in `test/` con il tag `banco` e un'esecuzione notturna in CI. Non è un lavoro che blocca la beta, perché la beta può partire con la previsione di base.
+
+### 11.6 Azioni di Lorenzo (aggiorna la sezione 6)
+
+| # | Entro | Azione |
+|---|---|---|
+| 1 | **Subito** | Inviare al CNR l'email di `ricerca/14`, aggiungendo i fatti 10.3-3 e 10.3-4 (nessuna attinenza con le mansioni, lavoro fuori orario sul Mac dell'ente). Conservare la risposta |
+| 2 | **Entro il 20/11** | Mettere a disposizione un **telefono Android** (il tuo, uno in prestito o uno di fascia media da circa 150 €, già nel tetto) e il **tuo iPhone** per l'installazione con il tuo Apple ID gratuito. Senza, B2 e B3 restano rossi |
+| 3 | Entro fine novembre | Trovare **1-2 veterinari abilitati** e proporre la lettera di C1-8: è il collo di bottiglia di B5 |
+| 4 | Entro fine novembre | Prenotare il **commercialista** con le domande di `ricerca/14` |
+| 5 | Inizio dicembre | Creare il **progetto Supabase** a Francoforte (piano gratuito), accettare il DPA, applicare la checklist di `ricerca/11` §6 |
+| 6 | **Entro il 4/12**, solo se C2-8 dice che ne hai diritto | Domanda al fondo EUIPO per le PMI |
+| 7 | **Entro il 15/12** | **Scegliere il nome** tra i candidati di C2-8; poi dominio, account social e `.eu` |
+| 8 | Entro il 15/12 | **Mac personale** (10.4): resta raccomandato. Risolve anche lo spazio su disco che oggi blocca Android in locale |
+| 9 | Dopo il nome | Apple Developer, Google Play Console, indirizzo pubblico per il DSA (azioni 8-9 della sezione 6) |
