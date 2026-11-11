@@ -1,7 +1,0 @@
-## Diagnosi pipì (scenario pulito, giorno 20)
-- c07 adulto 6.0 kg: mediana osservata da sveglio 236.0 min (n=49), letteratura 300.0, Bayes empirico 268, intervallo tipico del modello 295 min
-- c10 adulto 12.0 kg: mediana osservata da sveglio 256.0 min (n=35), letteratura 300.0, Bayes empirico 258, intervallo tipico del modello 331 min
-- c14 adulto 22.0 kg: mediana osservata da sveglio 291.0 min (n=42), letteratura 300.0, Bayes empirico 282, intervallo tipico del modello 326 min
-- c18 adulto 36.0 kg: mediana osservata da sveglio 273.0 min (n=34), letteratura 300.0, Bayes empirico 304, intervallo tipico del modello 401 min
-- c22 anziano 14.0 kg: mediana osservata da sveglio 230.0 min (n=56), letteratura 240.0, Bayes empirico 197, intervallo tipico del modello 281 min
-- c24 anziano 30.0 kg: mediana osservata da sveglio 272.0 min (n=54), letteratura 240.0, Bayes empirico 262, intervallo tipico del modello 297 min

@@ -33,10 +33,6 @@ import 'potty_predictor.dart';
 const int _binMin = 15;
 const int _nFeat = 16;
 
-/// Indice della prima covariata di innesco (risveglio); seguono pasto,
-/// acqua, attività, passeggiata.
-const int _trig0 = 11;
-
 const featureNames = [
   'base',
   'tempo dall\'ultima volta',
@@ -298,7 +294,11 @@ class Forecast {
     required this.curve,
     required this.coefficients,
     this.accuracy,
+    this.usualMinutes = const [],
   });
+
+  /// Orari abituali (minuti dalla mezzanotte) dalla previsione di base.
+  final List<int> usualMinutes;
 
   final Need need;
   final DateTime? last;
@@ -751,6 +751,13 @@ class EliminationModel {
   }
 }
 
+String _dur(double m) {
+  final h = m ~/ 60, mm = (m % 60).round();
+  if (h == 0) return '$mm min';
+  if (mm == 0) return h == 1 ? '1 ora' : '$h ore';
+  return '$h h $mm min';
+}
+
 class FittedModel {
   FittedModel._(
     this._model,
@@ -947,41 +954,77 @@ class FittedModel {
     }
     var qRec = prudence.quantile;
     if (need == Need.pipi && accidents > 0) qRec = math.min(qRec, 0.15);
+    // Il modello resta calcolato "in ombra" (curva e coefficienti, per il
+    // banco di prova), ma ciò che si mostra viene dalla previsione di base
+    // finché il modello non supera il collaudo (piano CEO 11.3, ricerca/12).
     final r = _quantiles(c, last, now, [qRec, 0.25, 0.5, 0.75]);
-    var recommended = r.q[qRec]!;
-    var expected = r.q[0.5]!;
-    var wStart = r.q[0.25]!;
-    var wEnd = r.q[0.75]!;
-    final overdue = r.pastProb >= qRec;
-
-    // Spiegazione: quale covariata spinge di più nel momento consigliato.
-    final x = _model.features(
-      c,
-      EliminationModel._floorBin(recommended),
-      last,
-      now,
-      prior,
+    final base = Baseline.compute(
+      dog: dog,
+      times: [
+        for (final t in _ctx.outings)
+          if (!t.isAfter(now)) t,
+      ],
+      now: now,
+      fallbackMin: prior.median * bio.factor,
+      prudenceQuantile: qRec,
+      maxGapMin: prior.maxDay * 1.5,
+      minGapMin: need.clusterMinutes.toDouble(),
     );
-    final contrib = <int, double>{
-      for (var j = _trig0; j < _nFeat; j++) j: beta[j] * x[j],
-    };
-    final top = contrib.entries.reduce((a, b) => a.value >= b.value ? a : b);
-    var reason = overdue
-        ? 'È il momento: in base al suo ritmo la probabilità che debba '
-              'uscire è già alta.'
-        : 'Segue il ritmo appreso di ${dog.name}.';
-    if (!overdue && top.value > 0.6) {
-      reason = switch (top.key) {
-        _trig0 => 'Dopo il risveglio il bisogno arriva presto.',
-        const (_trig0 + 1) =>
-          need == Need.cacca
-              ? 'Il pasto attiva l\'intestino (riflesso gastrocolico).'
-              : 'Dopo il pasto il bisogno arriva prima.',
-        const (_trig0 + 2) => 'Ha bevuto: la $noun arriverà prima.',
-        const (_trig0 + 4) => 'L\'inizio della passeggiata stimola il bisogno.',
-        _ => 'L\'attività stimola il bisogno.',
-      };
+    // Farmaci o malattie che aumentano la pipì: l'intervallo personale si
+    // accorcia subito, senza aspettare 3 giorni di dati (verso prudente).
+    final k =
+        need == Need.pipi &&
+            bio.factor < 1 &&
+            base.nIntervals >= 4 &&
+            !base.adaptedRecent
+        ? bio.factor
+        : 1.0;
+    DateTime at(double m) => last.add(Duration(minutes: (m * k).round()));
+    var recommended = at(base.recommendedAfterMin);
+    var expected = at(base.intervalMin);
+    var wStart = at(base.windowStartMin);
+    var wEnd = at(base.windowEndMin);
+    String hm(int m) =>
+        '${(m ~/ 60).toString().padLeft(2, '0')}:${(m % 60).toString().padLeft(2, '0')}';
+    final usual = base.habitualMinutes.map(hm).join(', ');
+    var reason = base.nIntervals < 4
+        ? 'Sto ancora imparando il ritmo di ${dog.name}: per ora uso valori '
+              'tipici per età e taglia.'
+        : 'In base al suo intervallo abituale da sveglio '
+              '(circa ${_dur(base.intervalMin)}).';
+    if (need == Need.cacca) {
+      // Per la cacca nessun orario puntuale: solo le abitudini (11.3).
+      final h = base.nextHabitual(now);
+      if (h != null) {
+        recommended = h;
+        expected = h;
+        wStart = h.subtract(const Duration(minutes: 30));
+        wEnd = h.add(const Duration(minutes: 45));
+      }
+      reason = usual.isEmpty
+          ? 'Registra qualche giorno di cacche per vedere i suoi orari abituali.'
+          : 'Di solito la fa verso le $usual.';
+    } else {
+      final h = base.nextHabitual(
+        last.add(Duration(minutes: (base.intervalMin * 0.4).round())),
+      );
+      if (h != null && h.isAfter(now) && h.isBefore(recommended)) {
+        recommended = h;
+        reason = 'È uno dei suoi orari abituali di uscita.';
+      } else if (base.adaptedRecent) {
+        reason =
+            'Negli ultimi giorni fa pipì più spesso del solito: ho '
+            'accorciato l\'intervallo.';
+      }
     }
+    final overdue = !recommended.isAfter(now);
+    if (overdue) {
+      recommended = now;
+      if (need == Need.pipi) {
+        reason = 'È ora: è passato il suo intervallo abituale.';
+      }
+    }
+    if (expected.isBefore(recommended)) expected = recommended;
 
     // Tetti di sicurezza (solo pipì) e gestione della notte.
     // Il tetto per età si accorcia con malattie e farmaci che aumentano la
@@ -990,10 +1033,7 @@ class FittedModel {
     final f = bio.factor < 1 ? bio.factor : 1.0;
     final dayCapMin = math.max(120.0, prior.maxDay * f);
     final nightCapMin = math.max(180.0, prior.maxNight * f);
-    String dur(double m) {
-      final h = m ~/ 60, mm = (m % 60).round();
-      return mm == 0 ? '$h ore' : '$h h $mm min';
-    }
+    String dur(double m) => _dur(m);
 
     if (need == Need.pipi) {
       latest = last.add(Duration(minutes: dayCapMin.round()));
@@ -1101,10 +1141,11 @@ class FittedModel {
       factors: reasons,
       confidence: conf,
       learnedDays: learnedDays,
-      typicalIntervalMin: typicalInterval(now),
+      typicalIntervalMin: base.intervalMin * k,
       curve: r.curve,
       coefficients: beta,
       accuracy: acc,
+      usualMinutes: base.habitualMinutes,
     );
   }
 

@@ -415,9 +415,41 @@ class _DogFormPageState extends State<DogFormPage> {
         if (mounted) toast(context, 'Meteo non raggiungibile ora');
       }
     }
-    final firstDog = store.dogs.isEmpty;
+    // «Primo cane vero»: il cane di esempio non conta (CEO 11.4), altrimenti
+    // chi prova l'esempio non riceverebbe mai la richiesta del permesso.
+    final firstReal = !isDemoId(dog.id) && !store.hasRealDog;
     await store.upsertDog(dog);
-    if (firstDog && Notifier.instance.supported && mounted) {
+    if (firstReal && store.demoDogs.isNotEmpty && mounted) {
+      final names = store.demoDogs.map((d) => d.name).join(', ');
+      final drop = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Eliminare il cane di esempio?'),
+          content: Text(
+            '$names serviva solo per provare l\'app. Se lo elimini, restano '
+            'solo i dati di ${dog.name}.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Tienilo'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Elimina l\'esempio'),
+            ),
+          ],
+        ),
+      );
+      if (drop == true) {
+        await store.removeDemo();
+        await store.selectDog(dog.id);
+      }
+    }
+    if (firstReal &&
+        Notifier.instance.supported &&
+        Notifier.instance.allowed.value != true &&
+        mounted) {
       // Permesso notifiche dopo il primo cane, spiegando perché (CEO C1-3).
       final go = await showDialog<bool>(
         context: context,

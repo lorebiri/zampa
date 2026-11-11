@@ -15,6 +15,41 @@ class Notifier {
   bool _ready = false;
   bool _exactAllowed = false;
 
+  /// Notifiche consentite dal sistema: null finché non si sa (o se la
+  /// piattaforma non le supporta). La Home mostra «Notifiche spente» se false.
+  final allowed = ValueNotifier<bool?>(null);
+
+  /// Rilegge dal sistema se le notifiche sono consentite.
+  Future<bool?> refreshAllowed() async {
+    if (!supported || !_ready) return null;
+    bool? ok;
+    try {
+      final ios = _plugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
+      final mac = _plugin
+          .resolvePlatformSpecificImplementation<
+            MacOSFlutterLocalNotificationsPlugin
+          >();
+      final android = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      if (ios != null) {
+        ok = (await ios.checkPermissions())?.isEnabled;
+      } else if (mac != null) {
+        ok = (await mac.checkPermissions())?.isEnabled;
+      } else if (android != null) {
+        ok = await android.areNotificationsEnabled();
+      }
+    } catch (e) {
+      debugPrint('Stato del permesso non leggibile: $e');
+    }
+    allowed.value = ok;
+    return ok;
+  }
+
   /// Chiede il permesso per le notifiche (e su Android le sveglie esatte).
   Future<bool> requestPermissions() async {
     if (!supported || !_ready) return false;
@@ -43,6 +78,7 @@ class Notifier {
       ok = await android.requestNotificationsPermission() ?? false;
       if (ok) await requestExactAlarms();
     }
+    await refreshAllowed();
     return ok;
   }
 
@@ -94,6 +130,7 @@ class Notifier {
         _exactAllowed = true; // iOS/macOS: sempre puntuali
       }
       _ready = true;
+      await refreshAllowed();
     } catch (e) {
       debugPrint('Notifiche non disponibili: $e');
     }
@@ -160,6 +197,12 @@ class Notifier {
       _ready ? _plugin.pendingNotificationRequests() : const [];
 
   bool get ready => _ready;
+
+  /// Cancella tutte le notifiche programmate e mostrate.
+  Future<void> cancelAll() async {
+    if (!_ready) return;
+    await _plugin.cancelAll();
+  }
 
   Future<void> cancel(int id) async {
     if (!_ready) return;

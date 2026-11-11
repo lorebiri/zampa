@@ -101,14 +101,14 @@ _Truth _adult(DateTime start, int days, int seed) {
   for (var i = 1; i < events.length; i++) {
     final actual = events[i];
     if (actual.isBefore(testFrom)) continue;
-    // Momento della previsione: subito dopo l'ultima informazione
-    // registrata prima dell'evento vero.
-    final known = truth.logs
-        .where((l) => l.time.isBefore(actual))
-        .map((l) => l.time)
-        .reduce((a, b) => a.isAfter(b) ? a : b);
+    // Origine onesta (ricerca/12, T1 e T17): la previsione parte 1 minuto
+    // dopo l'evento precedente dello stesso tipo e vede solo i log fino a
+    // quel momento. Partire dall'ultimo evento di qualsiasi tipo abbelliva
+    // i risultati (artefatto dei «3 minuti» per la cacca).
+    final known = events[i - 1];
     final now = known.add(const Duration(minutes: 1));
     final visible = truth.logs.where((l) => !l.time.isAfter(known)).toList();
+    assert(visible.every((l) => !l.time.isAfter(now)));
     final fitted = engine.fit(truth.dog, need, visible, const [], now);
     final f = fitted.forecast(now, withAccuracy: false);
     errModel.add(actual.difference(f.expectedAt).inMinutes.abs().toDouble());
@@ -155,28 +155,40 @@ void main() {
   final truth = _adult(start, 21, 3);
   final testFrom = start.add(const Duration(days: 14));
 
-  test('pipì: il modello batte il timer fisso', () {
-    final r = _evaluate(truth, Need.pipi, testFrom);
-    // ignore: avoid_print
-    print(
-      'PIPÌ  n=${r.n}  errore mediano modello=${r.model} min  '
-      'timer=${r.timer} min  nella finestra=${(r.inWindow * 100).round()}% '
-      '(ampiezza mediana ${r.width} min)',
-    );
-    expect(r.model, lessThan(r.timer));
-    expect(r.model, lessThan(45));
-  });
+  test(
+    'pipì: la previsione di base non fa peggio del timer (origine onesta)',
+    () {
+      final r = _evaluate(truth, Need.pipi, testFrom);
+      // ignore: avoid_print
+      print(
+        'PIPÌ  n=${r.n}  errore mediano modello=${r.model} min  '
+        'timer=${r.timer} min  nella finestra=${(r.inWindow * 100).round()}% '
+        '(ampiezza mediana ${r.width} min)',
+      );
+      // T17: con l'origine onesta non fa peggio del timer.
+      expect(r.model, lessThanOrEqualTo(r.timer));
+      expect(r.model, lessThan(45));
+    },
+  );
 
-  test('cacca: il modello batte il timer fisso', () {
+  test('cacca: riconosce gli orari abituali (solo descrittivo)', () {
     final r = _evaluate(truth, Need.cacca, testFrom);
     // ignore: avoid_print
     print(
-      'CACCA n=${r.n}  errore mediano modello=${r.model} min  '
-      'timer=${r.timer} min  nella finestra=${(r.inWindow * 100).round()}% '
-      '(ampiezza mediana ${r.width} min)',
+      'CACCA n=${r.n}  errore mediano orario abituale=${r.model} min  '
+      'timer=${r.timer} min (descrittivo: per la cacca nessun orario puntuale)',
     );
-    expect(r.model, lessThan(r.timer));
-    expect(r.model, lessThan(45));
+    final visible = truth.logs.where((l) => l.time.isBefore(testFrom)).toList();
+    final f = EliminationModel()
+        .fit(truth.dog, Need.cacca, visible, const [], testFrom)
+        .forecast(testFrom, withAccuracy: false);
+    // Questo cane la fa 30-45' dopo la colazione delle 8 (tutti i giorni).
+    expect(
+      f.usualMinutes.any((m) => m >= 8 * 60 && m <= 9 * 60 + 30),
+      isTrue,
+      reason: 'orari abituali ${f.usualMinutes}',
+    );
+    expect(f.reason, startsWith('Di solito'));
   });
 
   test('senza dati usa i valori della letteratura', () {

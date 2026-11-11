@@ -70,6 +70,22 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     return model(d, need, now).forecast(now);
   }
 
+  /// C'è almeno un cane vero (non l'esempio)?
+  bool get hasRealDog => dogs.any((d) => !isDemoId(d.id));
+
+  /// Cani di esempio presenti.
+  List<Dog> get demoDogs => [
+    for (final d in dogs)
+      if (isDemoId(d.id)) d,
+  ];
+
+  /// Elimina il cane di esempio e i suoi dati.
+  Future<void> removeDemo() async {
+    for (final d in demoDogs) {
+      await deleteDog(d.id);
+    }
+  }
+
   Dog? get dog {
     if (dogs.isEmpty) return null;
     return dogs.firstWhere(
@@ -537,6 +553,8 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     final out = <PlannedNotification>[];
     for (var di = 0; di < dogs.length && di < 9; di++) {
       final d = dogs[di];
+      // Il cane di esempio non manda mai notifiche (CEO 11.4).
+      if (isDemoId(d.id)) continue;
       final base = (di + 1) * 1000;
       final dLogs = logs.where((l) => l.dogId == d.id).toList()
         ..sort((a, b) => a.time.compareTo(b.time));
@@ -625,6 +643,9 @@ class AppStore extends ChangeNotifier implements SyncTarget {
         if (!on) continue;
         final p = forecast(d, need, now);
         if (p.last == null) continue;
+        // Cacca: si avvisa solo agli orari abituali, mai a un orario
+        // «previsto» (piano CEO 11.3).
+        if (need == Need.cacca && p.usualMinutes.isEmpty) continue;
         final at = p.recommendedAt.subtract(
           Duration(minutes: d.reminderLeadMinutes),
         );
@@ -634,8 +655,10 @@ class AppStore extends ChangeNotifier implements SyncTarget {
             at.isAfter(now) ? at : p.recommendedAt,
             need == Need.pipi
                 ? 'È quasi ora di uscire con ${d.name} 🐾'
-                : 'Probabile cacca in arrivo per ${d.name} 💩',
-            'Uscita consigliata alle ${hm(p.recommendedAt)}. ${p.reason}',
+                : 'Di solito a quest\'ora ${d.name} fa la cacca 💩',
+            need == Need.pipi
+                ? 'Uscita consigliata alle ${hm(p.recommendedAt)}. ${p.reason}'
+                : p.reason,
             3,
           ),
         );
@@ -681,6 +704,9 @@ class AppStore extends ChangeNotifier implements SyncTarget {
 
   static const _notifKey = 'zampa_notif_ids';
 
+  /// Riprogramma le notifiche (per esempio appena concesso il permesso).
+  Future<void> replan() => _reschedule();
+
   Future<void> _reschedule() async {
     final n = notifier;
     if (n == null || !n.supported) return;
@@ -688,6 +714,7 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     // Allarmi urgenti: notifica immediata, una volta sola per allarme.
     for (var di = 0; di < dogs.length && di < 9; di++) {
       final d = dogs[di];
+      if (isDemoId(d.id)) continue;
       final urgent =
           AlertEngine.compute(
             dog: d,

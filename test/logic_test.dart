@@ -288,6 +288,16 @@ void main() {
     await tester.pump();
     expect(find.text('Luna'), findsWidgets);
     expect(find.text('Prossima pipì'), findsOneWidget);
+    expect(find.text('ESEMPIO'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Prossima cacca'),
+      300,
+      scrollable: find
+          .byWidgetPredicate(
+            (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+          )
+          .first,
+    );
     expect(find.text('Prossima cacca'), findsOneWidget);
     for (final tab in ['Bisogni', 'Salute', 'Nutrizione', 'Profilo']) {
       await tester.tap(find.text(tab));

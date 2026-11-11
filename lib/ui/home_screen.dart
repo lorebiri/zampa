@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../logic/alerts.dart';
 import '../logic/bio_params.dart';
@@ -9,10 +11,13 @@ import '../logic/potty_predictor.dart';
 import '../logic/prevention.dart';
 import '../logic/seasonal.dart';
 import '../logic/weather.dart';
+import '../brand.dart';
 import '../models.dart';
+import '../notifications.dart';
 import '../store.dart';
 import 'common.dart';
 import 'avatar_editor.dart';
+import 'dog_form.dart';
 import 'avatar.dart';
 import 'log_sheet.dart';
 import 'theme.dart';
@@ -27,16 +32,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Timer? _tick;
+  AppLifecycleListener? _life;
 
   @override
   void initState() {
     super.initState();
     _tick = Timer.periodic(const Duration(seconds: 30), (_) => setState(() {}));
+    // Chi torna dalle Impostazioni dopo aver acceso le notifiche deve vedere
+    // sparire l'avviso, e i promemoria vanno riprogrammati.
+    _life = AppLifecycleListener(
+      onResume: () async {
+        final was = Notifier.instance.allowed.value;
+        final now = await Notifier.instance.refreshAllowed();
+        if (was != true && now == true && mounted) {
+          await StoreScope.read(context).replan();
+        }
+      },
+    );
   }
 
   @override
   void dispose() {
     _tick?.cancel();
+    _life?.dispose();
     super.dispose();
   }
 
@@ -85,6 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return PageBody(
       children: [
         DogHeader(dog: dog),
+        if (isDemoId(dog.id)) const _DemoBanner(),
+        if (!isDemoId(dog.id)) const _NotificationsOffBanner(),
         // Le urgenze vengono prima del compagno: una cosa seria non deve
         // sembrare un gioco (revisione veterinaria).
         for (final a in alerts.where(
@@ -428,16 +448,13 @@ class ForecastCard extends StatelessWidget {
     final fg = urgent
         ? t.colorScheme.onTertiaryContainer
         : t.colorScheme.onPrimaryContainer;
-    final confLabel = switch (f.confidence) {
-      Confidence.bassa => 'Sto imparando',
-      Confidence.media => 'Affidabilità media',
-      Confidence.alta => 'Affidabilità alta',
-    };
-    final confIcon = switch (f.confidence) {
-      Confidence.bassa => Icons.school_outlined,
-      Confidence.media => Icons.signal_cellular_alt_2_bar,
-      Confidence.alta => Icons.signal_cellular_alt,
-    };
+    // Nessuna «affidabilità» né percentuale: la previsione di base è una
+    // regola trasparente, non una promessa di precisione (piano CEO 11.3).
+    final learning = f.confidence == Confidence.bassa;
+    final usual = [
+      for (final m in f.usualMinutes)
+        '${(m ~/ 60).toString().padLeft(2, '0')}:${(m % 60).toString().padLeft(2, '0')}',
+    ];
     final muted = fg.withValues(alpha: 0.85);
     return Card(
       color: bg,
@@ -474,23 +491,60 @@ class ForecastCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: Space.xs),
-              Row(
-                children: [
-                  Icon(confIcon, size: 16, color: muted),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      confLabel,
-                      style: t.textTheme.labelMedium?.copyWith(color: muted),
+              if (learning) ...[
+                const SizedBox(height: Space.xs),
+                Row(
+                  children: [
+                    Icon(Icons.school_outlined, size: 16, color: muted),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        'Sto imparando',
+                        style: t.textTheme.labelMedium?.copyWith(color: muted),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
               const SizedBox(height: Space.m),
               if (f.last == null)
                 Text(f.reason, style: TextStyle(color: fg))
-              else ...[
+              else if (!isPee) ...[
+                // Cacca: solo le abitudini, nessun orario puntuale.
+                if (usual.isNotEmpty)
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Di solito verso le ',
+                          style: t.textTheme.titleLarge?.copyWith(
+                            color: fg,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: usual.join(' e '),
+                          style: t.textTheme.headlineMedium?.copyWith(
+                            color: fg,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  Text(
+                    f.reason,
+                    style: t.textTheme.bodyMedium?.copyWith(color: fg),
+                  ),
+                const SizedBox(height: Space.xs),
+                Text(
+                  'Ultima ${relative(f.last!, now)}',
+                  style: t.textTheme.bodyLarge?.copyWith(
+                    color: fg,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ] else ...[
                 if (f.overdue)
                   Text(
                     'Adesso',
@@ -526,8 +580,7 @@ class ForecastCard extends StatelessWidget {
                 ),
                 const SizedBox(height: Space.m),
                 Text(
-                  'Finestra probabile ${hm(f.windowStart)}–${hm(f.windowEnd)} · '
-                  'probabilità nella prossima ora ${(f.probNextHour * 100).round()}%',
+                  'Di solito tra le ${hm(f.windowStart)} e le ${hm(f.windowEnd)}',
                   style: t.textTheme.bodySmall?.copyWith(color: muted),
                 ),
                 const SizedBox(height: Space.xs),
@@ -700,4 +753,69 @@ class PostOpCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Banner fisso del cane di esempio: dati finti, nessuna notifica.
+class _DemoBanner extends StatelessWidget {
+  const _DemoBanner();
+
+  @override
+  Widget build(BuildContext context) => NoticeCard(
+    'Questo è un cane di esempio: i dati sono inventati e non riceverai '
+    'notifiche. Aggiungi il tuo cane per usare $appName davvero.',
+    level: AlertLevel.info,
+    tag: 'ESEMPIO',
+    child: Padding(
+      padding: const EdgeInsets.only(top: Space.s),
+      child: FilledButton.icon(
+        icon: const Icon(Icons.add),
+        label: const Text('Aggiungi il tuo cane'),
+        onPressed: () =>
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const DogFormPage())),
+      ),
+    ),
+  );
+}
+
+/// Avviso permanente e gratuito se il sistema blocca le notifiche: senza,
+/// promemoria, dosi e allarmi non arrivano (CEO 11.4).
+class _NotificationsOffBanner extends StatelessWidget {
+  const _NotificationsOffBanner();
+
+  Future<void> _enable(BuildContext context) async {
+    final store = StoreScope.read(context);
+    final ok = await Notifier.instance.requestPermissions();
+    if (ok) {
+      await store.replan();
+      return;
+    }
+    // Già negato una volta: il sistema non chiede più, servono le Impostazioni.
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+      await launchUrl(Uri.parse('app-settings:'));
+    } else if (context.mounted) {
+      toast(context, 'Attivale da Impostazioni › App › Zampa › Notifiche');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<bool?>(
+    valueListenable: Notifier.instance.allowed,
+    builder: (context, allowed, _) => allowed != false
+        ? const SizedBox.shrink()
+        : NoticeCard(
+            'Senza notifiche non ti avviseremo quando deve uscire, per le '
+            'medicine e i vaccini, né se qualcosa richiede il veterinario.',
+            level: AlertLevel.attenzione,
+            tag: 'NOTIFICHE SPENTE',
+            child: Padding(
+              padding: const EdgeInsets.only(top: Space.s),
+              child: FilledButton.icon(
+                icon: const Icon(Icons.notifications_active_outlined),
+                label: const Text('Attiva'),
+                onPressed: () => _enable(context),
+              ),
+            ),
+          ),
+  );
 }

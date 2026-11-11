@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../models.dart';
 import 'bio_params.dart';
 
@@ -87,5 +89,169 @@ class PottyStats {
     ).where((o) => o.time.isAfter(from)).toList();
     if (outs.isEmpty) return null;
     return outs.where((o) => !o.indoor).length / outs.length;
+  }
+}
+
+/// Previsione di base (Ciclo 2, C2-3; piano CEO 11.3).
+///
+/// Finché il modello statistico non batte un semplice timer sul banco di
+/// prova (ricerca/12), ciò che l'utente vede si basa solo su regole
+/// trasparenti, calcolate sui dati registrati del cane:
+/// 1. intervallo personale da sveglio (mediana degli ultimi 14 giorni), che
+///    si accorcia subito se negli ultimi 3 giorni è diventato più breve
+///    (protezione per la poliuria che compare);
+/// 2. orari abituali (gli stessi da almeno il 40% dei giorni), quando cadono
+///    prima dell'intervallo;
+/// 3. finestra «di solito tra X e Y» dagli intervalli osservati (20°-80°).
+/// Tetti di sicurezza e notte restano quelli del modello, invariati.
+class Baseline {
+  const Baseline({
+    required this.intervalMin,
+    required this.recommendedAfterMin,
+    required this.windowStartMin,
+    required this.windowEndMin,
+    required this.habitualMinutes,
+    required this.nIntervals,
+    required this.adaptedRecent,
+  });
+
+  /// Intervallo tipico da sveglio (minuti).
+  final double intervalMin;
+
+  /// Minuti dopo l'ultimo evento a cui conviene uscire (secondo la prudenza).
+  final double recommendedAfterMin;
+  final double windowStartMin;
+  final double windowEndMin;
+
+  /// Orari abituali (minuti dalla mezzanotte), in ordine.
+  final List<int> habitualMinutes;
+
+  /// Intervalli da sveglio su cui si basa (0 = solo valori di partenza).
+  final int nIntervals;
+
+  /// True se l'intervallo è stato accorciato per gli ultimi 3 giorni.
+  final bool adaptedRecent;
+
+  static double _quantile(List<double> sorted, double q) {
+    if (sorted.length == 1) return sorted.first;
+    final pos = q * (sorted.length - 1);
+    final lo = pos.floor(), hi = pos.ceil();
+    return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+  }
+
+  /// [times]: eventi registrati (già fusi), in ordine cronologico.
+  /// [fallbackMin]: intervallo di partenza dalla letteratura, usato finché
+  /// gli intervalli osservati sono meno di 4.
+  static Baseline compute({
+    required Dog dog,
+    required List<DateTime> times,
+    required DateTime now,
+    required double fallbackMin,
+    required double prudenceQuantile,
+    required double maxGapMin,
+    double minGapMin = 15,
+  }) {
+    final past = [
+      for (final t in times)
+        if (!t.isAfter(now)) t,
+    ];
+    final all = <(DateTime, double)>[];
+    for (var i = 1; i < past.length; i++) {
+      final a = past[i - 1], b = past[i];
+      if (now.difference(b).inDays >= 14) continue;
+      if (PottyPredictor.inSleepWindow(dog, a) ||
+          PottyPredictor.inSleepWindow(dog, b)) {
+        continue;
+      }
+      final g = b.difference(a).inMinutes.toDouble();
+      if (g < minGapMin || g > maxGapMin) continue;
+      all.add((b, g));
+    }
+    final gaps = [for (final e in all) e.$2]..sort();
+    final recent = [
+      for (final e in all)
+        if (now.difference(e.$1).inHours < 72) e.$2,
+    ]..sort();
+
+    double interval, qRec, q20, q80;
+    var adapted = false;
+    if (gaps.length < 4) {
+      interval = fallbackMin;
+      // Senza dati: finestra larga e uscita prudente intorno alla mediana.
+      qRec = fallbackMin * (0.6 + prudenceQuantile);
+      q20 = fallbackMin * 0.7;
+      q80 = fallbackMin * 1.35;
+    } else {
+      interval = _quantile(gaps, 0.5);
+      qRec = _quantile(gaps, prudenceQuantile);
+      q20 = _quantile(gaps, 0.2);
+      q80 = _quantile(gaps, 0.8);
+      if (recent.length >= 3) {
+        final r = _quantile(recent, 0.5);
+        // Solo verso il più breve, e solo se il cambiamento è netto: un
+        // cane che deve uscire più spesso non deve aspettare.
+        if (r < interval * 0.85) {
+          final k = r / interval;
+          interval *= k;
+          qRec *= k;
+          q20 *= k;
+          q80 *= k;
+          adapted = true;
+        }
+      }
+    }
+    return Baseline(
+      intervalMin: interval,
+      recommendedAfterMin: math.min(qRec, interval),
+      windowStartMin: q20,
+      windowEndMin: q80,
+      habitualMinutes: findHabitual(dog, past, now),
+      nIntervals: gaps.length,
+      adaptedRecent: adapted,
+    );
+  }
+
+  /// Orari ricorrenti negli ultimi 14 giorni: gruppi entro 45 minuti presenti
+  /// in almeno il 40% dei giorni con dati (e almeno 3 giorni).
+  static List<int> findHabitual(Dog dog, List<DateTime> times, DateTime now) {
+    final recent = [
+      for (final t in times)
+        if (!t.isAfter(now) && now.difference(t).inDays < 14) t,
+    ];
+    final days = {for (final t in recent) DateTime(t.year, t.month, t.day)}
+        .length;
+    if (days < 3) return const [];
+    final mins = [for (final t in recent) t.hour * 60 + t.minute]..sort();
+    final clusters = <List<int>>[];
+    for (final m in mins) {
+      if (clusters.isEmpty || m - clusters.last.last > 45) {
+        clusters.add([m]);
+      } else {
+        clusters.last.add(m);
+      }
+    }
+    final need = math.max(3, (days * 0.4).ceil());
+    return [
+      for (final c in clusters)
+        if (c.length >= need) c[c.length ~/ 2],
+    ];
+  }
+
+  /// Prossimo orario abituale dopo [after] (entro 24 ore), o null.
+  DateTime? nextHabitual(DateTime after) {
+    DateTime? best;
+    for (final m in habitualMinutes) {
+      for (var d = 0; d <= 1; d++) {
+        final t = DateTime(
+          after.year,
+          after.month,
+          after.day + d,
+          m ~/ 60,
+          m % 60,
+        );
+        if (t.isAfter(after) && (best == null || t.isBefore(best))) best = t;
+      }
+    }
+    return best;
   }
 }

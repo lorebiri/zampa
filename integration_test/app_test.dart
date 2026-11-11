@@ -46,6 +46,8 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     await Notifier.instance.init();
+    // Il sistema conserva le notifiche delle esecuzioni precedenti.
+    await Notifier.instance.cancelAll();
     final store = AppStore(prefs: prefs, notifier: Notifier.instance);
     await store.load();
     await tester.pumpWidget(ZampaApp(store: store));
@@ -84,18 +86,50 @@ void main() {
     // ignore: avoid_print
     print('PERMESSO CONCESSO: $granted');
     expect(granted, isTrue, reason: 'consentire le notifiche nel simulatore');
-    await store.upsertDog(store.dog!);
+    await store.replan();
+    await settle(tester);
+    expect(Notifier.instance.ready, isTrue, reason: 'plugin inizializzato');
+
+    // C2-2: il cane di esempio non programma nessuna notifica.
+    final demoPending = await Notifier.instance.pending();
+    // ignore: avoid_print
+    print('NOTIFICHE CON IL SOLO ESEMPIO: ${demoPending.length}');
+    expect(demoPending, isEmpty);
+
+    // Arriva il primo cane vero, con una pipì e una terapia.
+    final now = DateTime.now();
+    final real = Dog(
+      id: newId(),
+      name: 'Birba',
+      birthDate: DateTime(now.year - 4, now.month, 1),
+      sex: Sex.femmina,
+      weightKg: 9,
+    );
+    await store.upsertDog(real);
+    await store.addLog(
+      LogEntry(
+        id: newId(),
+        dogId: real.id,
+        type: LogType.pipi,
+        time: now.subtract(const Duration(minutes: 30)),
+      ),
+    );
+    await store.upsertRecord(
+      HealthRecord(
+        id: newId(),
+        dogId: real.id,
+        type: RecordType.farmaco,
+        title: 'Antibiotico',
+        date: now.subtract(const Duration(hours: 2)),
+        everyHours: 12,
+        endDate: now.add(const Duration(days: 7)),
+      ),
+    );
     await settle(tester);
 
-    // Notifiche: il sistema deve avere notifiche in attesa, entro il tetto.
-    expect(
-      Notifier.instance.ready,
-      isTrue,
-      reason: 'plugin notifiche inizializzato',
-    );
     final pending = await Notifier.instance.pending();
     // ignore: avoid_print
-    print('NOTIFICHE IN ATTESA: ${pending.length}');
+    print('NOTIFICHE IN ATTESA (cane vero): ${pending.length}');
     for (final p in pending.take(8)) {
       // ignore: avoid_print
       print('  #${p.id} ${p.title}');
@@ -106,6 +140,11 @@ void main() {
       pending.any((p) => (p.title ?? '').startsWith('💊')),
       isTrue,
       reason: 'dosi della terapia',
+    );
+    expect(
+      pending.every((p) => !(p.title ?? '').contains('Luna')),
+      isTrue,
+      reason: 'nessuna notifica del cane di esempio',
     );
 
     // Registrazione di una pipì con un tocco dalla schermata Oggi.

@@ -60,29 +60,7 @@ class _PottyScreenState extends State<PottyScreen> {
             ),
           ),
           ForecastCard(forecast: f, dog: dog),
-          if (f.curve.isNotEmpty) ...[
-            const SectionTitle('Probabilità nelle prossime ore'),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
-                child: SizedBox(
-                  height: 170,
-                  child: CustomPaint(
-                    painter: _CurvePainter(
-                      curve: f.curve,
-                      now: now,
-                      recommended: f.recommendedAt,
-                      color: t.colorScheme.primary,
-                      accent: t.colorScheme.tertiary,
-                      text: t.textTheme.bodySmall!,
-                    ),
-                    size: Size.infinite,
-                  ),
-                ),
-              ),
-            ),
-          ],
-          const SectionTitle('Come sta imparando'),
+          const SectionTitle('Come calcola l\'orario'),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -106,19 +84,6 @@ class _PottyScreenState extends State<PottyScreen> {
                       'Tetto massimo per età (non un obiettivo)',
                       _dur(model.prior.maxDay),
                     ),
-                  if (f.accuracy != null) ...[
-                    _kv(
-                      context,
-                      'Errore tipico sulle ultime ${f.accuracy!.n}',
-                      '± ${f.accuracy!.medianAbsErrorMin.round()} min',
-                    ),
-                    _kv(
-                      context,
-                      'Eventi caduti nella finestra',
-                      '${(f.accuracy!.inWindowRate * 100).round()}%',
-                    ),
-                  ] else
-                    _kv(context, 'Accuratezza', 'servono almeno 4 eventi'),
                   if (outdoor != null)
                     _kv(
                       context,
@@ -127,12 +92,17 @@ class _PottyScreenState extends State<PottyScreen> {
                     ),
                   const SizedBox(height: 8),
                   Text(
-                    'Il modello stima quarto d\'ora per quarto d\'ora la probabilità '
-                    'del bisogno, tenendo conto di tempo trascorso, ora del giorno, '
-                    'sonno, pasti, acqua, risveglio, gioco e passeggiate, più i fattori '
-                    'biologici (età, taglia, dieta, calore, farmaci, malattie note). '
-                    'Parte dai valori della letteratura veterinaria e si adatta a '
-                    '${dog.name} man mano che registri.',
+                    need == Need.pipi
+                        ? 'L\'orario viene dal suo intervallo abituale da sveglio '
+                              'negli ultimi 14 giorni, accorciato subito se negli '
+                              'ultimi 3 giorni esce più spesso, e dai suoi orari '
+                              'abituali. Finché non ci sono abbastanza dati usa i '
+                              'valori della letteratura per età e taglia, con i '
+                              'fattori noti (farmaci, malattie, calore). Il tetto '
+                              'per età vale sempre. È una stima: se ${dog.name} '
+                              'chiede di uscire, ascolta lui.'
+                        : 'Mostra gli orari in cui ${dog.name} la fa di solito '
+                              'negli ultimi 14 giorni.',
                     style: t.textTheme.bodySmall,
                   ),
                 ],
@@ -233,98 +203,6 @@ class _PottyScreenState extends State<PottyScreen> {
       ],
     ),
   );
-}
-
-class _CurvePainter extends CustomPainter {
-  _CurvePainter({
-    required this.curve,
-    required this.now,
-    required this.recommended,
-    required this.color,
-    required this.accent,
-    required this.text,
-  });
-  final List<(DateTime, double)> curve;
-  final DateTime now;
-  final DateTime recommended;
-  final Color color;
-  final Color accent;
-  final TextStyle text;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const left = 34.0, bottom = 20.0;
-    final w = size.width - left, h = size.height - bottom;
-    final end = curve.last.$1;
-    final span = end.difference(now).inMinutes.toDouble();
-    double x(DateTime t) =>
-        left + w * (t.difference(now).inMinutes / span).clamp(0, 1);
-    double y(double p) => h * (1 - p);
-    final grid = Paint()
-      ..color = text.color!.withValues(alpha: 0.15)
-      ..strokeWidth = 1;
-    for (final p in [0.25, 0.5, 0.75, 1.0]) {
-      canvas.drawLine(Offset(left, y(p)), Offset(size.width, y(p)), grid);
-      _label(canvas, '${(p * 100).round()}%', Offset(0, y(p) - 7));
-    }
-    // Etichette orarie ogni 2 ore.
-    var t = DateTime(now.year, now.month, now.day, now.hour + 1);
-    while (t.isBefore(end)) {
-      if (t.hour % 2 == 0) {
-        _label(canvas, '${two(t.hour)}:00', Offset(x(t) - 14, h + 4));
-      }
-      t = t.add(const Duration(hours: 1));
-    }
-    final path = Path()..moveTo(x(curve.first.$1), y(curve.first.$2));
-    final fill = Path()
-      ..moveTo(x(curve.first.$1), h)
-      ..lineTo(x(curve.first.$1), y(curve.first.$2));
-    for (final (tt, p) in curve) {
-      path.lineTo(x(tt), y(p));
-      fill.lineTo(x(tt), y(p));
-    }
-    fill
-      ..lineTo(x(curve.last.$1), h)
-      ..close();
-    canvas.drawPath(fill, Paint()..color = color.withValues(alpha: 0.12));
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = color
-        ..strokeWidth = 2.5
-        ..style = PaintingStyle.stroke,
-    );
-    if (recommended.isBefore(end)) {
-      final rx = x(recommended);
-      canvas.drawLine(
-        Offset(rx, 0),
-        Offset(rx, h),
-        Paint()
-          ..color = accent
-          ..strokeWidth = 2,
-      );
-      _label(
-        canvas,
-        'esci',
-        Offset(math.min(rx + 4, size.width - 24), 2),
-        color: accent,
-      );
-    }
-  }
-
-  void _label(Canvas c, String s, Offset o, {Color? color}) {
-    final tp = TextPainter(
-      text: TextSpan(
-        text: s,
-        style: text.copyWith(color: color, fontSize: 10),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
-    tp.paint(c, o);
-  }
-
-  @override
-  bool shouldRepaint(covariant _CurvePainter old) => old.curve != curve;
 }
 
 class _DayBars extends StatelessWidget {

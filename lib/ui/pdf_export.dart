@@ -238,7 +238,7 @@ Future<Uint8List> buildPdf(AppStore store, Dog dog, DateTime now) async {
         ),
         p(
           'Intervallo tipico tra le pipì da sveglio: ${pf.typicalIntervalMin.round()} min '
-          '(modello $appName, ${pf.learnedDays.toStringAsFixed(1)} giorni di dati).',
+          '(mediana degli ultimi 14 giorni registrati in $appName).',
           size: 8,
         ),
         if (therapies.isNotEmpty) ...[

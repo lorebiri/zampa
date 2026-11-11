@@ -1,0 +1,70 @@
+name: Android
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  apk:
+    name: APK installabile
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # Firmato con la chiave di debug: si installa sul telefono ma non va
+      # sul Play Store (serve la chiave di caricamento, dopo il nome).
+      - run: flutter build apk --release
+      - run: cp build/app/outputs/flutter-apk/app-release.apk zampa.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zampa-android
+          path: zampa.apk
+          retention-days: 30
+
+  emulatore:
+    name: Collaudo su emulatore (API 34)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Accelerazione KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: bash .github/scripts/android_itest.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: collaudo-android-log
+          path: itest.log
+          if-no-files-found: ignore
