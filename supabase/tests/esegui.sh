@@ -23,6 +23,7 @@ if ! command -v psql >/dev/null && [ -x /opt/homebrew/opt/postgresql@16/bin/psql
   PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 fi
 MIG=migrations/2026-11-10_sicurezza.sql
+MIG2=migrations/2026-11-14_promemoria_web.sql
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 export PGOPTIONS="-c client_min_messages=warning"
@@ -39,6 +40,7 @@ nuovo_db zampa_test_nuovo
 "${PSQL[@]}" -d zampa_test_nuovo -f schema.sql >/dev/null
 "${PSQL[@]}" -d zampa_test_nuovo -f schema.sql >/dev/null
 "${PSQL[@]}" -d zampa_test_nuovo -f tests/01_sicurezza.sql
+"${PSQL[@]}" -d zampa_test_nuovo -f tests/02_promemoria_web.sql
 
 echo "== 2. Schema versione 1 + dati + migrazione (eseguita due volte) + test"
 nuovo_db zampa_test_migrato
@@ -56,11 +58,14 @@ insert into public.invites (code, dog_id, created_by)
 SQL
   "${PSQL[@]}" -d zampa_test_migrato -f "$MIG" >/dev/null
   "${PSQL[@]}" -d zampa_test_migrato -f "$MIG" >/dev/null
+  "${PSQL[@]}" -d zampa_test_migrato -f "$MIG2" >/dev/null
+  "${PSQL[@]}" -d zampa_test_migrato -f "$MIG2" >/dev/null
   "${PSQL[@]}" -d zampa_test_migrato -Atc \
     "select 'dati della v1 conservati: ' || count(*) from public.entries where id = 'v1'"
   "${PSQL[@]}" -d zampa_test_migrato -c \
     "delete from auth.users where id = '00000000-0000-0000-0000-0000000000aa'" >/dev/null
   "${PSQL[@]}" -d zampa_test_migrato -f tests/01_sicurezza.sql | tail -1
+  "${PSQL[@]}" -d zampa_test_migrato -f tests/02_promemoria_web.sql | tail -1
 
   echo "== 3. Struttura: schema da zero e schema migrato devono coincidere"
   for db in zampa_test_nuovo zampa_test_migrato; do
@@ -75,6 +80,12 @@ fi
 echo "== 4. La migrazione coincide con la sezione 2 di schema.sql"
 sed -n '/^-- 2.1 Colonne/,/^commit;/p' schema.sql > "$TMP/a.sql"
 sed -n '/^-- 2.1 Colonne/,/^commit;/p' "$MIG" > "$TMP/b.sql"
+diff "$TMP/a.sql" "$TMP/b.sql" || { echo "not ok - diverse"; exit 1; }
+echo "ok - coincidono"
+
+echo "== 5. La migrazione dei promemoria coincide con la sezione 3 di schema.sql"
+sed -n '/^-- 3.1 Tabelle/,/^commit;/p' schema.sql > "$TMP/a.sql"
+sed -n '/^-- 3.1 Tabelle/,/^commit;/p' "$MIG2" > "$TMP/b.sql"
 diff "$TMP/a.sql" "$TMP/b.sql" || { echo "not ok - diverse"; exit 1; }
 echo "ok - coincidono"
 
