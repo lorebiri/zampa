@@ -252,7 +252,7 @@ La rete ora permette di installare Flutter 3.47.9 (clonato da GitHub, scaricando
 | `flutter test` | 159 passati, 22 saltati | **172 passati** (159 + 13 nuovi), 22 saltati |
 | `dart format` | — | nessuna modifica necessaria |
 | `tool/build_web.sh` (base href `/lulu/`) | — | ✅ build riuscita |
-| `flutter build apk --release` | — | in corso al momento della pausa: il primo tentativo è fallito solo perché l'SDK di questa macchina chiama la piattaforma «android-37.0» anziché «android-37» (problema della macchina, non del codice) |
+| `flutter build apk --release` | — | ✅ **riuscita**: `app-release.apk` universale da 72,0 MB (dopo aver dato alla piattaforma dell'SDK di questa macchina il nome «android-37» atteso dal plugin Android; il codice non è cambiato). La versione solo 64 bit, quella per la pagina di download, non l'ho ancora generata |
 
 **Collaudo Playwright sull'app vera** (a misura iPhone 13, chiaro e scuro, servita in `/lulu/`):
 schermata iniziale e avvertenze, cane di esempio, tutte le schede, procedura guidata con un cane vero,
@@ -273,5 +273,5 @@ Nessun errore JavaScript.
 **Difetto preesistente notato (non corretto):** nell'informativa gli a capo del file `.md` spezzano le
 frasi degli elenchi su più paragrafi.
 
-Prossimi passi, sospesi per la pausa: chiudere la build APK, poi il blocco B (Web Push, approvato).
+Prossimi passi, sospesi per la pausa: il blocco B (Web Push, approvato).
 Per il blocco C le schermate di prova sono pronte in `docs/design/` e aspettano l'ok di Lorenzo.
