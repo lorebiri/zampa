@@ -154,7 +154,7 @@ DateTime? sameTimeForecast(
 /// Riferimenti «stesso orario» e «stesso giorno della settimana» per la
 /// pipì dopo l'ultima di [past] (uscite ≤ origine, in ordine). [fallback] è
 /// l'orario del timer per età e taglia, usato senza storia.
-({DateTime sameTime, DateTime sameWeekday}) referenceForecasts(
+({DateTime sameTime, DateTime sameWeekday, DateTime timer}) referenceForecasts(
   Dog dog,
   List<DateTime> past,
   double cluster,
@@ -203,7 +203,7 @@ DateTime? sameTimeForecast(
         minOffset: minOff,
       ) ??
       sameTime;
-  return (sameTime: sameTime, sameWeekday: sameWeekday);
+  return (sameTime: sameTime, sameWeekday: sameWeekday, timer: timer);
 }
 
 /// Orario previsto v2 dai candidati (regola congelata, punto 2).
