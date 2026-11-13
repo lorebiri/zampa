@@ -154,4 +154,71 @@ void main() {
     final m = _mood(s, now);
     expect(m.pose, Pose.concerned);
   });
+
+  group('Personalizzazione', () {
+    test('pelo, muso, accessori e pose: sempre disegnabili', () {
+      for (final coat in CoatType.values) {
+        for (final muzzle in MuzzleType.values) {
+          for (final acc in Accessory.values) {
+            for (final pose in Pose.values) {
+              final g = PixelDog.render(
+                AvatarLook(
+                  coatType: coat,
+                  muzzle: muzzle,
+                  accessory: acc,
+                  ears: EarType.lunghe,
+                ),
+                pose,
+                2,
+              );
+              final filled = g.expand((r) => r).where((c) => c != null);
+              expect(
+                filled.length,
+                greaterThan(80),
+                reason: '$coat $muzzle $acc $pose',
+              );
+            }
+          }
+        }
+      }
+    });
+
+    test(
+      'ogni razza preimpostata si disegna; Lulù è un bolognese a fiocchi',
+      () {
+        for (final b in BreedPreset.all) {
+          expect(
+            PixelDog.render(b.build(), Pose.happy, 0),
+            isNotEmpty,
+            reason: b.name,
+          );
+        }
+        final lulu = AvatarLook.lulu();
+        expect(lulu.coatType, CoatType.fiocchi);
+        expect(lulu.ears, EarType.lunghe);
+        expect(lulu.accessory, Accessory.fiocco);
+      },
+    );
+
+    test('i salvataggi vecchi restano validi', () {
+      final vecchio = AvatarLook.fromJson({
+        'size': 'piccola',
+        'coat': 0xFF000000,
+        'pattern': 'macchie',
+        'ears': 'dritte',
+        'tail': 'corta',
+        'longHair': true,
+        'collar': 0xFF123456,
+      });
+      expect(vecchio.coatType, CoatType.lungo);
+      expect(vecchio.longHair, isTrue);
+      expect(vecchio.muzzle, MuzzleType.medio);
+      expect(vecchio.accessory, Accessory.collare);
+      final nuovo = AvatarLook.fromJson(AvatarLook.lulu().toJson());
+      expect(nuovo.coatType, CoatType.fiocchi);
+      expect(nuovo.muzzle, MuzzleType.corto);
+      expect(nuovo.accessory, Accessory.fiocco);
+      expect(nuovo.ears, EarType.lunghe);
+    });
+  });
 }

@@ -13,19 +13,7 @@ import 'package:zampa/ui/avatar.dart';
 import 'package:zampa/ui/theme.dart';
 
 final _cani = <(String, AvatarLook)>[
-  (
-    '$mascotName · bolognese (predefinito)',
-    AvatarLook(
-      size: DogSize.piccola,
-      coat: 0xFFFBF8F2,
-      coat2: 0xFFE9DCC6,
-      pattern: CoatPattern.tinta,
-      ears: EarType.pendenti,
-      tail: TailType.arricciata,
-      longHair: true,
-      collar: 0xFFF26B4F,
-    ),
-  ),
+  ('$mascotName · bolognese (predefinito)', AvatarLook.lulu()),
   (
     'Birba · pinscher nero focato',
     AvatarLook(
@@ -112,8 +100,8 @@ void main() {
                   style: theme.textTheme.headlineSmall,
                 ),
                 Text(
-                  'Disegnati con il motore attuale dell\'app. Nuvolette, pelo a fiocchi o riccio, '
-                  'muso corto/lungo e accessori (fiocco, bandana) sono la parte da aggiungere.',
+                  'Disegnati dal motore dell\'app: razza di partenza, colori, pelo (raso, lungo, riccio, '
+                  'a fiocchi), muso, orecchie, coda e accessorio (collare, fiocco, bandana).',
                   style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),

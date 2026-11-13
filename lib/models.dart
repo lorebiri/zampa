@@ -1044,7 +1044,18 @@ enum DogSize { piccola, media, grande }
 
 enum CoatPattern { tinta, focature, pettoBianco, macchie, pezzato, maschera }
 
-enum EarType { dritte, pendenti, semi }
+/// Orecchie: dritte, cadenti, semierette o lunghe e pelose (bolognese,
+/// cocker), quasi confuse col pelo della testa.
+enum EarType { dritte, pendenti, semi, lunghe }
+
+/// Tipo di pelo: raso, lungo, riccio (barboncino), a fiocchi (bolognese).
+enum CoatType { raso, lungo, riccio, fiocchi }
+
+/// Lunghezza del muso: corto (brachicefali), medio, lungo (levrieri, collie).
+enum MuzzleType { corto, medio, lungo }
+
+/// Accessorio facoltativo, del colore scelto.
+enum Accessory { collare, fiocco, bandana, nessuno }
 
 enum TailType { lunga, arricciata, corta }
 
@@ -1056,9 +1067,27 @@ class AvatarLook {
     this.pattern = CoatPattern.pettoBianco,
     this.ears = EarType.pendenti,
     this.tail = TailType.lunga,
-    this.longHair = false,
+    bool longHair = false,
+    CoatType? coatType,
+    this.muzzle = MuzzleType.medio,
+    this.accessory = Accessory.collare,
     this.collar = 0xFFE0453A,
-  });
+  }) : coatType = coatType ?? (longHair ? CoatType.lungo : CoatType.raso);
+
+  /// Lulù, la mascotte: bolognese bianco a fiocchi, con il fiocco corallo.
+  /// È il personaggio del primo avvio.
+  factory AvatarLook.lulu() => AvatarLook(
+    size: DogSize.piccola,
+    coat: 0xFFFBF8F2,
+    coat2: 0xFFE9DCC6,
+    pattern: CoatPattern.tinta,
+    ears: EarType.lunghe,
+    tail: TailType.arricciata,
+    coatType: CoatType.fiocchi,
+    muzzle: MuzzleType.corto,
+    accessory: Accessory.fiocco,
+    collar: 0xFFF26B4F,
+  );
 
   factory AvatarLook.forWeight(double kg) => AvatarLook(
     size: kg < 10
@@ -1072,8 +1101,15 @@ class AvatarLook {
   CoatPattern pattern;
   EarType ears;
   TailType tail;
-  bool longHair;
+  CoatType coatType;
+  MuzzleType muzzle;
+  Accessory accessory;
   int collar;
+
+  /// Pelo lungo o a fiocchi (frange su corpo, coda e orecchie).
+  bool get longHair =>
+      coatType == CoatType.lungo || coatType == CoatType.fiocchi;
+  set longHair(bool v) => coatType = v ? CoatType.lungo : CoatType.raso;
 
   AvatarLook copy() => AvatarLook.fromJson(toJson());
 
@@ -1085,6 +1121,9 @@ class AvatarLook {
     'ears': ears.name,
     'tail': tail.name,
     'longHair': longHair,
+    'coatType': coatType.name,
+    'muzzle': muzzle.name,
+    'accessory': accessory.name,
     'collar': collar,
   };
 
@@ -1098,6 +1137,150 @@ class AvatarLook {
     ears: EarType.values.byName((j['ears'] as String?) ?? 'pendenti'),
     tail: TailType.values.byName((j['tail'] as String?) ?? 'lunga'),
     longHair: (j['longHair'] as bool?) ?? false,
+    coatType: _byNameOrNull(CoatType.values, j['coatType']),
+    muzzle: _byNameOrNull(MuzzleType.values, j['muzzle']) ?? MuzzleType.medio,
+    accessory:
+        _byNameOrNull(Accessory.values, j['accessory']) ?? Accessory.collare,
     collar: (j['collar'] as int?) ?? 0xFFE0453A,
   );
+}
+
+T? _byNameOrNull<T extends Enum>(List<T> values, Object? name) {
+  for (final v in values) {
+    if (v.name == name) return v;
+  }
+  return null;
+}
+
+/// Preimpostazioni per le razze più diffuse in Italia: punto di partenza,
+/// poi si ritocca a mano.
+class BreedPreset {
+  const BreedPreset(this.name, this.build);
+  final String name;
+  final AvatarLook Function() build;
+
+  static final all = <BreedPreset>[
+    BreedPreset('Bolognese (Lulù)', AvatarLook.lulu),
+    BreedPreset(
+      'Meticcio',
+      () => AvatarLook(coat: 0xFFC8955A, coat2: 0xFFF4E6CF),
+    ),
+    BreedPreset(
+      'Labrador',
+      () => AvatarLook(
+        size: DogSize.grande,
+        coat: 0xFFD9A55B,
+        coat2: 0xFFF1D6A6,
+        pattern: CoatPattern.tinta,
+      ),
+    ),
+    BreedPreset(
+      'Golden retriever',
+      () => AvatarLook(
+        size: DogSize.grande,
+        coat: 0xFFE0B04F,
+        coat2: 0xFFF1D6A6,
+        pattern: CoatPattern.tinta,
+        coatType: CoatType.lungo,
+      ),
+    ),
+    BreedPreset(
+      'Pastore tedesco',
+      () => AvatarLook(
+        size: DogSize.grande,
+        coat: 0xFF2D2726,
+        coat2: 0xFFB4762E,
+        pattern: CoatPattern.focature,
+        ears: EarType.dritte,
+        muzzle: MuzzleType.lungo,
+      ),
+    ),
+    BreedPreset(
+      'Jack Russell',
+      () => AvatarLook(
+        size: DogSize.piccola,
+        coat: 0xFFF7F4EE,
+        coat2: 0xFFB4592C,
+        pattern: CoatPattern.pezzato,
+        ears: EarType.semi,
+        tail: TailType.corta,
+      ),
+    ),
+    BreedPreset(
+      'Chihuahua',
+      () => AvatarLook(
+        size: DogSize.piccola,
+        coat: 0xFFE0B04F,
+        coat2: 0xFFF4E6CF,
+        ears: EarType.dritte,
+        muzzle: MuzzleType.corto,
+      ),
+    ),
+    BreedPreset(
+      'Barboncino',
+      () => AvatarLook(
+        size: DogSize.media,
+        coat: 0xFF2D2726,
+        coat2: 0xFF2D2726,
+        pattern: CoatPattern.tinta,
+        coatType: CoatType.riccio,
+        ears: EarType.lunghe,
+        tail: TailType.corta,
+      ),
+    ),
+    BreedPreset(
+      'Bassotto',
+      () => AvatarLook(
+        size: DogSize.piccola,
+        coat: 0xFF6B3E26,
+        coat2: 0xFFB4762E,
+        pattern: CoatPattern.focature,
+        muzzle: MuzzleType.lungo,
+      ),
+    ),
+    BreedPreset(
+      'Beagle',
+      () => AvatarLook(
+        size: DogSize.media,
+        coat: 0xFFB4762E,
+        coat2: 0xFFF7F4EE,
+        pattern: CoatPattern.pezzato,
+      ),
+    ),
+    BreedPreset(
+      'Border collie',
+      () => AvatarLook(
+        size: DogSize.media,
+        coat: 0xFF2D2726,
+        coat2: 0xFFF7F4EE,
+        pattern: CoatPattern.pettoBianco,
+        ears: EarType.semi,
+        coatType: CoatType.lungo,
+        muzzle: MuzzleType.lungo,
+      ),
+    ),
+    BreedPreset(
+      'Carlino o bulldog',
+      () => AvatarLook(
+        size: DogSize.piccola,
+        coat: 0xFFE7C99A,
+        coat2: 0xFFE7C99A,
+        pattern: CoatPattern.maschera,
+        ears: EarType.semi,
+        tail: TailType.arricciata,
+        muzzle: MuzzleType.corto,
+      ),
+    ),
+    BreedPreset(
+      'Yorkshire',
+      () => AvatarLook(
+        size: DogSize.piccola,
+        coat: 0xFF5E6B7D,
+        coat2: 0xFFC8955A,
+        pattern: CoatPattern.focature,
+        ears: EarType.dritte,
+        coatType: CoatType.lungo,
+      ),
+    ),
+  ];
 }

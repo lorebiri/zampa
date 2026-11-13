@@ -5,8 +5,8 @@ import 'avatar.dart';
 import 'common.dart';
 import 'theme.dart';
 
-/// Personalizzazione del compagno: taglia, mantello, motivo, orecchie, coda,
-/// pelo e collare, con anteprima dal vivo.
+/// Personalizzazione del compagno: razza di partenza, taglia, colori,
+/// mantello, pelo, muso, orecchie, coda e accessorio, con anteprima dal vivo.
 class AvatarEditorPage extends StatefulWidget {
   const AvatarEditorPage({super.key, required this.dog});
   final Dog dog;
@@ -16,7 +16,7 @@ class AvatarEditorPage extends StatefulWidget {
 }
 
 class _AvatarEditorPageState extends State<AvatarEditorPage> {
-  late final AvatarLook look = widget.dog.look.copy();
+  late AvatarLook look = widget.dog.look.copy();
   Pose preview = Pose.happy;
 
   static const coats = <(String, int)>[
@@ -97,6 +97,25 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
     );
   }
 
+  /// Scelta fra poche opzioni: chip che vanno a capo (testo grande ok).
+  Widget _chips<T>(
+    List<T> values,
+    T selected,
+    Map<T, String> labels,
+    void Function(T) set,
+  ) => Wrap(
+    spacing: 8,
+    runSpacing: 8,
+    children: [
+      for (final v in values)
+        ChoiceChip(
+          label: Text(labels[v]!),
+          selected: v == selected,
+          onSelected: (_) => setState(() => set(v)),
+        ),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context);
@@ -118,6 +137,24 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
             ],
             selected: {preview},
             onSelectionChanged: (s) => setState(() => preview = s.first),
+          ),
+          const SectionTitle('Parti da una razza'),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final b in BreedPreset.all)
+                ActionChip(
+                  label: Text(b.name),
+                  onPressed: () => setState(() {
+                    final keep = look.collar;
+                    look = b.build();
+                    if (b.build().accessory != Accessory.fiocco) {
+                      look.collar = keep;
+                    }
+                  }),
+                ),
+            ],
           ),
           const SectionTitle('Taglia'),
           SegmentedButton<DogSize>(
@@ -170,22 +207,26 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
                 ),
             ],
           ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: const Text('Pelo lungo'),
-            value: look.longHair,
-            onChanged: (v) => setState(() => look.longHair = v),
-          ),
+          const SectionTitle('Pelo'),
+          _chips<CoatType>(CoatType.values, look.coatType, {
+            CoatType.raso: 'Raso',
+            CoatType.lungo: 'Lungo',
+            CoatType.riccio: 'Riccio',
+            CoatType.fiocchi: 'A fiocchi',
+          }, (v) => look.coatType = v),
+          const SectionTitle('Muso'),
+          _chips<MuzzleType>(MuzzleType.values, look.muzzle, {
+            MuzzleType.corto: 'Corto',
+            MuzzleType.medio: 'Medio',
+            MuzzleType.lungo: 'Lungo',
+          }, (v) => look.muzzle = v),
           const SectionTitle('Orecchie'),
-          SegmentedButton<EarType>(
-            segments: const [
-              ButtonSegment(value: EarType.dritte, label: Text('Dritte')),
-              ButtonSegment(value: EarType.semi, label: Text('Semi')),
-              ButtonSegment(value: EarType.pendenti, label: Text('Pendenti')),
-            ],
-            selected: {look.ears},
-            onSelectionChanged: (s) => setState(() => look.ears = s.first),
-          ),
+          _chips<EarType>(EarType.values, look.ears, {
+            EarType.dritte: 'Dritte',
+            EarType.semi: 'Semierette',
+            EarType.pendenti: 'Cadenti',
+            EarType.lunghe: 'Lunghe e pelose',
+          }, (v) => look.ears = v),
           const SectionTitle('Coda'),
           SegmentedButton<TailType>(
             segments: const [
@@ -199,7 +240,14 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
             selected: {look.tail},
             onSelectionChanged: (s) => setState(() => look.tail = s.first),
           ),
-          const SectionTitle('Collare'),
+          const SectionTitle('Accessorio'),
+          _chips<Accessory>(Accessory.values, look.accessory, {
+            Accessory.collare: 'Collare',
+            Accessory.fiocco: 'Fiocco',
+            Accessory.bandana: 'Bandana',
+            Accessory.nessuno: 'Nessuno',
+          }, (v) => look.accessory = v),
+          const SizedBox(height: Space.s),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -209,7 +257,7 @@ class _AvatarEditorPageState extends State<AvatarEditorPage> {
                   c,
                   look.collar == c,
                   () => setState(() => look.collar = c),
-                  tip: 'Collare',
+                  tip: 'Colore dell\'accessorio',
                 ),
             ],
           ),

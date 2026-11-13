@@ -212,7 +212,7 @@ class WelcomePage extends StatelessWidget {
         CompanionDevice(
           child: ExcludeSemantics(
             child: PixelDogView(
-              look: AvatarLook(),
+              look: AvatarLook.lulu(),
               pose: Pose.happy,
               height: 150,
             ),

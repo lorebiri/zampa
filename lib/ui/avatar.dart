@@ -153,29 +153,54 @@ class PixelDog {
       }
     }
 
+    // Pelo riccio o a fiocchi: riccioli d'ombra sparsi (si legge anche
+    // piccolo) e bordo del corpo mosso.
+    final curly =
+        look.coatType == CoatType.riccio || look.coatType == CoatType.fiocchi;
+    final curlShade = look.coatType == CoatType.fiocchi
+        ? Color.lerp(main, sec, 0.7)!
+        : Color.lerp(main, Colors.black, 0.18)!;
+    bool curl(int x, int y) => (x * 3 + y * 5) % 7 == 0 || (x + y * 2) % 9 == 0;
+    Color curlyBody(int x, int y) {
+      final c = bodyColor(x, y);
+      return curly && c == main && curl(x, y) ? curlShade : c;
+    }
+
     // Corpo.
-    ellipse(cx, cy, rx, ry, bodyColor);
+    ellipse(cx, cy, rx, ry, curlyBody);
+    if (curly) {
+      for (var x = (cx - rx + 1).round(); x < (cx + rx).round(); x += 3) {
+        px(x, (cy - ry).round() - 1, main);
+        px(x, (cy + ry).round() + 1, main);
+      }
+    }
     if (look.longHair) {
       for (var x = (cx - rx + 2).round(); x < (cx + rx - 1).round(); x += 2) {
         px(x, (cy + ry).round(), bodyColor(x, (cy + ry).round()));
       }
     }
 
-    // Collare.
+    // Accessorio (collare, bandana; il fiocco va sulla testa più avanti).
     final collar = Color(look.collar);
-    for (
-      var y = (hy + headR * 0.45).round();
-      y <= (cy - ry * 0.1).round();
-      y++
-    ) {
-      px((hx - headR * 0.55).round(), y, collar);
-      px((hx - headR * 0.55).round() + 1, y, collar);
+    final neckX = (hx - headR * 0.55).round();
+    if (look.accessory == Accessory.collare) {
+      for (
+        var y = (hy + headR * 0.45).round();
+        y <= (cy - ry * 0.1).round();
+        y++
+      ) {
+        px(neckX, y, collar);
+        px(neckX + 1, y, collar);
+      }
+      px(neckX + 1, (cy - ry * 0.1).round() + 1, const Color(0xFFF2C94C));
+    } else if (look.accessory == Accessory.bandana) {
+      final top = (hy + headR * 0.45).round();
+      for (var i = 0; i < 4; i++) {
+        for (var x = neckX - 1 + i; x <= neckX + 3 - i; x++) {
+          px(x, top + i, collar);
+        }
+      }
     }
-    px(
-      (hx - headR * 0.55).round() + 1,
-      (cy - ry * 0.1).round() + 1,
-      const Color(0xFFF2C94C),
-    );
 
     // Testa e muso.
     Color headColor(int x, int y) {
@@ -184,8 +209,26 @@ class PixelDog {
       return main;
     }
 
-    ellipse(hx, hy, headR, headR * 1.02, headColor);
-    final mx = hx + headR * 0.85, my = hy + headR * 0.3;
+    ellipse(
+      hx,
+      hy,
+      headR,
+      headR * 1.02,
+      (x, y) => curly && headColor(x, y) == main && curl(x, y + 1)
+          ? curlShade
+          : headColor(x, y),
+    );
+    if (curly) {
+      // Ciuffo in cima alla testa.
+      px(hx.round() - 1, (hy - headR).round() - 1, main);
+      px(hx.round() + 1, (hy - headR).round() - 1, main);
+    }
+    final mk = switch (look.muzzle) {
+      MuzzleType.corto => 0.55,
+      MuzzleType.medio => 1.0,
+      MuzzleType.lungo => 1.45,
+    };
+    final mx = hx + headR * (0.6 + 0.25 * mk), my = hy + headR * 0.3;
     final muzzleSec =
         look.pattern == CoatPattern.focature ||
         look.pattern == CoatPattern.pettoBianco ||
@@ -193,12 +236,12 @@ class PixelDog {
     ellipse(
       mx,
       my,
-      2.2 + 0.4 * k,
+      (2.2 + 0.4 * k) * mk,
       1.6 + 0.3 * k,
       (_, _) => muzzleSec ? sec : main,
     );
     px(
-      (mx + 2.2 + 0.4 * k).round() - 1,
+      (mx + (2.2 + 0.4 * k) * mk).round() - 1,
       (my - 0.6).round(),
       const Color(0xFF2B1B17),
     ); // naso
@@ -255,12 +298,38 @@ class PixelDog {
           2.8 + (look.longHair ? 1 : 0),
           (_, _) => dark,
         );
+      case EarType.lunghe:
+        // Lunghe e pelose, quasi confuse col pelo della testa.
+        ellipse(
+          earX - 0.6,
+          hy + 1.6,
+          1.8,
+          3.8 + (look.longHair ? 0.8 : 0),
+          (x, y) =>
+              curly && curl(x, y) ? curlShade : Color.lerp(main, sec, 0.35)!,
+        );
       case EarType.semi:
         for (var d = -1; d <= 1; d++) {
           px((earX + d).round(), earTop.round(), main);
         }
         px(earX.round() + 1, earTop.round() - 1, dark);
         px(earX.round() + 2, earTop.round(), dark);
+    }
+
+    // Fiocco sulla testa.
+    if (look.accessory == Accessory.fiocco) {
+      final bx = (hx - headR * 0.1).round(), by = (hy - headR).round() - 1;
+      for (final (dx, dy) in [
+        (-2, 0),
+        (-1, 0),
+        (-2, -1),
+        (1, 0),
+        (2, 0),
+        (2, -1),
+      ]) {
+        px(bx + dx, by + dy, collar);
+      }
+      px(bx, by, Color.lerp(collar, Colors.black, 0.3)!);
     }
 
     // Contorno pixel.
