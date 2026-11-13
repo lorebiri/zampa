@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import '../models.dart';
 import 'bio_params.dart';
+import 'poop_forecast.dart';
 import 'potty_predictor.dart';
 
 /// PIANO DI USCITE (ricerca/28 §3)
@@ -20,9 +21,9 @@ import 'potty_predictor.dart';
 ///   • il cane ha una «tenuta» propria C (in minuti di carico): rischio di
 ///     incidente in un intervallo = P(C < carico), log-normale con σ 0,3;
 ///   • C si impara dallo storico: incidenti in casa (C ≈ carico), uscite
-///     senza incidente (C > carico, dato censurato) e segnali (il cane chiede
-///     a metà della tenuta [IPOTESI]), partendo da 2 × il tetto diurno per
-///     età (`BioParams.pee.maxDay`) [IPOTESI].
+///     senza incidente (C > carico, dato censurato), partendo da 2 × il
+///     tetto diurno per età (`BioParams.pee.maxDay`) [IPOTESI]. I segnali non
+///     entrano nella tenuta (v3.1, ricerca/28 §3.4): servono a «Esci adesso».
 /// Il tetto diurno per età e malattia resta un limite: un intervallo che lo
 /// supera è penalizzato e segnalato, anche se il rischio stimato è basso.
 
@@ -122,7 +123,21 @@ class PlanParams {
     this.capPenalty = 0.3,
     this.step = 15,
     this.historyDays = 21,
+    this.signalsInHold = false,
+    this.poopWeight = 0.5,
+    this.poopWait = 240,
   });
+
+  /// v3.1: costo (incidenti attesi) di un intervallo senza uscite che copre
+  /// tutta la finestra della cacca attesa (dall'orario previsto a [poopWait]
+  /// minuti dopo) [IPOTESI].
+  final double poopWeight;
+  final int poopWait;
+
+  /// Regola congelata: i segnali entravano nella tenuta («C ≈ 2 × carico»).
+  /// Sul banco gonfiavano il rischio stimato di 4 volte (segnali lievi,
+  /// falsi e della cacca): ora i segnali servono solo a «Esci adesso».
+  final bool signalsInHold;
   final double sleepWeight, mealLoad, sigma, priorFactor, priorSd;
   final double signalFactor, capPenalty;
   final int step, historyDays;
@@ -281,7 +296,9 @@ class HoldModel {
       obs.add((l, pees[k].indoor, w));
     }
     // Segnali: il cane chiede a circa metà della sua tenuta [IPOTESI].
-    for (final s in visible.where((l) => l.type == LogType.segnale)) {
+    for (final s in visible.where(
+      (l) => p.signalsInHold && l.type == LogType.segnale,
+    )) {
       if (s.time.isBefore(from)) continue;
       DateTime? before;
       for (final q in pees) {
@@ -327,6 +344,7 @@ OutingPlan planDay(
   int n, {
   required DateTime lastPee,
   int done = 0,
+  DateTime? poopDue,
 }) {
   final dog = hm.dog;
   final p = hm.p;
@@ -384,9 +402,17 @@ OutingPlan planDay(
   int gi(DateTime t) => t.difference(t0).inMinutes ~/ p.step;
   final slotG = [for (final t in slots) gi(t)];
   final lastG = grid.length - 1;
-  double costIdx(int h, int i) => h < 0
-      ? costOf(l0 + cl[i], a0 + ca[i])
-      : costOf(cl[i] - cl[h], ca[i] - ca[h]);
+  // Cacca attesa: un intervallo che copre tutta la sua finestra costa.
+  final poopEnd = poopDue?.add(Duration(minutes: p.poopWait));
+  double poopCost(DateTime a, DateTime b) =>
+      poopDue != null && !a.isAfter(poopDue) && b.isAfter(poopEnd!)
+      ? p.poopWeight
+      : 0;
+  double costIdx(int h, int i) =>
+      (h < 0
+          ? costOf(l0 + cl[i], a0 + ca[i])
+          : costOf(cl[i] - cl[h], ca[i] - ca[h])) +
+      poopCost(h < 0 ? lastPee : grid[h], grid[i]);
 
   if (k == 0) {
     final r = hm.riskOfLoad(hm.load(lastPee, nextFirst, owner: owner));
@@ -432,7 +458,8 @@ OutingPlan planDay(
   }
   if (bi < 0) {
     // Meno orari possibili del necessario (uscite a meno di un'ora).
-    return planDay(hm, owner, now, n - 1, lastPee: lastPee, done: done);
+    return planDay(hm, owner, now, n - 1,
+        lastPee: lastPee, done: done, poopDue: poopDue);
   }
   final idx = <int>[];
   for (var j = k - 1, i = bi; j >= 0; j--) {
@@ -479,8 +506,12 @@ List<OutingPlan> planOptions(
   final wake = day.add(Duration(minutes: owner.wakeOn(dog, day)));
   final last = pees.isEmpty ? wake : pees.last.time;
   final done = pees.where((o) => !o.indoor && !o.time.isBefore(wake)).length;
+  final due = poopCandidates(dog, [
+    for (final l in logs)
+      if (!l.time.isAfter(now)) l,
+  ], now)?.at;
   return [
     for (final n in options)
-      planDay(hm, owner, now, n, lastPee: last, done: done),
+      planDay(hm, owner, now, n, lastPee: last, done: done, poopDue: due),
   ];
 }

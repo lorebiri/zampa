@@ -297,7 +297,9 @@ PlanDogResult simulatePlan(
               .where((o) => !o.indoor && !o.time.isBefore(wake))
               .length;
           final pd = planDay(hm, os, now, arm.n,
-              lastPee: lastLoggedPee(now), done: done);
+              lastPee: lastLoggedPee(now),
+              done: done,
+              poopDue: poopCandidates(dog, vis, now)?.at);
           plan = pd.times;
           needReplan = false;
         }
@@ -335,7 +337,8 @@ PlanDogResult simulatePlan(
       if (arm.kind == 'piano' && counting(t)) {
         final vis = [for (final l in logged) if (!l.time.isAfter(t)) l];
         final hm = HoldModel.fit(dog, vis, t, owner: os);
-        final pd = planDay(hm, os, t, arm.n, lastPee: lastLoggedPee(t));
+        final pd = planDay(hm, os, t, arm.n,
+            lastPee: lastLoggedPee(t), poopDue: poopCandidates(dog, vis, t)?.at);
         res.predicted += pd.expectedAccidents;
         plan = pd.times;
         needReplan = false;
