@@ -11,6 +11,7 @@ import 'chart_summary.dart';
 import 'common.dart';
 import 'home_screen.dart';
 import 'log_sheet.dart';
+import 'potty_v3.dart';
 
 class PottyScreen extends StatefulWidget {
   const PottyScreen({super.key});
@@ -61,9 +62,15 @@ class _PottyScreenState extends State<PottyScreen> {
               onSelectionChanged: (s) => setState(() => need = s.first),
             ),
           ),
+          if (kPrevisioneV3InVista) SignalBanner(dog: dog, logs: logs),
           ForecastCard(forecast: f, dog: dog),
           if (need == Need.pipi && f.v2 != null && kPrevisioneV2InVista)
             _V2Card(v: f.v2!, dog: dog, now: now),
+          if (need == Need.cacca && kPrevisioneV3InVista)
+            PoopV3Card(dog: dog, logs: logs),
+          if (kPrevisioneV3InVista) SignalButtons(dog: dog),
+          if (need == Need.pipi && kPrevisioneV3InVista)
+            OutingPlanCard(dog: dog, logs: logs),
           const SectionTitle('Come calcola l\'orario'),
           Card(
             child: Padding(
@@ -190,6 +197,7 @@ class _PottyScreenState extends State<PottyScreen> {
               padding: EdgeInsets.all(16),
               child: Text('Ancora nessuna registrazione.'),
             ),
+          if (kPrevisioneV3InVista) StudyExportTile(dog: dog),
           const SizedBox(height: 8),
           Text(
             'Scorri verso sinistra una voce per eliminarla.',
@@ -223,6 +231,10 @@ class _PottyScreenState extends State<PottyScreen> {
 /// [kPrevisioneV2InVista] finché il CEO non decide se sostituire la
 /// previsione di base anche nella Home.
 const bool kPrevisioneV2InVista = true;
+
+/// Schede v3 (ricerca/28): segnali, cacca legata ai pasti, piano di uscite,
+/// esportazione per lo studio.
+const bool kPrevisioneV3InVista = true;
 
 class _V2Card extends StatelessWidget {
   const _V2Card({required this.v, required this.dog, required this.now});

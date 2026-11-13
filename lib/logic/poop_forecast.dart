@@ -214,12 +214,7 @@ int? _nearestSlot(List<int> slots, int m, {int tol = 90}) {
     days: p.slotDays,
     freq: p.slotFreq,
   );
-  final outSlots = habitualSlots(
-    outs,
-    now,
-    days: p.slotDays,
-    freq: p.slotFreq,
-  );
+  final outSlots = habitualSlots(outs, now, days: p.slotDays, freq: p.slotFreq);
 
   // Valori tipici senza storia [STIMA, 05 §P8]: pasto, risposta precoce con
   // picco a 30 minuti (cucciolo 20); passeggiata nei primi 10 minuti.

@@ -451,6 +451,7 @@ extension LogTypeIcon on LogType {
     LogType.addomeGonfio => Icons.circle_outlined,
     LogType.mammelle => Icons.child_friendly_outlined,
     LogType.ferita => Icons.healing_outlined,
+    LogType.segnale => Icons.sensor_door_outlined,
   };
 }
 
