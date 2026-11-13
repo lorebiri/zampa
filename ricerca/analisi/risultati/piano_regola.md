@@ -2,7 +2,7 @@
 
 *13/11/2026.*
 
-## Regola v3.0 (parametri scritti prima di qualsiasi esecuzione, `PlanParams` nel commit `d1d6a4b` e seguenti; nessuna taratura)
+## Regola v3.0 (parametri scritti prima di qualsiasi esecuzione, `PlanParams` nel commit `5cd8b36`; nessuna taratura)
 
 Tenuta log-normale σ 0,3 imparata da incidenti (eventi), uscite senza incidente (censurati) e segnali («C ≈ 2 × carico», peso 0,5); partenza 2 × tetto diurno; carico = sveglio + 0,4 × sonno + 40 min per pasto; programmazione dinamica su orari ogni 15 min con padrone a casa e sveglio, ≥ 60 min tra uscite; penalità 0,3 oltre il tetto.
 
