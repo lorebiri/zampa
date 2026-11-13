@@ -363,3 +363,18 @@ Per annullare una parte basta `git revert <commit>`.
 Non fatto, da decidere: compagno nelle notifiche e widget Android (dopo), colori proposti da una
 foto (in locale). Animazioni: restano quelle a pochi frame già presenti; ferme con «riduci movimento».
 Test: 197 passati; analyze pulito.
+
+## Aggiornamento: logo C applicato e stati d'animo marcati
+
+- **Logo** (`2f537f5`): variante C, la P-cane geometrica. È il marchio predefinito di
+  `tool/marchi.py`; `python3 tool/gen_icons.py` rigenera icone Android (adattiva e mipmap), web
+  (favicon, 192, 512, maskable, apple-touch), iOS, macOS, Windows e il logo esteso chiaro e scuro
+  (`docs/brand/logo-pellovi-*.png`). La pagina di download usa il logo esteso e i colori nuovi;
+  anche la schermata d'attesa è in corallo.
+- **Stati d'animo** (`288490a`, `d9bed43`): felice salta con i cuoricini; sereno è seduto e
+  scodinzola piano; impaziente sta davanti alla porta, gratta con la zampa e ha la nuvoletta;
+  affamato tiene il muso sulla ciotola con la lingua fuori; assonnato è invariato; preoccupato ha
+  le orecchie basse, lo sguardo in su e la croce del veterinario. Animazioni a 2-4 fotogrammi,
+  ferme con «riduci movimento». Anteprima: `docs/design/tamagotchi-anteprima.png`. Screenshot
+  dell'app rigenerati in `docs/design/app-*.png`.
+- Test: 197 passati; analyze pulito.
