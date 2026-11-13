@@ -19,6 +19,7 @@ import '../notifications.dart';
 import '../store.dart';
 import 'common.dart';
 import 'avatar_editor.dart';
+import 'device_notice.dart';
 import 'dog_wizard.dart';
 import 'health_screen.dart';
 import 'avatar.dart';
@@ -114,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
         DogHeader(dog: dog),
         if (isDemoId(dog.id)) const _DemoBanner(),
         if (!isDemoId(dog.id)) const _NotificationsOffBanner(),
+        if (!isDemoId(dog.id)) const DeviceNotice(),
         // Le urgenze vengono prima del compagno: una cosa seria non deve
         // sembrare un gioco (revisione veterinaria).
         for (final a in alerts.where(

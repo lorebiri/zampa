@@ -663,6 +663,8 @@ class DogPhotoField extends StatelessWidget {
       );
       if (x == null) return;
       onChanged(await store.savePhoto(await x.readAsBytes()));
+    } on PhotoSpaceFull catch (e) {
+      if (context.mounted) toast(context, e.message);
     } catch (_) {
       if (context.mounted) {
         toast(context, 'Foto non disponibile su questo dispositivo');

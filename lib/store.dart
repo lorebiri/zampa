@@ -22,8 +22,19 @@ import 'sync/sync_engine.dart';
 /// Stato dell'app e persistenza locale (JSON in SharedPreferences, che
 /// funziona su iOS, Android, web e desktop).
 class AppStore extends ChangeNotifier implements SyncTarget {
-  AppStore({SharedPreferences? prefs, this.notifier, this.namespace = ''})
-    : _prefs = prefs; // ignore: prefer_initializing_formals
+  AppStore({
+    SharedPreferences? prefs,
+    this.notifier,
+    this.namespace = '',
+    this.photoBudgetChars = defaultPhotoBudgetChars,
+  }) : _prefs = prefs; // ignore: prefer_initializing_formals
+
+  /// Sul web i dati stanno nel localStorage del browser, che tiene circa
+  /// 5 MB in tutto: se le foto lo riempissero, non si salverebbero più
+  /// nemmeno cani, diari e terapie. Le foto hanno quindi un tetto (in
+  /// caratteri base64, circa 1,5 MB). Su Android e iOS nessun tetto.
+  static const int? defaultPhotoBudgetChars = kIsWeb ? 1500000 : null;
+  final int? photoBudgetChars;
 
   /// Prefisso delle chiavi di salvataggio (più profili nello stesso test).
   final String namespace;
@@ -544,7 +555,16 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   Future<String> savePhoto(Uint8List bytes) async {
     _prefs ??= await SharedPreferences.getInstance();
     final id = newId();
-    await _prefs!.setString('photo_$id', base64Encode(bytes));
+    final encoded = base64Encode(bytes);
+    final budget = photoBudgetChars;
+    if (budget != null) {
+      var used = 0;
+      for (final k in _prefs!.getKeys().where((k) => k.startsWith('photo_'))) {
+        used += _prefs!.getString(k)?.length ?? 0;
+      }
+      if (used + encoded.length > budget) throw const PhotoSpaceFull();
+    }
+    await _prefs!.setString('photo_$id', encoded);
     return id;
   }
 
@@ -1086,4 +1106,16 @@ class PlannedNotification {
 
   /// Da consegnare all'orario esatto anche in risparmio energetico.
   final bool exact;
+}
+
+/// Spazio per le foto esaurito (solo web, vedi [AppStore.photoBudgetChars]).
+class PhotoSpaceFull implements Exception {
+  const PhotoSpaceFull();
+
+  String get message =>
+      'Spazio per le foto esaurito in questa versione web. Le foto si '
+      'possono aggiungere senza limiti nell\'app Android.';
+
+  @override
+  String toString() => message;
 }

@@ -451,6 +451,8 @@ class _LogSheetState extends State<_LogSheet> {
       if (x == null) return;
       final id = await store.savePhoto(await x.readAsBytes());
       setState(() => photoId = id);
+    } on PhotoSpaceFull catch (e) {
+      if (mounted) toast(context, e.message);
     } catch (e) {
       if (mounted) toast(context, 'Foto non disponibile su questo dispositivo');
     }

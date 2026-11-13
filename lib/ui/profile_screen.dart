@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../brand.dart';
 import '../store.dart';
@@ -112,6 +114,22 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
         ),
+        // Solo nella web app: pagina con l'APK Android e le istruzioni per
+        // aggiungere l'app alla schermata Home dell'iPhone.
+        if (kIsWeb) ...[
+          const SectionTitle('Installa'),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.download_outlined),
+              title: const Text('Installa $appName sul telefono'),
+              subtitle: const Text('Android (APK) e iPhone (schermata Home)'),
+              onTap: () => launchUrl(
+                Uri.base.resolve('download.html'),
+                webOnlyWindowName: '_self',
+              ),
+            ),
+          ),
+        ],
         const SectionTitle('Informazioni'),
         Card(
           child: Padding(
