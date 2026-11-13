@@ -1,0 +1,445 @@
+## v21 weekend_pipi_e3 BASE (tutti)
+- n eventi / cani: 1132 / 32
+- errore mediano (min): 44 [38–55]
+- errore mediano timer (min): 53 [45–64]
+- errore mediano stesso orario 7 gg (min): 43 [37–48]
+- R / timer (per cane): 1.04 [0.84–1.19]
+- R / stesso orario 7 gg: 1.50 [1.11–1.85]
+- R / stesso giorno sett.: 1.61 [1.17–2.01]
+- cani in cui batte il timer: 59% [47%–74%]
+- copertura della finestra mostrata: 79% [76%–82%]
+- ampiezza mediana della finestra (min): 312
+- errore con segno mediano (− = in ritardo): 12
+- errore mediano vs evento VERO (min): 44
+- tetto da sveglio rispettato (T15): 1132/1132
+## v21 weekend_pipi_e3 BASE — gruppo cucciolo
+- n eventi / cani: 375 / 6
+- errore mediano (min): 33 [27–41]
+- errore mediano timer (min): 41 [37–47]
+- errore mediano stesso orario 7 gg (min): 37 [28–45]
+- R / timer (per cane): 0.82 [0.71–0.97]
+- R / stesso orario 7 gg: 1.00 [0.91–1.10]
+- R / stesso giorno sett.: 1.15 [0.90–1.41]
+- cani in cui batte il timer: 83% [67%–100%]
+- copertura della finestra mostrata: 83% [80%–87%]
+- ampiezza mediana della finestra (min): 193
+- errore con segno mediano (− = in ritardo): 9
+- errore mediano vs evento VERO (min): 33
+- tetto da sveglio rispettato (T15): 375/375
+
+## v21 weekend_pipi_e3 BASE — gruppo adulto
+- n eventi / cani: 356 / 14
+- errore mediano (min): 62 [48–92]
+- errore mediano timer (min): 73 [57–106]
+- errore mediano stesso orario 7 gg (min): 49 [44–64]
+- R / timer (per cane): 1.15 [0.79–1.42]
+- R / stesso orario 7 gg: 1.95 [1.14–2.99]
+- R / stesso giorno sett.: 2.12 [1.19–3.14]
+- cani in cui batte il timer: 57% [38%–78%]
+- copertura della finestra mostrata: 74% [68%–80%]
+- ampiezza mediana della finestra (min): 555
+- errore con segno mediano (− = in ritardo): 16
+- errore mediano vs evento VERO (min): 62
+- tetto da sveglio rispettato (T15): 356/356
+
+## v21 weekend_pipi_e3 BASE — gruppo anziano
+- n eventi / cani: 191 / 6
+- errore mediano (min): 62 [46–74]
+- errore mediano timer (min): 66 [65–72]
+- errore mediano stesso orario 7 gg (min): 46 [32–65]
+- R / timer (per cane): 0.93 [0.83–1.05]
+- R / stesso orario 7 gg: 1.28 [1.08–1.51]
+- R / stesso giorno sett.: 1.36 [1.18–1.60]
+- cani in cui batte il timer: 50% [25%–75%]
+- copertura della finestra mostrata: 81% [78%–83%]
+- ampiezza mediana della finestra (min): 346
+- errore con segno mediano (− = in ritardo): 16
+- errore mediano vs evento VERO (min): 62
+- tetto da sveglio rispettato (T15): 191/191
+
+## v21 weekend_pipi_e3 BASE — gruppo cronico
+- n eventi / cani: 131 / 3
+- errore mediano (min): 32 [25–42]
+- errore mediano timer (min): 46 [28–60]
+- errore mediano stesso orario 7 gg (min): 36 [33–39]
+- R / timer (per cane): 0.67 [0.42–0.96]
+- R / stesso orario 7 gg: 0.87 [0.75–1.08]
+- R / stesso giorno sett.: 0.97 [0.75–1.24]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura della finestra mostrata: 82% [78%–86%]
+- ampiezza mediana della finestra (min): 327
+- errore con segno mediano (− = in ritardo): 10
+- errore mediano vs evento VERO (min): 32
+- tetto da sveglio rispettato (T15): 131/131
+
+## v21 weekend_pipi_e3 BASE — gruppo poliuria
+- n eventi / cani: 79 / 3
+- errore mediano (min): 60 [47–92]
+- errore mediano timer (min): 64 [45–88]
+- errore mediano stesso orario 7 gg (min): 69 [52–90]
+- R / timer (per cane): 1.08 [1.04–1.14]
+- R / stesso orario 7 gg: 1.06 [0.90–1.22]
+- R / stesso giorno sett.: 0.98 [0.78–1.37]
+- cani in cui batte il timer: 0% [0%–0%]
+- copertura della finestra mostrata: 76% [67%–89%]
+- ampiezza mediana della finestra (min): 419
+- errore con segno mediano (− = in ritardo): 5
+- errore mediano vs evento VERO (min): 60
+- tetto da sveglio rispettato (T15): 79/79
+
+## v21 weekend_pipi_e3 BASE — a richiesta
+- n eventi / cani: 1132 / 32
+- errore mediano (min): 44 [38–55]
+- errore mediano timer (min): 53 [45–64]
+- errore mediano stesso orario 7 gg (min): 43 [37–48]
+- R / timer (per cane): 1.04 [0.84–1.19]
+- R / stesso orario 7 gg: 1.50 [1.11–1.85]
+- R / stesso giorno sett.: 1.61 [1.17–2.01]
+- cani in cui batte il timer: 59% [47%–74%]
+- copertura della finestra mostrata: 79% [76%–82%]
+- ampiezza mediana della finestra (min): 312
+- errore con segno mediano (− = in ritardo): 12
+- errore mediano vs evento VERO (min): 44
+- tetto da sveglio rispettato (T15): 1132/1132
+
+## v21 weekend_pipi_e3 BASE — fine settimana
+- n eventi / cani: 296 / 32
+- errore mediano (min): 48 [41–61]
+- errore mediano timer (min): 58 [49–66]
+- errore mediano stesso orario 7 gg (min): 63 [49–71]
+- R / timer (per cane): 0.97 [0.88–1.05]
+- R / stesso orario 7 gg: 1.15 [0.85–1.40]
+- R / stesso giorno sett.: 1.79 [1.13–2.48]
+- cani in cui batte il timer: 56% [45%–70%]
+- copertura della finestra mostrata: 83% [78%–87%]
+- ampiezza mediana della finestra (min): 317
+- errore con segno mediano (− = in ritardo): 20
+- errore mediano vs evento VERO (min): 48
+- tetto da sveglio rispettato (T15): 296/296
+
+## v21 weekend_pipi_e3 BASE — dopo il cambio di routine (g. 15-28)
+- n eventi / cani: 754 / 32
+- errore mediano (min): 45 [39–58]
+- errore mediano timer (min): 58 [48–69]
+- errore mediano stesso orario 7 gg (min): 45 [40–50]
+- R / timer (per cane): 0.93 [0.82–1.04]
+- R / stesso orario 7 gg: 1.31 [1.12–1.49]
+- R / stesso giorno sett.: 1.19 [1.00–1.44]
+- cani in cui batte il timer: 53% [39%–67%]
+- copertura della finestra mostrata: 78% [75%–81%]
+- ampiezza mediana della finestra (min): 324
+- errore con segno mediano (− = in ritardo): 11
+- errore mediano vs evento VERO (min): 45
+- tetto da sveglio rispettato (T15): 754/754
+
+## v21 weekend_pipi_e3 BASE — solo di giorno (no notte)
+- n eventi / cani: 878 / 32
+- errore mediano (min): 51 [43–66]
+- errore mediano timer (min): 60 [46–75]
+- errore mediano stesso orario 7 gg (min): 47 [41–56]
+- R / timer (per cane): 0.95 [0.87–1.02]
+- R / stesso orario 7 gg: 0.93 [0.76–1.25]
+- R / stesso giorno sett.: 0.91 [0.74–1.24]
+- cani in cui batte il timer: 59% [45%–74%]
+- copertura della finestra mostrata: 84% [81%–87%]
+- ampiezza mediana della finestra (min): 305
+- errore con segno mediano (− = in ritardo): 13
+- errore mediano vs evento VERO (min): 51
+- tetto da sveglio rispettato (T15): 878/878
+
+## v21 weekend_pipi_e3 BASE — prima pipì del mattino (dopo la notte)
+- n eventi / cani: 254 / 32
+- errore mediano (min): 21 [17–27]
+- errore mediano timer (min): 38 [32–46]
+- errore mediano stesso orario 7 gg (min): 21 [19–27]
+- R / timer (per cane): 1.04 [0.77–1.19]
+- R / stesso orario 7 gg: 2.57 [1.21–4.00]
+- R / stesso giorno sett.: 1.82 [1.10–2.79]
+- cani in cui batte il timer: 75% [64%–88%]
+- copertura della finestra mostrata: 63% [55%–70%]
+- ampiezza mediana della finestra (min): 409
+- errore con segno mediano (− = in ritardo): 9
+- errore mediano vs evento VERO (min): 21
+- tetto da sveglio rispettato (T15): 254/254
+
+
+## v21 weekend_pipi_e3 V2 (tutti)
+- n eventi / cani: 1132 / 32
+- errore mediano (min): 39 [32–46]
+- errore mediano timer (min): 53 [45–64]
+- errore mediano stesso orario 7 gg (min): 43 [37–48]
+- R / timer (per cane): 0.70 [0.62–0.81]
+- R / stesso orario 7 gg: 1.01 [0.92–1.11]
+- R / stesso giorno sett.: 1.09 [0.97–1.21]
+- cani in cui batte il timer: 75% [63%–87%]
+- copertura intervallo 10-90% (nominale 80%): 81% [79%–84%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 13% [12%–15%]
+- pipì prima dell'uscita consigliata di base: 18% [16%–21%]
+- minuti tra avviso v2 e pipì (mediana): 82
+- minuti tra uscita consigliata di base e pipì (mediana): 71
+- ampiezza mediana della finestra 50% (min): 96
+- fiducia bassa / media / alta: 15% / 46% / 39%
+- fiducia bassa: errore mediano / copertura 50%: 62 min / 61%
+- fiducia media: errore mediano / copertura 50%: 40 min / 54%
+- fiducia alta: errore mediano / copertura 50%: 35 min / 45%
+- copertura 25-75% (nominale 50%): 52% [49%–55%]
+- ampiezza mediana della finestra (min): 278
+- errore con segno mediano (− = in ritardo): 6
+- errore mediano vs evento VERO (min): 39
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 11% / 10%
+- tetto da sveglio rispettato (T15): 1132/1132
+## v21 weekend_pipi_e3 V2 — gruppo cucciolo
+- n eventi / cani: 375 / 6
+- errore mediano (min): 32 [26–41]
+- errore mediano timer (min): 41 [37–47]
+- errore mediano stesso orario 7 gg (min): 37 [28–45]
+- R / timer (per cane): 0.76 [0.65–0.92]
+- R / stesso orario 7 gg: 0.92 [0.87–0.97]
+- R / stesso giorno sett.: 1.07 [0.90–1.23]
+- cani in cui batte il timer: 83% [67%–100%]
+- copertura intervallo 10-90% (nominale 80%): 81% [77%–87%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 14% [11%–17%]
+- pipì prima dell'uscita consigliata di base: 19% [16%–23%]
+- minuti tra avviso v2 e pipì (mediana): 61
+- minuti tra uscita consigliata di base e pipì (mediana): 54
+- ampiezza mediana della finestra 50% (min): 66
+- fiducia bassa / media / alta: 1% / 17% / 82%
+- fiducia media: errore mediano / copertura 50%: 26 min / 61%
+- fiducia alta: errore mediano / copertura 50%: 34 min / 46%
+- copertura 25-75% (nominale 50%): 49% [43%–54%]
+- ampiezza mediana della finestra (min): 167
+- errore con segno mediano (− = in ritardo): 1
+- errore mediano vs evento VERO (min): 32
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 12% / 11%
+- tetto da sveglio rispettato (T15): 375/375
+
+## v21 weekend_pipi_e3 V2 — gruppo adulto
+- n eventi / cani: 356 / 14
+- errore mediano (min): 51 [44–75]
+- errore mediano timer (min): 73 [57–106]
+- errore mediano stesso orario 7 gg (min): 49 [44–64]
+- R / timer (per cane): 0.68 [0.52–0.89]
+- R / stesso orario 7 gg: 1.15 [1.00–1.33]
+- R / stesso giorno sett.: 1.25 [1.01–1.50]
+- cani in cui batte il timer: 64% [44%–88%]
+- copertura intervallo 10-90% (nominale 80%): 81% [75%–85%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 13% [10%–16%]
+- pipì prima dell'uscita consigliata di base: 21% [17%–25%]
+- minuti tra avviso v2 e pipì (mediana): 105
+- minuti tra uscita consigliata di base e pipì (mediana): 80
+- ampiezza mediana della finestra 50% (min): 145
+- fiducia bassa / media / alta: 34% / 64% / 2%
+- fiducia bassa: errore mediano / copertura 50%: 87 min / 62%
+- fiducia media: errore mediano / copertura 50%: 43 min / 52%
+- copertura 25-75% (nominale 50%): 54% [48%–61%]
+- ampiezza mediana della finestra (min): 488
+- errore con segno mediano (− = in ritardo): 10
+- errore mediano vs evento VERO (min): 51
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 12% / 10%
+- tetto da sveglio rispettato (T15): 356/356
+
+## v21 weekend_pipi_e3 V2 — gruppo anziano
+- n eventi / cani: 191 / 6
+- errore mediano (min): 41 [34–58]
+- errore mediano timer (min): 66 [65–72]
+- errore mediano stesso orario 7 gg (min): 46 [32–65]
+- R / timer (per cane): 0.64 [0.54–0.76]
+- R / stesso orario 7 gg: 0.88 [0.74–1.06]
+- R / stesso giorno sett.: 0.94 [0.79–1.11]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura intervallo 10-90% (nominale 80%): 83% [80%–85%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 13% [8%–17%]
+- pipì prima dell'uscita consigliata di base: 16% [12%–20%]
+- minuti tra avviso v2 e pipì (mediana): 113
+- minuti tra uscita consigliata di base e pipì (mediana): 111
+- ampiezza mediana della finestra 50% (min): 113
+- fiducia bassa / media / alta: 9% / 74% / 16%
+- fiducia media: errore mediano / copertura 50%: 42 min / 52%
+- fiducia alta: errore mediano / copertura 50%: 54 min / 35%
+- copertura 25-75% (nominale 50%): 51% [46%–56%]
+- ampiezza mediana della finestra (min): 322
+- errore con segno mediano (− = in ritardo): 10
+- errore mediano vs evento VERO (min): 41
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 9% / 10%
+- tetto da sveglio rispettato (T15): 191/191
+
+## v21 weekend_pipi_e3 V2 — gruppo cronico
+- n eventi / cani: 131 / 3
+- errore mediano (min): 30 [26–32]
+- errore mediano timer (min): 46 [28–60]
+- errore mediano stesso orario 7 gg (min): 36 [33–39]
+- R / timer (per cane): 0.61 [0.43–0.96]
+- R / stesso orario 7 gg: 0.79 [0.75–0.82]
+- R / stesso giorno sett.: 0.88 [0.75–0.96]
+- cani in cui batte il timer: 100% [100%–100%]
+- copertura intervallo 10-90% (nominale 80%): 83% [80%–86%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 11% [10%–13%]
+- pipì prima dell'uscita consigliata di base: 13% [11%–16%]
+- minuti tra avviso v2 e pipì (mediana): 77
+- minuti tra uscita consigliata di base e pipì (mediana): 72
+- ampiezza mediana della finestra 50% (min): 75
+- fiducia bassa / media / alta: 5% / 27% / 68%
+- fiducia media: errore mediano / copertura 50%: 22 min / 74%
+- fiducia alta: errore mediano / copertura 50%: 32 min / 51%
+- copertura 25-75% (nominale 50%): 57% [49%–65%]
+- ampiezza mediana della finestra (min): 251
+- errore con segno mediano (− = in ritardo): 6
+- errore mediano vs evento VERO (min): 30
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 7% / 10%
+- tetto da sveglio rispettato (T15): 131/131
+
+## v21 weekend_pipi_e3 V2 — gruppo poliuria
+- n eventi / cani: 79 / 3
+- errore mediano (min): 63 [47–92]
+- errore mediano timer (min): 64 [45–88]
+- errore mediano stesso orario 7 gg (min): 69 [52–90]
+- R / timer (per cane): 0.97 [0.84–1.05]
+- R / stesso orario 7 gg: 0.95 [0.89–1.02]
+- R / stesso giorno sett.: 0.89 [0.78–1.00]
+- cani in cui batte il timer: 33% [0%–100%]
+- copertura intervallo 10-90% (nominale 80%): 77% [70%–89%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 15% [7%–22%]
+- pipì prima dell'uscita consigliata di base: 19% [11%–26%]
+- minuti tra avviso v2 e pipì (mediana): 130
+- minuti tra uscita consigliata di base e pipì (mediana): 114
+- ampiezza mediana della finestra 50% (min): 128
+- fiducia bassa / media / alta: 24% / 63% / 13%
+- fiducia media: errore mediano / copertura 50%: 59 min / 46%
+- copertura 25-75% (nominale 50%): 46% [43%–48%]
+- ampiezza mediana della finestra (min): 417
+- errore con segno mediano (− = in ritardo): 12
+- errore mediano vs evento VERO (min): 63
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 14% / 11%
+- tetto da sveglio rispettato (T15): 79/79
+
+## v21 weekend_pipi_e3 V2 — a richiesta
+- n eventi / cani: 1132 / 32
+- errore mediano (min): 39 [32–46]
+- errore mediano timer (min): 53 [45–64]
+- errore mediano stesso orario 7 gg (min): 43 [37–48]
+- R / timer (per cane): 0.70 [0.62–0.81]
+- R / stesso orario 7 gg: 1.01 [0.92–1.11]
+- R / stesso giorno sett.: 1.09 [0.97–1.21]
+- cani in cui batte il timer: 75% [63%–87%]
+- copertura intervallo 10-90% (nominale 80%): 81% [79%–84%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 13% [12%–15%]
+- pipì prima dell'uscita consigliata di base: 18% [16%–21%]
+- minuti tra avviso v2 e pipì (mediana): 82
+- minuti tra uscita consigliata di base e pipì (mediana): 71
+- ampiezza mediana della finestra 50% (min): 96
+- fiducia bassa / media / alta: 15% / 46% / 39%
+- fiducia bassa: errore mediano / copertura 50%: 62 min / 61%
+- fiducia media: errore mediano / copertura 50%: 40 min / 54%
+- fiducia alta: errore mediano / copertura 50%: 35 min / 45%
+- copertura 25-75% (nominale 50%): 52% [49%–55%]
+- ampiezza mediana della finestra (min): 278
+- errore con segno mediano (− = in ritardo): 6
+- errore mediano vs evento VERO (min): 39
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 11% / 10%
+- tetto da sveglio rispettato (T15): 1132/1132
+
+## v21 weekend_pipi_e3 V2 — fine settimana
+- n eventi / cani: 296 / 32
+- errore mediano (min): 45 [36–52]
+- errore mediano timer (min): 58 [49–66]
+- errore mediano stesso orario 7 gg (min): 63 [49–71]
+- R / timer (per cane): 0.73 [0.57–0.95]
+- R / stesso orario 7 gg: 0.86 [0.76–0.95]
+- R / stesso giorno sett.: 1.34 [1.01–1.70]
+- cani in cui batte il timer: 69% [57%–82%]
+- copertura intervallo 10-90% (nominale 80%): 83% [79%–88%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 11% [7%–15%]
+- pipì prima dell'uscita consigliata di base: 14% [10%–19%]
+- minuti tra avviso v2 e pipì (mediana): 87
+- minuti tra uscita consigliata di base e pipì (mediana): 82
+- ampiezza mediana della finestra 50% (min): 90
+- fiducia bassa / media / alta: 16% / 42% / 42%
+- fiducia bassa: errore mediano / copertura 50%: 47 min / 65%
+- fiducia media: errore mediano / copertura 50%: 52 min / 52%
+- fiducia alta: errore mediano / copertura 50%: 41 min / 46%
+- copertura 25-75% (nominale 50%): 51% [45%–58%]
+- ampiezza mediana della finestra (min): 278
+- errore con segno mediano (− = in ritardo): 12
+- errore mediano vs evento VERO (min): 45
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 11% / 8%
+- tetto da sveglio rispettato (T15): 296/296
+
+## v21 weekend_pipi_e3 V2 — dopo il cambio di routine (g. 15-28)
+- n eventi / cani: 754 / 32
+- errore mediano (min): 41 [34–49]
+- errore mediano timer (min): 58 [48–69]
+- errore mediano stesso orario 7 gg (min): 45 [40–50]
+- R / timer (per cane): 0.74 [0.65–0.84]
+- R / stesso orario 7 gg: 1.06 [0.95–1.16]
+- R / stesso giorno sett.: 0.95 [0.85–1.09]
+- cani in cui batte il timer: 69% [56%–82%]
+- copertura intervallo 10-90% (nominale 80%): 79% [75%–81%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 15% [13%–17%]
+- pipì prima dell'uscita consigliata di base: 19% [17%–22%]
+- minuti tra avviso v2 e pipì (mediana): 79
+- minuti tra uscita consigliata di base e pipì (mediana): 68
+- ampiezza mediana della finestra 50% (min): 90
+- fiducia bassa / media / alta: 16% / 42% / 42%
+- fiducia bassa: errore mediano / copertura 50%: 55 min / 59%
+- fiducia media: errore mediano / copertura 50%: 44 min / 49%
+- fiducia alta: errore mediano / copertura 50%: 37 min / 43%
+- copertura 25-75% (nominale 50%): 48% [44%–51%]
+- ampiezza mediana della finestra (min): 270
+- errore con segno mediano (− = in ritardo): 5
+- errore mediano vs evento VERO (min): 41
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 14% / 10%
+- tetto da sveglio rispettato (T15): 754/754
+
+## v21 weekend_pipi_e3 V2 — solo di giorno (no notte)
+- n eventi / cani: 878 / 32
+- errore mediano (min): 47 [40–58]
+- errore mediano timer (min): 60 [46–75]
+- errore mediano stesso orario 7 gg (min): 47 [41–56]
+- R / timer (per cane): 0.91 [0.78–1.02]
+- R / stesso orario 7 gg: 0.89 [0.78–1.09]
+- R / stesso giorno sett.: 0.87 [0.76–1.08]
+- cani in cui batte il timer: 69% [55%–82%]
+- copertura intervallo 10-90% (nominale 80%): 83% [80%–86%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 16% [14%–19%]
+- pipì prima dell'uscita consigliata di base: 21% [18%–23%]
+- minuti tra avviso v2 e pipì (mediana): 66
+- minuti tra uscita consigliata di base e pipì (mediana): 57
+- ampiezza mediana della finestra 50% (min): 95
+- fiducia bassa / media / alta: 14% / 40% / 46%
+- fiducia bassa: errore mediano / copertura 50%: 85 min / 62%
+- fiducia media: errore mediano / copertura 50%: 55 min / 53%
+- fiducia alta: errore mediano / copertura 50%: 35 min / 45%
+- copertura 25-75% (nominale 50%): 51% [47%–55%]
+- ampiezza mediana della finestra (min): 263
+- errore con segno mediano (− = in ritardo): 5
+- errore mediano vs evento VERO (min): 47
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 13% / 7%
+- tetto da sveglio rispettato (T15): 878/878
+
+## v21 weekend_pipi_e3 V2 — prima pipì del mattino (dopo la notte)
+- n eventi / cani: 254 / 32
+- errore mediano (min): 20 [17–22]
+- errore mediano timer (min): 38 [32–46]
+- errore mediano stesso orario 7 gg (min): 21 [19–27]
+- R / timer (per cane): 0.60 [0.37–0.81]
+- R / stesso orario 7 gg: 1.48 [0.73–2.17]
+- R / stesso giorno sett.: 1.05 [0.75–1.42]
+- cani in cui batte il timer: 81% [71%–91%]
+- copertura intervallo 10-90% (nominale 80%): 76% [69%–81%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 2% [1%–4%]
+- pipì prima dell'uscita consigliata di base: 11% [7%–16%]
+- minuti tra avviso v2 e pipì (mediana): 476
+- minuti tra uscita consigliata di base e pipì (mediana): 463
+- ampiezza mediana della finestra 50% (min): 101
+- fiducia bassa / media / alta: 19% / 64% / 17%
+- fiducia bassa: errore mediano / copertura 50%: 17 min / 58%
+- fiducia media: errore mediano / copertura 50%: 20 min / 56%
+- fiducia alta: errore mediano / copertura 50%: 26 min / 47%
+- copertura 25-75% (nominale 50%): 55% [51%–59%]
+- ampiezza mediana della finestra (min): 413
+- errore con segno mediano (− = in ritardo): 9
+- errore mediano vs evento VERO (min): 20
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 2% / 23%
+- tetto da sveglio rispettato (T15): 254/254
+
+

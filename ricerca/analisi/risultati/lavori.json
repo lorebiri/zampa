@@ -1,4 +1,4 @@
-{"tag": "v21", "shadow": false, "of": 4,
+{"tag": "v22", "shadow": false, "of": 4,
  "jobs": [
   {"scenario": "realistico", "grid": true},
   {"scenario": "realistico_nuovo", "grid": true},

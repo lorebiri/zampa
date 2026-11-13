@@ -29,6 +29,11 @@ import 'potty_predictor.dart';
 /// Regola congelata in ricerca/analisi/risultati/v2_regola_congelata.md.
 /// Tetti, notte, prudenza e allarmi restano quelli della previsione di base.
 
+/// Solo per il banco di prova (ricerca/27): spegne la regola di sicurezza
+/// della v2.1 per misurarne il costo. Nell'app resta sempre vera.
+// ignore: prefer_const_declarations
+bool v2SafetyCapForBench = true;
+
 /// Una previsione v2 fatta a un'origine (1 minuto dopo una pipì).
 class V2Point {
   const V2Point({
@@ -221,7 +226,11 @@ V2Point combineV2({
   // mediana non va oltre la previsione di base, che è già accorciata. (La
   // regola congelata prendeva il più anticipato dei tre: troppo presto.)
   var at = c[1];
-  if (adaptedRecent && base.isBefore(at)) at = base;
+  // Strada 5: nei primi 3 giorni «stesso orario» e «stesso giorno» non hanno
+  // ancora storia (sono il timer): vale la sola previsione di base.
+  final young = origin.difference(past.first).inDays < 3;
+  if (young) at = base;
+  if (v2SafetyCapForBench && adaptedRecent && base.isBefore(at)) at = base;
   if (at.isBefore(origin)) at = origin;
   return V2Point(
     origin: origin,

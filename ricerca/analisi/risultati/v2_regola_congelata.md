@@ -25,3 +25,9 @@
 La regola qui sopra, eseguita con il codice dell'app (`risultati/v2fin_*`), **non supera** la soglia R/timer: 0,87 [0,80–0,94] sul realistico e 0,88 [0,79–0,96] sul banco nuovo. Causa: la regola di sicurezza (punto 2, «il più anticipato») scatta nel 18-21% degli eventi e li anticipa di circa 80 minuti; nell'analisi esplorativa non c'era.
 
 **v2.1, decisa dopo aver visto il banco nuovo** (quindi il banco nuovo non vale più come prova indipendente): punto 2 diventa «se la previsione di base ha accorciato l'intervallo per gli ultimi 3 giorni, l'orario previsto non va oltre quello della previsione di base». Il resto è invariato. Prova indipendente: un terzo banco mai eseguito (`realistico_nuovo2`, seme 2), con le stesse soglie, più lo scenario poliuria per T14.
+
+## v2.2 (13/11/2026): partenza a freddo
+
+Esito v2.1 (`risultati/v21_*`): realistico R/timer 0,84 [0,77–0,90], banco nuovo 0,86, terzo banco 0,87 [0,82–0,92]; R/«stesso orario» 0,98 / 0,95 / 1,00; copertura 80% 81% / 81% / 80%; calibrazione entro ±9 punti in tutte le fasce con n ≥ 50; T14 −4; T15 sempre. Senza la regola di sicurezza la poliuria va in ritardo (−31 min nel sottogruppo del realistico): la regola resta.
+
+Aggiunta (strada 5, decisa sui giorni 1-7, che non entrano nel collaudo): con meno di 3 giorni di storia l'orario previsto è quello della previsione di base. Giorni 1-3: R/timer 0,97 → 0,78.
