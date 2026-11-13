@@ -323,3 +323,26 @@ nell'app vera, in chiaro e in scuro.
 - **Non fatto in questo giro**: riscrivere i testi dell'interfaccia con un tono più giovane e
   qualche emoji. L'app dà già del tu; molti testi sono clinici, rivisti dai veterinari, e non vanno
   toccati senza di loro. Si può fare sui testi non clinici in un giro dedicato.
+
+## Aggiornamento: Pellovi, GitHub Pages, logo e tamagotchi (anteprime da approvare)
+
+- **Nome**: l'app si chiama **Pellovi**; **Lulù** è la mascotte (`appName`, `mascotName`,
+  `mascotIntro` in `lib/brand.dart`). La schermata di benvenuto dice «Ciao! Sono Lulù, la tua
+  compagna in Pellovi». File: `pellovi.apk`, `pellovi-backup-*.json`, `Pellovi_<cane>_<data>.pdf`.
+- **GitHub Pages**: `.github/workflows/pages.yml` (push su `main` e tag `v*`, base href
+  `/<repo>/` o dominio `PAGES_DOMAIN`). La pagina di download punta all'APK dell'ultima Release.
+  Provato in locale sotto `/zampa/`.
+- **Prima del repo pubblico**: [`docs/PUBBLICARE-IL-REPO.md`](docs/PUBBLICARE-IL-REPO.md). Nessun
+  segreto nel codice né nella cronologia, quindi niente da ruotare. Restano però da togliere i dati
+  personali (email negli autori dei commit, `.claude/launch.json`, `ricerca/14` su CNR e fisco,
+  piano economico). Consiglio: un repository pubblico nuovo con solo il codice dell'app.
+- **Logo**: tre varianti della P-cane in [`docs/brand/anteprima-logo-pellovi.png`](docs/brand/anteprima-logo-pellovi.png)
+  (A pixel art, B a fiocchi, C geometrica), con icone fino a 48 px e logo esteso chiaro e scuro.
+  Scelta di Lorenzo; poi `python3 tool/gen_icons.py --marchio p-pixel|p-fiocchi|p-geometrica`
+  rigenera tutte le icone (il disegno sta in `tool/marchi.py`).
+- **Tamagotchi**: anteprima in [`docs/design/tamagotchi-anteprima.png`](docs/design/tamagotchi-anteprima.png),
+  con 3 cani personalizzati (Lulù bolognese predefinita, un pinscher, un labrador) in 6 stati
+  d'animo, disegnati con il motore attuale dell'app. Da aggiungere dopo l'approvazione: nuvolette
+  degli stati, pelo a fiocchi o riccio, muso corto o lungo, accessori, preimpostazioni per razza,
+  colori proposti da una foto (in locale), legami con le attività del giorno.
+- **Test**: `flutter analyze` pulito; `flutter test` 190 passati.
