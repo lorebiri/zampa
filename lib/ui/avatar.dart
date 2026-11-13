@@ -8,6 +8,7 @@ import '../logic/elimination_model.dart';
 import '../logic/modules.dart';
 import '../logic/nutrition.dart';
 import '../logic/potty_predictor.dart';
+import '../logic/prevention.dart';
 import '../models.dart';
 import '../store.dart';
 import 'common.dart';
@@ -469,6 +470,15 @@ class PetMood {
         Icons.favorite,
       );
     }
+    // Scodinzola anche dopo un pasto appena dato.
+    if (recent.any((l) => l.type == LogType.pasto) &&
+        recent.every((l) => l.signs.isEmpty)) {
+      return PetMood(
+        Pose.happy,
+        'Pappa fatta: ${dog.name} scodinzola!',
+        Icons.favorite,
+      );
+    }
     if (pee.last != null &&
         (pee.overdue || pee.recommendedAt.difference(now).inMinutes <= 20)) {
       return PetMood(
@@ -486,11 +496,62 @@ class PetMood {
         Icons.restaurant,
       );
     }
+    // Sereno e premuroso: una scadenza vicina (vaccino, antiparassitario,
+    // farmaco). Mai colpevolizzante, anche se la data è passata.
+    final due = dueItems(
+      store.records,
+      dog.id,
+    ).where((d) => d.due.difference(now).inDays <= 7).toList();
+    if (due.isNotEmpty) {
+      final d = due.first;
+      final days = DateTime(
+        d.due.year,
+        d.due.month,
+        d.due.day,
+      ).difference(DateTime(now.year, now.month, now.day)).inDays;
+      final quando = days < 0
+          ? 'è da fare quando puoi'
+          : days == 0
+          ? 'è per oggi'
+          : days == 1
+          ? 'è per domani'
+          : 'è tra $days giorni';
+      return PetMood(
+        Pose.idle,
+        '${d.record.title} $quando: ci penso io a ricordartelo.',
+        Icons.event_available,
+      );
+    }
+    // Felice quando le cose di oggi sono fatte: pasti dati, nessuna dose
+    // in sospeso.
+    if (_dayDone(store, dog, now)) {
+      return PetMood(
+        Pose.happy,
+        'Fatto tutto per oggi: ${dog.name} è felice!',
+        Icons.favorite,
+      );
+    }
     return PetMood(
       Pose.idle,
       '${dog.name} sta ${dog.g('tranquillo', 'tranquilla')}. Prossima uscita alle ${hm(pee.recommendedAt)}.',
       null,
     );
+  }
+
+  static bool _dayDone(AppStore store, Dog dog, DateTime now) {
+    if (store.pendingDoses(dog.id, now).isNotEmpty) return false;
+    final meals = Nutrition.plan(dog, now).meals;
+    final today = store
+        .logsOf(dog.id)
+        .where(
+          (l) =>
+              l.type == LogType.pasto &&
+              l.time.year == now.year &&
+              l.time.month == now.month &&
+              l.time.day == now.day,
+        )
+        .length;
+    return meals > 0 && today >= meals;
   }
 
   static bool _mealTime(AppStore store, Dog dog, DateTime now) {
