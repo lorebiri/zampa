@@ -1,4 +1,4 @@
-# Informativa privacy di Lulù (versione beta)
+# Informativa privacy di Pellovi (versione beta)
 
 > **Stato:** bozza rivista dall'esperto privacy (C2-7, 11/11/2026), da far leggere a un
 > legale prima della pubblicazione negli store. Le parti tra `[[ ]]` sono da completare.
@@ -9,7 +9,7 @@ Ultimo aggiornamento: `[[data di pubblicazione]]`
 
 ## 1. In breve
 
-- Lulù funziona **senza account**: in questo caso tutto resta sul tuo telefono e noi non
+- Pellovi funziona **senza account**: in questo caso tutto resta sul tuo telefono e noi non
   riceviamo nulla.
 - L'**account è facoltativo**. Serve per il backup, per usare più telefoni e per
   condividere il cane con la famiglia. I dati vanno su server in **Germania (Francoforte)**.
@@ -19,16 +19,16 @@ Ultimo aggiornamento: `[[data di pubblicazione]]`
   finché non dici di sì. Li puoi spegnere quando vuoi.
 - Niente pubblicità, niente profilazione, niente vendita di dati, nessun identificativo
   pubblicitario.
-- Lulù **non è un dispositivo medico**: non fa diagnosi e non sostituisce il veterinario.
+- Pellovi **non è un dispositivo medico**: non fa diagnosi e non sostituisce il veterinario.
 
 ## 2. Chi è il titolare del trattamento
 
-**Lorenzo Birindelli**, persona fisica, sviluppatore di Lulù come progetto personale.
+**Lorenzo Birindelli**, persona fisica, sviluppatore di Pellovi come progetto personale.
 
 - Indirizzo: `[[via, numero civico, CAP, città]]`
 - Email per la privacy: `[[indirizzo email dedicato, per esempio privacy@dominio-di-zampa]]`
 
-Lulù non è un prodotto del CNR né di altri enti. Il titolare non ha nominato un
+Pellovi non è un prodotto del CNR né di altri enti. Il titolare non ha nominato un
 Responsabile della protezione dei dati (DPO), perché non è obbligatorio per questo
 trattamento (art. 37 GDPR).
 

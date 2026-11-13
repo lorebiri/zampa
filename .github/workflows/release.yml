@@ -67,9 +67,9 @@ jobs:
             echo "::warning::Nessuna chiave di firma nei segreti: APK firmato con la chiave di debug."
             exit 0
           fi
-          echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/lulu.jks"
+          echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/pellovi.jks"
           {
-            echo "storeFile=$RUNNER_TEMP/lulu.jks"
+            echo "storeFile=$RUNNER_TEMP/pellovi.jks"
             echo "storePassword=$STORE_PASSWORD"
             echo "keyAlias=$KEY_ALIAS"
             echo "keyPassword=$KEY_PASSWORD"
@@ -80,47 +80,47 @@ jobs:
           ARGS=(--build-name "${{ steps.versione.outputs.nome }}" --build-number "${{ steps.versione.outputs.numero }}")
           # Universale (tutti i telefoni) per la Release.
           flutter build apk --release "${ARGS[@]}"
-          cp build/app/outputs/flutter-apk/app-release.apk lulu-universale.apk
+          cp build/app/outputs/flutter-apk/app-release.apk pellovi-universale.apk
           # Solo 64 bit (quasi tutti i telefoni dal 2017), più leggero: è quello
           # della pagina di download (Cloudflare Pages accetta file fino a 25 MiB).
           flutter build apk --release --split-per-abi --target-platform android-arm64 "${ARGS[@]}"
-          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk lulu.apk
-          ls -lh lulu.apk lulu-universale.apk
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk pellovi.apk
+          ls -lh pellovi.apk pellovi-universale.apk
 
       - name: Web app (PWA) con l'APK da scaricare
         env:
-          APK: lulu.apk
+          APK: pellovi.apk
           LULU_VERSION: ${{ steps.versione.outputs.nome }}
         run: |
           tool/build_web.sh --build-name "${{ steps.versione.outputs.nome }}"
-          (cd build/web && zip -qr "$GITHUB_WORKSPACE/lulu-web.zip" .)
-          MB=$(( $(stat -c %s build/web/lulu.apk) / 1048576 ))
+          (cd build/web && zip -qr "$GITHUB_WORKSPACE/pellovi-web.zip" .)
+          MB=$(( $(stat -c %s build/web/pellovi.apk) / 1048576 ))
           if (( MB >= 25 )); then
-            echo "::warning::lulu.apk pesa ${MB} MiB: Cloudflare Pages accetta file fino a 25 MiB."
+            echo "::warning::pellovi.apk pesa ${MB} MiB: Cloudflare Pages accetta file fino a 25 MiB."
           fi
 
       - name: Togli la chiave dal runner
         if: always()
-        run: rm -f android/key.properties "$RUNNER_TEMP/lulu.jks"
+        run: rm -f android/key.properties "$RUNNER_TEMP/pellovi.jks"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: lulu-${{ steps.versione.outputs.nome }}
+          name: pellovi-${{ steps.versione.outputs.nome }}
           path: |
-            lulu.apk
-            lulu-universale.apk
-            lulu-web.zip
+            pellovi.apk
+            pellovi-universale.apk
+            pellovi-web.zip
           retention-days: 30
 
       - name: GitHub Release (solo per i tag)
         if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
-          name: Lulù ${{ steps.versione.outputs.nome }}
+          name: Pellovi ${{ steps.versione.outputs.nome }}
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
           generate_release_notes: true
           files: |
-            lulu.apk
-            lulu-universale.apk
-            lulu-web.zip
+            pellovi.apk
+            pellovi-universale.apk
+            pellovi-web.zip

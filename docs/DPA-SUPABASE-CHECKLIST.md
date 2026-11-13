@@ -51,7 +51,7 @@ elettronico**: l'accettazione online va bene, purché tu ne conservi la prova.
         possibili accessi da fuori (assistenza): è il motivo delle clausole standard.
 - [ ] Rinomina e conserva i file: `2026-12-XX_Supabase_DPA.pdf` e uno screenshot del
       pannello con la regione e la data. Mettili fuori dal repository (sono documenti
-      tuoi, non del codice), per esempio in una cartella "Lulù – legale".
+      tuoi, non del codice), per esempio in una cartella "Pellovi – legale".
 
 ### C. Sub-responsabili e trasferimenti
 
@@ -68,7 +68,7 @@ elettronico**: l'accettazione online va bene, purché tu ne conservi la prova.
 ### D. Limiti da rispettare
 
 - [ ] Nessun dato sanitario di **persone** nel database (il DPA vieta i dati "PHI" USA
-      senza un accordo a parte). Lulù tratta dati del cane: va bene, ma non aggiungere
+      senza un accordo a parte). Pellovi tratta dati del cane: va bene, ma non aggiungere
       campi sulla salute del proprietario.
 - [ ] La chiave `service_role` resta solo nel pannello o in un gestore di password.
 

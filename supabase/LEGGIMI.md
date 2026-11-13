@@ -1,4 +1,4 @@
-# Attivare gli account di Lulù (Supabase, server UE)
+# Attivare gli account di Pellovi (Supabase, server UE)
 
 Gli account sono **facoltativi**: senza questa configurazione l'app funziona
 come prima, con i dati solo sul telefono. Questi passaggi li fai tu, perché
@@ -44,7 +44,7 @@ flutter run --dart-define-from-file=config/supabase.json
 
 ## 6. Promemoria sul web e su iPhone (Web Push)
 
-Sul web e su iPhone (con Lulù aggiunta alla schermata Home, iOS 16.4+) le
+Sul web e su iPhone (con Pellovi aggiunta alla schermata Home, iOS 16.4+) le
 notifiche locali non esistono: i promemoria li invia il server. Servono
 l'account e questi passaggi, una volta sola.
 

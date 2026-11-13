@@ -3,7 +3,7 @@
 <head>
   <!--
     Il base href si sceglie al momento della build:
-      BASE_HREF=/lulu/ tool/build_web.sh
+      BASE_HREF=/pellovi/ tool/build_web.sh
     (deve iniziare e finire con "/"). Con la radice del dominio basta "/".
   -->
   <base href="$FLUTTER_BASE_HREF">
@@ -11,7 +11,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Lulù: la salute del tuo cane in un posto solo. Vaccini, antiparassitari, terapie, peso, pipì e cacca. I dati restano sul tuo dispositivo.">
+  <meta name="description" content="Pellovi: la salute del tuo cane in un posto solo. Vaccini, antiparassitari, terapie, peso, pipì e cacca. I dati restano sul tuo dispositivo.">
   <meta name="theme-color" content="#22406A">
   <!--
     Solo script del nostro sito. Blocca anche lo script di Google che il
@@ -27,13 +27,13 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Lulù">
+  <meta name="apple-mobile-web-app-title" content="Pellovi">
   <meta name="format-detection" content="telephone=no">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 
-  <title>Lulù</title>
+  <title>Pellovi</title>
   <link rel="manifest" href="manifest.json">
 
   <style>
@@ -53,12 +53,12 @@
 <body>
   <div id="splash" role="status" aria-live="polite">
     <img src="icons/Icon-192.png" alt="">
-    <span>Lulù si sta aprendo…</span>
-    <noscript>Per usare Lulù attiva JavaScript nel browser.</noscript>
+    <span>Pellovi si sta aprendo…</span>
+    <noscript>Per usare Pellovi attiva JavaScript nel browser.</noscript>
   </div>
   <script src="flutter_bootstrap.js" async></script>
   <script>
-    // Funziona offline: service worker di Lulù (web/sw.js). Quello generato
+    // Funziona offline: service worker di Pellovi (web/sw.js). Quello generato
     // da Flutter si disinstalla da solo e non è usato (web/flutter_bootstrap.js).
     if ('serviceWorker' in navigator && window.isSecureContext) {
       window.addEventListener('load', function () {

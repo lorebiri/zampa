@@ -1,4 +1,4 @@
-// Service worker di Lulù: l'app si apre anche senza rete.
+// Service worker di Pellovi: l'app si apre anche senza rete.
 //
 // - Alla build, tool/pwa_finalize.py sostituisce VERSIONE e la lista
 //   PRECACHE con i file veri di build/web (e un'impronta del loro contenuto):
@@ -83,7 +83,7 @@ self.addEventListener('push', (event) => {
   } catch (e) {
     dati = { body: event.data ? event.data.text() : '' };
   }
-  const titolo = dati.title || 'Lulù';
+  const titolo = dati.title || 'Pellovi';
   event.waitUntil(
     self.registration.showNotification(titolo, {
       body: dati.body || '',
@@ -98,7 +98,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// Tocco sulla notifica: porta in primo piano Lulù o la apre.
+// Tocco sulla notifica: porta in primo piano Pellovi o la apre.
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const url = (event.notification.data && event.notification.data.url) || self.registration.scope;

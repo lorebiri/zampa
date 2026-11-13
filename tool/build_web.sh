@@ -2,7 +2,7 @@
 # Build della web app installabile (PWA), pronta per qualunque hosting statico.
 #
 #   tool/build_web.sh                     # sito alla radice del dominio
-#   BASE_HREF=/lulu/ tool/build_web.sh    # sito in una sottocartella
+#   BASE_HREF=/pellovi/ tool/build_web.sh    # sito in una sottocartella
 #   APK=percorso/app-release.apk tool/build_web.sh   # include l'APK da scaricare
 #
 # Il risultato è in build/web: basta caricarne il contenuto sull'hosting.
@@ -22,7 +22,7 @@ esac
 flutter build web --release --base-href "$BASE_HREF" --no-web-resources-cdn "$@"
 
 if [[ -n "${APK:-}" ]]; then
-  cp "$APK" build/web/lulu.apk
+  cp "$APK" build/web/pellovi.apk
 fi
 
 VERSIONE="$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | cut -d+ -f1)"

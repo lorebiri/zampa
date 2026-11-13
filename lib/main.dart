@@ -223,6 +223,8 @@ class WelcomePage extends StatelessWidget {
           header: true,
           child: Text(appName, style: t.textTheme.displaySmall),
         ),
+        const SizedBox(height: Space.xs),
+        Text('Ciao! Sono $mascotIntro.', style: t.textTheme.titleMedium),
         const SizedBox(height: Space.s),
         Text(
           appTagline,

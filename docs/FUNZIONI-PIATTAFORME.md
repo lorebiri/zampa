@@ -1,4 +1,4 @@
-# Lulù: funzioni per piattaforma (blocco B)
+# Pellovi: funzioni per piattaforma (blocco B)
 
 Stato **prima** (fino al commit `9d28010`) e **dopo** questo branch. «Web» è il browser del
 computer o di Android; «iPhone» è Safari o la web app aggiunta alla schermata Home.
@@ -43,7 +43,7 @@ browser non l'ho potuta aprire**, perché in questa sessione Flutter non si inst
 - **Invio** (`supabase/functions/invia-promemoria`): ogni minuto con `pg_cron`, `web-push` con
   chiavi VAPID, scarta le iscrizioni scadute; 3 test Deno e controllo dei tipi.
 - **Service worker**: mostra la notifica (gli allarmi restano finché non li tocchi) e al tocco apre
-  Lulù. Provato in Chromium consegnando un messaggio push: notifica mostrata.
+  Pellovi. Provato in Chromium consegnando un messaggio push: notifica mostrata.
 - **Da fare da Lorenzo**: chiavi VAPID, segreti, deploy e cron (`supabase/LEGGIMI.md` §6); citare
   nell'informativa che i testi dei promemoria passano dal server UE fino all'invio.
 - **Non provato qui**: la consegna attraverso i server push veri (Google, Apple, Mozilla), perché il

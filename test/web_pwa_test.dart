@@ -50,12 +50,13 @@ void main() {
       expect(fuori, isEmpty);
     });
 
-    test('il nome visibile è Lulù, i file usano Lulu senza accento', () {
-      expect(appName, 'Lulù');
-      expect(appFileName, 'Lulu');
+    test('il nome visibile è Pellovi, la mascotte è Lulù', () {
+      expect(appName, 'Pellovi');
+      expect(appFileName, 'Pellovi');
+      expect(mascotName, 'Lulù');
       expect(
         backupFileName(DateTime(2026, 11, 13)),
-        'lulu-backup-2026-11-13.json',
+        'pellovi-backup-2026-11-13.json',
       );
     });
 
@@ -142,7 +143,7 @@ void main() {
     test('pagina di download: APK e istruzioni per iPhone', () {
       final html = File('web/download.html').readAsStringSync();
       expect(html, contains('Scarica per Android (APK)'));
-      expect(html, contains('href="lulu.apk"'));
+      expect(html, contains('href="pellovi.apk"'));
       expect(html, contains('Aggiungi alla schermata Home'));
     });
   });

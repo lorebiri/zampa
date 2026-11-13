@@ -25,16 +25,16 @@ jobs:
       # Firmato con la chiave di debug: si installa sul telefono ma non va
       # sul Play Store (serve la chiave di caricamento, dopo il nome).
       - run: flutter build apk --release
-      - run: cp build/app/outputs/flutter-apk/app-release.apk lulu.apk
+      - run: cp build/app/outputs/flutter-apk/app-release.apk pellovi.apk
       # Versione leggera per i telefoni degli ultimi anni (arm64).
       - run: flutter build apk --release --split-per-abi --target-platform android-arm64
-      - run: cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk lulu-arm64.apk
+      - run: cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk pellovi-arm64.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: lulu-android
+          name: pellovi-android
           path: |
-            lulu.apk
-            lulu-arm64.apk
+            pellovi.apk
+            pellovi-arm64.apk
           retention-days: 30
 
   emulatore:

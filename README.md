@@ -1,4 +1,4 @@
-# Lulù
+# Pellovi
 
 App per la salute del cane (Flutter): web app installabile (PWA, anche per iPhone) e APK Android: cartella sanitaria, prevenzione,
 nutrizione, allarmi clinici rivisti da veterinari, previsione di pipì e cacca con un modello
@@ -22,4 +22,4 @@ flutter build apk --release                             # APK Android
 
 Installazione e pubblicazione: [`INSTALLA.md`](INSTALLA.md) · web app e APK: [`LULU-WEB-REPORT.md`](LULU-WEB-REPORT.md).
 
-Lulù non è un dispositivo medico e non sostituisce il veterinario.
+Pellovi non è un dispositivo medico e non sostituisce il veterinario.

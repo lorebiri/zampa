@@ -1,8 +1,8 @@
-# Lulù — Testi clinici, versione 1 (v1)
+# Pellovi — Testi clinici, versione 1 (v1)
 
 **Documento di revisione per il medico veterinario abilitato.**  
 Estratto il 10/11/2026 dal codice dell'app (cartella `lib/`, sola lettura). Versione dei testi: **v1**.  
-Preparato dalla redazione di Lulù. Chi l'ha preparato **non è un medico veterinario abilitato**: questo documento serve a raccogliere la revisione e la firma di un professionista iscritto all'Ordine.  
+Preparato dalla redazione di Pellovi. Chi l'ha preparato **non è un medico veterinario abilitato**: questo documento serve a raccogliere la revisione e la firma di un professionista iscritto all'Ordine.  
 Gemello in formato tabella: `docs/clinica/testi-clinici-v1.csv` (stesse righe, stessi ID).
 
 ## Terza revisione veterinaria (ricerca/26, 11/11/2026): approvate con modifica, da firmare
@@ -325,7 +325,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 #### EMG-022 · EMERGENZE
 
 - **Quando scatta:** In fondo alla scheda Emergenze e in altre schermate (costante «disclaimer» in lib/ui/common.dart).
-- **Testo:** «Lulù aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.»
+- **Testo:** «Pellovi aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.»
 - **Fonte:** ricerca/06 · `lib/ui/common.dart:242`
 - **Nota per la traduzione:** Testo con valore legale: far rivedere anche da un legale per ogni paese.
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
@@ -794,7 +794,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 
 - **Quando scatta:** Femmina intera di almeno 12 mesi senza calori registrati, con almeno un segno tra: beve molto, pipì più frequente, vomito, abbattimento, inappetenza, perdite vulvari. OGGI con 2 o più segni, ATTENZIONE con 1.
 - **Titolo:** «Femmina non sterilizzata: attenzione all'utero»
-- **Testo:** «Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: [se 2 o più segni: «contatta il veterinario oggi stesso»][se 1 segno: «osservala e senti il veterinario se compaiono altri segni»]. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.»
+- **Testo:** «Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: [se 2 o più segni: «contatta il veterinario oggi stesso»][se 1 segno: «osservala e senti il veterinario se compaiono altri segni»]. Registra i calori nella sezione Riproduzione: Pellovi potrà avvisarti meglio.»
 - **Frase d'azione sotto l'avviso:** OGGI: «Contatta il veterinario oggi stesso.» / ATTENZIONE: «Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.»
 - **Fonte:** ricerca/07 N6 · `lib/logic/alerts.dart:582`
 - **Esito:** ☐ Approvato ☐ Modificare ☐ Eliminare
@@ -1546,8 +1546,8 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 | ID | Quando | Testo | Fonte · file:riga | Esito (A/M/E) | Note |
 |---|---|---|---|---|---|
 | UI-DIA-001 | Diario «Cuore e respiro», sempre. | **Cuore e respiro** — Conta i respiri mentre dorme tranquillo (non dopo il gioco né al caldo): ogni volta che il torace si alza tocca il pulsante. Con il timer da 30 secondi il risultato viene raddoppiato. Normale sotto 30 al minuto (ACVIM 2019). | ACVIM 2019; Porciello et al. 2016 · `lib/ui/diaries_screen.dart:194` | ☐A ☐M ☐E | |
-| UI-DIA-003 | Diario «Insulina e glicemie», sempre. | Le unità sono quelle prescritte dal veterinario: Lulù le registra, non le calcola. Acqua, pipì e peso sono gli indicatori di controllo (AAHA 2018). | AAHA 2018 · `lib/ui/diaries_screen.dart:317` | ☐A ☐M ☐E | |
-| UI-DIA-007 | Esami di laboratorio, sempre. | Lulù non interpreta gli esami: mostra l'andamento e segnala i valori fuori dall'intervallo indicato dal laboratorio. L'interpretazione spetta al veterinario. | — · `lib/ui/diaries_screen.dart:691` | ☐A ☐M ☐E | |
+| UI-DIA-003 | Diario «Insulina e glicemie», sempre. | Le unità sono quelle prescritte dal veterinario: Pellovi le registra, non le calcola. Acqua, pipì e peso sono gli indicatori di controllo (AAHA 2018). | AAHA 2018 · `lib/ui/diaries_screen.dart:317` | ☐A ☐M ☐E | |
+| UI-DIA-007 | Esami di laboratorio, sempre. | Pellovi non interpreta gli esami: mostra l'andamento e segnala i valori fuori dall'intervallo indicato dal laboratorio. L'interpretazione spetta al veterinario. | — · `lib/ui/diaries_screen.dart:691` | ☐A ☐M ☐E | |
 | UI-DIA-010 | Muscoli e cognitivo, sempre (nota a piè di pagina). | Questionari validati come CBPI (dolore), LOAD (artrosi) e CCDR (disfunzione cognitiva) sono protetti da copyright: il veterinario può somministrarli in visita. | — · `lib/ui/diaries_screen.dart:1240` | ☐A ☐M ☐E | |
 
 ### Home e terapie
@@ -1558,7 +1558,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 | UI-HOM-002 | Terapia diuretica con dose serale (dalle 18). | Non spostare né saltare il diuretico per ridurre le uscite notturne: chiedi al veterinario se si può dare al mattino. | ricerca/07 tabella I · `lib/ui/home_screen.dart:188` | ☐A ☐M ☐E | |
 | UI-HOM-003 | Nei 14 giorni dopo un intervento (scheda «Convalescenza: giorno N di 14»). | **Convalescenza: giorno {n} di 14** — • Riposo: uscite brevi al guinzaglio solo per i bisogni, niente corse, salti o scale.<br>• Collare elisabettiano (o body) finché il veterinario non dice di toglierlo: non deve leccare la ferita.<br>• Controlla la ferita due volte al giorno e registrala.<br>• Prima pipì entro 24 ore; appetito di solito entro 24-48 ore.<br>• Somministra solo i farmaci prescritti. | ricerca/07 aggiunta N8 · `lib/ui/home_screen.dart:526` | ☐A ☐M ☐E | |
 | UI-DOS-001 | Home, dialogo di conferma di «Saltato» su una dose (titolo «Dose saltata?»). | Generale: «Confermi che questa dose non è stata data? Non raddoppiare la prossima: chiedi al veterinario cosa fare.» / Insulina (nome con insulin, caninsulin, vetsulin, prozinc, lantus, glargin): «Confermi che l'insulina non è stata fatta? Non farla in ritardo e non raddoppiare la prossima senza aver sentito il veterinario. Se non sei sicuro che sia stata fatta, non rifarla.» / Antiepilettici (fenobarbital, levetiracetam, bromuro di potassio o di sodio, imepitoina, zonisamide e nomi commerciali): «Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.» **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare (A7).** | ricerca/26 §5.1; AAHA 2018; ACVIM 2016 · `lib/ui/home_screen.dart` (`_DoseCard`) | ☐A ☐M ☐E | |
-| UI-DOS-002 | Notifica 2 ore dopo una dose non confermata (al massimo 3 per cane). | Generale (invariato): **💊 Dose confermata per {nome}?** — Apri Lulù e segna "Dato" o "Saltato". Se l'hai saltata non raddoppiare la successiva: chiedi al veterinario. / Insulina: **💉 Insulina di {nome}: segnata?** — Se è stata fatta, segna "Dato". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario. **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare (A7).** / Antiepilettici: **💊 Dose confermata per {nome}?** — Apri Lulù e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso. **Testo ricavato dal testo approvato del dialogo (ricerca/26 §5.1), da firmare.** | ricerca/26 §5.1, §5.3 · `lib/store.dart` (`planNotifications`) | ☐A ☐M ☐E | |
+| UI-DOS-002 | Notifica 2 ore dopo una dose non confermata (al massimo 3 per cane). | Generale (invariato): **💊 Dose confermata per {nome}?** — Apri Pellovi e segna "Dato" o "Saltato". Se l'hai saltata non raddoppiare la successiva: chiedi al veterinario. / Insulina: **💉 Insulina di {nome}: segnata?** — Se è stata fatta, segna "Dato". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario. **Approvata con modifica dal veterinario-revisore (ricerca/26), da firmare (A7).** / Antiepilettici: **💊 Dose confermata per {nome}?** — Apri Pellovi e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso. **Testo ricavato dal testo approvato del dialogo (ricerca/26 §5.1), da firmare.** | ricerca/26 §5.1, §5.3 · `lib/store.dart` (`planNotifications`) | ☐A ☐M ☐E | |
 
 ### Promemoria uscite
 
@@ -1613,7 +1613,7 @@ La scheda Emergenze è sempre raggiungibile dall'app. Oggi **non mostra alcun nu
 | ID | Quando | Testo | Fonte · file:riga | Esito (A/M/E) | Note |
 |---|---|---|---|---|---|
 | CUC-001 | Cucciolo fino a 16 settimane. | **Finestra di socializzazione (fino a ~14 settimane)** — Fagli conoscere con calma persone, rumori, superfici e cani vaccinati e sani, anche prima della fine dei vaccini, in ambienti controllati (AVSAB 2008). Finché i vaccini non sono completi evita parchi e aree con feci di cani sconosciuti; sì a cani sani e vaccinati, case di amici e classi per cuccioli con protocollo igienico. Abitualo a trasportino e manipolazione. | AVSAB 2008 (position statement) · `lib/logic/seasonal.dart:294` | ☐A ☐M ☐E | |
-| CUC-002 | Cucciolo fino a 26 settimane. | **Educazione al bisogno** — Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Lulù ti dice quando portarlo fuori. | — · `lib/logic/seasonal.dart:303` | ☐A ☐M ☐E | |
+| CUC-002 | Cucciolo fino a 26 settimane. | **Educazione al bisogno** — Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Pellovi ti dice quando portarlo fuori. | — · `lib/logic/seasonal.dart:303` | ☐A ☐M ☐E | |
 
 ### Prevenzione (proposte in cartella)
 

@@ -9,9 +9,9 @@
   Cache-Control: no-cache
 /manifest.json
   Cache-Control: no-cache
-/lulu.apk
+/pellovi.apk
   Content-Type: application/vnd.android.package-archive
-  Content-Disposition: attachment; filename="lulu.apk"
+  Content-Disposition: attachment; filename="pellovi.apk"
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

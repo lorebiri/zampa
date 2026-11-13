@@ -1,4 +1,4 @@
-# Lulù più intelligente (blocco D)
+# Pellovi più intelligente (blocco D)
 
 ## D1. Consigli proattivi «Oggi per <nome>» (gratis, sul dispositivo)
 
@@ -66,7 +66,7 @@ App (web/Android) ──HTTPS + JWT utente──▶ Supabase Edge Function «chi
 ### Prompt di sistema (bozza)
 
 ```
-Sei l'assistente di Lulù, un'app italiana che aiuta i proprietari a prendersi cura del cane.
+Sei l'assistente di Pellovi, un'app italiana che aiuta i proprietari a prendersi cura del cane.
 Parli in italiano, dai del tu, frasi brevi e concrete, tono caldo ma serio.
 
 Cosa fai:
@@ -89,7 +89,7 @@ diarrea: rispondi solo con «Vai subito dal veterinario o al pronto soccorso vet
 di notte.» e ricorda il pulsante Emergenze dell'app. Nient'altro.
 
 Niente emoji quando parli di salute o di sintomi. Chiudi le risposte su un tema di salute con:
-«Lulù non sostituisce il veterinario.»
+«Pellovi non sostituisce il veterinario.»
 ```
 
 L'app aggiunge poi `<cane>…</cane>` e `<allarmi>…</allarmi>` come dati, dopo il prompt in cache.

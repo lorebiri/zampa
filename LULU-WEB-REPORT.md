@@ -1,5 +1,9 @@
 # Lulù: web app installabile e APK Android — rapporto
 
+> **Nota (13/11, notte):** l'app ora si chiama **Pellovi**; «Lulù» è il nome della mascotte, il
+> bolognese in pixel art. Il nome sta in `lib/brand.dart` (`appName`, `mascotName`). In questo
+> rapporto «Lulù» indica l'app nelle sezioni scritte prima del cambio.
+
 Branch `claude/debug-completo` (nessun push precedente, ma ho tenuto questo nome perché è l'unico
 su cui questa sessione è autorizzata a fare push). Niente merge su `main`, niente tag, niente
 pubblicazioni.
@@ -230,7 +234,7 @@ riscrivere `lib/ui/theme.dart` e le schermate.
 
 ### D. Lulù più intelligente
 
-[`docs/ASSISTENTE-LULU.md`](docs/ASSISTENTE-LULU.md):
+[`docs/ASSISTENTE.md`](docs/ASSISTENTE.md):
 - **D1, consigli «Oggi per <nome>»**: regole e priorità progettate sui moduli esistenti
   (prevenzione, stagione, nutrizione, peso, bisogni, diari); implementazione in attesa di Flutter.
 - **D2, assistente con l'API di Claude**: architettura con Supabase Edge Function (la chiave mai

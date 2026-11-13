@@ -12,7 +12,7 @@
          intent, che non richiede il permesso (informativa §3, ricerca/24). -->
 
     <application
-        android:label="Lulù"
+        android:label="Pellovi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

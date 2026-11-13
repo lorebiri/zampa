@@ -133,7 +133,7 @@ void main() {
       expect(r.first.title, '💊 Dose confermata per Rex?');
       expect(
         r.first.body,
-        'Apri Lulù e segna "Dato" o "Saltato". Con i farmaci per le '
+        'Apri Pellovi e segna "Dato" o "Saltato". Con i farmaci per le '
         'convulsioni una dose saltata può far tornare le crisi: se l\'hai '
         'saltata, chiama il veterinario oggi per sapere se darla adesso.',
       );
@@ -144,7 +144,7 @@ void main() {
       expect(r.first.title, '💊 Dose confermata per Rex?');
       expect(
         r.first.body,
-        'Apri Lulù e segna "Dato" o "Saltato". Se l\'hai saltata non '
+        'Apri Pellovi e segna "Dato" o "Saltato". Se l\'hai saltata non '
         'raddoppiare la successiva: chiedi al veterinario.',
       );
     });

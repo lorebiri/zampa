@@ -157,7 +157,10 @@ void main() {
     await tester.tap(find.text('Esporta i miei dati'));
     await tester.pumpAndSettle();
     expect(shared, hasLength(1));
-    expect(shared.single.name, matches(r'^lulu-backup-\d{4}-\d\d-\d\d\.json$'));
+    expect(
+      shared.single.name,
+      matches(r'^pellovi-backup-\d{4}-\d\d-\d\d\.json$'),
+    );
     final j = jsonDecode(shared.single.json) as Map<String, Object?>;
     expect((j['dogs']! as List).length, store.dogs.length);
     expect(find.textContaining('Backup pronto'), findsOneWidget);
@@ -195,7 +198,7 @@ void main() {
       ),
     );
     Finder has(String s) => find.textContaining(s, findRichText: true);
-    expect(has('Informativa privacy di Lulù'), findsOneWidget);
+    expect(has('Informativa privacy di Pellovi'), findsOneWidget);
     expect(has('1. In breve'), findsOneWidget);
     expect(has('Stato:'), findsNothing);
     expect(has('**'), findsNothing);

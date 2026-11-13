@@ -1,14 +1,14 @@
-# Installare Lulù sul telefono
+# Installare Pellovi sul telefono
 
-Lulù è gratuita e funziona senza account: i dati restano sul telefono.
+Pellovi è gratuita e funziona senza account: i dati restano sul telefono.
 
 ## Android (qualsiasi telefono Android 7 o più recente)
 
-L'APK si scarica dalla pagina **Installa Lulù** della web app (`download.html`, oppure
-**Profilo › Installa Lulù sul telefono**), che spiega anche i passaggi:
+L'APK si scarica dalla pagina **Installa Pellovi** della web app (`download.html`, oppure
+**Profilo › Installa Pellovi sul telefono**), che spiega anche i passaggi:
 
 1. Tocca **Scarica per Android (APK)** e conferma il download.
-2. Apri `lulu.apk` dalla notifica o dalla cartella Download. Android chiede di consentire
+2. Apri `pellovi.apk` dalla notifica o dalla cartella Download. Android chiede di consentire
    l'installazione da quella app (Chrome, File…): consenti, poi **Installa**.
 3. Al primo avvio:
    - aggiungi il tuo cane;
@@ -21,11 +21,11 @@ Gli aggiornamenti si installano allo stesso modo, sopra la versione precedente, 
 
 Per chi sviluppa: l'APK di ogni rilascio è anche allegato alla GitHub Release del tag `v*`
 (workflow `.github/workflows/release.yml`) e, per ogni commit su `main`, tra gli artifact del
-workflow **Android** (`lulu-android`).
+workflow **Android** (`pellovi-android`).
 
 ## iPhone e iPad: web app sulla schermata Home
 
-Lulù su iPhone non passa dall'App Store: si usa da Safari come web app installabile.
+Pellovi su iPhone non passa dall'App Store: si usa da Safari come web app installabile.
 
 1. Apri l'indirizzo della web app con **Safari**.
 2. Tocca **Condividi** (il quadrato con la freccia in su) › **Aggiungi alla schermata Home** › **Aggiungi**.
@@ -39,8 +39,8 @@ qualche settimana senza uso.
 
 ```bash
 tool/build_web.sh                        # sito alla radice del dominio
-BASE_HREF=/lulu/ tool/build_web.sh       # sito in una sottocartella
-APK=lulu.apk tool/build_web.sh           # mette anche l'APK nella pagina di download
+BASE_HREF=/pellovi/ tool/build_web.sh       # sito in una sottocartella
+APK=pellovi.apk tool/build_web.sh           # mette anche l'APK nella pagina di download
 ```
 
 Il risultato in `build/web` va caricato così com'è su un hosting statico qualsiasi (HTTPS
