@@ -289,3 +289,33 @@ Dettagli e tabella funzione per funzione: [`docs/FUNZIONI-PIATTAFORME.md`](docs/
 - **PDF per il veterinario sul web**: provato, si scarica `Lulu_<cane>_<data>.pdf`.
 - **Test**: `flutter analyze` pulito; `flutter test` 187 passati (22 saltati, come prima).
 - **Ancora da fare** (non è una funzione esistente, ma conviene): ripristino del backup.
+
+## Aggiornamento: blocco C, stile nuovo applicato a tutta l'app
+
+Lo stile approvato da Lorenzo (schermate di prova `docs/design/home|cane|allarme-*.png`) ora è
+nell'app vera, in chiaro e in scuro.
+
+- **Tema centrale** (`lib/ui/theme.dart`): tavolozza corallo/lime/lilla/cielo/sole su crema (chiaro)
+  o marrone notte (scuro); angoli molto arrotondati; titoli più grossi e decisi; pulsanti pieni
+  corallo con testo scuro; avvisi informativi lilla; **barra di navigazione a pillola sospesa**
+  (scura nel tema chiaro, chiara nel tema scuro). Feedback al tocco con l'effetto «sparkle» e
+  transizioni tra schede, azzerati con «riduci movimento».
+- **Allarmi clinici**: colori e forme invariati (sono i più squadrati, rosso pieno per SUBITO),
+  niente emoji; il compagno si fa da parte.
+- **Accessibilità verificata con test automatici**: in tutte e 5 le schede, in chiaro e in scuro,
+  contrasto del testo AA e aree di tocco di almeno 44 px (`test/visual_a11y_test.dart`); testo al
+  200% senza overflow (test già esistente, verde).
+- **Nome dell'app in un solo punto**: `lib/brand.dart`. I due testi clinici che lo contenevano usano
+  il segnaposto `{app}`; un test controlla che il nome non compaia in altri file Dart. Fuori dal
+  codice Dart il nome sta anche in `web/index.html`, `web/manifest.json`, `web/download.html`,
+  `AndroidManifest.xml` e `ios/Runner/Info.plist`: i test in `test/web_pwa_test.dart` controllano
+  che coincidano con `appName`, quindi un cambio dimenticato fa fallire i test.
+- **Screenshot dell'app vera** in `docs/design/app-*-chiaro.png` e `app-*-scuro.png` (benvenuto,
+  Oggi, Bisogni, Salute, Nutrizione, Profilo, Emergenze, allarme SUBITO) e la panoramica
+  `docs/design/app-panoramica-chiaro.png` / `-scuro.png`. L'allarme si rigenera con
+  `flutter test tool/screens/allarme_test.dart --update-goldens`.
+- Non toccati `pee_forecast_v2.dart` e `elimination_model.dart`.
+- **Test**: `flutter analyze` pulito; `flutter test` 190 passati (22 saltati, come prima).
+- **Non fatto in questo giro**: riscrivere i testi dell'interfaccia con un tono più giovane e
+  qualche emoji. L'app dà già del tu; molti testi sono clinici, rivisti dai veterinari, e non vanno
+  toccati senza di loro. Si può fare sui testi non clinici in un giro dedicato.
