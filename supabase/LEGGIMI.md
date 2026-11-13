@@ -42,6 +42,45 @@ condiviso né caricato su GitHub: è già escluso) e inserisci i valori. Poi:
 flutter run --dart-define-from-file=config/supabase.json
 ```
 
+## 6. Promemoria sul web e su iPhone (Web Push)
+
+Sul web e su iPhone (con Lulù aggiunta alla schermata Home, iOS 16.4+) le
+notifiche locali non esistono: i promemoria li invia il server. Servono
+l'account e questi passaggi, una volta sola.
+
+1. **Database**: esegui `supabase/migrations/2026-11-14_promemoria_web.sql`
+   nel SQL Editor (è già compreso in `schema.sql`).
+2. **Chiavi VAPID** (una coppia per sempre: cambiarla invalida le iscrizioni):
+   `npx web-push generate-vapid-keys`.
+3. **Edge Function**, dalla cartella del progetto:
+   ```bash
+   supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... \
+     VAPID_SUBJECT=https://indirizzo-della-web-app CRON_SECRET=$(openssl rand -hex 24)
+   supabase functions deploy invia-promemoria --no-verify-jwt
+   ```
+   `--no-verify-jwt` perché la chiama il cron con `CRON_SECRET`, non un utente.
+4. **Cron ogni minuto** (Database › Extensions: attiva `pg_cron` e `pg_net`),
+   poi nel SQL Editor, con l'URL del progetto e lo stesso `CRON_SECRET`:
+   ```sql
+   select cron.schedule('lulu-promemoria', '* * * * *', $$
+     select net.http_post(
+       url := 'https://IL-TUO-PROGETTO.supabase.co/functions/v1/invia-promemoria',
+       headers := jsonb_build_object('Authorization', 'Bearer IL-CRON-SECRET'))
+   $$);
+   ```
+5. **App**: aggiungi `VAPID_PUBLIC_KEY` (la pubblica) a `config/supabase.json`.
+
+Nell'app, sul web, la Home mostra «Attiva promemoria» quando tutto è pronto,
+altrimenti spiega cosa manca (aggiungere alla Home su iPhone, entrare con
+l'account, notifiche bloccate nel browser).
+
+Privacy: titoli e testi dei promemoria (nome del cane, farmaci, orari) restano
+sul server UE solo fino all'invio, e la funzione non li scrive nei registri.
+Vanno citati nell'informativa e nel registro dei trattamenti.
+
+Prove: `supabase/tests/esegui.sh` (SQL, 17 test) e, per la funzione,
+`deno test supabase/functions/invia-promemoria/logica_test.ts`.
+
 ## Come funziona
 - **Offline prima di tutto:** l'app lavora sempre sui dati locali e sincronizza qualche
   secondo dopo ogni modifica, quando c'è rete.

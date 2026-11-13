@@ -91,6 +91,13 @@ void main() {
       );
     });
 
+    test('sw.js riceve i promemoria Web Push e apre Lulù al tocco', () {
+      final sw = File('web/sw.js').readAsStringSync();
+      expect(sw, contains("addEventListener('push'"));
+      expect(sw, contains('showNotification('));
+      expect(sw, contains("addEventListener('notificationclick'"));
+    });
+
     test('pagina di download: APK e istruzioni per iPhone', () {
       final html = File('web/download.html').readAsStringSync();
       expect(html, contains('Scarica per Android (APK)'));

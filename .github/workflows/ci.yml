@@ -30,3 +30,15 @@ jobs:
       - run: flutter test
       # La web app è la versione per iPhone: deve compilare a ogni modifica.
       - run: tool/build_web.sh
+
+  edge-function:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      # Logica dell'invio dei promemoria Web Push.
+      - run: deno test supabase/functions/invia-promemoria/logica_test.ts
+      - run: deno check supabase/functions/invia-promemoria/index.ts

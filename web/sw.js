@@ -75,6 +75,44 @@ self.addEventListener('message', (event) => {
   );
 });
 
+// Promemoria Web Push inviati da supabase/functions/invia-promemoria.
+self.addEventListener('push', (event) => {
+  let dati = {};
+  try {
+    dati = event.data ? event.data.json() : {};
+  } catch (e) {
+    dati = { body: event.data ? event.data.text() : '' };
+  }
+  const titolo = dati.title || 'Lulù';
+  event.waitUntil(
+    self.registration.showNotification(titolo, {
+      body: dati.body || '',
+      tag: dati.tag || undefined,
+      renotify: Boolean(dati.tag),
+      requireInteraction: Boolean(dati.urgent),
+      icon: 'icons/Icon-192.png',
+      badge: 'icons/Icon-192.png',
+      lang: 'it',
+      data: { url: self.registration.scope },
+    }),
+  );
+});
+
+// Tocco sulla notifica: porta in primo piano Lulù o la apre.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || self.registration.scope;
+  event.waitUntil(
+    (async () => {
+      const finestre = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      for (const c of finestre) {
+        if (c.url.startsWith(self.registration.scope) && 'focus' in c) return c.focus();
+      }
+      return self.clients.openWindow(url);
+    })(),
+  );
+});
+
 function shouldSkip(url) {
   return url.pathname.endsWith('.apk') || url.pathname.endsWith('/sw.js');
 }
