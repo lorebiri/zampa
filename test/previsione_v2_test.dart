@@ -70,7 +70,8 @@ void main() {
       final v = _v2(logs.where((l) => !l.time.isAfter(now)).toList(), now);
       final p = v.point;
       final c = [p.base, p.sameTime, p.sameWeekday]..sort();
-      var expected = p.earliest ? c.first : c[1];
+      var expected = c[1];
+      if (p.earliest && p.base.isBefore(expected)) expected = p.base;
       if (expected.isBefore(p.origin)) expected = p.origin;
       expect(p.at, expected);
     }
@@ -89,7 +90,7 @@ void main() {
     expect(b.probNextHour, closeTo(a.probNextHour, 1e-9));
   });
 
-  test('pipì più frequenti negli ultimi giorni: vale il più anticipato', () {
+  test('pipì più frequenti negli ultimi giorni: mai oltre la base', () {
     // 11 giorni ogni ~4 ore, poi 3 giorni ogni ~2 ore (poliuria).
     final logs = <LogEntry>[];
     var id = 0;
@@ -121,9 +122,6 @@ void main() {
     expect(f.adaptedRecent, isTrue);
     final p = f.v2!.point;
     expect(p.earliest, isTrue);
-    final c = [p.base, p.sameTime, p.sameWeekday]..sort();
-    final first = c.first.isBefore(p.origin) ? p.origin : c.first;
-    expect(p.at, first);
     expect(p.at.isAfter(p.base), isFalse);
   });
 

@@ -1,12 +1,7 @@
-{"tag": "v2fin", "shadow": false, "of": 4,
+{"tag": "v21", "shadow": false, "of": 4,
  "jobs": [
   {"scenario": "realistico", "grid": true},
   {"scenario": "realistico_nuovo", "grid": true},
-  {"scenario": "pulito"},
-  {"scenario": "mancanti"},
-  {"scenario": "jitter"},
-  {"scenario": "orari_padrone"},
-  {"scenario": "weekend"},
-  {"scenario": "cambio_routine"},
+  {"scenario": "realistico_nuovo2", "grid": true},
   {"scenario": "poliuria"}
  ]}

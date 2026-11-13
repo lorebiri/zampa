@@ -19,3 +19,9 @@
 - **Banco nuovo** (`realistico_nuovo`): stesse soglie. È la prova che conta per l'adattamento al banco.
 - Altri 7 scenari: R/timer e copertura, descrittivi.
 - Riferimento secondario, non usato per decidere: mediana di cinque candidati (B, modello in ombra, H, W, timer).
+
+## Esito della regola congelata e correzione v2.1 (13/11/2026, dopo la verifica)
+
+La regola qui sopra, eseguita con il codice dell'app (`risultati/v2fin_*`), **non supera** la soglia R/timer: 0,87 [0,80–0,94] sul realistico e 0,88 [0,79–0,96] sul banco nuovo. Causa: la regola di sicurezza (punto 2, «il più anticipato») scatta nel 18-21% degli eventi e li anticipa di circa 80 minuti; nell'analisi esplorativa non c'era.
+
+**v2.1, decisa dopo aver visto il banco nuovo** (quindi il banco nuovo non vale più come prova indipendente): punto 2 diventa «se la previsione di base ha accorciato l'intervallo per gli ultimi 3 giorni, l'orario previsto non va oltre quello della previsione di base». Il resto è invariato. Prova indipendente: un terzo banco mai eseguito (`realistico_nuovo2`, seme 2), con le stesse soglie, più lo scenario poliuria per T14.

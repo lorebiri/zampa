@@ -102,6 +102,16 @@ const scenarios = {
     polyuria: PuMode.own,
     seed: 1,
   ),
+  'realistico_nuovo2': Scenario(
+    'realistico',
+    missing: true,
+    jitter: true,
+    sched: SchedMode.mix,
+    weekend: true,
+    routineChange: true,
+    polyuria: PuMode.own,
+    seed: 2,
+  ),
 };
 
 class DogSpec {

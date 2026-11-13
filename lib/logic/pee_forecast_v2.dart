@@ -15,7 +15,8 @@ import 'potty_predictor.dart';
 /// L'orario previsto è la MEDIANA dei tre: quando una regola sbaglia (per
 /// esempio il timer nei cani a orari fissi, o l'orario abituale nel fine
 /// settimana) le altre due la mettono in minoranza. Se negli ultimi 3 giorni
-/// il cane esce più spesso (poliuria che compare) vale il più anticipato.
+/// il cane esce più spesso (poliuria che compare) non si va oltre la
+/// previsione di base, che ha già accorciato l'intervallo.
 ///
 /// La finestra e la probabilità sono calibrate sugli errori passati del
 /// cane, ricalcolati con origine onesta (nessun dato dal futuro):
@@ -52,7 +53,8 @@ class V2Point {
   /// Candidati: previsione di base, stesso orario, stesso giorno.
   final DateTime base, sameTime, sameWeekday;
 
-  /// True se vale il più anticipato (pipì più frequenti negli ultimi giorni).
+  /// True se le pipì sono più frequenti negli ultimi giorni (la previsione
+  /// non va oltre quella di base).
   final bool earliest;
 
   /// True se è la prima pipì dopo la notte (base ≥ 5 ore dopo, altro giorno).
@@ -213,7 +215,11 @@ V2Point combineV2({
   final refs = referenceForecasts(dog, past, cluster, priorMedian);
   final c = [base, refs.sameTime, refs.sameWeekday]
     ..sort((a, b) => a.compareTo(b));
-  var at = adaptedRecent ? c.first : c[1];
+  // v2.1 (ricerca/27 §3.4): con pipì più frequenti negli ultimi giorni la
+  // mediana non va oltre la previsione di base, che è già accorciata. (La
+  // regola congelata prendeva il più anticipato dei tre: troppo presto.)
+  var at = c[1];
+  if (adaptedRecent && base.isBefore(at)) at = base;
   if (at.isBefore(origin)) at = origin;
   return V2Point(
     origin: origin,
