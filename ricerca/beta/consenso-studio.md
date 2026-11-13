@@ -97,22 +97,18 @@ Escono solo **numeri già calcolati sul telefono**. Ci arrivano in uno di questi
 mandi tu (per esempio per email) all'indirizzo della prova. Lo puoi aprire e leggere prima
 di mandarlo.
 
-**b) L'invio automatico, se presente nella tua versione.** `[DA COMPLETARE: dire se la v3
-invia anche ogni giorno, senza account, a un server Supabase in UE (Francoforte), come in
-ricerca/12 §5.3. Se no, togliere questo punto.]`
+Nella versione v3 l'app **non invia nulla da sola**: esce solo il file che mandi tu.
 
-Il contenuto è lo stesso:
+Il file contiene:
 
 | Gruppo | Cosa contiene | Come è reso meno preciso |
 |---|---|---|
 | Sul cane | codice casuale; fascia d'età (cucciolo, adulto, anziano); fascia di taglia (meno di 10, 10-25, 25-45, oltre 45 kg); sesso e se è sterilizzato; malattia cronica sì/no; giardino o terrazzo dove può fare i bisogni da solo sì/no; come esce di solito (quando lo chiede, a orari fissi, un po' e un po', accesso libero al giardino) | solo fasce e categorie, nessun testo libero |
-| Per ogni evento (pipì o cacca) | giorno dello studio (0, 1, 2…); parte della giornata; di quanto ha sbagliato la previsione; se è successo in casa (sì/no); se prima hai segnato un segnale (sì/no) | minuti arrotondati a 5; nessun orario, nessuna data |
-| Per ogni giorno | numero di uscite | solo il numero |
+| Per ogni evento (pipì o cacca) | giorno dello studio (0, 1, 2…); fine settimana sì/no; parte della giornata (mattino, giorno, sera; solo pipì); di quanto hanno sbagliato le previsioni, anche con il segno (prima o dopo); se la pipì è caduta nella fascia prevista (sì/no); se è successo in casa (sì/no); se prima hai segnato un segnale (sì/no) | minuti arrotondati a 5 e troncati a 12 ore; nessun orario, nessuna data |
+| Per ogni giorno | numero di uscite, di incidenti in casa e di segnali segnati | solo i numeri |
 | Tecnico | versione dell'app, della previsione e di questo testo | |
 
-`[DA COMPLETARE: allineare questa tabella al formato definitivo del file di esportazione
-e, se c'è, dell'invio automatico. Ogni campo in più va aggiunto qui prima, e cambia la
-versione del testo.]`
+La tabella corrisponde al file prodotto dall'app (`lib/logic/study_export.dart`, versione `studio-v3-2026-11`). Ogni campo in più va aggiunto qui prima, e cambia la versione del testo.
 
 ### 6. Cosa non esce mai
 

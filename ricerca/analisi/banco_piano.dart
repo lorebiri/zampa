@@ -111,7 +111,8 @@ PlanDogResult simulatePlan(
     routineChange: true,
     polyuria: PuMode.own,
   );
-  final owner = OwnerKind.values[(index + seed) % 3];
+  // Padroni mescolati anche quando si prende un cane su tre.
+  final owner = OwnerKind.values[(index + index ~/ 3 + seed) % 3];
   final res = PlanDogResult(s.id, s.group, owner);
   // Stessi pasti, bevute e orari in tutte le strategie (numeri casuali
   // comuni): r1 per il piano della giornata, r2 per i minuti.
