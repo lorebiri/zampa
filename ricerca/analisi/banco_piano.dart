@@ -21,6 +21,8 @@
 //     passano almeno 60 minuti.
 part of 'banco.dart';
 
+int planDecideCalls = 0, planDecideMs = 0;
+
 enum OwnerKind { tempoPieno, partTime, casa }
 
 class PlanArm {
@@ -176,14 +178,6 @@ PlanDogResult simulatePlan(
   meals.sort();
   drinks.sort((a, b) => a.$1.compareTo(b.$1));
 
-  bool asleepAt(DateTime t) {
-    for (var d = 0; d < wakes.length; d++) {
-      if (t.isBefore(wakes[d])) return d == 0 || !t.isBefore(beds[d - 1]);
-      if (t.isBefore(beds[d])) return false;
-    }
-    return true;
-  }
-
   bool ownerHome(DateTime t) {
     if (t.weekday >= 6) return true;
     final m = t.hour * 60 + t.minute;
@@ -191,6 +185,47 @@ PlanDogResult simulatePlan(
       if (m >= a && m < b) return false;
     }
     return true;
+  }
+
+  // Tabelle al minuto, uguali in tutte le strategie (più veloce).
+  const total = simDays * 24 * 60;
+  final asleepArr = List<bool>.filled(total, false);
+  final homeArr = List<bool>.filled(total, true);
+  final mealArr = List<bool>.filled(total, false);
+  final rateArr = List<double>.filled(total, 0);
+  {
+    var wi = 0;
+    for (var i = 0; i < total; i++) {
+      final t = simStart.add(Duration(minutes: i));
+      while (wi < wakes.length && !t.isBefore(beds[wi])) {
+        wi++;
+      }
+      // Sveglio tra wakes[wi] e beds[wi].
+      asleepArr[i] = wi >= wakes.length || t.isBefore(wakes[wi]);
+      homeArr[i] = ownerHome(t);
+      final pu = puFrom != null && !t.isBefore(puFrom) ? 2.2 : 1.0;
+      final chronicPu = s.chronic ? 2.0 : 1.0;
+      rateArr[i] =
+          (asleepArr[i] ? 0.35 : 0.5) * sizeScale * pu * chronicPu / 60;
+    }
+    for (final m in meals) {
+      final i0 = m.difference(simStart).inMinutes;
+      for (var i = i0 + 25; i <= i0 + 60; i++) {
+        if (i >= 0 && i < total) mealArr[i] = true;
+      }
+    }
+    for (final (drunkAt, ml0) in drinks) {
+      final i0 = drunkAt.difference(simStart).inMinutes;
+      for (var dt = 0; dt <= 240; dt++) {
+        final i = i0 + dt;
+        if (i < 0 || i >= total) continue;
+        final t = simStart.add(Duration(minutes: i));
+        final pu = puFrom != null && !t.isBefore(puFrom) ? 2.2 : 1.0;
+        final ml = ml0 * pu * (s.chronic ? 2.0 : 1.0);
+        final k = math.exp(-0.5 * math.pow((dt - 65) / 35, 2)) / (35 * 2.5066);
+        rateArr[i] += 0.7 * ml * sizeScale * k;
+      }
+    }
   }
 
   final logged = <LogEntry>[];
@@ -216,8 +251,7 @@ PlanDogResult simulatePlan(
   );
   DateTime? outEnd, outStart, pendingOut;
   var peed = false, pooped = false;
-  final bolus = <(DateTime, double)>[];
-  var di = 0, mi = 0;
+  var mi = 0;
   DateTime? lastPolicyOut;
   // Decisione della strategia: prossimo orario.
   DateTime? next;
@@ -235,7 +269,7 @@ PlanDogResult simulatePlan(
     return r ?? wakes[0];
   }
 
-  DateTime? decide(DateTime now) {
+  DateTime? decideImpl(DateTime now) {
     final day = DateTime(now.year, now.month, now.day);
     switch (arm.kind) {
       case 'fisso':
@@ -274,12 +308,22 @@ PlanDogResult simulatePlan(
     return null;
   }
 
+  DateTime? decide(DateTime now) {
+    planDecideCalls++;
+    final sw = Stopwatch()..start();
+    final r = decideImpl(now);
+    planDecideMs += sw.elapsedMilliseconds;
+    return r;
+  }
+
   // Per la valutazione dei segnali (orario del segnale, previsione v2).
   final openSignals = <(DateTime, DateTime?)>[];
 
+  var mIdx = -1;
   for (var t = simStart; t.isBefore(end); t = t.add(const Duration(minutes: 1))) {
-    final asleep = asleepAt(t);
-    final home = ownerHome(t);
+    mIdx++;
+    final asleep = asleepArr[mIdx];
+    final home = homeArr[mIdx];
     final avail = home && !asleep;
     final dIdx = t.difference(simStart).inDays;
     if (dIdx != lastDay && !asleep && t.hour >= 4) {
@@ -297,24 +341,11 @@ PlanDogResult simulatePlan(
         next = decide(t);
       }
     }
-    final pu = puFrom != null && !t.isBefore(puFrom) ? 2.2 : 1.0;
-    final chronicPu = s.chronic ? 2.0 : 1.0;
-    while (di < drinks.length && !drinks[di].$1.isAfter(t)) {
-      bolus.add((drinks[di].$1, drinks[di].$2 * pu * chronicPu));
-      di++;
-    }
     while (mi < meals.length && !meals[mi].isAfter(t)) {
       if (r2.nextDouble() < 0.85) log(LogType.pasto, meals[mi]);
       mi++;
     }
-    var rate = (asleep ? 0.35 : 0.5) * sizeScale * pu * chronicPu / 60;
-    for (final (drunkAt, ml) in bolus) {
-      final dt = t.difference(drunkAt).inMinutes.toDouble();
-      if (dt < 0 || dt > 240) continue;
-      final k = math.exp(-0.5 * math.pow((dt - 65) / 35, 2)) / (35 * 2.5066);
-      rate += 0.7 * ml * sizeScale * k;
-    }
-    bolus.removeWhere((b) => t.difference(b.$1).inMinutes > 240);
+    final rate = rateArr[mIdx];
     v += rate;
 
     final outside = outEnd != null && t.isBefore(outEnd);
@@ -356,10 +387,7 @@ PlanDogResult simulatePlan(
       } else if (v >= 0.8 * urge && r2.nextDouble() < 0.05) {
         sig = [Sign.annusaTerra, Sign.giraSuSe, Sign.irrequieto][r2.nextInt(3)];
       } else if (!t.isBefore(readyAt)) {
-        final recentMeal = meals.any((m) {
-          final dt = t.difference(m).inMinutes;
-          return dt >= 25 && dt <= 60;
-        });
+        final recentMeal = mealArr[mIdx];
         final strong = t.difference(readyAt).inMinutes > 240;
         if ((recentMeal || strong) && r2.nextDouble() < 0.08) {
           sig = r2.nextBool() ? Sign.giraSuSe : Sign.annusaTerra;

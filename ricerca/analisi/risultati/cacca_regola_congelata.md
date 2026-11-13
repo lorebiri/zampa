@@ -46,3 +46,14 @@ Tutti gli eventi, codice dell'app (`risultati/v3cacca_verifica.txt`):
 ## Correzione v3.1 (dichiarata DOPO aver visto la verifica)
 
 Sui tre banchi realistici W («stesso giorno») è sempre il candidato peggiore (1,22-1,38 tra i cani a orari decisi dal padrone). La mediana di **M, H, T** (senza W) fa 0,92 [0,86–0,98], 0,86 [0,80–0,95], 0,88 [0,82–0,95]: è una scelta fatta guardando questi banchi, quindi non vale come conferma. **Si verifica su due banchi mai eseguiti: `realistico_nuovo3` e `orari_padrone_nuovo3` (seme 3)**, con lo stesso criterio (R/timer ≤ 0,85 e IC < 1 sul realistico nuovo). Questo testo è nel commit prima dell'esecuzione.
+
+## Esito di v3.1 sul quarto banco (mai eseguito prima)
+
+`risultati/v3cacca_v31_nuovo3.txt`, tutti gli eventi:
+
+| Banco | Timer (min) | v3.1 R/timer | Regola congelata (M, H, W, T) | M da sola | Criterio |
+|---|---|---|---|---|---|
+| `realistico_nuovo3` | 106 | **0,86 [0,77–0,98]** | 0,90 [0,83–1,01] | 0,90 | IC < 1 ✔, soglia 0,85 ✘ (per un centesimo) |
+| `orari_padrone_nuovo3` (uscite decise dal padrone, registrazioni mancanti) | 176 | **0,68 [0,58–0,79]** | 0,72 | 0,67 | ✔ |
+
+Copertura 80%: 77% su entrambi. Errore con segno +29 / +13 min (la previsione è un po' in anticipo: verso prudente).

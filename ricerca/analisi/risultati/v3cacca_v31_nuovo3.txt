@@ -1,0 +1,37 @@
+## cacca realistico_nuovo3 (un evento su 1) (n = 1347, cani = 32)
+- timer: errore mediano 106 min, R/timer 1.00 [1.00–1.00], R/H 1.00
+- H: errore mediano 123 min, R/timer 1.00 [0.89–1.15], R/H 1.00
+- W: errore mediano 127 min, R/timer 1.08 [0.95–1.27], R/H 1.08
+- M: errore mediano 112 min, R/timer 0.90 [0.80–1.03], R/H 0.90
+- v3: errore mediano 106 min, R/timer 0.86 [0.77–0.98], R/H 0.86
+- medMH: errore mediano 113 min, R/timer 0.94 [0.84–1.08], R/H 0.94
+- min3: errore mediano 114 min, R/timer 0.95 [0.84–1.11], R/H 0.96
+- medMHT: errore mediano 106 min, R/timer 0.86 [0.77–0.98], R/H 0.86
+- medHWT: errore mediano 99 min, R/timer 0.93 [0.84–1.05], R/H 0.93
+- med4: errore mediano 105 min, R/timer 0.90 [0.83–1.01], R/H 0.90
+- v3 errore con segno mediano: 29
+- v3 copertura 50%: 47%, 80%: 77%
+- orari decisi dal padrone (n=678), R/timer: timer 1.00, H 1.07, W 1.22, M 0.92, v3 0.86, medMH 0.99, min3 1.01, medMHT 0.86, medHWT 1.01, med4 0.95
+- a richiesta (n=669), R/timer: timer 1.00, H 0.88, W 0.85, M 0.86, v3 0.84, medMH 0.85, min3 0.87, medMHT 0.84, medHWT 0.79, med4 0.82
+- cuccioli (n=373), R/timer: timer 1.00, H 1.17, W 1.31, M 1.01, v3 1.03, medMH 1.09, min3 1.04, medMHT 1.03, medHWT 1.10, med4 1.09
+- adulti (n=546), R/timer: timer 1.00, H 0.96, W 1.08, M 0.89, v3 0.83, medMH 0.98, min3 0.99, medMHT 0.83, medHWT 0.94, med4 0.85
+- anziani (n=204), R/timer: timer 1.00, H 1.13, W 1.13, M 0.96, v3 0.95, medMH 0.97, min3 0.91, medMHT 0.95, medHWT 0.94, med4 0.99
+
+## cacca orari_padrone_nuovo3 (un evento su 1) (n = 1358, cani = 32)
+- timer: errore mediano 176 min, R/timer 1.00 [1.00–1.00], R/H 1.09
+- H: errore mediano 175 min, R/timer 0.91 [0.81–1.05], R/H 1.00
+- W: errore mediano 192 min, R/timer 1.07 [0.97–1.18], R/H 1.17
+- M: errore mediano 97 min, R/timer 0.67 [0.53–0.81], R/H 0.73
+- v3: errore mediano 134 min, R/timer 0.68 [0.58–0.79], R/H 0.75
+- medMH: errore mediano 149 min, R/timer 0.70 [0.62–0.79], R/H 0.77
+- min3: errore mediano 157 min, R/timer 0.90 [0.79–1.02], R/H 0.99
+- medMHT: errore mediano 134 min, R/timer 0.68 [0.58–0.79], R/H 0.75
+- medHWT: errore mediano 162 min, R/timer 0.83 [0.75–0.93], R/H 0.91
+- med4: errore mediano 139 min, R/timer 0.72 [0.64–0.80], R/H 0.78
+- v3 errore con segno mediano: 13
+- v3 copertura 50%: 49%, 80%: 77%
+- orari decisi dal padrone (n=1358), R/timer: timer 1.00, H 0.91, W 1.07, M 0.67, v3 0.68, medMH 0.70, min3 0.90, medMHT 0.68, medHWT 0.83, med4 0.72
+- cuccioli (n=376), R/timer: timer 1.00, H 1.03, W 1.38, M 0.88, v3 1.01, medMH 1.18, min3 0.89, medMHT 1.01, medHWT 1.13, med4 1.05
+- adulti (n=553), R/timer: timer 1.00, H 0.95, W 1.08, M 0.73, v3 0.63, medMH 0.71, min3 0.89, medMHT 0.63, medHWT 0.82, med4 0.68
+- anziani (n=198), R/timer: timer 1.00, H 0.89, W 1.05, M 0.45, v3 0.66, medMH 0.53, min3 0.98, medMHT 0.66, medHWT 0.75, med4 0.68
+

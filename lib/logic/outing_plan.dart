@@ -346,14 +346,47 @@ OutingPlan planDay(
   final remaining = math.max(0, n - done);
   final k = math.min(remaining, slots.length);
 
-  double gapCost(DateTime a, DateTime b) {
-    final l = hm.load(a, b, owner: owner);
+  double costOf(double l, double awake) {
     var c = hm.riskOfLoad(l);
     // Tetto diurno per età e salute: solo per il tempo da sveglio.
-    final awake = hm.awakeMinutes(a, b, owner);
     if (awake > hm.capMin) c += p.capPenalty * (awake / hm.capMin - 1);
     return c;
   }
+
+  double gapCost(DateTime a, DateTime b) =>
+      costOf(hm.load(a, b, owner: owner), hm.awakeMinutes(a, b, owner).toDouble());
+
+  // Carico cumulato su una griglia di 15 minuti da t0 alla prima uscita di
+  // domani: il costo di un intervallo tra due orari è una differenza.
+  final grid = <DateTime>[];
+  for (var t = t0; t.isBefore(nextFirst); t = t.add(Duration(minutes: p.step))) {
+    grid.add(t);
+  }
+  grid.add(nextFirst);
+  final cl = List<double>.filled(grid.length, 0);
+  final ca = List<double>.filled(grid.length, 0);
+  final mealAt = <int>{};
+  for (var d = -1; d <= 1; d++) {
+    for (final m in hm.meals) {
+      final t = day.add(Duration(days: d, minutes: m + 30));
+      if (t.isBefore(t0) || !t.isBefore(nextFirst)) continue;
+      mealAt.add(t.difference(t0).inMinutes ~/ p.step + 1);
+    }
+  }
+  for (var g = 1; g < grid.length; g++) {
+    cl[g] = cl[g - 1] +
+        hm.load(grid[g - 1], grid[g], owner: owner) +
+        (mealAt.contains(g) ? p.mealLoad : 0);
+    ca[g] = ca[g - 1] + hm.awakeMinutes(grid[g - 1], grid[g], owner);
+  }
+  final l0 = hm.load(lastPee, t0, owner: owner);
+  final a0 = hm.awakeMinutes(lastPee, t0, owner).toDouble();
+  int gi(DateTime t) => t.difference(t0).inMinutes ~/ p.step;
+  final slotG = [for (final t in slots) gi(t)];
+  final lastG = grid.length - 1;
+  double costIdx(int h, int i) => h < 0
+      ? costOf(l0 + cl[i], a0 + ca[i])
+      : costOf(cl[i] - cl[h], ca[i] - ca[h]);
 
   if (k == 0) {
     final r = hm.riskOfLoad(hm.load(lastPee, nextFirst, owner: owner));
@@ -372,14 +405,14 @@ OutingPlan planDay(
   final best = List.generate(k, (_) => List.filled(m, inf));
   final from = List.generate(k, (_) => List.filled(m, -1));
   for (var i = 0; i < m; i++) {
-    best[0][i] = gapCost(lastPee, slots[i]);
+    best[0][i] = costIdx(-1, slotG[i]);
   }
   for (var j = 1; j < k; j++) {
     for (var i = j; i < m; i++) {
       for (var h = j - 1; h < i; h++) {
         if (best[j - 1][h] == inf) continue;
         if (slots[i].difference(slots[h]).inMinutes < 60) continue;
-        final v = best[j - 1][h] + gapCost(slots[h], slots[i]);
+        final v = best[j - 1][h] + costIdx(slotG[h], slotG[i]);
         if (v < best[j][i]) {
           best[j][i] = v;
           from[j][i] = h;
@@ -391,7 +424,7 @@ OutingPlan planDay(
   var bv = inf;
   for (var i = 0; i < m; i++) {
     if (best[k - 1][i] == inf) continue;
-    final v = best[k - 1][i] + gapCost(slots[i], nextFirst);
+    final v = best[k - 1][i] + costIdx(slotG[i], lastG);
     if (v < bv) {
       bv = v;
       bi = i;
