@@ -1,0 +1,91 @@
+name: Web app su GitHub Pages
+
+# Costruisce la web app (PWA) e la pubblica su GitHub Pages a ogni push su
+# main e a ogni tag v*. Indirizzo: https://<utente>.github.io/<repo>/ oppure,
+# se la variabile di repository PAGES_DOMAIN è impostata (es. app.pellovi.it),
+# il dominio personalizzato. La pagina di download punta all'APK dell'ultima
+# GitHub Release (workflow «Rilascio»), scaricabile solo se il repo è pubblico.
+#
+# Una volta sola, in GitHub: Settings › Pages › Source: «GitHub Actions».
+# Facoltative (Settings › Secrets and variables › Actions › Variables):
+# PAGES_DOMAIN, SUPABASE_URL, SUPABASE_ANON_KEY, VAPID_PUBLIC_KEY (sono
+# valori pubblici: finiscono comunque nel codice della web app).
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Indirizzo del sito
+        id: sito
+        env:
+          DOMINIO: ${{ vars.PAGES_DOMAIN }}
+          REPO: ${{ github.event.repository.name }}
+        run: |
+          if [[ -n "$DOMINIO" ]]; then
+            echo "base=/" >> "$GITHUB_OUTPUT"
+          elif [[ "$REPO" == *.github.io ]]; then
+            echo "base=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=/$REPO/" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build della web app
+        env:
+          BASE_HREF: ${{ steps.sito.outputs.base }}
+          APK_URL: https://github.com/${{ github.repository }}/releases/latest/download/pellovi.apk
+          LULU_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
+        run: |
+          ARGS=()
+          if [[ -n "$SUPABASE_URL" && -n "$SUPABASE_ANON_KEY" ]]; then
+            ARGS+=(--dart-define=SUPABASE_URL="$SUPABASE_URL" --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY")
+          fi
+          if [[ -n "$VAPID_PUBLIC_KEY" ]]; then
+            ARGS+=(--dart-define=VAPID_PUBLIC_KEY="$VAPID_PUBLIC_KEY")
+          fi
+          LULU_VERSION="${LULU_VERSION#v}" tool/build_web.sh "${ARGS[@]}"
+
+      - name: Dominio personalizzato
+        if: vars.PAGES_DOMAIN != ''
+        run: echo "${{ vars.PAGES_DOMAIN }}" > build/web/CNAME
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

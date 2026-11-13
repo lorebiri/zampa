@@ -26,4 +26,6 @@ if [[ -n "${APK:-}" ]]; then
 fi
 
 VERSIONE="$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | cut -d+ -f1)"
-python3 tool/pwa_finalize.py build/web "${LULU_VERSION:-$VERSIONE}"
+# APK_URL: pulsante «Scarica per Android» verso un APK altrove (es. l'ultima
+# GitHub Release); senza, punta a pellovi.apk accanto alla web app.
+python3 tool/pwa_finalize.py build/web "${LULU_VERSION:-$VERSIONE}" "${APK_URL:-}"

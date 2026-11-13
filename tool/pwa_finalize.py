@@ -5,7 +5,10 @@
   un'impronta del loro contenuto (così ogni nuova versione svuota la cache).
 - Scrive il numero di versione nella pagina di download.
 
-Uso: python3 tool/pwa_finalize.py build/web [versione]
+Uso: python3 tool/pwa_finalize.py build/web [versione] [indirizzo-apk]
+
+Con indirizzo-apk (es. l'APK dell'ultima GitHub Release) il pulsante della
+pagina di download punta lì invece che a pellovi.apk accanto alla web app.
 Solo libreria standard: gira su qualunque runner con Python 3.
 """
 import hashlib
@@ -44,6 +47,7 @@ def main() -> int:
         return 2
     radice = sys.argv[1]
     versione = sys.argv[2] if len(sys.argv) > 2 else ''
+    apk = sys.argv[3] if len(sys.argv) > 3 else ''
     sw = os.path.join(radice, 'sw.js')
     if not os.path.isfile(sw):
         print(f'Manca {sw}: la build non contiene web/sw.js', file=sys.stderr)
@@ -80,9 +84,15 @@ def main() -> int:
     open(sw, 'w', encoding='utf-8').write(testo)
 
     download = os.path.join(radice, 'download.html')
-    if versione and os.path.isfile(download):
+    if os.path.isfile(download) and (versione or apk):
         pagina = open(download, encoding='utf-8').read()
-        pagina = pagina.replace('__LULU_VERSIONE__', versione)
+        if versione:
+            pagina = pagina.replace('__LULU_VERSIONE__', versione)
+        if apk:
+            if not apk.startswith('https://'):
+                print('indirizzo-apk deve iniziare con https://', file=sys.stderr)
+                return 1
+            pagina = pagina.replace('href="pellovi.apk"', f'href="{apk}"')
         open(download, 'w', encoding='utf-8').write(pagina)
 
     dimensione = sum(os.path.getsize(os.path.join(radice, r)) for r in file)
