@@ -336,12 +336,11 @@ class DogHeader extends StatelessWidget {
                     color: c.dark ? Palette.nightMustard : Palette.mustard,
                     borderRadius: BorderRadius.circular(Radii.field),
                   ),
-                  child: Text(
-                    dog.name.isEmpty ? '?' : dog.name[0].toUpperCase(),
-                    style: t.textTheme.headlineSmall?.copyWith(
-                      color: Palette.mustardInk,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  clipBehavior: Clip.antiAlias,
+                  // Il compagno in piccolo: lo stesso cane personalizzato.
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: PixelDogView(look: dog.look, height: 44),
                   ),
                 ),
               ),

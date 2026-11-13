@@ -346,3 +346,20 @@ nell'app vera, in chiaro e in scuro.
   degli stati, pelo a fiocchi o riccio, muso corto o lungo, accessori, preimpostazioni per razza,
   colori proposti da una foto (in locale), legami con le attività del giorno.
 - **Test**: `flutter analyze` pulito; `flutter test` 190 passati.
+
+## Aggiornamento: tamagotchi integrato (3 commit separati, annullabili)
+
+1. `7705c3e` **Stati d'animo**: scodinzola anche dopo un pasto; sereno e premuroso con una scadenza
+   entro 7 giorni (se è passata, «da fare quando puoi», senza rimproveri); felice quando le cose di
+   oggi sono fatte. Restano le regole di prima: con un allarme è preoccupato, mai felice; dorme negli
+   orari di sonno; impaziente quando la pipì prevista si avvicina (previsione letta, non modificata).
+2. `30c578e` **Personalizzazione**: pelo raso, lungo, riccio o a fiocchi; muso corto, medio o lungo;
+   orecchie lunghe; accessorio (collare, fiocco, bandana); 13 razze di partenza; Lulù (bolognese a
+   fiocchi con fiocco corallo) nel primo avvio. I dati salvati prima restano validi.
+3. **Compagno in piccolo** nell'intestazione di tutte le schede, al posto dell'iniziale del nome.
+
+Per annullare una parte basta `git revert <commit>`.
+
+Non fatto, da decidere: compagno nelle notifiche e widget Android (dopo), colori proposti da una
+foto (in locale). Animazioni: restano quelle a pochi frame già presenti; ferme con «riduci movimento».
+Test: 197 passati; analyze pulito.
