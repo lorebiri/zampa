@@ -9,8 +9,8 @@
     "scope": "./",
     "display": "standalone",
     "orientation": "portrait",
-    "background_color": "#F2F4EF",
-    "theme_color": "#22406A",
+    "background_color": "#FFF7F1",
+    "theme_color": "#F26B4F",
     "categories": ["health", "lifestyle"],
     "prefer_related_applications": false,
     "icons": [

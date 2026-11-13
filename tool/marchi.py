@@ -253,7 +253,8 @@ MARCHI = {
     'p-geometrica': icona_geometrica,
 }
 
-MARCHIO_PREDEFINITO = 'lulu'
+# Scelto da Lorenzo il 13/11/2026: variante C, P-cane geometrica.
+MARCHIO_PREDEFINITO = 'p-geometrica'
 
 
 # ---------------------------------------------------------------------------

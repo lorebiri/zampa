@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Installa Pellovi</title>
   <meta name="description" content="Installa Pellovi su Android (APK) o aggiungila alla schermata Home dell'iPhone.">
-  <meta name="theme-color" content="#22406A">
+  <meta name="theme-color" content="#F26B4F">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <style>
     :root {
-      --paper: #F2F4EF; --card: #FFFFFF; --ink: #22406A; --text: #18212E;
-      --muted: #4A5566; --line: #D3DAD1; --accent: #F2B53A; --accent-ink: #4A3300;
-      --note: #FCEBC2;
+      --paper: #FFF7F1; --card: #FFFFFF; --ink: #B3361E; --text: #1E1714;
+      --muted: #5C5049; --line: #F0E2D8; --accent: #F26B4F; --accent-ink: #2A0E06;
+      --note: #FFE3DA;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --paper: #0F1722; --card: #172131; --ink: #A9C6F0; --text: #E7EBF2;
-        --muted: #AEB8C8; --line: #34425A; --accent: #F2C064; --accent-ink: #2A1D00;
-        --note: #4A3812;
+        --paper: #14100E; --card: #221B18; --ink: #FF8A6E; --text: #F8EFE9;
+        --muted: #C4B5AB; --line: #3A2F2A; --accent: #FF8A6E; --accent-ink: #2A0E06;
+        --note: #4A2219;
       }
     }
     * { box-sizing: border-box; }
@@ -31,6 +31,7 @@
       padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
     }
     main { max-width: 560px; margin: 0 auto; }
+    .logo img { display: block; height: 56px; width: auto; max-width: 100%; margin: 4px 0 12px; border-radius: 12px; }
     header { display: flex; align-items: center; gap: 14px; margin: 8px 0 20px; }
     header img { width: 64px; height: 64px; border-radius: 16px; flex: none; }
     h1 { font-size: 28px; line-height: 1.15; margin: 0; color: var(--ink); }
@@ -57,8 +58,11 @@
 </head>
 <body>
 <main>
+  <picture class="logo">
+    <source srcset="icons/logo-esteso-scuro.png" media="(prefers-color-scheme: dark)">
+    <img src="icons/logo-esteso-chiaro.png" alt="Pellovi">
+  </picture>
   <header>
-    <img src="icons/Icon-192.png" alt="">
     <div>
       <h1>Installa Pellovi</h1>
       <p>La salute del tuo cane, sul telefono. Gratis, senza pubblicità.

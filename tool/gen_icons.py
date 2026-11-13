@@ -91,6 +91,19 @@ def main():
             'windows/runner/resources/app_icon.ico',
             sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
 
+    # Logo esteso «Pellovi» (la P è il segno), chiaro e scuro: per la pagina
+    # di download, il sito e i materiali.
+    if MARCHIO.startswith('p-'):
+        from anteprima_logo import scritta
+        import marchi
+        for nome, sfondo, colore, accento in [
+            ('chiaro', marchi.CREMA_FONDO, marchi.CORALLO, (255, 196, 180)),
+            ('scuro', marchi.NOTTE, marchi.BIANCO, marchi.CREMA),
+        ]:
+            img = scritta(MARCHIO, sfondo, colore, accento, altezza=160)
+            img.save(f'web/icons/logo-esteso-{nome}.png', optimize=True)
+            img.save(f'docs/brand/logo-pellovi-{nome}.png', optimize=True)
+
     if '--anteprima' in sys.argv:
         anteprima(sys.argv[sys.argv.index('--anteprima') + 1])
     print('Icone generate.')

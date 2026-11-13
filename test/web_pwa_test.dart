@@ -80,7 +80,7 @@ void main() {
       expect(manifest['display'], 'standalone');
       expect(manifest['start_url'], './');
       expect(manifest['scope'], './');
-      expect(manifest['theme_color'], '#22406A');
+      expect(manifest['theme_color'], '#F26B4F');
     });
 
     test('manifest: icone normali e maskable, tutte presenti', () {
