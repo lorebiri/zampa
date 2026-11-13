@@ -59,9 +59,16 @@ in `android/app/build.gradle.kts` (`namespace`, `applicationId`) più lo spostam
 - `web/index.html`: meta per iPhone (`apple-mobile-web-app-*`, `apple-touch-icon` 180×180),
   `theme-color`, viewport con le aree sicure, schermata «Lulù si sta aprendo…» con tema scuro,
   richiesta di **archiviazione persistente** (riduce il rischio che il browser cancelli i dati).
-- **Icone nuove**: prima c'era il logo Flutter predefinito, anche su Android. Ora una zampa in
-  pixel art blu/senape (`tool/gen_icons.js` le rigenera). È un segnaposto: l'icona definitiva è
-  una scelta di marchio.
+- **Logo nuovo: il muso di un bolognese in pixel art** (griglia 32×32 disegnata in codice,
+  `tool/gen_icons.py`): pelo bianco a fiocchi con ombre crema, orecchie lunghe che scendono ai
+  lati, occhi tondi neri con un punto di luce, tartufo nero, lingua e guance rosa, contorno
+  marrone caldo su fondo **corallo** (`#F26B4F`). Ingrandito sempre per multipli interi senza
+  smussare (solo le icone sotto i 32 px, 16/20/29, sono ridotte). Da quel disegno escono tutte le
+  icone: web (favicon 32, 192, 512, maskable 192/512 con margine di sicurezza, apple-touch-icon
+  180), Android (mipmap classiche e **icona adattiva** con foreground e colore di fondo), iOS,
+  macOS e Windows (.ico). Prima c'era il logo Flutter predefinito.
+  Anteprima affiancata (16, 32, 48, 96, 192, 512 px, fondo chiaro e scuro):
+  ![Anteprima delle icone](docs/brand/anteprima-icone.png)
 - **Uso offline (`web/sw.js`)**: scoperta importante — in Flutter 3.47 il service worker generato
   da Flutter **si disinstalla da solo**, quindi finora l'app web non funzionava offline. Ora:
   `web/flutter_bootstrap.js` non lo registra più, e `sw.js` salva tutti i file dell'app alla prima
@@ -158,7 +165,7 @@ i telefoni dal 2017); il workflow avvisa se lo supera.
    perdono i dati). Se la chiave si perde, stesso problema.
 4. **Hosting** (proposta Cloudflare Pages) e dominio.
 5. **Web Push** sì/no (proposta sopra).
-6. **Icona** definitiva.
+6. **Logo**: va bene il bolognese corallo? Si cambia in `tool/gen_icons.py` e si rigenera tutto.
 7. **Privacy per il web**: l'informativa parla di dati «sul telefono»; sul web sono nel browser.
    Il motore grafico scarica ancora i caratteri di riserva (emoji) da `fonts.gstatic.com`:
    da citare nell'informativa o da eliminare includendo un font emoji nell'app (+ peso).
