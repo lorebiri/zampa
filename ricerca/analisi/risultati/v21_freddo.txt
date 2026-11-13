@@ -22,20 +22,20 @@
 - R / stesso orario 7 gg: 0.81 [0.64–1.07]
 - R / stesso giorno sett.: 0.81 [0.64–1.07]
 - cani in cui batte il timer: 53% [40%–67%]
-- copertura intervallo 10-90% (nominale 80%): 57% [48%–64%]
-- pipì prima dell'avviso v2 (avviso in ritardo): 22% [15%–30%]
+- copertura intervallo 10-90% (nominale 80%): 54% [47%–61%]
+- pipì prima dell'avviso v2 (avviso in ritardo): 23% [17%–31%]
 - pipì prima dell'uscita consigliata di base: 28% [20%–36%]
 - minuti tra avviso v2 e pipì (mediana): 89
 - minuti tra uscita consigliata di base e pipì (mediana): 84
-- ampiezza mediana della finestra 50% (min): 92
+- ampiezza mediana della finestra 50% (min): 81
 - fiducia bassa / media / alta: 60% / 36% / 4%
-- fiducia bassa: errore mediano / copertura 50%: 122 min / 35%
+- fiducia bassa: errore mediano / copertura 50%: 122 min / 29%
 - fiducia media: errore mediano / copertura 50%: 40 min / 47%
-- copertura 25-75% (nominale 50%): 41% [33%–47%]
-- ampiezza mediana della finestra (min): 243
+- copertura 25-75% (nominale 50%): 37% [29%–44%]
+- ampiezza mediana della finestra (min): 201
 - errore con segno mediano (− = in ritardo): 6
 - errore mediano vs evento VERO (min): 44
-- PIT < 0,1 / > 0,9 (attese 10%/10%): 25% / 20%
+- PIT < 0,1 / > 0,9 (attese 10%/10%): 27% / 21%
 - tetto da sveglio rispettato (T15): 138/138
 
 ## freddo BASE giorni 4-7

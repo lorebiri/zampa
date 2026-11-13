@@ -5,6 +5,7 @@ import 'package:zampa/logic/bio_params.dart';
 import 'package:zampa/logic/elimination_model.dart';
 import 'package:zampa/logic/pee_forecast_v2.dart';
 import 'package:zampa/models.dart';
+import 'package:zampa/ui/potty_screen.dart';
 
 /// Previsione v2 della prossima pipì (ricerca/27): mediana di tre regole,
 /// finestre e probabilità calibrate sugli errori passati, origine onesta.
