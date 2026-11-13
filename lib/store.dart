@@ -770,11 +770,10 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   /// Riprogramma le notifiche (per esempio appena concesso il permesso).
   Future<void> replan() => _reschedule();
 
-  Future<void> _reschedule() async {
-    final n = notifier;
-    if (n == null || !n.supported) return;
-    final now = DateTime.now();
-    // Allarmi urgenti: notifica immediata, una volta sola per allarme.
+  /// Allarmi SUBITO/OGGI di oggi non ancora notificati: uno per allarme e
+  /// per giorno (la chiave va segnata da chi li consegna).
+  List<({String key, PlannedNotification n})> _newUrgent(DateTime now) {
+    final out = <({String key, PlannedNotification n})>[];
     for (var di = 0; di < dogs.length && di < 9; di++) {
       final d = dogs[di];
       if (isDemoId(d.id)) continue;
@@ -796,13 +795,34 @@ class AppStore extends ChangeNotifier implements SyncTarget {
             'alert_${d.id}_${a.title}_${now.year}${now.month}${now.day}';
         final slot = (di + 1) * 1000 + 90 + ui++;
         if (_prefs!.getBool(key) ?? false) continue;
-        await _prefs!.setBool(key, true);
-        await n.showNow(
-          slot,
-          '${a.level == AlertLevel.subito ? '🔴 SUBITO' : '🟠 OGGI'}: ${a.title}',
-          '${d.name}: ${a.actionText ?? a.message}',
-        );
+        out.add((
+          key: key,
+          n: PlannedNotification(
+            slot,
+            now,
+            '${a.level == AlertLevel.subito ? '🔴 SUBITO' : '🟠 OGGI'}: ${a.title}',
+            '${d.name}: ${a.actionText ?? a.message}',
+            0,
+            exact: true,
+          ),
+        ));
       }
+    }
+    return out;
+  }
+
+  Future<void> _reschedule() async {
+    final n = notifier;
+    if (n == null || !n.supported) {
+      // Web e iPhone: niente notifiche locali, eventualmente Web Push.
+      await _pushReminders();
+      return;
+    }
+    final now = DateTime.now();
+    // Allarmi urgenti: notifica immediata, una volta sola per allarme.
+    for (final u in _newUrgent(now)) {
+      await _prefs!.setBool(u.key, true);
+      await n.showNow(u.n.id, u.n.title, u.n.body);
     }
     // Notifiche programmate, entro il tetto e per priorità.
     final planned = planNotifications(now);
@@ -817,6 +837,47 @@ class AppStore extends ChangeNotifier implements SyncTarget {
       await n.schedule(p.id, p.when, p.title, p.body, exact: p.exact);
     }
     await _prefs!.setStringList(_notifKey, [for (final id in keep) '$id']);
+  }
+
+  /// Promemoria via Web Push (web app, iPhone dalla schermata Home): il
+  /// server li invia all'ora giusta. Attivo solo con account e permesso.
+  ReminderSink? reminderSink;
+  Future<void>? _pushing;
+  bool _pushAgain = false;
+
+  Future<void> _pushReminders() async {
+    final sink = reminderSink;
+    if (sink == null || !sink.active || _prefs == null) return;
+    if (_pushing != null) {
+      // Una sola spedizione alla volta: l'ultima versione vince.
+      _pushAgain = true;
+      return _pushing;
+    }
+    final run = () async {
+      do {
+        _pushAgain = false;
+        final now = DateTime.now();
+        final urgent = _newUrgent(now);
+        try {
+          await sink.replace(
+            planNotifications(now),
+            urgent: [for (final u in urgent) u.n],
+          );
+          for (final u in urgent) {
+            await _prefs!.setBool(u.key, true);
+          }
+        } catch (e) {
+          // Senza rete restano da inviare: si riprova al prossimo salvataggio.
+          debugPrint('Promemoria web non inviati: $e');
+        }
+      } while (_pushAgain);
+    }();
+    _pushing = run;
+    try {
+      await run;
+    } finally {
+      _pushing = null;
+    }
   }
 
   static DateTime? nextDose(HealthRecord r, DateTime now) {
@@ -1118,4 +1179,18 @@ class PhotoSpaceFull implements Exception {
 
   @override
   String toString() => message;
+}
+
+/// Dove spedire i promemoria quando il dispositivo non ha notifiche locali
+/// (vedi lib/sync/push_reminders.dart).
+abstract class ReminderSink {
+  /// Account collegato e browser iscritto alle notifiche push.
+  bool get active;
+
+  /// Sostituisce i promemoria programmati sul server; [urgent] sono allarmi
+  /// da inviare subito, che la sostituzione successiva non cancella.
+  Future<void> replace(
+    List<PlannedNotification> planned, {
+    List<PlannedNotification> urgent = const [],
+  });
 }

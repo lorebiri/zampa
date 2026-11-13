@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,12 +10,14 @@ import 'notifications.dart';
 import 'brand.dart';
 import 'consent.dart';
 import 'store.dart';
+import 'sync/push_reminders.dart';
 import 'sync/supabase_backend.dart';
 import 'logic/alerts.dart';
 import 'models.dart';
 import 'ui/account_screen.dart';
 import 'ui/avatar.dart';
 import 'ui/common.dart';
+import 'ui/device_notice.dart';
 import 'ui/dog_wizard.dart';
 import 'ui/health_screen.dart';
 import 'ui/home_screen.dart';
@@ -40,6 +43,14 @@ Future<void> main() async {
         );
         final client = Supabase.instance.client;
         attachEngine(store, SupabaseBackend(client));
+        // Web e iPhone: promemoria come notifiche Web Push dal server.
+        if (kIsWeb && PushConfig.enabled) {
+          final sink = SupabaseReminderSink(client);
+          await sink.restore();
+          store.reminderSink = sink;
+          appReminders = sink;
+          client.auth.onAuthStateChange.listen((_) => store.replan());
+        }
         return AuthService(client);
       } catch (e) {
         debugPrint('Account non disponibili: $e');
