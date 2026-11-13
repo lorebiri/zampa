@@ -47,6 +47,34 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Dopo il primo disegno la pagina manda i file che ha usato davvero (la
+// variante del motore grafico scelta dal browser): si salvano per l'offline.
+self.addEventListener('message', (event) => {
+  const data = event.data || {};
+  if (data.tipo !== 'salva-usati' || !Array.isArray(data.url)) return;
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE);
+      for (const u of data.url) {
+        let url;
+        try {
+          url = new URL(u, self.registration.scope);
+        } catch (e) {
+          continue;
+        }
+        if (url.origin !== self.location.origin || shouldSkip(url)) continue;
+        if (await cache.match(url, { ignoreSearch: true })) continue;
+        try {
+          const r = await fetch(url);
+          if (r.ok) await cache.put(url, r);
+        } catch (e) {
+          console.warn('Non salvato offline:', u, e);
+        }
+      }
+    })(),
+  );
+});
+
 function shouldSkip(url) {
   return url.pathname.endsWith('.apk') || url.pathname.endsWith('/sw.js');
 }

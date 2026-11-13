@@ -20,8 +20,11 @@ ESCLUSI_NOMI = {
     'version.json', '.last_build_id',
 }
 ESCLUSI_ESTENSIONI = ('.apk', '.map', '.symbols')
-# Varianti del motore grafico che il browser non usa con una build JavaScript.
-ESCLUSI_PREFISSI = ('canvaskit/skwasm', 'skwasm')
+# Il motore grafico ha più varianti (canvaskit, chromium, webparagraph, wimp,
+# skwasm): il browser ne usa una sola. Non si salvano in anticipo; dopo il
+# primo disegno index.html dice al service worker quali file ha usato davvero.
+# Anche le licenze (NOTICES, 1,4 MB) si scaricano solo se aperte.
+ESCLUSI_PREFISSI = ('canvaskit/', 'skwasm', 'assets/NOTICES')
 
 
 def da_salvare(rel: str) -> bool:

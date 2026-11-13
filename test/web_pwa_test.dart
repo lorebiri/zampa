@@ -2,6 +2,7 @@
 // avviso per i dispositivi che non ricevono notifiche (web, iPhone).
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,9 +30,8 @@ void main() {
     });
 
     test('Android mostra Lulù sotto l\'icona (applicationId invariato)', () {
-      final manifest = File(
-        'android/app/src/main/AndroidManifest.xml',
-      ).readAsStringSync();
+      final manifest = File('android/app/src/main/AndroidManifest.xml')
+          .readAsStringSync();
       expect(manifest, contains('android:label="$appName"'));
       final gradle = File('android/app/build.gradle.kts').readAsStringSync();
       expect(gradle, contains('applicationId = "it.zampa.zampa"'));
@@ -39,9 +39,9 @@ void main() {
   });
 
   group('Web app installabile', () {
-    final manifest =
-        jsonDecode(File('web/manifest.json').readAsStringSync())
-            as Map<String, dynamic>;
+    final manifest = jsonDecode(
+      File('web/manifest.json').readAsStringSync(),
+    ) as Map<String, dynamic>;
 
     test('manifest: nome, colori, avvio relativo al base href', () {
       expect(manifest['short_name'], appName);
@@ -81,10 +81,14 @@ void main() {
 
     test('sw.js ha le righe che tool/pwa_finalize.py riscrive', () {
       final sw = File('web/sw.js').readAsStringSync();
-      expect(RegExp(r'^const VERSIONE = .*;$', multiLine: true).hasMatch(sw),
-          isTrue);
-      expect(RegExp(r'^const PRECACHE = .*;$', multiLine: true).hasMatch(sw),
-          isTrue);
+      expect(
+        RegExp(r'^const VERSIONE = .*;$', multiLine: true).hasMatch(sw),
+        isTrue,
+      );
+      expect(
+        RegExp(r'^const PRECACHE = .*;$', multiLine: true).hasMatch(sw),
+        isTrue,
+      );
     });
 
     test('pagina di download: APK e istruzioni per iPhone', () {
@@ -132,23 +136,26 @@ void main() {
   });
 
   group('Foto sul web', () {
-    test('oltre il tetto la foto è rifiutata e i dati restano salvabili', () async {
-      SharedPreferences.setMockInitialValues({});
-      final s = AppStore(
-        prefs: await SharedPreferences.getInstance(),
-        photoBudgetChars: 1000,
-      );
-      await s.load();
-      // 600 byte → 800 caratteri base64: entra.
-      final id = await s.savePhoto(Uint8List(600));
-      expect(s.photo(id), hasLength(600));
-      // La seconda supererebbe 1000 caratteri.
-      await expectLater(
-        s.savePhoto(Uint8List(600)),
-        throwsA(isA<PhotoSpaceFull>()),
-      );
-      expect(const PhotoSpaceFull().message, contains('Android'));
-    });
+    test(
+      'oltre il tetto la foto è rifiutata e i dati restano salvabili',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final s = AppStore(
+          prefs: await SharedPreferences.getInstance(),
+          photoBudgetChars: 1000,
+        );
+        await s.load();
+        // 600 byte → 800 caratteri base64: entra.
+        final id = await s.savePhoto(Uint8List(600));
+        expect(s.photo(id), hasLength(600));
+        // La seconda supererebbe 1000 caratteri.
+        await expectLater(
+          s.savePhoto(Uint8List(600)),
+          throwsA(isA<PhotoSpaceFull>()),
+        );
+        expect(const PhotoSpaceFull().message, contains('Android'));
+      },
+    );
 
     test('su Android e iOS nessun tetto', () async {
       expect(AppStore.defaultPhotoBudgetChars, isNull); // test non web

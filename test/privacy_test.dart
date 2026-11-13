@@ -157,10 +157,7 @@ void main() {
     await tester.tap(find.text('Esporta i miei dati'));
     await tester.pumpAndSettle();
     expect(shared, hasLength(1));
-    expect(
-      shared.single.name,
-      matches(r'^lulu-backup-\d{4}-\d\d-\d\d\.json$'),
-    );
+    expect(shared.single.name, matches(r'^lulu-backup-\d{4}-\d\d-\d\d\.json$'));
     final j = jsonDecode(shared.single.json) as Map<String, Object?>;
     expect((j['dogs']! as List).length, store.dogs.length);
     expect(find.textContaining('Backup pronto'), findsOneWidget);
