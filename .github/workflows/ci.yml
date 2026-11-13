@@ -28,3 +28,5 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test || echo "::warning::formattazione da sistemare"
       - run: flutter analyze --fatal-infos
       - run: flutter test
+      # La web app è la versione per iPhone: deve compilare a ogni modifica.
+      - run: tool/build_web.sh

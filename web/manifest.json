@@ -1,23 +1,30 @@
 {
-    "name": "zampa",
-    "short_name": "zampa",
-    "start_url": ".",
+    "id": "./",
+    "name": "Lulù – la salute del tuo cane",
+    "short_name": "Lulù",
+    "description": "Vaccini, antiparassitari, terapie, peso, pipì e cacca del tuo cane. I dati restano sul tuo dispositivo.",
+    "lang": "it",
+    "dir": "ltr",
+    "start_url": "./",
+    "scope": "./",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "orientation": "portrait",
+    "background_color": "#F2F4EF",
+    "theme_color": "#22406A",
+    "categories": ["health", "lifestyle"],
     "prefer_related_applications": false,
     "icons": [
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "icons/Icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "icons/Icon-maskable-192.png",

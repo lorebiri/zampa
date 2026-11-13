@@ -1,0 +1,18 @@
+# Intestazioni per Cloudflare Pages e Netlify (gli altri hosting le ignorano).
+# Il service worker e la pagina principale non vanno tenuti in cache dal
+# browser, altrimenti gli aggiornamenti arrivano in ritardo.
+/sw.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/flutter_bootstrap.js
+  Cache-Control: no-cache
+/manifest.json
+  Cache-Control: no-cache
+/lulu.apk
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment; filename="lulu.apk"
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=()
