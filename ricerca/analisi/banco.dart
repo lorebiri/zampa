@@ -107,6 +107,23 @@ const scenarios = {
     polyuria: PuMode.own,
     seed: 1,
   ),
+  // ricerca/28: quarto banco, mai eseguito prima della verifica di v3.1.
+  'realistico_nuovo3': Scenario(
+    'realistico',
+    missing: true,
+    jitter: true,
+    sched: SchedMode.mix,
+    weekend: true,
+    routineChange: true,
+    polyuria: PuMode.own,
+    seed: 3,
+  ),
+  'orari_padrone_nuovo3': Scenario(
+    'orari_padrone',
+    sched: SchedMode.all,
+    missing: true,
+    seed: 3,
+  ),
   'realistico_nuovo2': Scenario(
     'realistico',
     missing: true,

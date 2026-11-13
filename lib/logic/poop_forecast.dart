@@ -21,8 +21,9 @@ import 'potty_predictor.dart';
 /// Senza storia valgono i valori tipici per età (cucciolo: più pasti, più
 /// probabilità, ritardo più breve).
 ///
-/// L'orario mostrato è la MEDIANA di M, «stesso orario» (H, ultimi 7 giorni),
-/// «stesso giorno della settimana» (W) e timer (T, intervallo medio): regola scritta
+/// L'orario mostrato è la MEDIANA di M, «stesso orario» (H, ultimi 7 giorni)
+/// e timer (T, intervallo medio) (v3.1; la regola congelata aggiungeva lo
+/// «stesso giorno della settimana», W): regola scritta
 /// prima della verifica in ricerca/analisi/risultati/cacca_regola_congelata.md.
 /// Nessun dato dal futuro: si usano solo i log fino a [now].
 
@@ -479,13 +480,12 @@ poopCandidates(
         minOffset: 0.4 * mean,
       ) ??
       h;
-  // Regola congelata (ricerca/analisi/risultati/cacca_regola_congelata.md):
-  // mediana di ancora, «stesso orario», «stesso giorno» e timer (con quattro
-  // candidati, il punto di mezzo tra i due centrali).
-  final c = [m, h, w, t]..sort();
-  var at = DateTime.fromMillisecondsSinceEpoch(
-    (c[1].millisecondsSinceEpoch + c[2].millisecondsSinceEpoch) ~/ 2,
-  );
+  // v3.1 (ricerca/analisi/risultati/cacca_regola_congelata.md, correzione
+  // dichiarata dopo la verifica): mediana di ancora, «stesso orario» e timer.
+  // «Stesso giorno della settimana» è il candidato peggiore su tutti i banchi
+  // e resta solo come riferimento. (Regola congelata: mediana di M, H, W, T.)
+  final c = [m, h, t]..sort();
+  var at = c[1];
   // Primi 3 giorni: «stesso orario» non ha storia, vale l'ancora.
   if (now.difference(poops.first).inDays < 3) at = m;
   if (at.isBefore(now)) at = now;
