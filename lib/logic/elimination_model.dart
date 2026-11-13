@@ -1770,8 +1770,13 @@ class FittedModel {
         ? recommended
         : expected;
     final v2f = need == Need.pipi && v2 && !pointOnly
-        ? _v2(pastTimes, now, recommended, shadow?.probNextHour ??
-              (60 / math.max(60.0, base.intervalMin * k)).clamp(0.05, 0.5))
+        ? _v2(
+            pastTimes,
+            now,
+            recommended,
+            shadow?.probNextHour ??
+                (60 / math.max(60.0, base.intervalMin * k)).clamp(0.05, 0.5),
+          )
         : null;
     final conf = learnedDays < 2
         ? Confidence.bassa

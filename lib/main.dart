@@ -23,11 +23,23 @@ import 'ui/potty_screen.dart';
 import 'ui/profile_screen.dart';
 import 'ui/theme.dart';
 
+/// Tenuto in vita per tutta la durata dell'app (vedi main).
+// ignore: unused_element
+AppLifecycleListener? _quickActionsOnResume;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Notifier.instance.init();
   final store = AppStore(notifier: Notifier.instance);
   await store.load();
+  // Bottoni «Fatta ✓» / «Non ancora» del promemoria (ricerca/28): si
+  // applicano i tocchi fatti ad app chiusa, quelli che arrivano con l'app
+  // aperta e, per sicurezza, a ogni ritorno in primo piano.
+  Notifier.instance.onQuickAction = () => store.applyQuickActions();
+  await store.applyQuickActions();
+  _quickActionsOnResume = AppLifecycleListener(
+    onResume: () => unawaited(store.applyQuickActions()),
+  );
   await ConsentStore.instance.load();
   // Account facoltativo: attivo solo se la build contiene la configurazione
   // Supabase (vedi supabase/LEGGIMI.md).

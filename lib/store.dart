@@ -15,6 +15,7 @@ import 'logic/modules.dart';
 import 'logic/nutrition.dart';
 import 'logic/potty_predictor.dart';
 import 'logic/prevention.dart';
+import 'logic/quick_actions.dart';
 import 'models.dart';
 import 'notifications.dart';
 import 'sync/sync_engine.dart';
@@ -126,8 +127,50 @@ class AppStore extends ChangeNotifier implements SyncTarget {
       labs.addAll(list('labs').map(LabResult.fromJson));
       selectedDogId = j['selectedDogId'] as String?;
     }
+    snoozes.addAll(Snooze.decodeAll(_prefs!.getString(_snoozeKey)));
     notifyListeners();
     await _reschedule();
+  }
+
+  // --- Azioni rapide nella notifica (ricerca/28) --------------------------
+
+  /// «Non ancora» in corso, per cane. Solo sul telefono: non va nel backup
+  /// né nella sincronizzazione (è un dettaglio dei promemoria).
+  final snoozes = <String, Snooze>{};
+  String get _snoozeKey => '${namespace}lulu_snooze_v1';
+
+  /// Applica i tocchi su «Fatta ✓» / «Non ancora» rimasti in coda (anche
+  /// quelli fatti ad app chiusa). Idempotente. Restituisce quante pipì ha
+  /// aggiunto al diario.
+  Future<int> applyQuickActions([DateTime? at]) {
+    // Una alla volta: avviso dall'isolato e ritorno in primo piano possono
+    // arrivare insieme, e la stessa pipì non deve entrare due volte.
+    final run = _qaRun.then((_) => _applyQuickActions(at));
+    _qaRun = run.then((_) {}, onError: (_) {});
+    return run;
+  }
+
+  Future<void> _qaRun = Future.value();
+
+  Future<int> _applyQuickActions(DateTime? at) async {
+    _prefs ??= await SharedPreferences.getInstance();
+    final queue = await QuickActionQueue.read(_prefs!);
+    if (queue.isEmpty) return 0;
+    final r = reduceQuickActions(
+      actions: queue,
+      dogIds: {for (final d in dogs) d.id},
+      logs: logs,
+      snoozes: snoozes,
+      now: at ?? DateTime.now(),
+    );
+    logs.addAll(r.newLogs);
+    snoozes
+      ..clear()
+      ..addAll(r.snoozes);
+    await _prefs!.setString(_snoozeKey, Snooze.encodeAll(snoozes));
+    await QuickActionQueue.remove(_prefs!, r.applied);
+    await _save();
+    return r.newLogs.length;
   }
 
   String exportJson() => const JsonEncoder.withIndent('  ').convert({
@@ -377,6 +420,8 @@ class AppStore extends ChangeNotifier implements SyncTarget {
       await _prefs!.remove(k);
     }
     selectedDogId = null;
+    snoozes.clear();
+    await _prefs?.remove(_snoozeKey);
     await _save();
   }
 
@@ -692,17 +737,34 @@ class AppStore extends ChangeNotifier implements SyncTarget {
         final at = p.recommendedAt.subtract(
           Duration(minutes: d.reminderLeadMinutes),
         );
+        final id = base + (need == Need.pipi ? 0 : 45);
+        // Pipì: bottoni «Fatta ✓» / «Non ancora» (ricerca/28); dopo «Non
+        // ancora» il promemoria torna tra 15 minuti finché non c'è una pipì.
+        final snoozed = need == Need.pipi
+            ? activeSnoozeUntil(snoozes[d.id], dLogs, now)
+            : null;
         out.add(
           PlannedNotification(
-            base + (need == Need.pipi ? 0 : 45),
-            at.isAfter(now) ? at : p.recommendedAt,
-            need == Need.pipi
+            id,
+            snoozed ?? (at.isAfter(now) ? at : p.recommendedAt),
+            snoozed != null
+                ? QuickActionTexts.snoozeTitle(d.name)
+                : need == Need.pipi
                 ? 'È quasi ora di uscire con ${d.name} 🐾'
                 : 'Di solito a quest\'ora ${d.name} fa la cacca 💩',
-            need == Need.pipi
+            snoozed != null
+                ? QuickActionTexts.snoozeBody
+                : need == Need.pipi
                 ? 'Uscita consigliata alle ${hm(p.recommendedAt)}. ${p.reason}'
                 : p.reason,
             3,
+            payload: need == Need.pipi
+                ? ReminderPayload(
+                    dogId: d.id,
+                    dogName: d.name,
+                    notificationId: id,
+                  ).encode()
+                : null,
           ),
         );
       }
@@ -794,7 +856,14 @@ class AppStore extends ChangeNotifier implements SyncTarget {
       if (!keep.contains(id)) await n.cancel(id);
     }
     for (final p in planned) {
-      await n.schedule(p.id, p.when, p.title, p.body, exact: p.exact);
+      await n.schedule(
+        p.id,
+        p.when,
+        p.title,
+        p.body,
+        exact: p.exact,
+        payload: p.payload,
+      );
     }
     await _prefs!.setStringList(_notifKey, [for (final id in keep) '$id']);
   }
@@ -1075,6 +1144,7 @@ class PlannedNotification {
     this.body,
     this.priority, {
     this.exact = false,
+    this.payload,
   });
   final int id;
   final DateTime when;
@@ -1086,4 +1156,8 @@ class PlannedNotification {
 
   /// Da consegnare all'orario esatto anche in risparmio energetico.
   final bool exact;
+
+  /// Payload della notifica (promemoria della pipì: cane e id, per i
+  /// bottoni rapidi; vedi ReminderPayload).
+  final String? payload;
 }
