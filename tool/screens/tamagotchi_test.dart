@@ -81,7 +81,7 @@ Future<void> _fonts(WidgetTester tester) => tester.runAsync(() async {
 void main() {
   testWidgets('anteprima tamagotchi', (tester) async {
     await _fonts(tester);
-    tester.view.physicalSize = const Size(2400, 840);
+    tester.view.physicalSize = const Size(2400, 1180);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     final theme = buildTheme(Brightness.light);
@@ -100,8 +100,8 @@ void main() {
                   style: theme.textTheme.headlineSmall,
                 ),
                 Text(
-                  'Disegnati dal motore dell\'app: razza di partenza, colori, pelo (raso, lungo, riccio, '
-                  'a fiocchi), muso, orecchie, coda e accessorio (collare, fiocco, bandana).',
+                  'Ogni stato ha posa, espressione, coda e un oggetto di contesto; sotto, i 4 fotogrammi '
+                  'dell\'animazione di Lulù (ferma con «riduci movimento»).',
                   style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),
@@ -138,34 +138,12 @@ void main() {
                               ),
                               child: CompanionDevice(
                                 night: s.$1 == Pose.sleeping,
-                                overlay: [
-                                  Positioned(
-                                    top: 10,
-                                    right: 12,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Palette.pixelInk,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        s.$4,
-                                        size: 22,
-                                        color: s.$1 == Pose.concerned
-                                            ? const Color(0xFFB42318)
-                                            : Palette.pixelInk,
-                                      ),
-                                    ),
-                                  ),
-                                ],
                                 child: PixelDogView(
                                   look: c.$2,
                                   pose: s.$1,
                                   night: s.$1 == Pose.sleeping,
                                   height: 150,
+                                  frame: 1,
                                 ),
                               ),
                             ),
@@ -173,6 +151,45 @@ void main() {
                       ],
                     ),
                   ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 18),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        child: Text(
+                          'Animazione (4 fotogrammi)',
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ),
+                      for (final s in _stati)
+                        SizedBox(
+                          width: 340,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (var f = 0; f < 4; f++)
+                                Container(
+                                  width: 80,
+                                  height: 84,
+                                  margin: const EdgeInsets.all(2),
+                                  color: s.$1 == Pose.sleeping
+                                      ? const Color(0xFF1E2A44)
+                                      : const Color(0xFFDCE9C9),
+                                  child: PixelDogView(
+                                    look: _cani.first.$2,
+                                    pose: s.$1,
+                                    night: s.$1 == Pose.sleeping,
+                                    height: 80,
+                                    frame: f,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

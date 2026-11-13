@@ -35,17 +35,31 @@ class PixelDog {
       DogSize.grande => 1.22,
     };
     final lying = pose == Pose.sleeping;
+    // Ogni stato ha una posa riconoscibile anche in piccolo: felice salta,
+    // sereno è seduto, impaziente sta davanti alla porta, affamato abbassa
+    // la testa sulla ciotola, preoccupato tiene la testa bassa.
+    final sitting = pose == Pose.idle;
+    final lift = pose == Pose.happy ? const [0, 2, 3, 2][frame % 4] : 0;
     const ground = 27;
+    final dogGround = ground - lift;
     final legLen = lying ? 0 : (2.5 + 2.2 * k).round();
     final rx = 8.5 * k, ry = 3.8 * k;
-    final cx = 19.0;
-    final cy = ground - legLen - ry + (lying ? 0.5 : 0);
+    // Impaziente: un po' più a sinistra, la porta è a destra.
+    final cx = pose == Pose.waiting ? 15.0 : 19.0;
+    final cy =
+        dogGround - legLen - ry + (lying ? 0.5 : 0) + (sitting ? 1.5 : 0);
     final headR = 3.6 + 1.3 * k + (look.size == DogSize.piccola ? 0.6 : 0);
-    final bob = (pose == Pose.idle || pose == Pose.waiting) && frame % 4 >= 2
-        ? 1
-        : 0;
+    final bob = pose == Pose.waiting && frame % 4 >= 2 ? 1 : 0;
     final hx = cx + rx + headR * 0.45;
-    final hy = cy - ry - headR * 0.35 + (lying ? 3.2 : 0) + bob;
+    final hy =
+        cy -
+        ry -
+        headR * 0.35 +
+        (lying ? 3.2 : 0) +
+        bob +
+        (pose == Pose.hungry ? 2.5 : 0) +
+        (pose == Pose.concerned ? 1 : 0) -
+        (sitting ? 1 : 0);
 
     void px(int x, int y, Color c) {
       if (x >= 0 && x < w && y >= 0 && y < h) g[y][x] = c;
@@ -91,9 +105,12 @@ class PixelDog {
       }
     }
 
-    final tailWag = pose == Pose.happy
-        ? (frame % 2 == 0 ? -1 : 1)
-        : (frame % 6 == 0 ? 1 : 0);
+    final tailWag = switch (pose) {
+      Pose.happy || Pose.waiting => frame % 2 == 0 ? -1 : 1,
+      Pose.idle => frame % 4 < 2 ? 0 : 1, // scodinzola piano
+      Pose.concerned => 1, // coda bassa
+      _ => 0,
+    };
 
     // Coda (dietro al corpo).
     final tx = (cx - rx + 1).round(), ty = (cy - ry * 0.4).round();
@@ -131,9 +148,15 @@ class PixelDog {
         (cx + rx - 2).round(),
       ];
       for (var i = 0; i < legXs.length; i++) {
-        final stepUp = pose == Pose.happy && frame % 2 == i % 2 ? 1 : 0;
-        for (var y = (cy + ry * 0.6).round(); y < ground - stepUp; y++) {
-          final paw = y >= ground - 2 - stepUp;
+        if (sitting && i < 2) continue; // le cosce sono disegnate dopo
+        final stepUp = switch (pose) {
+          Pose.happy => lift > 0 ? 1 : (frame % 2 == i % 2 ? 1 : 0),
+          // Gratta la porta con la zampa anteriore.
+          Pose.waiting => i == 3 && frame % 2 == 0 ? 3 : 0,
+          _ => 0,
+        };
+        for (var y = (cy + ry * 0.6).round(); y < dogGround - stepUp; y++) {
+          final paw = y >= dogGround - 2 - stepUp;
           final c =
               paw &&
                   (look.pattern == CoatPattern.focature ||
@@ -168,6 +191,16 @@ class PixelDog {
 
     // Corpo.
     ellipse(cx, cy, rx, ry, curlyBody);
+    if (sitting) {
+      // Seduto: coscia appoggiata a terra dietro.
+      ellipse(
+        cx - rx * 0.5,
+        dogGround - ry * 0.85,
+        rx * 0.42,
+        ry * 0.9,
+        curlyBody,
+      );
+    }
     if (curly) {
       for (var x = (cx - rx + 1).round(); x < (cx + rx).round(); x += 3) {
         px(x, (cy - ry).round() - 1, main);
@@ -245,7 +278,7 @@ class PixelDog {
       (my - 0.6).round(),
       const Color(0xFF2B1B17),
     ); // naso
-    if (pose == Pose.happy || pose == Pose.waiting) {
+    if (pose == Pose.happy || pose == Pose.waiting || pose == Pose.hungry) {
       px(mx.round(), (my + 1.4).round(), const Color(0xFFE76F8A)); // lingua
       if (frame % 2 == 0) {
         px(mx.round(), (my + 2.2).round(), const Color(0xFFE76F8A));
@@ -263,16 +296,28 @@ class PixelDog {
       px(ex, ey, const Color(0xFF2B1B17));
       px(ex + 1, ey, const Color(0xFF2B1B17));
     } else {
-      px(ex, ey, const Color(0xFF2B1B17));
-      px(ex, ey - 1, const Color(0xFF2B1B17));
-      px(ex + 1, ey - 1, Colors.white);
-      if (pose == Pose.concerned) px(ex - 1, ey - 2, const Color(0xFF2B1B17));
+      if (pose == Pose.concerned) {
+        // Sguardo in su e sopracciglio alzato all'interno.
+        px(ex, ey, Colors.white);
+        px(ex, ey - 1, const Color(0xFF2B1B17));
+        px(ex + 1, ey - 1, const Color(0xFF2B1B17));
+        px(ex - 1, ey - 2, const Color(0xFF2B1B17));
+        px(ex, ey - 3, const Color(0xFF2B1B17));
+      } else {
+        px(ex, ey, const Color(0xFF2B1B17));
+        px(ex, ey - 1, const Color(0xFF2B1B17));
+        px(ex + 1, ey - 1, Colors.white);
+      }
     }
 
     // Orecchie.
     final earX = hx - headR * 0.35;
     final earTop = hy - headR;
-    switch (look.ears) {
+    final earsDown = pose == Pose.concerned;
+    switch (earsDown &&
+            (look.ears == EarType.dritte || look.ears == EarType.semi)
+        ? EarType.pendenti
+        : look.ears) {
       case EarType.dritte:
         final eh = (3 + 2.2 * k).round();
         for (var i = 0; i < eh; i++) {
@@ -292,8 +337,8 @@ class PixelDog {
         );
       case EarType.pendenti:
         ellipse(
-          earX - 0.5,
-          hy + 0.5,
+          earX - 0.5 - (earsDown ? 0.8 : 0),
+          hy + 0.5 + (earsDown ? 1 : 0),
           1.4,
           2.8 + (look.longHair ? 1 : 0),
           (_, _) => dark,
@@ -330,6 +375,68 @@ class PixelDog {
         px(bx + dx, by + dy, collar);
       }
       px(bx, by, Color.lerp(collar, Colors.black, 0.3)!);
+    }
+
+    // Oggetti di contesto (con il loro contorno).
+    void sprite(int ox, int oy, List<String> righe, Map<String, Color> col) {
+      for (var y = 0; y < righe.length; y++) {
+        for (var x = 0; x < righe[y].length; x++) {
+          final c = col[righe[y][x]];
+          if (c != null) px(ox + x, oy + y, c);
+        }
+      }
+    }
+
+    const heart = ['.#.#.', '#####', '.###.', '..#..'];
+    const pink = {'#': Color(0xFFE76F8A)};
+    switch (pose) {
+      case Pose.happy:
+        // Cuoricini che salgono.
+        sprite(cx.round() - 1, 1 + (3 - frame % 4), heart, pink);
+        sprite((cx - rx).round() + 1, 3 + (frame + 2) % 4, heart, pink);
+      case Pose.waiting:
+        // La porta a destra e una nuvoletta con i puntini.
+        const wood = Color(0xFF9A6A43), woodDark = Color(0xFF6E4A2E);
+        for (var y = 8; y < ground; y++) {
+          for (var x = 38; x < 44; x++) {
+            px(x, y, x == 38 || y == 8 ? woodDark : wood);
+          }
+        }
+        px(39, 18, const Color(0xFFF2C94C)); // maniglia
+        sprite(
+          hx.round() - 2,
+          math.max(1, (hy - headR).round() - 7),
+          const ['#######', '#.#.#.#', '#######', '..#....'],
+          const {'#': Colors.white, '.': Color(0xFF2B1B17)},
+        );
+      case Pose.hungry:
+        // La ciotola davanti al muso, con le crocchette.
+        final bx = (hx + headR * 0.5).round();
+        sprite(
+          bx,
+          ground - 4,
+          const ['.o.o.o.', '#######', '.#####.', '..###..'],
+          const {'#': Color(0xFFE0453A), 'o': Color(0xFF8A5A2B)},
+        );
+      case Pose.concerned:
+        // Croce del veterinario: rimanda a lui, senza drammi.
+        sprite(
+          35,
+          1,
+          const [
+            'wwwwwww',
+            'wwwrwww',
+            'wwwrwww',
+            'wrrrrrw',
+            'wwwrwww',
+            'wwwrwww',
+            'wwwwwww',
+          ],
+          const {'w': Colors.white, 'r': Color(0xFFB42318)},
+        );
+      case Pose.idle:
+      case Pose.sleeping:
+        break;
     }
 
     // Contorno pixel.
@@ -409,11 +516,15 @@ class PixelDogView extends StatefulWidget {
     this.pose = Pose.idle,
     this.night = false,
     this.height = 170,
+    this.frame,
   });
   final AvatarLook look;
   final Pose pose;
   final bool night;
   final double height;
+
+  /// Fotogramma fisso (anteprime e test); null = animato.
+  final int? frame;
 
   @override
   State<PixelDogView> createState() => _PixelDogViewState();
@@ -465,7 +576,9 @@ class _PixelDogViewState extends State<PixelDogView>
               ? Pose.happy
               : widget.pose;
           final speed = pose == Pose.happy ? 24 : 9;
-          final frame = Motion.reduced(context) ? 0 : (c.value * speed).floor();
+          final frame =
+              widget.frame ??
+              (Motion.reduced(context) ? 0 : (c.value * speed).floor());
           return CustomPaint(
             size: Size.infinite,
             painter: _PixelPainter(
