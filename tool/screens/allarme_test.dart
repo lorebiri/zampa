@@ -1,6 +1,7 @@
 // Screenshot della Home con un allarme SUBITO vero, in chiaro e in scuro,
 // per docs/design/. Non fa parte della suite: si lancia a mano con
 //   flutter test tool/screens/allarme_test.dart --update-goldens
+// ignore_for_file: invalid_use_of_visible_for_testing_member
 import 'dart:io';
 
 import 'package:flutter/material.dart';
