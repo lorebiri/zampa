@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -674,10 +676,21 @@ class DogPhotoField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final store = StoreScope.read(context);
+    final id = photoId;
+    final now = id == null ? null : store.photo(id);
+    if (id != null && now == null) {
+      // Sul web la foto è in IndexedDB: si legge in modo asincrono.
+      return FutureBuilder<Uint8List?>(
+        future: store.loadPhoto(id),
+        builder: (context, snap) => _content(context, snap.data),
+      );
+    }
+    return _content(context, now);
+  }
+
+  Widget _content(BuildContext context, Uint8List? bytes) {
     final t = Theme.of(context);
-    final bytes = photoId == null
-        ? null
-        : StoreScope.read(context).photo(photoId!);
     return Wrap(
       spacing: 16,
       runSpacing: 12,

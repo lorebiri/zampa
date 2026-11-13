@@ -12,6 +12,24 @@ import 'package:zampa/store.dart';
 import 'package:zampa/ui/device_notice.dart';
 import 'package:zampa/ui/privacy_screen.dart';
 import 'package:zampa/ui/theme.dart';
+import 'package:zampa/web/photo_blobs.dart';
+
+class _FakeBlobs implements PhotoBlobs {
+  final data = <String, Uint8List>{};
+  bool broken = false;
+
+  @override
+  Future<void> put(String id, Uint8List bytes) async {
+    if (broken) throw StateError('IndexedDB non disponibile');
+    data[id] = bytes;
+  }
+
+  @override
+  Future<Uint8List?> get(String id) async => data[id];
+
+  @override
+  Future<void> clear() async => data.clear();
+}
 
 Widget _host(Widget child) => MaterialApp(
   theme: buildTheme(Brightness.light),
@@ -171,5 +189,49 @@ void main() {
       await s.load();
       await s.savePhoto(Uint8List(3000000));
     });
+  });
+
+  group('Foto sul web in IndexedDB', () {
+    test('nessun tetto, lettura dopo il riavvio, cancellazione', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final blobs = _FakeBlobs();
+      final s = AppStore(prefs: prefs, photoBudgetChars: 1000)
+        ..photoBlobs = blobs;
+      await s.load();
+      // 3 foto da 600 byte: oltre il tetto del localStorage, ma in IndexedDB.
+      final ids = [
+        for (var i = 0; i < 3; i++) await s.savePhoto(Uint8List(600)),
+      ];
+      expect(blobs.data.keys, containsAll(ids));
+      expect(prefs.getKeys().where((k) => k.startsWith('photo_')), isEmpty);
+      expect(s.photo(ids.first), hasLength(600));
+      // Dopo un riavvio la cache è vuota: si legge da IndexedDB.
+      final s2 = AppStore(prefs: prefs)..photoBlobs = blobs;
+      await s2.load();
+      expect(s2.photo(ids.first), isNull);
+      expect(await s2.loadPhoto(ids.first), hasLength(600));
+      expect(s2.photo(ids.first), hasLength(600));
+      await s2.wipe();
+      expect(blobs.data, isEmpty);
+    });
+
+    test(
+      'se IndexedDB non funziona si torna al localStorage, con il tetto',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final s = AppStore(
+          prefs: await SharedPreferences.getInstance(),
+          photoBudgetChars: 1000,
+        )..photoBlobs = (_FakeBlobs()..broken = true);
+        await s.load();
+        final id = await s.savePhoto(Uint8List(600));
+        expect(s.photo(id), hasLength(600));
+        await expectLater(
+          s.savePhoto(Uint8List(600)),
+          throwsA(isA<PhotoSpaceFull>()),
+        );
+      },
+    );
   });
 }

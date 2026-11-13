@@ -18,6 +18,7 @@ import 'logic/prevention.dart';
 import 'models.dart';
 import 'notifications.dart';
 import 'sync/sync_engine.dart';
+import 'web/photo_blobs.dart';
 
 /// Stato dell'app e persistenza locale (JSON in SharedPreferences, che
 /// funziona su iOS, Android, web e desktop).
@@ -35,6 +36,10 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   /// caratteri base64, circa 1,5 MB). Su Android e iOS nessun tetto.
   static const int? defaultPhotoBudgetChars = kIsWeb ? 1500000 : null;
   final int? photoBudgetChars;
+
+  /// Sul web le foto vanno in IndexedDB (senza tetto); null altrove.
+  PhotoBlobs? photoBlobs = createPhotoBlobs();
+  final _photoCache = <String, Uint8List>{};
 
   /// Prefisso delle chiavi di salvataggio (più profili nello stesso test).
   final String namespace;
@@ -387,6 +392,12 @@ class AppStore extends ChangeNotifier implements SyncTarget {
             <String>[]) {
       await _prefs!.remove(k);
     }
+    _photoCache.clear();
+    try {
+      await photoBlobs?.clear();
+    } catch (e) {
+      debugPrint('Foto non cancellate: $e');
+    }
     selectedDogId = null;
     await _save();
   }
@@ -555,6 +566,17 @@ class AppStore extends ChangeNotifier implements SyncTarget {
   Future<String> savePhoto(Uint8List bytes) async {
     _prefs ??= await SharedPreferences.getInstance();
     final id = newId();
+    final blobs = photoBlobs;
+    if (blobs != null) {
+      try {
+        await blobs.put(id, bytes);
+        _photoCache[id] = bytes;
+        return id;
+      } catch (e) {
+        // IndexedDB non disponibile (es. navigazione privata): ripiego.
+        debugPrint('Foto non salvata in IndexedDB: $e');
+      }
+    }
     final encoded = base64Encode(bytes);
     final budget = photoBudgetChars;
     if (budget != null) {
@@ -568,9 +590,26 @@ class AppStore extends ChangeNotifier implements SyncTarget {
     return id;
   }
 
+  /// La foto, se è già in memoria o in SharedPreferences (sincrona).
   Uint8List? photo(String id) {
+    final cached = _photoCache[id];
+    if (cached != null) return cached;
     final s = _prefs?.getString('photo_$id');
     return s == null ? null : base64Decode(s);
+  }
+
+  /// La foto, cercandola anche in IndexedDB (web).
+  Future<Uint8List?> loadPhoto(String id) async {
+    final now = photo(id);
+    if (now != null) return now;
+    try {
+      final b = await photoBlobs?.get(id);
+      if (b != null) _photoCache[id] = b;
+      return b;
+    } catch (e) {
+      debugPrint('Foto non leggibile: $e');
+      return null;
+    }
   }
 
   // --- Promemoria ---------------------------------------------------------
