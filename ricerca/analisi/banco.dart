@@ -16,6 +16,7 @@ import 'dart:math' as math;
 
 import 'package:zampa/logic/bio_params.dart';
 import 'package:zampa/logic/elimination_model.dart';
+import 'package:zampa/logic/pee_forecast_v2.dart';
 import 'package:zampa/logic/potty_predictor.dart';
 import 'package:zampa/models.dart';
 

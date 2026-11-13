@@ -21,6 +21,8 @@ class Rec2 {
   List<Rec2> ombra,
   List<GridRec> grid,
   List<ShadowRecord> history,
+  List<Rec2> v2,
+  List<GridRec> gridV2,
 })
 evaluatePair(
   Truth tr,
@@ -28,6 +30,7 @@ evaluatePair(
   int every = 1,
   bool shadow = true,
   int gridStepH = 0,
+  int fromDay = evalFromDay,
 }) {
   final cluster = need.clusterMinutes;
   final outs = PottyPredictor.outings(
@@ -36,11 +39,11 @@ evaluatePair(
     clusterMinutes: cluster,
   ).map((o) => o.time).toList();
   final trueOuts = _cluster(need == Need.pipi ? tr.pees : tr.poops, cluster);
-  final evalFrom = simStart.add(const Duration(days: evalFromDay));
+  final evalFrom = simStart.add(Duration(days: fromDay));
   final changeAt = simStart.add(const Duration(days: 14));
   final engine = EliminationModel();
-  final base = <Rec2>[], ombra = <Rec2>[];
-  final grid = <GridRec>[];
+  final base = <Rec2>[], ombra = <Rec2>[], v2 = <Rec2>[];
+  final grid = <GridRec>[], gridV2 = <GridRec>[];
   // R6: previsioni in ombra registrate, ripassate al modello (R4, R5).
   final history = <ShadowRecord>[];
   // Origini: dopo ogni evento valutato (indice i) e, con [gridStepH], a
@@ -65,7 +68,7 @@ evaluatePair(
     if (i < 0) {
       final visible = tr.logged.where((l) => !l.time.isAfter(origin)).toList();
       final f = engine
-          .fit(tr.dog, need, visible, const [], origin)
+          .fit(tr.dog, need, visible, const [], origin, shadow: shadow)
           .forecast(origin, withAccuracy: false, history: history);
       final until = origin.add(const Duration(minutes: 60));
       final y = outs.any((o) => o.isAfter(origin) && !o.isAfter(until)) ? 1 : 0;
@@ -80,16 +83,30 @@ evaluatePair(
         final u2 = o2.add(const Duration(minutes: 60));
         if (outs.any((o) => o.isAfter(o2) && !o.isAfter(u2))) hit++;
       }
-      grid.add(
-        GridRec(
-          tr.spec.id,
-          tr.spec.group,
-          f.shadow?.probNextHour ?? f.probNextHour,
-          (hit + 0.5) / (n + 1),
-          y,
-          yt,
-        ),
-      );
+      if (shadow) {
+        grid.add(
+          GridRec(
+            tr.spec.id,
+            tr.spec.group,
+            f.shadow?.probNextHour ?? f.probNextHour,
+            (hit + 0.5) / (n + 1),
+            y,
+            yt,
+          ),
+        );
+      }
+      if (f.v2 != null) {
+        gridV2.add(
+          GridRec(
+            tr.spec.id,
+            tr.spec.group,
+            f.v2!.probNextHour,
+            (hit + 0.5) / (n + 1),
+            y,
+            yt,
+          ),
+        );
+      }
       continue;
     }
     final actual = outs[i];
@@ -158,6 +175,7 @@ evaluatePair(
     final common = <String, Object>{
       'dog': tr.spec.id,
       'group': tr.spec.group,
+      'day': actual.difference(simStart).inHours / 24,
       'scheduled': _isScheduled(tr),
       'weekend': actual.weekday >= 6,
       'afterChange': !actual.isBefore(changeAt),
@@ -185,6 +203,33 @@ evaluatePair(
         'widthWin': f.windowEnd.difference(f.windowStart).inMinutes.toDouble(),
       }),
     );
+    final w = f.v2;
+    if (w != null) {
+      v2.add(
+        Rec2({
+          ...common,
+          'errModel': ae(w.expectedAt),
+          'signedErr': actual.difference(w.expectedAt).inMinutes.toDouble(),
+          'errModelTrue': trueNext
+              .difference(w.expectedAt)
+              .inMinutes
+              .abs()
+              .toDouble(),
+          'inWin': inside(w.lo80, w.hi80),
+          'widthWin': w.hi80.difference(w.lo80).inMinutes.toDouble(),
+          'in50': inside(w.lo50, w.hi50),
+          'width50': w.hi50.difference(w.lo50).inMinutes.toDouble(),
+          'pit': _pitV2(w, actual),
+          // Avvisi: la pipì arriva prima dell'avviso (in ritardo)?
+          'alertLate': actual.isBefore(w.alertAt),
+          'baseLate': actual.isBefore(f.recommendedAt),
+          'alertLead': actual.difference(w.alertAt).inMinutes.toDouble(),
+          'baseLead': actual.difference(f.recommendedAt).inMinutes.toDouble(),
+          'conf': w.confidence.index.toDouble(),
+          'earliest': w.point.earliest,
+        }),
+      );
+    }
     final s = f.shadow;
     if (s != null) {
       ombra.add(
@@ -205,7 +250,37 @@ evaluatePair(
       );
     }
   }
-  return (base: base, ombra: ombra, grid: grid, history: history);
+  return (
+    base: base,
+    ombra: ombra,
+    grid: grid,
+    history: history,
+    v2: v2,
+    gridV2: gridV2,
+  );
+}
+
+/// PIT approssimato della v2 dai suoi quantili (7,5-25-50-75-92,5).
+double _pitV2(PeeForecastV2 w, DateTime x) {
+  final qs = [
+    (w.lo80, 0.075),
+    (w.lo50, 0.25),
+    (w.expectedAt, 0.5),
+    (w.hi50, 0.75),
+    (w.hi80, 0.925),
+  ];
+  if (x.isBefore(qs.first.$1)) return 0.0375;
+  if (x.isAfter(qs.last.$1)) return 0.9625;
+  for (var k = 1; k < qs.length; k++) {
+    final (a, pa) = qs[k - 1];
+    final (b, pb) = qs[k];
+    if (!x.isAfter(b)) {
+      final span = b.difference(a).inSeconds;
+      final f = span <= 0 ? 1.0 : x.difference(a).inSeconds / span;
+      return pa + (pb - pa) * f;
+    }
+  }
+  return 0.9625;
 }
 
 bool _capOk(Dog dog, Forecast f, double maxDay, DateTime origin) {
@@ -354,6 +429,37 @@ Map<String, String> summarize2(List<Rec2> r, {bool shadow = false}) {
       boot2(r, (s) => _rate2(s, 'inWin')),
       pct: true,
     ),
+    if (r.first.m.containsKey('alertLate')) ...{
+      'pipì prima dell\'avviso v2 (avviso in ritardo)': fmt(
+        boot2(r, (s) => _rate2(s, 'alertLate')),
+        pct: true,
+      ),
+      'pipì prima dell\'uscita consigliata di base': fmt(
+        boot2(r, (s) => _rate2(s, 'baseLate')),
+        pct: true,
+      ),
+      'minuti tra avviso v2 e pipì (mediana)': _med2(
+        r,
+        'alertLead',
+      ).toStringAsFixed(0),
+      'minuti tra uscita consigliata di base e pipì (mediana)': _med2(
+        r,
+        'baseLead',
+      ).toStringAsFixed(0),
+      'ampiezza mediana della finestra 50% (min)': _med2(
+        r,
+        'width50',
+      ).toStringAsFixed(0),
+      'fiducia bassa / media / alta': [
+        for (var c = 0; c < 3; c++)
+          '${(r.where((e) => e.d('conf') == c).length / r.length * 100).toStringAsFixed(0)}%',
+      ].join(' / '),
+      for (var c = 0; c < 3; c++)
+        if (r.where((e) => e.d('conf') == c).length >= 20)
+          'fiducia ${['bassa', 'media', 'alta'][c]}: errore mediano / copertura 50%':
+              '${_med2(r.where((e) => e.d('conf') == c).toList(), 'errModel').toStringAsFixed(0)} min / '
+              '${(_rate2(r.where((e) => e.d('conf') == c).toList(), 'in50') * 100).toStringAsFixed(0)}%',
+    },
     if (shadow)
       'copertura 25-75% (nominale 50%)': fmt(
         boot2(r, (s) => _rate2(s, 'in50')),
@@ -436,6 +542,7 @@ void runShard(
     final bench = buildBench(scenarios[j.scenario]!);
     final base = <Map<String, Object>>[], ombra = <Map<String, Object>>[];
     final grid = <Map<String, Object>>[];
+    final v2 = <Map<String, Object>>[], gridV2 = <Map<String, Object>>[];
     for (var i = shard; i < bench.length; i += of) {
       // Con la griglia gli eventi e gli orari fissi si valutano insieme,
       // in ordine di tempo, con la stessa storia delle previsioni (R6).
@@ -449,11 +556,19 @@ void runShard(
       base.addAll(r.base.map((e) => e.m));
       ombra.addAll(r.ombra.map((e) => e.m));
       grid.addAll(r.grid.map(gridToJson));
+      v2.addAll(r.v2.map((e) => e.m));
+      gridV2.addAll(r.gridV2.map(gridToJson));
       // ignore: avoid_print
       print('$tag ${j.label} ${bench[i].spec.id}');
     }
     File('${dir.path}/${tag}_${j.label}_$shard.json').writeAsStringSync(
-      jsonEncode({'base': base, 'ombra': ombra, 'grid': grid}),
+      jsonEncode({
+        'base': base,
+        'ombra': ombra,
+        'grid': grid,
+        'v2': v2,
+        'gridV2': gridV2,
+      }),
     );
   }
 }
@@ -462,8 +577,8 @@ void runShard(
 String mergeShards(String tag, List<Job> jobs, int of) {
   final all = StringBuffer();
   for (final j in jobs) {
-    final base = <Rec2>[], ombra = <Rec2>[];
-    final grid = <GridRec>[];
+    final base = <Rec2>[], ombra = <Rec2>[], v2 = <Rec2>[];
+    final grid = <GridRec>[], gridV2 = <GridRec>[];
     var missing = 0;
     for (var k = 0; k < of; k++) {
       final f = File('${outDir()}/tmp/${tag}_${j.label}_$k.json');
@@ -479,6 +594,12 @@ String mergeShards(String tag, List<Job> jobs, int of) {
       grid.addAll(
         (m['grid'] as List).map((x) => gridFromJson(x as Map<String, dynamic>)),
       );
+      v2.addAll(((m['v2'] as List?) ?? const []).map(rec));
+      gridV2.addAll(
+        ((m['gridV2'] as List?) ?? const []).map(
+          (x) => gridFromJson(x as Map<String, dynamic>),
+        ),
+      );
     }
     if (missing == of) continue;
     final b = StringBuffer();
@@ -489,6 +610,12 @@ String mergeShards(String tag, List<Job> jobs, int of) {
     if (base.isNotEmpty) b.writeln(report2('$tag ${j.label} BASE', base));
     if (ombra.isNotEmpty) {
       b.writeln(report2('$tag ${j.label} OMBRA', ombra, shadow: true));
+    }
+    if (gridV2.isNotEmpty) {
+      b.writeln(render('$tag ${j.label} V2 griglia (tutti)', summarizeGrid(gridV2)));
+    }
+    if (v2.isNotEmpty) {
+      b.writeln(report2('$tag ${j.label} V2', v2, shadow: true));
     }
     saveText('${tag}_${j.label}', b.toString());
     all.write(b);

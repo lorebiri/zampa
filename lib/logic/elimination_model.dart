@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import '../models.dart';
 import 'bio_params.dart';
 import 'nutrition.dart';
+import 'pee_forecast_v2.dart';
 import 'potty_predictor.dart';
 
 /// MODELLO DI PREVISIONE DEI BISOGNI (pipì e cacca)
@@ -704,7 +705,19 @@ class Forecast {
     this.usualMinutes = const [],
     this.measuredIntervals = 0,
     this.shadow,
+    this.v2,
+    this.adaptedRecent = false,
   });
+
+  /// Previsione v2 della prossima pipì (ricerca/27): mediana di previsione
+  /// di base, «stesso orario» e «stesso giorno della settimana», con
+  /// finestre e probabilità calibrate sugli errori passati del cane. Null
+  /// per la cacca e senza pipì registrate.
+  final PeeForecastV2? v2;
+
+  /// True se la previsione di base ha accorciato l'intervallo per gli
+  /// ultimi 3 giorni (pipì più frequenti).
+  final bool adaptedRecent;
 
   /// Intervalli osservati su cui si basa la previsione di base (0-3: valori
   /// di partenza dalla letteratura, non misure del cane).
@@ -1534,10 +1547,17 @@ class FittedModel {
     );
   }
 
+  /// Previsione a [now]. Con [pointOnly] calcola solo la previsione di base
+  /// (niente modello in ombra, accuratezza e v2): serve alla v2 per rifare
+  /// le previsioni passate; con [window] falso salta anche la finestra
+  /// empirica. Con [v2] falso non calcola la previsione v2.
   Forecast forecast(
     DateTime now, {
     bool withAccuracy = true,
     List<ShadowRecord> history = const [],
+    bool v2 = true,
+    bool pointOnly = false,
+    bool window = true,
   }) {
     final c = _withFuture(now);
     final li = c.lastOutingIndex(now);
@@ -1571,7 +1591,7 @@ class FittedModel {
     // Il modello resta calcolato "in ombra" (curva e coefficienti, per il
     // banco di prova), ma ciò che si mostra viene dalla previsione di base
     // finché il modello non supera il collaudo (piano CEO 11.3, ricerca/12).
-    final r = shadowFitted
+    final r = shadowFitted && !pointOnly
         ? _quantiles(c, last, now, [0.1, 0.25, 0.5, 0.75, 0.9])
         : null;
     ShadowForecast? shadow;
@@ -1622,7 +1642,9 @@ class FittedModel {
       // delle pipì degli ultimi 14 giorni (7,5°-92,5° percentile degli
       // scarti: un po' più largo del 10°-90° perché il ritmo del cane cambia
       // nel tempo; sul banco la copertura resta vicina all'80%).
-      final w = _empiricalWindow(pastTimes, now, qRec, bio.factor, point);
+      final w = window
+          ? _empiricalWindow(pastTimes, now, qRec, bio.factor, point)
+          : null;
       if (w != null) {
         wStart = w.$1;
         wEnd = w.$2;
@@ -1741,7 +1763,16 @@ class FittedModel {
           'segnale.';
     }
 
-    final acc = withAccuracy && shadowFitted ? accuracy(now, history) : null;
+    final acc = withAccuracy && shadowFitted && !pointOnly
+        ? accuracy(now, history)
+        : null;
+    final shownExpected = expected.isBefore(recommended)
+        ? recommended
+        : expected;
+    final v2f = need == Need.pipi && v2 && !pointOnly
+        ? _v2(pastTimes, now, recommended, shadow?.probNextHour ??
+              (60 / math.max(60.0, base.intervalMin * k)).clamp(0.05, 0.5))
+        : null;
     final conf = learnedDays < 2
         ? Confidence.bassa
         : (acc != null && acc.n >= 8 && acc.inWindowRate >= 0.55)
@@ -1751,7 +1782,7 @@ class FittedModel {
       need: need,
       last: last,
       recommendedAt: recommended,
-      expectedAt: expected.isBefore(recommended) ? recommended : expected,
+      expectedAt: shownExpected,
       windowStart: wStart,
       windowEnd: wEnd,
       latestAt: latest,
@@ -1768,6 +1799,52 @@ class FittedModel {
       usualMinutes: base.habitualMinutes,
       measuredIntervals: base.nIntervals,
       shadow: shadow,
+      v2: v2f,
+      adaptedRecent: base.adaptedRecent,
+    );
+  }
+
+  /// Previsione v2 (ricerca/27) a [now], con le uscite [pastTimes] (≤ now).
+  /// Ogni previsione passata si rifà 1 minuto dopo la pipì precedente con
+  /// la sola previsione di base di allora: nessun dato dal futuro.
+  PeeForecastV2 _v2(
+    List<DateTime> pastTimes,
+    DateTime now,
+    DateTime recommended,
+    double fallbackProb,
+  ) {
+    final cluster = need.clusterMinutes.toDouble();
+    final cache = <int, V2Point>{};
+    V2Point pointAt(int i) => cache.putIfAbsent(i, () {
+      final upto = pastTimes.sublist(0, i);
+      final origin = upto.last.add(const Duration(minutes: 1));
+      final isCurrent = i == pastTimes.length;
+      final f = forecast(
+        origin,
+        withAccuracy: false,
+        v2: false,
+        pointOnly: true,
+        window: isCurrent,
+      );
+      return combineV2(
+        dog: dog,
+        past: upto,
+        origin: origin,
+        base: f.expectedAt,
+        adaptedRecent: f.adaptedRecent,
+        cluster: cluster,
+        priorMedian: prior.median,
+        baseWindowStart: isCurrent ? f.windowStart : null,
+        baseWindowEnd: isCurrent ? f.windowEnd : null,
+      );
+    });
+    return buildV2(
+      dog: dog,
+      outings: pastTimes,
+      now: now,
+      pointAt: pointAt,
+      recommendedAt: recommended,
+      fallbackProb: fallbackProb,
     );
   }
 
@@ -1950,8 +2027,15 @@ class FittedModel {
       prudence = Prudence.normale;
     }
     var qRec = prudence.quantile;
+    // Solo gli incidenti già avvenuti a [now] (le previsioni passate della
+    // v2 non devono vedere quelli successivi).
     final accidents = _ctx.indoor.indexed
-        .where((e) => e.$2 && now.difference(_ctx.outings[e.$1]).inDays <= 14)
+        .where(
+          (e) =>
+              e.$2 &&
+              !_ctx.outings[e.$1].isAfter(now) &&
+              now.difference(_ctx.outings[e.$1]).inDays <= 14,
+        )
         .length;
     if (need == Need.pipi && accidents > 0) qRec = math.min(qRec, 0.15);
     return qRec;
