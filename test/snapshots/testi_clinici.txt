@@ -114,10 +114,10 @@ oggi | Attenzione all'utero (piometra) | In una femmina non sterilizzata, nelle 
 attenzione | Calore che dura da oltre 4 settimane | Un calore persistente va valutato dal veterinario. Se è già finito, registra "Fine calore". | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
 ## femmina intera, un segno
-attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
 ## femmina intera, due segni
-oggi | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Contatta il veterinario oggi stesso.
+oggi | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio. | Contatta il veterinario oggi stesso.
 info | Ha vomitato una volta | Osserva: se si ripete, se è abbattuto o compaiono altri segni, senti il veterinario. | Parlane alla prossima visita.
 ## pipì in casa ripetute
 subito | Nessuna pipì da 24 ore | Se Fido non ha davvero urinato (e non è solo una registrazione mancante), è un'urgenza, specie nei maschi. Se escono solo gocce, conta come se non avesse urinato. | Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.
@@ -246,7 +246,7 @@ info | Parto atteso entro circa 24 ore | La temperatura sotto 37,5 °C di solito
 info | Parto vicino (presunto il 13/11) | Prepara la cassa parto. Chiama subito il veterinario se: contrazioni forti per oltre 30 minuti senza cuccioli, oltre 2 ore tra un cucciolo e l'altro, perdite verdi o nere senza cuccioli. | (nessuna frase d'azione)
 ## perdite purulente
 oggi | Perdite purulente | Perdite purulente in una femmina non sterilizzata possono indicare un'infezione dell'utero: contatta il veterinario oggi stesso. | Contatta il veterinario oggi stesso.
-attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
+attenzione | Femmina non sterilizzata: attenzione all'utero | Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## sterilizzata con perdite
 attenzione | Perdite vulvari | Perdite dalla vulva in una femmina sterilizzata vanno fatte vedere nei prossimi giorni. Se sono sangue e lei si comporta come in calore, dillo al veterinario: a volte resta un pezzetto di ovaio. Oggi stesso se è abbattuta, beve molto o compaiono pus o cattivo odore. | Senti il veterinario nei prossimi 1-2 giorni; prima se peggiora.
 ## sterilizzata con perdite purulente
@@ -292,16 +292,16 @@ info | 3 scadenze superate | Esame delle feci · Visita di controllo annuale · 
 ### Dosi: conferma di «Saltato» e promemoria a 2 ore
 ## Metacam (other)
 saltato | Dose saltata? | Confermi che questa dose non è stata data? Non raddoppiare la prossima: chiedi al veterinario cosa fare.
-promemoria | 💊 Dose confermata per Fido? | Apri Zampa e segna "Dato" o "Saltato". Se l'hai saltata non raddoppiare la successiva: chiedi al veterinario.
+promemoria | 💊 Dose confermata per Fido? | Apri Lulù e segna "Dato" o "Saltato". Se l'hai saltata non raddoppiare la successiva: chiedi al veterinario.
 ## Caninsulin (insulin)
 saltato | Dose saltata? | Confermi che l'insulina non è stata fatta? Non farla in ritardo e non raddoppiare la prossima senza aver sentito il veterinario. Se non sei sicuro che sia stata fatta, non rifarla.
 promemoria | 💉 Insulina di Fido: segnata? | Se è stata fatta, segna "Dato". Se non sei sicuro che sia stata fatta, non rifarla: chiedi al veterinario.
 ## Fenobarbital (antiepileptic)
 saltato | Dose saltata? | Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.
-promemoria | 💊 Dose confermata per Fido? | Apri Zampa e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso.
+promemoria | 💊 Dose confermata per Fido? | Apri Lulù e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso.
 ## Keppra (antiepileptic)
 saltato | Dose saltata? | Confermi che la dose non è stata data? Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: chiama il veterinario oggi per sapere se darla adesso.
-promemoria | 💊 Dose confermata per Fido? | Apri Zampa e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso.
+promemoria | 💊 Dose confermata per Fido? | Apri Lulù e segna "Dato" o "Saltato". Con i farmaci per le convulsioni una dose saltata può far tornare le crisi: se l'hai saltata, chiama il veterinario oggi per sapere se darla adesso.
 
 ### Prevenzione (PreventionPlanner.suggest)
 ## cucciolo di 4 settimane, nord
@@ -626,12 +626,12 @@ info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la 
 info | Sterilizzazione nelle taglie grandi | Per alcune razze grandi gli studi indicano che l'età della sterilizzazione può influire su articolazioni e alcuni tumori (Hart et al. 2020). Non esiste un'età giusta per tutti: parlane con il veterinario.
 ## cucciolo di 10 settimane
 info | Finestra di socializzazione (fino a ~14 settimane) | Fagli conoscere con calma persone, rumori, superfici e cani vaccinati e sani, anche prima della fine dei vaccini, in ambienti controllati (AVSAB 2008). Finché i vaccini non sono completi evita parchi e aree con feci di cani sconosciuti; sì a cani sani e vaccinati, case di amici e classi per cuccioli con protocollo igienico. Abitualo a trasportino e manipolazione.
-info | Educazione al bisogno | Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Zampa ti dice quando portarlo fuori.
+info | Educazione al bisogno | Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Lulù ti dice quando portarlo fuori.
 info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
 ## cucciolo di 20 settimane
-info | Educazione al bisogno | Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Zampa ti dice quando portarlo fuori.
+info | Educazione al bisogno | Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Lulù ti dice quando portarlo fuori.
 info | Veleni per lumache e topi | In questa stagione sono più usati nei giardini e negli orti: tienilo al guinzaglio vicino a coltivazioni e cantine.
 info | Acqua stagnante e leptospirosi | Non farlo bere da pozzanghere, fossi e stagni: la leptospirosi si trasmette con l'urina dei topi ed è trasmissibile all'uomo. Vomito, abbattimento e sete dopo un bagno in acque ferme → veterinario oggi.
 info | Zecche | Al Centro-Sud le zecche sono presenti tutto l'anno: mantieni la protezione e controlla il pelo dopo le passeggiate.
@@ -725,7 +725,7 @@ Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
 Impedisci che si gratti; non mettere colliri di tua iniziativa.
 Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
 Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
-Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Lulù aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
 Emergenze
 ## cane senza numeri
 Aggiungi i numeri utili
@@ -774,7 +774,7 @@ Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
 Impedisci che si gratti; non mettere colliri di tua iniziativa.
 Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
 Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
-Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Lulù aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
 Emergenze
 ## cane in Svizzera
 Aggiungi i numeri utili
@@ -823,7 +823,7 @@ Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
 Impedisci che si gratti; non mettere colliri di tua iniziativa.
 Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
 Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
-Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Lulù aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
 Emergenze
 ## cane con numeri
 Chiama il mio veterinario
@@ -876,5 +876,5 @@ Occhio sporgente, ferito, molto dolente o perdita improvvisa della vista
 Impedisci che si gratti; non mettere colliri di tua iniziativa.
 Ustioni, folgorazione (cavi elettrici) o quasi-annegamento
 Anche se sembra stare bene: i danni a polmoni e cuore possono comparire nelle ore successive.
-Zampa aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
+Lulù aiuta a osservare e organizzare: non fa diagnosi e non sostituisce la visita veterinaria. In emergenza (fatica a respirare, gengive pallide o blu, addome gonfio con conati a vuoto, collasso, convulsioni, sospetto avvelenamento, sforzo a urinare senza risultato, colpo di calore) contatta subito il veterinario o il pronto soccorso veterinario più vicino.
 Emergenze

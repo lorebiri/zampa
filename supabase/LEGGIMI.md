@@ -1,4 +1,4 @@
-# Attivare gli account di Zampa (Supabase, server UE)
+# Attivare gli account di Lulù (Supabase, server UE)
 
 Gli account sono **facoltativi**: senza questa configurazione l'app funziona
 come prima, con i dati solo sul telefono. Questi passaggi li fai tu, perché

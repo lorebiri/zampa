@@ -293,7 +293,7 @@ void main() {
     log('>>> CONDIVISIONE PDF: foglio di condivisione aperto per 20 s');
     final shareFuture = Printing.sharePdf(
       bytes: bytes,
-      filename: 'Zampa_Birba_collaudo.pdf',
+      filename: 'Lulu_Birba_collaudo.pdf',
     );
     var shared = '(in corso)';
     shareFuture.then((v) => shared = '$v').catchError((Object e) {

@@ -44,7 +44,7 @@ Future<void> shareBackupFile(String json, String fileName, Rect? origin) async {
 }
 
 String backupFileName(DateTime d) =>
-    'zampa-backup-${d.year}-${_two(d.month)}-${_two(d.day)}.json';
+    '${appFileName.toLowerCase()}-backup-${d.year}-${_two(d.month)}-${_two(d.day)}.json';
 
 String _two(int n) => n.toString().padLeft(2, '0');
 String _date(DateTime d) => '${_two(d.day)}/${_two(d.month)}/${d.year}';

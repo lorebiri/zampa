@@ -1,8 +1,8 @@
-# Zampa – dossier di progetto
+# Lulù – dossier di progetto
 
 *10 novembre 2026 · prototipo 0.1 · nome provvisorio*
 
-Zampa è un'app per iOS, Android, web e desktop dedicata alla salute del cane. Raccoglie in un solo posto la cartella sanitaria, le scadenze di vaccini e antiparassitari, le terapie, il peso e la nutrizione. Ha in più un **modello probabilistico che impara quando il cane deve fare pipì e cacca** e manda il promemoria prima che sia troppo tardi: è pensato per chi vive in appartamento senza giardino.
+Lulù è un'app web installabile (PWA) e Android dedicata alla salute del cane. Raccoglie in un solo posto la cartella sanitaria, le scadenze di vaccini e antiparassitari, le terapie, il peso e la nutrizione. Ha in più un **modello probabilistico che impara quando il cane deve fare pipì e cacca** e manda il promemoria prima che sia troppo tardi: è pensato per chi vive in appartamento senza giardino.
 
 Il lavoro è stato svolto da un team di agenti, ciascuno con un rapporto completo e le fonti in `ricerca/`:
 
@@ -34,7 +34,7 @@ Le app di salute generaliste registrano la pipì ma non la prevedono: 11pets (2,
 - uso dei bisogni come **segnale di salute**, con avvisi quando cambia il ritmo, quando il cane beve troppo o quando c'è sforzo nell'urinare;
 - italiano, Android, iOS e web.
 
-Questo è lo spazio di Zampa. Attenzione al nome: esistono già ZampaVet, la catena Ca' Zampa e l'app Zampa a Zampa. Prima di investire nel marchio va fatta una verifica.
+Questo è lo spazio di Lulù (nome scelto a novembre 2026 al posto del provvisorio «Zampa», che si scontrava con ZampaVet, la catena Ca' Zampa e l'app Zampa a Zampa). Anche per «Lulù» va fatta una verifica del marchio prima di investire.
 
 ## 2. Quando potremmo guadagnarci?
 
@@ -107,7 +107,7 @@ Codice in `lib/`, test in `test/`. Funziona offline: i dati restano sul disposit
 - **Limiti onesti:**
   - **Dati sintetici:** anche il banco di prova è una simulazione. L'accuratezza su cani reali si potrà misurare solo con utenti veri, ed è il primo esperimento da fare con i beta tester.
   - **Uscite decise dal padrone:** un cane educato elimina quando viene portato fuori. Gli eventi registrati riflettono quindi anche gli orari del padrone, e il modello lo compensa solo in parte con la covariata "passeggiata".
-  - **Latenze stimate:** molte latenze in minuti sono stime dentro finestre fisiologiche misurate (rapporto 05). Nessuno ha mai misurato su larga scala la frequenza di pipì e cacca nei cani di casa. Con il consenso degli utenti, i dati di Zampa potrebbero diventare il primo dataset su questo, e quindi una pubblicazione scientifica.
+  - **Latenze stimate:** molte latenze in minuti sono stime dentro finestre fisiologiche misurate (rapporto 05). Nessuno ha mai misurato su larga scala la frequenza di pipì e cacca nei cani di casa. Con il consenso degli utenti, i dati di Lulù potrebbero diventare il primo dataset su questo, e quindi una pubblicazione scientifica.
 
 ### 3.2 Allarmi di salute
 
@@ -236,7 +236,7 @@ Ha poi segnalato 53 nuovi punti e 8 aggiunte. **Le correzioni di gravità A e B 
 |---|---|
 | Modalità post-operatoria | Scheda "Convalescenza: giorno N di 14" con riposo, collare elisabettiano, controllo della ferita, prima pipì e appetito. Diario della ferita: arrossata, gonfia o con secrezione → attenzione; punti aperti o sanguinamento → oggi. Pasto non ancora registrato 48 h dopo l'intervento → oggi. Indicatore "Riposo" al posto di "Uscite" |
 | Forasacchi | Maggio-agosto: orecchie scosse all'improvviso o starnuti violenti → oggi |
-| Anziano | Massa muscolare (Muscle Condition Score WSAVA). Checklist dei cambiamenti cognitivi sui 6 ambiti DISHAA, **scritta per Zampa e dichiarata non validata**. CBPI, LOAD e CCDR sono protetti da copyright: serve una licenza per inserirli nell'app |
+| Anziano | Massa muscolare (Muscle Condition Score WSAVA). Checklist dei cambiamenti cognitivi sui 6 ambiti DISHAA, **scritta per Lulù e dichiarata non validata**. CBPI, LOAD e CCDR sono protetti da copyright: serve una licenza per inserirli nell'app |
 | Consigli | Socializzazione con le precauzioni igieniche. Leptospirosi e acque stagnanti (giugno-novembre). Freddo (dicembre-febbraio) con avviso meteo sotto 0 °C. Età della sterilizzazione nelle grandi taglie, solo "parlane col veterinario" |
 | Razze | Toy (trachea, ipoglicemia), Schnauzer nano (pancreatite), Dobermann (cardiomiopatia), Cocker (otiti), Bulldog francese (ernia discale) |
 | Diabete | Blocco "Insulina già fatta alle…" contro la doppia somministrazione in famiglia |

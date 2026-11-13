@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Zampa usa la fotocamera solo se scegli di fotografare feci, vomito o lesioni da mostrare al veterinario.</string>
+	<string>Lulù usa la fotocamera solo se scegli di fotografare feci, vomito o lesioni da mostrare al veterinario.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Zampa accede alle foto solo se scegli un'immagine da allegare al diario del tuo cane.</string>
+	<string>Lulù accede alle foto solo se scegli un'immagine da allegare al diario del tuo cane.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Zampa</string>
+	<string>Lulù</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

@@ -866,7 +866,7 @@ class _NotificationsOffBanner extends StatelessWidget {
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
       await launchUrl(Uri.parse('app-settings:'));
     } else if (context.mounted) {
-      toast(context, 'Attivale da Impostazioni › App › Zampa › Notifiche');
+      toast(context, 'Attivale da Impostazioni › App › $appName › Notifiche');
     }
   }
 

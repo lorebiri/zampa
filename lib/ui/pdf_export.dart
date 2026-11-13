@@ -27,7 +27,7 @@ Future<void> exportPdf(BuildContext context, AppStore store, Dog dog) async {
     await Printing.sharePdf(
       bytes: bytes,
       filename:
-          '${appName}_${dog.name}_${dmy(DateTime.now()).replaceAll('/', '-')}.pdf',
+          '${appFileName}_${dog.name}_${dmy(DateTime.now()).replaceAll('/', '-')}.pdf',
     );
   } catch (e) {
     if (context.mounted) toast(context, 'PDF non disponibile: $e');

@@ -36,7 +36,7 @@ Il consenso è valido solo se è **libero, specifico, informato e inequivocabile
 
 ### Ci aiuti a capire se le previsioni funzionano?
 
-Zampa prova a prevedere quando il tuo cane avrà bisogno di uscire. Per sapere se ci
+Lulù prova a prevedere quando il tuo cane avrà bisogno di uscire. Per sapere se ci
 riesce davvero, ci servono i numeri di tanti cani veri.
 
 Se partecipi, **una volta al giorno** il telefono calcola quanto la previsione si è
@@ -53,7 +53,7 @@ I numeri sono legati a un **codice casuale** creato sul telefono, che non è col
 tuo account. Li conserviamo in UE fino a 12 mesi dopo la fine della beta.
 
 Puoi smettere quando vuoi da **Profilo › Privacy**: cancelliamo i tuoi numeri entro
-30 giorni. Se dici di no, Zampa funziona uguale.
+30 giorni. Se dici di no, Lulù funziona uguale.
 
 [ Sì, partecipo ]   [ No, grazie ]
 
@@ -66,7 +66,7 @@ Puoi smettere quando vuoi da **Profilo › Privacy**: cancelliamo i tuoi numeri 
 Se l'app si blocca o va in errore, può mandarci una descrizione tecnica del problema
 per aiutarci a correggerlo.
 
-**Contiene:** il punto del codice dove è avvenuto l'errore, la versione di Zampa, il
+**Contiene:** il punto del codice dove è avvenuto l'errore, la versione di Lulù, il
 modello del telefono e la versione del sistema.
 
 **Non contiene:** i dati dei tuoi cani, il diario, la tua email, il tuo indirizzo IP,
@@ -83,7 +83,7 @@ dopo 90 giorni. Puoi spegnerli quando vuoi da **Profilo › Privacy**.
 
 **Chi:** Lorenzo Birindelli, titolare del trattamento (contatti nell'informativa).
 
-**Perché:** valutare e migliorare l'accuratezza delle previsioni di Zampa. Non usiamo
+**Perché:** valutare e migliorare l'accuratezza delle previsioni di Lulù. Non usiamo
 questi dati per pubblicità, non li vendiamo e non li usiamo per decisioni su di te.
 
 **Base giuridica:** il tuo consenso (art. 6.1.a GDPR), che puoi ritirare in ogni momento.

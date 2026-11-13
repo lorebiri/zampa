@@ -1,4 +1,4 @@
-# Valutazione d'impatto leggera (DPIA) — Zampa beta
+# Valutazione d'impatto leggera (DPIA) — Lulù beta
 
 > **Stato:** versione 1, 11/11/2026 (C2-7). Riferimenti: art. 35 GDPR; Linee guida
 > WP248 rev.01 (fatte proprie dall'EDPB); elenco del Garante dei trattamenti soggetti a
@@ -10,7 +10,7 @@
 
 Le linee guida WP248 indicano nove criteri; con due o più, di solito la DPIA serve.
 
-| Criterio WP248 | Zampa | Presente? |
+| Criterio WP248 | Lulù | Presente? |
 |---|---|---|
 | 1. Valutazione o punteggio | previsioni sul **cane**, non sulla persona | no |
 | 2. Decisioni automatiche con effetti giuridici | no | no |

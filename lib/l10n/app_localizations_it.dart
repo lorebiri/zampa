@@ -321,8 +321,8 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String alrRep002Text(String urgent) {
     String _temp0 = intl.Intl.selectLogic(urgent, {
-      'yes': 'Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio.',
-      'other': 'Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Zampa potrà avvisarti meglio.',
+      'yes': 'Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.',
+      'other': 'Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.',
     });
     return '$_temp0';
   }
@@ -1480,7 +1480,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get cuc002Text =>
-      'Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Zampa ti dice quando portarlo fuori.';
+      'Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Lulù ti dice quando portarlo fuori.';
 
   @override
   String get via001Title => 'Età minima';

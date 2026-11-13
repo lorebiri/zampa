@@ -1,10 +1,10 @@
-# Lettera d'incarico — Revisione dei testi clinici dell'app Zampa (v1)
+# Lettera d'incarico — Revisione dei testi clinici dell'app Lulù (v1)
 
-*Modello da completare e firmare. Preparato il 10/11/2026 dalla redazione di Zampa, che non è un medico veterinario abilitato e non fornisce consulenza legale. Prima dell'invio Lorenzo lo faccia leggere a un consulente legale, in particolare i punti 6, 7 e 9.*
+*Modello da completare e firmare. Preparato il 10/11/2026 dalla redazione di Lulù, che non è un medico veterinario abilitato e non fornisce consulenza legale. Prima dell'invio Lorenzo lo faccia leggere a un consulente legale, in particolare i punti 6, 7 e 9.*
 
 ---
 
-**Committente:** Lorenzo Birindelli, titolare del progetto Zampa (di seguito «il Committente»).  
+**Committente:** Lorenzo Birindelli, titolare del progetto Lulù (di seguito «il Committente»).  
 Indirizzo: ______________________ · e-mail/PEC: ______________________
 
 **Professionista:** Dott./Dott.ssa ______________________, medico veterinario  
@@ -17,7 +17,7 @@ P. IVA: ______________ · e-mail/PEC: ______________________ (di seguito «il Pr
 
 ## 1. Oggetto
 
-Il Committente chiede al Professionista di rivedere i testi clinici dell'app per smartphone **Zampa**, che aiuta i proprietari a registrare la salute del proprio cane. L'app non fa diagnosi, non prescrive farmaci e non è un dispositivo medico.
+Il Committente chiede al Professionista di rivedere i testi clinici dell'app per smartphone **Lulù**, che aiuta i proprietari a registrare la salute del proprio cane. L'app non fa diagnosi, non prescrive farmaci e non è un dispositivo medico.
 
 La revisione riguarda la **versione v1** dei testi, raccolta in:
 
