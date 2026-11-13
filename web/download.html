@@ -69,7 +69,7 @@
     <h2 id="t-android">Android</h2>
     <p>L'app completa, con le notifiche per uscite, dosi, vaccini e allarmi.</p>
     <a class="btn" id="apk" href="lulu.apk" download>Scarica per Android (APK)</a>
-    <p class="piccolo">Versione <span id="versione">__LULU_VERSIONE__</span> · Android 7 o più recente</p>
+    <p class="piccolo">Versione <span id="versione">__LULU_VERSIONE__</span> · Android 7 o più recente, telefoni a 64 bit</p>
     <ol>
       <li>Tocca <kbd>Scarica per Android (APK)</kbd> e conferma il download.</li>
       <li>Apri il file <kbd>lulu.apk</kbd> dalla notifica o dalla cartella Download.</li>
@@ -126,7 +126,7 @@
   // Senza build di rilascio il numero di versione resta segnaposto: nascondilo.
   (function () {
     var v = document.getElementById('versione');
-    if (v && v.textContent.indexOf('__') === 0) v.parentNode.textContent = 'Android 7 o più recente';
+    if (v && v.textContent.indexOf('__') === 0) v.parentNode.textContent = 'Android 7 o più recente, telefoni a 64 bit';
   })();
 </script>
 </body>

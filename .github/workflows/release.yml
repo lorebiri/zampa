@@ -77,10 +77,15 @@ jobs:
 
       - name: APK
         run: |
-          flutter build apk --release \
-            --build-name "${{ steps.versione.outputs.nome }}" \
-            --build-number "${{ steps.versione.outputs.numero }}"
-          cp build/app/outputs/flutter-apk/app-release.apk lulu.apk
+          ARGS=(--build-name "${{ steps.versione.outputs.nome }}" --build-number "${{ steps.versione.outputs.numero }}")
+          # Universale (tutti i telefoni) per la Release.
+          flutter build apk --release "${ARGS[@]}"
+          cp build/app/outputs/flutter-apk/app-release.apk lulu-universale.apk
+          # Solo 64 bit (quasi tutti i telefoni dal 2017), più leggero: è quello
+          # della pagina di download (Cloudflare Pages accetta file fino a 25 MiB).
+          flutter build apk --release --split-per-abi --target-platform android-arm64 "${ARGS[@]}"
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk lulu.apk
+          ls -lh lulu.apk lulu-universale.apk
 
       - name: Web app (PWA) con l'APK da scaricare
         env:
@@ -89,6 +94,10 @@ jobs:
         run: |
           tool/build_web.sh --build-name "${{ steps.versione.outputs.nome }}"
           (cd build/web && zip -qr "$GITHUB_WORKSPACE/lulu-web.zip" .)
+          MB=$(( $(stat -c %s build/web/lulu.apk) / 1048576 ))
+          if (( MB >= 25 )); then
+            echo "::warning::lulu.apk pesa ${MB} MiB: Cloudflare Pages accetta file fino a 25 MiB."
+          fi
 
       - name: Togli la chiave dal runner
         if: always()
@@ -99,6 +108,7 @@ jobs:
           name: lulu-${{ steps.versione.outputs.nome }}
           path: |
             lulu.apk
+            lulu-universale.apk
             lulu-web.zip
           retention-days: 30
 
@@ -112,4 +122,5 @@ jobs:
           generate_release_notes: true
           files: |
             lulu.apk
+            lulu-universale.apk
             lulu-web.zip
