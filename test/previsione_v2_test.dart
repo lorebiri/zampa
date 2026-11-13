@@ -34,17 +34,18 @@ List<LogEntry> _regular(int days, {int jit = 20, int seed = 1}) {
         _start.month,
         _start.day + d,
       ).add(Duration(minutes: (h * 60).round() + r.nextInt(2 * jit + 1) - jit));
-      logs.add(LogEntry(id: '${id++}', dogId: 'd', type: LogType.pipi, time: t));
+      logs.add(
+        LogEntry(id: '${id++}', dogId: 'd', type: LogType.pipi, time: t),
+      );
     }
   }
   return logs;
 }
 
-PeeForecastV2 _v2(List<LogEntry> logs, DateTime now) =>
-    EliminationModel()
-        .fit(_dog(), Need.pipi, logs, const [], now, shadow: false)
-        .forecast(now, withAccuracy: false)
-        .v2!;
+PeeForecastV2 _v2(List<LogEntry> logs, DateTime now) => EliminationModel()
+    .fit(_dog(), Need.pipi, logs, const [], now, shadow: false)
+    .forecast(now, withAccuracy: false)
+    .v2!;
 
 void main() {
   test('orari fissi: la v2 prevede il prossimo orario abituale', () {
@@ -96,11 +97,7 @@ void main() {
     var id = 0;
     for (var d = 0; d < 14; d++) {
       final step = d < 11 ? 240 : 120;
-      for (
-        var m = 7 * 60 + 15;
-        m <= 22 * 60 + 30;
-        m += step
-      ) {
+      for (var m = 7 * 60 + 15; m <= 22 * 60 + 30; m += step) {
         logs.add(
           LogEntry(
             id: '${id++}',
@@ -160,7 +157,8 @@ void main() {
       isNull,
     );
     expect(
-      m.fit(_dog(), Need.pipi, const [], const [], now, shadow: false)
+      m
+          .fit(_dog(), Need.pipi, const [], const [], now, shadow: false)
           .forecast(now)
           .v2,
       isNull,
@@ -194,5 +192,22 @@ void main() {
     );
     // Scarti 4 h 00, 4 h 10, 4 h 20, 4 h 30: mediana 4 h 15.
     expect(p, DateTime(2026, 1, 5, 12, 15));
+  });
+
+  test('testi della scheda: tempo arrotondato, finestra, consiglio', () {
+    final logs = _regular(15);
+    final now = DateTime(_start.year, _start.month, _start.day + 14, 12, 0);
+    final v = _v2(logs.where((l) => !l.time.isAfter(now)).toList(), now);
+    final x = v2Texts(v, now, 'Test');
+    expect(x.title, startsWith('Prossima pipì tra circa '));
+    expect(x.window, startsWith('Di solito tra le '));
+    expect(x.advice, contains('esci'));
+    expect(
+      '${x.title}${x.window}${x.advice}${x.confidence}',
+      isNot(contains('%')),
+    );
+    final late = v2Texts(v, v.hi80.add(const Duration(hours: 1)), 'Test');
+    expect(late.title, startsWith('Potrebbe essere ora'));
+    expect(late.advice, 'Per stare tranquilli, esci adesso.');
   });
 }

@@ -122,7 +122,9 @@ DateTime? sameTimeForecast(
   for (final k in daysBack) {
     final ref = prev.subtract(Duration(days: k));
     if (ref.isBefore(firstDay)) continue;
-    final from = ref.add(Duration(minutes: math.max(cluster, minOffset).round()));
+    final from = ref.add(
+      Duration(minutes: math.max(cluster, minOffset).round()),
+    );
     DateTime? n;
     for (final o in past) {
       if (o.isAfter(from)) {
@@ -274,7 +276,9 @@ PeeForecastV2 buildV2({
     for (final (p, a) in past)
       if (p.morning == current.morning) res(p, a),
   ].take(nResidual).toList();
-  if (rs.length < 8) rs = [for (final (p, a) in past.take(nResidual)) res(p, a)];
+  if (rs.length < 8) {
+    rs = [for (final (p, a) in past.take(nResidual)) res(p, a)];
+  }
   rs.sort();
 
   final at = current.at;
@@ -369,4 +373,50 @@ double? _hazardNextHour(
     sy += w * ys[i];
   }
   return (sy / sw).clamp(0.0, 0.9);
+}
+
+/// Testi della scheda «Prossima pipì» (ricerca/27 §5). Nessuna frase di
+/// accuratezza (piano CEO 11.3): la fiducia è detta a parole.
+({String title, String window, String confidence, String advice}) v2Texts(
+  PeeForecastV2 v,
+  DateTime now,
+  String name, {
+  int leadMinutes = 10,
+}) {
+  String two(int x) => x.toString().padLeft(2, '0');
+  String hm(DateTime t) => '${two(t.hour)}:${two(t.minute)}';
+  String dur(int m) {
+    if (m < 60) {
+      final r = math.max(5, (m / 5).round() * 5);
+      return '$r minuti';
+    }
+    final q = (m / 15).round() * 15;
+    final h = q ~/ 60, mm = q % 60;
+    final hs = h == 1 ? '1 ora' : '$h ore';
+    return mm == 0 ? hs : '$hs e $mm minuti';
+  }
+
+  final m = v.minutesUntil(now);
+  final title = m <= 0
+      ? 'Potrebbe essere ora: è passato l\'orario previsto (${hm(v.expectedAt)})'
+      : 'Prossima pipì tra circa ${dur(m)} (verso le ${hm(v.expectedAt)})';
+  final lo = v.lo50.isBefore(now) ? now : v.lo50;
+  final window = v.hi50.isBefore(now)
+      ? 'Di solito a quest\'ora l\'ha già fatta: se chiede di uscire, '
+            'portalo fuori.'
+      : 'Di solito tra le ${hm(lo)} e le ${hm(v.hi50)}.';
+  final confidence = switch (v.confidence) {
+    V2Confidence.alta =>
+      'Fiducia alta: nelle ultime settimane le previsioni di $name sono '
+          'state vicine.',
+    V2Confidence.media => 'Fiducia media.',
+    V2Confidence.bassa =>
+      'Fiducia bassa: sto ancora imparando, oppure i suoi orari cambiano '
+          'molto da un giorno all\'altro.',
+  };
+  final go = v.alertAt.subtract(Duration(minutes: leadMinutes));
+  final advice = go.isAfter(now)
+      ? 'Per stare tranquilli, esci verso le ${hm(go)}.'
+      : 'Per stare tranquilli, esci adesso.';
+  return (title: title, window: window, confidence: confidence, advice: advice);
 }

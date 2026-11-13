@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../logic/bio_params.dart';
+import '../logic/pee_forecast_v2.dart';
 import '../logic/potty_predictor.dart';
 import '../models.dart';
 import '../store.dart';
@@ -61,6 +62,8 @@ class _PottyScreenState extends State<PottyScreen> {
             ),
           ),
           ForecastCard(forecast: f, dog: dog),
+          if (need == Need.pipi && f.v2 != null && kPrevisioneV2InVista)
+            _V2Card(v: f.v2!, dog: dog, now: now),
           const SectionTitle('Come calcola l\'orario'),
           Card(
             child: Padding(
@@ -214,6 +217,49 @@ class _PottyScreenState extends State<PottyScreen> {
       ],
     ),
   );
+}
+
+/// Scheda della previsione v2 (ricerca/27 §5). Spegnibile con
+/// [kPrevisioneV2InVista] finché il CEO non decide se sostituire la
+/// previsione di base anche nella Home.
+const bool kPrevisioneV2InVista = true;
+
+class _V2Card extends StatelessWidget {
+  const _V2Card({required this.v, required this.dog, required this.now});
+  final PeeForecastV2 v;
+  final Dog dog;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context);
+    final x = v2Texts(v, now, dog.name, leadMinutes: dog.reminderLeadMinutes);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nuova previsione (in prova)', style: t.textTheme.labelMedium),
+            const SizedBox(height: 4),
+            Text(x.title, style: t.textTheme.titleMedium),
+            const SizedBox(height: 6),
+            Text(x.window),
+            const SizedBox(height: 6),
+            Text(x.advice, style: const TextStyle(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 6),
+            Text(x.confidence, style: t.textTheme.bodySmall),
+            Text(
+              'Unisce tre stime: il suo intervallo abituale, gli orari dei '
+              'giorni scorsi e lo stesso giorno della settimana scorsa. È una '
+              'stima: se ${dog.name} chiede di uscire, ascolta lui.',
+              style: t.textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _DayBars extends StatelessWidget {
