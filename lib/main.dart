@@ -21,6 +21,7 @@ import 'ui/device_notice.dart';
 import 'ui/dog_wizard.dart';
 import 'ui/health_screen.dart';
 import 'ui/home_screen.dart';
+import 'ui/nav_icons.dart';
 import 'ui/nutrition_screen.dart';
 import 'ui/potty_screen.dart';
 import 'ui/profile_screen.dart';
@@ -137,30 +138,27 @@ class _RootPageState extends State<RootPage> {
                   ? NavigationDestinationLabelBehavior.onlyShowSelected
                   : null,
               onDestinationSelected: (i) => setState(() => _tab = i),
+              // Icone colorate in pixel art, come nella schermata approvata
+              // (docs/design/): decorative, la voce la dà l'etichetta.
               destinations: const [
                 NavigationDestination(
-                  icon: Icon(Icons.wb_sunny_outlined),
-                  selectedIcon: Icon(Icons.wb_sunny),
+                  icon: PixelIcon(NavIcon.casa),
                   label: 'Oggi',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.water_drop_outlined),
-                  selectedIcon: Icon(Icons.water_drop),
+                  icon: PixelIcon(NavIcon.zampa),
                   label: 'Bisogni',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.monitor_heart_outlined),
-                  selectedIcon: Icon(Icons.monitor_heart),
+                  icon: PixelIcon(NavIcon.stetoscopio),
                   label: 'Salute',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.rice_bowl_outlined),
-                  selectedIcon: Icon(Icons.rice_bowl),
+                  icon: PixelIcon(NavIcon.pappa),
                   label: 'Nutrizione',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.pets_outlined),
-                  selectedIcon: Icon(Icons.pets),
+                  icon: PixelIcon(NavIcon.profilo),
                   label: 'Profilo',
                 ),
               ],
