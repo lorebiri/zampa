@@ -16,13 +16,13 @@ browser non l'ho potuta aprire**, perché in questa sessione Flutter non si inst
 | Prevenzione stagionale per area, rischi di razza | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Nutrizione: calorie, porzioni, pasti per età | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Allarmi clinici (4 livelli, rivisti da veterinari) **mostrati nell'app** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Allarmi e promemoria **come notifiche ad app chiusa** | ✅ | ❌ in silenzio, l'utente non lo sapeva | ❌ ma con un avviso chiaro · 🔜 Web Push | ❌ in silenzio | ❌ con avviso · 🔜 Web Push (iOS 16.4+, app sulla Home) |
-| Terapie: dosi da confermare, «non raddoppiare» | ✅ | ⚠️ solo ad app aperta | ⚠️ idem, con avviso | ⚠️ idem | ⚠️ idem, con avviso |
+| Allarmi e promemoria **come notifiche ad app chiusa** | ✅ | ❌ in silenzio, l'utente non lo sapeva | ✅ **Web Push** (con account; Edge Function + cron) | ❌ in silenzio | ✅ **Web Push** con l'app sulla Home, iOS 16.4+ (con account) |
+| Terapie: dosi da confermare, «non raddoppiare» | ✅ | ⚠️ solo ad app aperta | ✅ promemoria via Web Push | ⚠️ solo ad app aperta | ✅ via Web Push (app sulla Home) |
 | Previsione bayesiana di pipì e cacca | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Compagno in pixel art | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Diari: diabete, epilessia, respiri, qualità della vita, riproduzione | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Foto (cane, feci, ferite) | ✅ | ⚠️ potevano riempire la memoria e **bloccare il salvataggio di tutti i dati** | ⚠️ tetto di 1,5 MB con messaggio · 🔜 IndexedDB | ⚠️ come web | ⚠️ come web |
-| PDF per il veterinario | ✅ condividi | ✅ scarica | ✅ scarica | ✅ condividi/scarica | ✅ |
+| Foto (cane, feci, ferite) | ✅ | ⚠️ potevano riempire la memoria e **bloccare il salvataggio di tutti i dati** | ✅ in IndexedDB, senza tetto (ripiego col tetto se IndexedDB manca) | ⚠️ come web | ✅ come web |
+| PDF per il veterinario | ✅ condividi | ✅ scarica | ✅ scarica (provato: `Lulu_<cane>_<data>.pdf`) | ✅ condividi/scarica | ✅ |
 | Backup «Esporta i miei dati» | ✅ | ✅ scarica il file | ✅ | ✅ foglio di condivisione | ✅ |
 | Ripristino del backup | ❌ manca ovunque | ❌ | ❌ | ❌ | ❌ (da fare, importante sul web) |
 | Emergenze: chiama veterinario, pronto soccorso, antiveleni | ✅ | ⚠️ `tel:` dipende dal computer | ⚠️ | ✅ | ✅ |
@@ -33,30 +33,18 @@ browser non l'ho potuta aprire**, perché in questa sessione Flutter non si inst
 | Installazione | APK | ❌ manifest generico | ✅ PWA installabile | ⚠️ | ✅ «Aggiungi alla schermata Home» |
 | Dati al sicuro nel tempo | ✅ | ⚠️ localStorage | ⚠️ + archiviazione persistente richiesta | ❌ Safari può cancellarli dopo ~7 giorni senza visite se non è sulla Home | ⚠️ avviso di aggiungerla alla Home |
 
-## Web Push per i promemoria (proposto, da implementare)
+## Web Push per i promemoria (fatto)
 
-Lulù calcola già tutti i promemoria (`AppStore` → `PlannedNotification`, con titolo, testo,
-orario e flag «esatto»). Su Android li consegna `flutter_local_notifications`. Sul web il browser
-non sa programmare notifiche future: serve un server che le invii all'ora giusta.
-
-1. **Chiavi VAPID** (una coppia, la privata solo nei segreti di Supabase).
-2. **`web/sw.js`**: eventi `push` (mostra titolo/testo) e `notificationclick` (apre o porta in
-   primo piano Lulù).
-3. **App (solo web)**: dopo un tocco su «Attiva promemoria», `PushManager.subscribe` con la chiave
-   pubblica e salvataggio dell'iscrizione in Supabase. Su iPhone il pulsante compare solo se
-   l'app è aperta dalla schermata Home (`display-mode: standalone`); altrimenti spiega come fare.
-4. **Tabelle Supabase**: `push_subscriptions` (utente, endpoint, chiavi, dispositivo) e
-   `push_queue` (utente, orario, titolo, testo, id stabile), con RLS «solo i propri».
-   L'app, invece di chiamare `Notifier.schedule`, sostituisce le proprie righe in `push_queue`
-   a ogni ripianificazione (stessa lista e stesso tetto di 60 di oggi).
-5. **Edge Function `invia-promemoria`** lanciata ogni minuto da `pg_cron`: prende le righe
-   scadute, invia con la libreria `web-push`, cancella le inviate, toglie le iscrizioni scadute
-   (risposta 404/410).
-
-Limiti: serve l'account (i promemoria passano dal server); su iPhone solo iOS 16.4+ e con l'app
-sulla Home; gli allarmi urgenti arrivano al massimo con un minuto di ritardo. Privacy: nomi dei
-farmaci e orari passano dal server UE → aggiornare informativa, DPIA e registro dei trattamenti.
-Costo: piano gratuito di Supabase. Stima: 2-4 giorni, con test.
-
-Non l'ho implementato in questa sessione per due motivi. Il codice Dart dell'iscrizione non si
-può compilare né provare qui. E l'invio dal server è una scelta di privacy che spetta a Lorenzo.
+- **App** (`lib/web/push_client*.dart`, `lib/sync/push_reminders.dart`): sul web la Home dice cosa
+  manca (Home su iPhone, account, permesso) e offre «Attiva promemoria»; `AppStore` spedisce al
+  server promemoria e allarmi urgenti (questi una volta sola, riprovati se manca la rete).
+- **Database** (`supabase/migrations/2026-11-14_promemoria_web.sql`): iscrizioni e coda chiuse
+  agli utenti, solo funzioni; 17 test SQL verdi su Postgres 16.
+- **Invio** (`supabase/functions/invia-promemoria`): ogni minuto con `pg_cron`, `web-push` con
+  chiavi VAPID, scarta le iscrizioni scadute; 3 test Deno e controllo dei tipi.
+- **Service worker**: mostra la notifica (gli allarmi restano finché non li tocchi) e al tocco apre
+  Lulù. Provato in Chromium consegnando un messaggio push: notifica mostrata.
+- **Da fare da Lorenzo**: chiavi VAPID, segreti, deploy e cron (`supabase/LEGGIMI.md` §6); citare
+  nell'informativa che i testi dei promemoria passano dal server UE fino all'invio.
+- **Non provato qui**: la consegna attraverso i server push veri (Google, Apple, Mozilla), perché il
+  Chromium di prova non ha un servizio push funzionante. Va provata su un telefono vero.

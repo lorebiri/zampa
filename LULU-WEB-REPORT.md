@@ -275,3 +275,17 @@ frasi degli elenchi su più paragrafi.
 
 Prossimi passi, sospesi per la pausa: il blocco B (Web Push, approvato).
 Per il blocco C le schermate di prova sono pronte in `docs/design/` e aspettano l'ok di Lorenzo.
+
+## Aggiornamento: blocco B fatto (Web Push, foto, collaudo)
+
+Dettagli e tabella funzione per funzione: [`docs/FUNZIONI-PIATTAFORME.md`](docs/FUNZIONI-PIATTAFORME.md).
+
+- **Web Push** completo: app, database (17 test SQL), Edge Function (3 test Deno), service worker
+  (notifica provata in Chromium). Attivazione lato server da fare con `supabase/LEGGIMI.md` §6.
+- **Foto sul web in IndexedDB**: niente più tetto di 1,5 MB; provato nell'app vera (la foto scelta
+  finisce in IndexedDB e si vede).
+- **Regressione trovata e corretta nel collaudo**: la Content-Security-Policy aggiunta prima
+  bloccava le foto sul web (URL `blob:`); ora consentito, con un test che lo controlla.
+- **PDF per il veterinario sul web**: provato, si scarica `Lulu_<cane>_<data>.pdf`.
+- **Test**: `flutter analyze` pulito; `flutter test` 187 passati (22 saltati, come prima).
+- **Ancora da fare** (non è una funzione esistente, ma conviene): ripristino del backup.
