@@ -1,0 +1,115 @@
+name: Rilascio
+
+# A ogni tag v* (es. v0.2.0): controlli, APK Android, web app (PWA) con l'APK
+# dentro, e una GitHub Release con i due file. Si può anche lanciare a mano
+# (in quel caso niente Release: i file restano tra gli artifact).
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      base_href:
+        description: 'Base href della web app (inizia e finisce con /)'
+        default: '/'
+
+permissions:
+  contents: write
+
+jobs:
+  rilascio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      # Per un hosting in sottocartella: variabile di repository LULU_BASE_HREF.
+      BASE_HREF: ${{ github.event.inputs.base_href || vars.LULU_BASE_HREF || '/' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter analyze --fatal-infos
+      - run: flutter test
+
+      - name: Versione dal tag
+        id: versione
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            V="${GITHUB_REF_NAME#v}"
+          else
+            V="$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | cut -d+ -f1)-prova"
+          fi
+          echo "nome=$V" >> "$GITHUB_OUTPUT"
+          # versionCode crescente per Android: numero di esecuzione del workflow.
+          echo "numero=$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+
+      # Chiave di firma: segreti ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD,
+      # ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD. Senza, l'APK usa la chiave di
+      # debug del runner, diversa a ogni esecuzione: gli aggiornamenti sopra
+      # una versione precedente NON si installerebbero.
+      - name: Chiave di firma Android
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [[ -z "$KEYSTORE" ]]; then
+            echo "::warning::Nessuna chiave di firma nei segreti: APK firmato con la chiave di debug."
+            exit 0
+          fi
+          echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/lulu.jks"
+          {
+            echo "storeFile=$RUNNER_TEMP/lulu.jks"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > android/key.properties
+
+      - name: APK
+        run: |
+          flutter build apk --release \
+            --build-name "${{ steps.versione.outputs.nome }}" \
+            --build-number "${{ steps.versione.outputs.numero }}"
+          cp build/app/outputs/flutter-apk/app-release.apk lulu.apk
+
+      - name: Web app (PWA) con l'APK da scaricare
+        env:
+          APK: lulu.apk
+          LULU_VERSION: ${{ steps.versione.outputs.nome }}
+        run: |
+          tool/build_web.sh --build-name "${{ steps.versione.outputs.nome }}"
+          (cd build/web && zip -qr "$GITHUB_WORKSPACE/lulu-web.zip" .)
+
+      - name: Togli la chiave dal runner
+        if: always()
+        run: rm -f android/key.properties "$RUNNER_TEMP/lulu.jks"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lulu-${{ steps.versione.outputs.nome }}
+          path: |
+            lulu.apk
+            lulu-web.zip
+          retention-days: 30
+
+      - name: GitHub Release (solo per i tag)
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Lulù ${{ steps.versione.outputs.nome }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
+          files: |
+            lulu.apk
+            lulu-web.zip
