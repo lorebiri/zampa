@@ -1,6 +1,6 @@
-# Zampa (nome provvisorio)
+# Lulù
 
-App per la salute del cane (Flutter: iOS, Android, web): cartella sanitaria, prevenzione,
+App per la salute del cane (Flutter): web app installabile (PWA, anche per iPhone) e APK Android: cartella sanitaria, prevenzione,
 nutrizione, allarmi clinici rivisti da veterinari, previsione di pipì e cacca con un modello
 bayesiano, compagno in pixel art, account facoltativi con sincronizzazione (Supabase UE).
 
@@ -16,9 +16,10 @@ flutter analyze
 flutter test
 flutter run -d chrome                                   # senza account
 flutter run --dart-define-from-file=config/supabase.json  # con account (file non nel repo)
+tool/build_web.sh                                       # web app per l'hosting (vedi INSTALLA.md)
+flutter build apk --release                             # APK Android
 ```
 
-Per iOS compilare da una copia fuori da OneDrive (gli attributi estesi dei file
-sincronizzati possono rompere la firma del codice).
+Installazione e pubblicazione: [`INSTALLA.md`](INSTALLA.md) · web app e APK: [`LULU-WEB-REPORT.md`](LULU-WEB-REPORT.md).
 
-Zampa non è un dispositivo medico e non sostituisce il veterinario.
+Lulù non è un dispositivo medico e non sostituisce il veterinario.

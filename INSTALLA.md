@@ -1,46 +1,50 @@
-# Installare Zampa sul telefono
+# Installare Lulù sul telefono
 
-Zampa è gratuita e funziona senza account: i dati restano sul telefono.
+Lulù è gratuita e funziona senza account: i dati restano sul telefono.
 
 ## Android (qualsiasi telefono Android 7 o più recente)
 
-1. Apri la pagina delle compilazioni:
-   <https://github.com/lorebiri/zampa/actions/workflows/android.yml>
-2. Apri l'ultima riga con la spunta verde. In fondo, sotto **Artifacts**, scarica **zampa-android**
-   (serve essere entrati su GitHub).
-3. Dentro lo zip c'è `zampa.apk`: copialo sul telefono, per esempio mandandolo a te stesso via mail o
-   Telegram, oppure scaricandolo direttamente dal telefono.
-4. Apri `zampa.apk` sul telefono. Android chiede di consentire l'installazione da quella app (Chrome,
-   File, Telegram…): consenti, poi **Installa**.
-5. Al primo avvio:
+L'APK si scarica dalla pagina **Installa Lulù** della web app (`download.html`, oppure
+**Profilo › Installa Lulù sul telefono**), che spiega anche i passaggi:
+
+1. Tocca **Scarica per Android (APK)** e conferma il download.
+2. Apri `lulu.apk` dalla notifica o dalla cartella Download. Android chiede di consentire
+   l'installazione da quella app (Chrome, File…): consenti, poi **Installa**.
+3. Al primo avvio:
    - aggiungi il tuo cane;
    - alla domanda sulle notifiche rispondi **Attiva** e poi **Consenti**;
    - se compare la richiesta «Sveglie e promemoria», attivala: serve a far arrivare le dosi all'orario
      esatto.
 
-Gli aggiornamenti si installano allo stesso modo, sopra la versione precedente, e i dati restano.
+Gli aggiornamenti si installano allo stesso modo, sopra la versione precedente, e i dati restano
+(purché l'APK sia firmato sempre con la stessa chiave: vedi `LULU-WEB-REPORT.md`).
 
-## iPhone
+Per chi sviluppa: l'APK di ogni rilascio è anche allegato alla GitHub Release del tag `v*`
+(workflow `.github/workflows/release.yml`) e, per ogni commit su `main`, tra gli artifact del
+workflow **Android** (`lulu-android`).
 
-Senza account Apple Developer a pagamento l'app si installa dal Mac con Xcode e il tuo Apple ID
-gratuito. Va reinstallata ogni 7 giorni, e i dati restano.
+## iPhone e iPad: web app sulla schermata Home
 
-1. Collega l'iPhone al Mac con il cavo e sblocca il telefono. Se chiede «Considerare attendibile
-   questo computer?», rispondi **Sì**.
-2. Sull'iPhone attiva **Impostazioni › Privacy e sicurezza › Modalità sviluppatore**: il telefono si
-   riavvia.
-3. Apri `ios/Runner.xcworkspace` con Xcode.
-   - Vai su **Xcode › Settings › Accounts › +** ed entra con il tuo Apple ID.
-   - Seleziona **Runner › Signing & Capabilities › Team**, poi scegli il tuo nome (Personal Team).
-   - Se Xcode dice che l'identificativo `it.zampa.zampa` è già usato, cambialo in qualcosa di tuo,
-     per esempio `it.lorenzo.zampa`.
-4. Da Terminale, nella cartella del progetto:
-   ```bash
-   flutter run --release
-   ```
-   Se ci sono più dispositivi, scegli l'iPhone.
-5. Al primo avvio l'iPhone può dire «Sviluppatore non attendibile». Vai su
-   **Impostazioni › Generali › VPN e gestione dispositivi**, tocca il tuo Apple ID e poi **Autorizza**.
+Lulù su iPhone non passa dall'App Store: si usa da Safari come web app installabile.
+
+1. Apri l'indirizzo della web app con **Safari**.
+2. Tocca **Condividi** (il quadrato con la freccia in su) › **Aggiungi alla schermata Home** › **Aggiungi**.
+3. Da ora aprila dall'icona: si apre a schermo intero e funziona anche senza rete.
+
+Limiti su iPhone: niente notifiche (promemoria e allarmi si vedono aprendo l'app); i dati stanno
+nel browser, quindi va aggiunta alla schermata Home, altrimenti Safari può cancellarli dopo
+qualche settimana senza uso.
+
+## Web app: build e pubblicazione
+
+```bash
+tool/build_web.sh                        # sito alla radice del dominio
+BASE_HREF=/lulu/ tool/build_web.sh       # sito in una sottocartella
+APK=lulu.apk tool/build_web.sh           # mette anche l'APK nella pagina di download
+```
+
+Il risultato in `build/web` va caricato così com'è su un hosting statico qualsiasi (HTTPS
+obbligatorio per l'installazione e l'uso offline).
 
 ## Cosa sapere
 
