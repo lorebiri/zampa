@@ -19,7 +19,7 @@ enum WebReminders {
   /// Il browser non sa ricevere notifiche push (o la build non le prevede).
   unsupported,
 
-  /// iPhone/iPad in Safari: serve aprire Lulù dalla schermata Home.
+  /// iPhone/iPad in Safari: serve aprire l'app dalla schermata Home.
   needsHomeScreen,
 
   /// Serve l'account (i promemoria passano dal server).

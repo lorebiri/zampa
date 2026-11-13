@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../brand.dart';
 import 'app_localizations.dart';
 import 'clinical_catalog.g.dart';
 
@@ -43,8 +44,12 @@ class ClinicalText {
   String? get action =>
       catalogParams.containsKey('${key}Action') ? resolve('Action') : null;
 
-  String resolve(String part, [AppLocalizations? l]) =>
-      catalogLookup(l ?? ClinicalL10n.current, '$key$part', params);
+  /// Il nome dell'app arriva sempre da brand.dart (unico punto da cambiare).
+  String resolve(String part, [AppLocalizations? l]) => catalogLookup(
+    l ?? ClinicalL10n.current,
+    '$key$part',
+    {'app': appName, ...params},
+  );
 
   @override
   String toString() => 'ClinicalText($id, $params)';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../logic/alerts.dart';
 
-/// Identità visiva di Lulù (approvata a novembre 2026, docs/design/).
+/// Identità visiva dell'app (approvata a novembre 2026, docs/design/).
 ///
 /// Giovane ma non infantile: corallo caldo come colore guida (quello del
 /// logo), lime, lilla, cielo e sole come accenti, molto spazio, card grandi e
@@ -168,9 +168,9 @@ class AppColors extends ThemeExtension<AppColors> {
       'ATTENZIONE',
     ),
     info: AlertTone(
-      Color(0xFFE6EDF7),
-      Color(0xFF1B355A),
-      Color(0xFF3D6AA8),
+      Color(0xFFEFE8FF),
+      Color(0xFF2B1A5C),
+      Color(0xFF5B3FB0),
       Icons.info_outline,
       null,
     ),
@@ -205,9 +205,9 @@ class AppColors extends ThemeExtension<AppColors> {
       'ATTENZIONE',
     ),
     info: AlertTone(
-      Color(0xFF1C2A3E),
-      Color(0xFFD5E2F5),
-      Color(0xFF8DB3E8),
+      Color(0xFF2A2240),
+      Color(0xFFE4D8FF),
+      Color(0xFFB9A6F2),
       Icons.info_outline,
       null,
     ),

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-// Modelli dati di Lulù. Tutto è serializzabile in JSON per la persistenza
+// Modelli dati dell'app. Tutto è serializzabile in JSON per la persistenza
 // locale (nessun dato lascia il dispositivo nella versione attuale).
 
 /// Identificativo casuale UUID v4: unico anche tra utenti diversi, così la

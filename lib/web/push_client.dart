@@ -1,4 +1,4 @@
-/// Notifiche Web Push nel browser (web app e iPhone con Lulù sulla Home).
+/// Notifiche Web Push nel browser (web app e iPhone con l'app sulla Home).
 ///
 /// Su Android, iOS nativo e nei test si usa la versione vuota
 /// ([push_client_stub.dart]): lì i promemoria sono notifiche locali.

@@ -383,11 +383,14 @@
   "@alrRep002Title": {
     "description": "ALR-REP-002 · titolo · urgent = yes con 2 o più segni"
   },
-  "alrRep002Text": "{urgent, select, yes{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.} other{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.}}",
+  "alrRep002Text": "{urgent, select, yes{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: {app} potrà avvisarti meglio.} other{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un'infezione dell'utero (piometra), che è un'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: {app} potrà avvisarti meglio.}}",
   "@alrRep002Text": {
     "description": "ALR-REP-002 · testo · urgent = yes con 2 o più segni",
     "placeholders": {
       "urgent": {
+        "type": "String"
+      },
+      "app": {
         "type": "String"
       }
     }
@@ -1772,9 +1775,14 @@
   "@cuc002Title": {
     "description": "CUC-002 · titolo"
   },
-  "cuc002Text": "Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Lulù ti dice quando portarlo fuori.",
+  "cuc002Text": "Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. {app} ti dice quando portarlo fuori.",
   "@cuc002Text": {
-    "description": "CUC-002 · testo"
+    "description": "CUC-002 · testo",
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
   },
   "via001Title": "Età minima",
   "@via001Title": {

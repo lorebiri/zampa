@@ -1091,7 +1091,7 @@ class _SparkPainter extends CustomPainter {
 // ---------------------------------------------------------------------------
 /// Valutazioni dell'anziano (07 aggiunta N10): Muscle Condition Score WSAVA
 /// (descrittivo) e una checklist dei cambiamenti cognitivi sui sei ambiti
-/// DISHAA, scritta per Lulù e NON validata. I questionari validati (CBPI,
+/// DISHAA, scritta per l'app e NON validata. I questionari validati (CBPI,
 /// LOAD, CCDR) sono protetti da copyright: vanno usati con licenza.
 class SeniorScalesPage extends StatefulWidget {
   const SeniorScalesPage({super.key, required this.dog});

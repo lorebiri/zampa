@@ -541,8 +541,8 @@ abstract class AppLocalizations {
   /// ALR-REP-002 · testo · urgent = yes con 2 o più segni
   ///
   /// In it, this message translates to:
-  /// **'{urgent, select, yes{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.} other{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: Lulù potrà avvisarti meglio.}}'**
-  String alrRep002Text(String urgent);
+  /// **'{urgent, select, yes{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: contatta il veterinario oggi stesso. Registra i calori nella sezione Riproduzione: {app} potrà avvisarti meglio.} other{Se è stata in calore negli ultimi 2-3 mesi può trattarsi di un\'infezione dell\'utero (piometra), che è un\'urgenza: osservala e senti il veterinario se compaiono altri segni. Registra i calori nella sezione Riproduzione: {app} potrà avvisarti meglio.}}'**
+  String alrRep002Text(String urgent, String app);
 
   /// ALR-URI-014 · titolo
   ///
@@ -2251,8 +2251,8 @@ abstract class AppLocalizations {
   /// CUC-002 · testo
   ///
   /// In it, this message translates to:
-  /// **'Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. Lulù ti dice quando portarlo fuori.'**
-  String get cuc002Text;
+  /// **'Premia subito, fuori, appena ha fatto. Non punire gli incidenti: pulisci con un detergente enzimatico. {app} ti dice quando portarlo fuori.'**
+  String cuc002Text(String app);
 
   /// VIA-001 · titolo
   ///

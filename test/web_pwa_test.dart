@@ -38,6 +38,18 @@ Widget _host(Widget child) => MaterialApp(
 
 void main() {
   group('Nome', () {
+    test('nel codice Dart il nome sta solo in lib/brand.dart', () {
+      final fuori = [
+        for (final f in Directory('lib').listSync(recursive: true))
+          if (f is File &&
+              f.path.endsWith('.dart') &&
+              !f.path.endsWith('brand.dart') &&
+              f.readAsStringSync().contains(appName))
+            f.path,
+      ];
+      expect(fuori, isEmpty);
+    });
+
     test('il nome visibile è Lulù, i file usano Lulu senza accento', () {
       expect(appName, 'Lulù');
       expect(appFileName, 'Lulu');

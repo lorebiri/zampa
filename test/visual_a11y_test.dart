@@ -1,5 +1,6 @@
 // Controlli automatici dell'identità visiva (ricerca/22-direzione-visiva.md):
-// contrasto del testo in chiaro e in scuro e testo al 200% senza overflow.
+// contrasto del testo in chiaro e in scuro, testo al 200% senza overflow,
+// aree di tocco di almeno 44 px (stile Lulù, docs/design/).
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,4 +105,24 @@ void main() {
     await tester.binding.setSurfaceSize(null);
     tester.platformDispatcher.clearTextScaleFactorTestValue();
   });
+
+  for (final dark in [false, true]) {
+    testWidgets('aree di tocco ≥ 44 px e contrasto in tutte le schede '
+        '(${dark ? 'scuro' : 'chiaro'})', (tester) async {
+      tester.platformDispatcher.platformBrightnessTestValue = dark
+          ? Brightness.dark
+          : Brightness.light;
+      await tester.binding.setSurfaceSize(const Size(420, 2400));
+      await _openDemo(tester);
+      for (var i = 0; i < 5; i++) {
+        await tester.tap(find.byType(NavigationDestination).at(i));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+        await expectLater(tester, meetsGuideline(textContrastGuideline));
+      }
+      await tester.binding.setSurfaceSize(null);
+      tester.platformDispatcher.clearPlatformBrightnessTestValue();
+    });
+  }
 }

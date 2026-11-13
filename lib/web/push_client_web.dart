@@ -7,7 +7,7 @@ import 'package:web/web.dart' as web;
 
 import 'push_client.dart';
 
-/// Versione per il browser, con il service worker di Lulù (web/sw.js).
+/// Versione per il browser, con il service worker dell'app (web/sw.js).
 class PushClient {
   /// Il browser sa ricevere notifiche push (su iPhone: iOS 16.4+, e solo con
   /// l'app aperta dalla schermata Home).
