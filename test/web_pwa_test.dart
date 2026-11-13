@@ -90,6 +90,17 @@ void main() {
       expect(html, contains('<title>$appName</title>'));
     });
 
+    test('la Content-Security-Policy blocca Google ma non le foto', () {
+      final html = File('web/index.html').readAsStringSync();
+      final csp = RegExp(r'Content-Security-Policy" content="([^"]+)"')
+          .firstMatch(html)!
+          .group(1)!;
+      // image_picker sul web legge la foto da un URL blob: (collaudo reale).
+      expect(RegExp(r"connect-src[^;]*\bblob:").hasMatch(csp), isTrue);
+      expect(csp, contains("script-src 'self'"));
+      expect(csp, isNot(contains('accounts.google.com')));
+    });
+
     test('il bootstrap non registra il service worker di Flutter', () {
       // Quello di Flutter si disinstalla da solo e toglierebbe sw.js.
       final js = File('web/flutter_bootstrap.js').readAsStringSync();
