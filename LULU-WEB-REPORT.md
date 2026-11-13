@@ -238,3 +238,40 @@ riscrivere `lib/ui/theme.dart` e le schermate.
   d'uso (20 al giorno, 200 al mese), consenso separato. Costo stimato per utente al mese con uso
   medio: ~0,55 $ con Opus 5.5, ~0,27 $ con Sonnet 5.5, ~0,02 $ con Haiku 5.5.
   **Non attivato, nessuna chiave chiesta**: decide Lorenzo.
+
+---
+
+## Aggiornamento: collaudo con Flutter vero (13/11, sera)
+
+La rete ora permette di installare Flutter 3.47.9 (clonato da GitHub, scaricando
+`storage.googleapis.com` e `pub.dev`).
+
+| Controllo | Prima (commit `9d28010`) | Dopo (questo branch) |
+|---|---|---|
+| `flutter analyze --fatal-infos` | nessun problema | nessun problema (corretto un import mancante in `test/web_pwa_test.dart`) |
+| `flutter test` | 159 passati, 22 saltati | **172 passati** (159 + 13 nuovi), 22 saltati |
+| `dart format` | — | nessuna modifica necessaria |
+| `tool/build_web.sh` (base href `/lulu/`) | — | ✅ build riuscita |
+| `flutter build apk --release` | — | in corso al momento della pausa: il primo tentativo è fallito solo perché l'SDK di questa macchina chiama la piattaforma «android-37.0» anziché «android-37» (problema della macchina, non del codice) |
+
+**Collaudo Playwright sull'app vera** (a misura iPhone 13, chiaro e scuro, servita in `/lulu/`):
+schermata iniziale e avvertenze, cane di esempio, tutte le schede, procedura guidata con un cane vero,
+avviso «PROMEMORIA» (compare, «Ho capito» lo nasconde anche dopo la ricarica), dati salvati dopo la
+ricarica, **apertura offline con i dati**, Emergenze, Privacy e informativa, esportazione
+(`lulu-backup-2026-11-13.json` con il cane dentro), link «Installa Lulù sul telefono» → `download.html`.
+Nessun errore JavaScript.
+
+**Correzioni nate dal collaudo:**
+- **Privacy:** il plugin `google_sign_in` caricava lo script di Google (`accounts.google.com`) a ogni
+  avvio, anche senza account; sul web non serve, perché l'accesso Google passa da Supabase. Ora una
+  Content-Security-Policy in `index.html` lo blocca (verificato: richiesta bloccata, nessun'altra
+  richiesta verso terzi). Se Supabase userà un dominio personalizzato, va aggiunto alla policy.
+- **Uso offline più leggero:** Flutter 3.47 contiene 5 varianti del motore grafico. Prima si salvavano
+  tutte (29 MB); ora si salva l'involucro (7,4 MB) e, dopo il primo disegno, solo la variante usata
+  davvero dal browser.
+
+**Difetto preesistente notato (non corretto):** nell'informativa gli a capo del file `.md` spezzano le
+frasi degli elenchi su più paragrafi.
+
+Prossimi passi, sospesi per la pausa: chiudere la build APK, poi il blocco B (Web Push, approvato).
+Per il blocco C le schermate di prova sono pronte in `docs/design/` e aspettano l'ok di Lorenzo.
