@@ -777,6 +777,12 @@ class PetMood {
   }
 }
 
+bool _sceneHasProp(Pose p) =>
+    p == Pose.happy ||
+    p == Pose.waiting ||
+    p == Pose.hungry ||
+    p == Pose.concerned;
+
 /// Schermo del compagno per la pagina Oggi.
 class PetScreen extends StatelessWidget {
   const PetScreen({
@@ -890,7 +896,9 @@ class PetScreen extends StatelessWidget {
                 ),
               ),
             ),
-          if (mood.bubble != null)
+          // Nuvoletta solo dove la scena non ha già il suo oggetto (cuori,
+          // porta, ciotola, croce del veterinario).
+          if (mood.bubble != null && !_sceneHasProp(mood.pose))
             Positioned(
               right: 14,
               top: 10,
