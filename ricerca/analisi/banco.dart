@@ -20,6 +20,7 @@ import 'package:zampa/logic/potty_predictor.dart';
 import 'package:zampa/models.dart';
 
 part 'banco2.dart';
+part 'banco3.dart';
 
 // ---------------------------------------------------------------------------
 // Scenari e cani.
@@ -34,8 +35,19 @@ class Scenario {
     this.weekend = false,
     this.routineChange = false,
     this.polyuria = PuMode.none,
+    this.triggerLog = false,
+    this.seed = 0,
   });
+
+  /// ricerca/27: con [seed] ≠ 0 il banco ha cani e storie nuovi (semi
+  /// diversi), mai visti durante la scelta dei metodi: verifica fuori banco.
+  final int seed;
   final String name;
+
+  /// ricerca/27, strada 2: il padrone registra con un tocco quasi tutti gli
+  /// inneschi (acqua 80%, pasti 95%, risveglio 90%). Le pipì e la loro
+  /// registrazione restano identiche al realistico (confronto appaiato).
+  final bool triggerLog;
   final bool missing;
   final bool jitter;
   final SchedMode sched;
@@ -69,6 +81,26 @@ const scenarios = {
     routineChange: true,
     polyuria: PuMode.own,
   ),
+  'realistico_inneschi': Scenario(
+    'realistico',
+    missing: true,
+    jitter: true,
+    sched: SchedMode.mix,
+    weekend: true,
+    routineChange: true,
+    polyuria: PuMode.own,
+    triggerLog: true,
+  ),
+  'realistico_nuovo': Scenario(
+    'realistico',
+    missing: true,
+    jitter: true,
+    sched: SchedMode.mix,
+    weekend: true,
+    routineChange: true,
+    polyuria: PuMode.own,
+    seed: 1,
+  ),
 };
 
 class DogSpec {
@@ -101,8 +133,8 @@ class DogSpec {
 
 /// 32 cani: 6 cuccioli, 14 adulti, 6 anziani, 3 con malattia cronica
 /// dichiarata (diabete, poliuria stabile), 3 con poliuria che compare.
-List<DogSpec> population() {
-  final r = math.Random(2026);
+List<DogSpec> population([int seed = 0]) {
+  final r = math.Random(2026 + seed * 7919);
   final specs = <DogSpec>[];
   var n = 0;
   double wake() => 6 + r.nextInt(5) * 0.5; // 6:00-8:00
@@ -482,15 +514,18 @@ Truth simulateDog(DogSpec s, Scenario sc, int seed) {
     }
   }
   for (final m in meals) {
-    if (r.nextDouble() < (sc.missing ? 0.85 : 1.0)) log(LogType.pasto, m);
+    final pMeal = sc.triggerLog ? 0.95 : (sc.missing ? 0.85 : 1.0);
+    if (r.nextDouble() < pMeal) log(LogType.pasto, m);
   }
   for (final (t, ml) in drinks) {
-    if (r.nextDouble() < (sc.missing ? 0.25 : 1.0)) {
+    final pWater = sc.triggerLog ? 0.8 : (sc.missing ? 0.25 : 1.0);
+    if (r.nextDouble() < pWater) {
       log(LogType.acqua, t, ml: r.nextBool() || !sc.missing ? ml * kg : null);
     }
   }
   for (final w in wakes) {
-    if (r.nextDouble() < (sc.missing ? 0.5 : 1.0)) log(LogType.risveglio, w);
+    final pWake = sc.triggerLog ? 0.9 : (sc.missing ? 0.5 : 1.0);
+    if (r.nextDouble() < pWake) log(LogType.risveglio, w);
   }
   for (final w in walksDone) {
     if (r.nextDouble() < (sc.missing ? 0.25 : 1.0)) {
@@ -1084,7 +1119,7 @@ Map<String, String> summarizeGrid(List<GridRec> g) {
 // ---------------------------------------------------------------------------
 
 List<Truth> buildBench(Scenario sc) {
-  final specs = population();
+  final specs = population(sc.seed);
   final out = <Truth>[];
   for (var i = 0; i < specs.length; i++) {
     final s = specs[i];
@@ -1093,7 +1128,7 @@ List<Truth> buildBench(Scenario sc) {
       SchedMode.all => true,
       SchedMode.mix => s.scheduled,
     };
-    out.add(simulateDog(s, sc, 1000 + i));
+    out.add(simulateDog(s, sc, 1000 + i + sc.seed * 100003));
   }
   return out;
 }
