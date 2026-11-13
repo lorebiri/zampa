@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lulù – proposta di interfaccia</title>
+<!--
+  Proposta di stile (blocco C), non è l'app: serve a decidere prima di
+  toccare il codice Flutter. Rendere con:
+    node docs/design/render.js   (Playwright, schermate in docs/design/*.png)
+  Parametri: ?s=home|cane|allarme&t=chiaro|scuro
+-->
+<style>
+  @font-face { font-family: Atk; src: url(../../assets/fonts/AtkinsonHyperlegibleNext-Regular.ttf); font-weight: 400; }
+  @font-face { font-family: Atk; src: url(../../assets/fonts/AtkinsonHyperlegibleNext-SemiBold.ttf); font-weight: 600; }
+  @font-face { font-family: Atk; src: url(../../assets/fonts/AtkinsonHyperlegibleNext-Bold.ttf); font-weight: 700; }
+  @font-face { font-family: Atk; src: url(../../assets/fonts/AtkinsonHyperlegibleNext-ExtraBold.ttf); font-weight: 800; }
+  :root {
+    --bg: #FFF7F1; --card: #FFFFFF; --text: #1E1714; --muted: #5C5049; --line: #F0E2D8;
+    --coral: #F26B4F; --coral-ink: #2A0E06; --coral-deep: #B83A22; --coral-soft: #FFE3DA;
+    --lime: #CDEB6A; --lime-ink: #1F2A00; --lilac: #E4D8FF; --lilac-ink: #2B1A5C;
+    --sky: #CDEBFF; --sky-ink: #06304D; --sun: #FFD66B; --sun-ink: #3D2B00;
+    --subito: #A3221B; --subito-bg: #FDE8E5; --subito-line: #E8A39C;
+    --nav: #1E1714; --nav-ink: #FFF7F1;
+  }
+  [data-t=scuro] {
+    --bg: #14100E; --card: #221B18; --text: #F8EFE9; --muted: #C4B5AB; --line: #3A2F2A;
+    --coral: #FF8A6E; --coral-ink: #2A0E06; --coral-deep: #FF9F88; --coral-soft: #4A2219;
+    --lime: #B9D85A; --lilac: #B9A6F2; --sky: #8CCBF5; --sun: #F2C553;
+    --subito: #FFB4AB; --subito-bg: #3B1512; --subito-line: #8C3A33;
+    --nav: #F8EFE9; --nav-ink: #14100E;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.45 Atk, system-ui, sans-serif; }
+  .tel { width: 390px; min-height: 844px; padding: 56px 20px 112px; position: relative; overflow: hidden; }
+  .pix { image-rendering: pixelated; display: block; }
+  h1 { font-size: 34px; line-height: 1.05; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+  h2 { font-size: 22px; font-weight: 800; margin: 28px 0 12px; letter-spacing: -0.2px; }
+  .sopra { font-weight: 700; color: var(--muted); font-size: 15px; margin-bottom: 4px; }
+  .card { background: var(--card); border-radius: 28px; padding: 18px; border: 1px solid var(--line); }
+  .riga { display: flex; align-items: center; gap: 14px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 14px; }
+  .btn { font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 999px; font-weight: 800; font-size: 17px; border: 0; padding: 0 22px; }
+  .btn.primario { background: var(--coral); color: var(--coral-ink); }
+  .btn.contorno { background: transparent; color: var(--text); border: 2px solid var(--text); }
+  .nav { position: fixed; left: 16px; right: 16px; bottom: 24px; height: 68px; background: var(--nav); color: var(--nav-ink); border-radius: 999px; display: flex; justify-content: space-around; align-items: center; font-weight: 700; font-size: 12px; }
+  .nav span { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 56px; min-height: 48px; justify-content: center; opacity: .7; }
+  .nav span.on { opacity: 1; }
+  .nav b { font-size: 20px; line-height: 1; }
+  /* Home */
+  .eroe { background: var(--coral); color: var(--coral-ink); border-radius: 32px; padding: 18px 18px 18px 14px; margin-top: 18px; display: flex; gap: 12px; align-items: center; }
+  .eroe .pix { width: 112px; height: 112px; flex: none; filter: drop-shadow(0 4px 0 rgba(0,0,0,.15)); }
+  .eroe .grande { font-size: 30px; font-weight: 800; line-height: 1; }
+  .eroe small { font-weight: 700; font-size: 15px; }
+  .barra { height: 10px; border-radius: 999px; background: rgba(42,14,6,.18); margin-top: 10px; overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 62%; background: var(--coral-ink); border-radius: 999px; }
+  .cosa { display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: 24px; margin-bottom: 10px; background: var(--card); border: 1px solid var(--line); min-height: 76px; }
+  .cosa .ico { width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; font-size: 24px; flex: none; }
+  .cosa .tit { font-weight: 800; font-size: 17px; }
+  .cosa .sub { color: var(--muted); font-size: 15px; }
+  .cosa .fatto { margin-left: auto; width: 44px; height: 44px; border-radius: 999px; border: 2px solid var(--line); flex: none; display: grid; place-items: center; font-weight: 800; }
+  .cosa .fatto.si { background: var(--lime); border-color: var(--lime); color: var(--lime-ink); }
+  /* Scheda */
+  .testa { text-align: center; }
+  .testa .pix { width: 160px; height: 160px; margin: 0 auto 8px; background: var(--coral); border-radius: 48px; }
+  .griglia { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dato { border-radius: 24px; padding: 14px 16px; }
+  .dato .n { font-size: 26px; font-weight: 800; line-height: 1.1; }
+  .dato .l { font-weight: 700; font-size: 14px; }
+  .linea { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
+  .linea:last-child { border-bottom: 0; }
+  .pallino { width: 12px; height: 12px; border-radius: 999px; flex: none; }
+  /* Allarme */
+  .allarme { background: var(--subito-bg); border: 2px solid var(--subito-line); border-radius: 20px; padding: 20px; margin-top: 18px; }
+  .livello { display: inline-block; background: var(--subito); color: var(--subito-bg); font-weight: 800; letter-spacing: 1px; border-radius: 8px; padding: 4px 10px; font-size: 14px; }
+  .allarme h1 { font-size: 28px; margin: 12px 0 10px; color: var(--text); }
+  .azione { font-weight: 800; font-size: 19px; margin: 14px 0 4px; }
+  .btn.urgente { background: var(--subito); color: var(--subito-bg); margin-top: 16px; }
+  .compagno-lato { display: flex; gap: 12px; align-items: center; margin-top: 20px; color: var(--muted); font-size: 15px; }
+  .compagno-lato .pix { width: 48px; height: 48px; opacity: .85; }
+</style>
+</head>
+<body>
+<div class="tel" id="tel"></div>
+<script>
+const q = new URLSearchParams(location.search);
+document.body.dataset.t = q.get('t') || 'chiaro';
+const LOGO = '../../web/icons/logo-faccia-512.png';
+const nav = (on) => `<div class="nav">${[['🏠','Oggi'],['🩺','Salute'],['🍖','Pappa'],['🐾','Bisogni'],['👤','Profilo']]
+  .map(([i,l]) => `<span class="${l===on?'on':''}"><b>${i}</b>${l}</span>`).join('')}</div>`;
+const S = {
+home: () => `
+  <div class="sopra">Venerdì 13 novembre</div>
+  <h1>Oggi per Birba</h1>
+  <div class="eroe">
+    <img class="pix" src="${LOGO}" alt="Birba, il compagno in pixel art">
+    <div>
+      <small>Prossima pipì</small>
+      <div class="grande">tra ~40 min</div>
+      <small>tra le 15:10 e le 15:50 · stima</small>
+      <div class="barra"><i></i></div>
+    </div>
+  </div>
+  <h2>Da fare oggi · 2 di 4 ✓</h2>
+  <div class="cosa"><div class="ico" style="background:var(--lilac);color:var(--lilac-ink)">💊</div>
+    <div><div class="tit">Antiparassitario</div><div class="sub">Scade domenica: tienilo pronto</div></div><div class="fatto" aria-label="Da fare"></div></div>
+  <div class="cosa"><div class="ico" style="background:var(--sun);color:var(--sun-ink)">🍖</div>
+    <div><div class="tit">Pappa: 2 pasti da 85 g</div><div class="sub">Peso giusto per lei, vai così</div></div><div class="fatto si" aria-label="Fatto">✓</div></div>
+  <div class="cosa"><div class="ico" style="background:var(--sky);color:var(--sky-ink)">🚶</div>
+    <div><div class="tit">45 minuti di passeggiata</div><div class="sub">Fa freschino: va benissimo</div></div><div class="fatto si" aria-label="Fatto">✓</div></div>
+  <div class="cosa"><div class="ico" style="background:var(--coral-soft);color:var(--text)">⚖️</div>
+    <div><div class="tit">Pesala questa settimana</div><div class="sub">L'ultima volta 3 settimane fa</div></div><div class="fatto" aria-label="Da fare"></div></div>
+  ${nav('Oggi')}`,
+cane: () => `
+  <div class="testa">
+    <img class="pix" src="${LOGO}" alt="Ritratto di Birba in pixel art">
+    <h1>Birba</h1>
+    <div style="color:var(--muted);font-weight:700;margin-top:4px">Bolognese · femmina sterilizzata · 4 anni</div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <span class="chip" style="background:var(--lime);color:var(--lime-ink)">In forma ✨</span>
+      <span class="chip" style="background:var(--sky);color:var(--sky-ink)">Microchip ok</span>
+    </div>
+  </div>
+  <h2>I suoi numeri</h2>
+  <div class="griglia">
+    <div class="dato" style="background:var(--sun);color:var(--sun-ink)"><div class="n">4,2 kg</div><div class="l">peso · stabile</div></div>
+    <div class="dato" style="background:var(--lilac);color:var(--lilac-ink)"><div class="n">5 pipì</div><div class="l">al giorno · come sempre</div></div>
+    <div class="dato" style="background:var(--sky);color:var(--sky-ink)"><div class="n">2 pasti</div><div class="l">340 kcal al giorno</div></div>
+    <div class="dato" style="background:var(--coral-soft);color:var(--text)"><div class="n">3/5</div><div class="l">vaccini in regola</div></div>
+  </div>
+  <h2>Prossime scadenze</h2>
+  <div class="card">
+    <div class="linea"><span class="pallino" style="background:var(--coral)"></span><div><b>Antiparassitario</b><br><span style="color:var(--muted)">domenica 15 novembre</span></div></div>
+    <div class="linea"><span class="pallino" style="background:var(--sun)"></span><div><b>Leptospirosi (richiamo)</b><br><span style="color:var(--muted)">entro il 4 dicembre</span></div></div>
+    <div class="linea"><span class="pallino" style="background:var(--sky)"></span><div><b>Test filariosi</b><br><span style="color:var(--muted)">aprile 2027</span></div></div>
+  </div>
+  ${nav('Salute')}`,
+allarme: () => `
+  <div class="sopra">Oggi per Rocco</div>
+  <div class="allarme" role="alert">
+    <span class="livello">SUBITO</span>
+    <h1>Sforzo a urinare: possibile urgenza</h1>
+    <div>Se Rocco si mette in posizione e non esce urina, o escono solo poche gocce, contatta subito il veterinario o un pronto soccorso veterinario, anche di notte. Nel maschio un blocco delle vie urinarie è un'emergenza: non aspettare il giorno dopo.</div>
+    <div class="azione">Vai subito dal veterinario o al pronto soccorso veterinario, anche di notte.</div>
+    <button class="btn urgente" style="width:100%">Chiama il veterinario</button>
+    <button class="btn contorno" style="width:100%;margin-top:10px">Emergenze e pronto soccorso h24</button>
+  </div>
+  <div class="compagno-lato"><img class="pix" src="${LOGO}" alt="">Con un allarme serio il compagno si fa da parte: niente giochi né emoji.</div>
+  ${nav('Oggi')}`,
+};
+document.getElementById('tel').innerHTML = (S[q.get('s')] || S.home)();
+</script>
+</body>
+</html>

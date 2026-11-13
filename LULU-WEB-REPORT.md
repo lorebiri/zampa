@@ -193,3 +193,48 @@ i telefoni dal 2017); il workflow avvisa se lo supera.
 | PWA con Playwright (iPhone 13, Pixel 7, chiaro/scuro, in `/lulu/`) | offline assente (SW di Flutter auto-disinstallante) | SW attivo, 13 file in cache, ricarica offline ok, nessun errore |
 | `tool/pwa_finalize.py` su build simulata | — | lista offline corretta (esclude APK, skwasm, mappe), versione scritta in download.html |
 | Sintassi JS, YAML dei workflow, script bash | — | ok |
+
+---
+
+## Blocchi B, C e D (richieste successive di Lorenzo)
+
+**Ostacolo comune:** B, C e D richiedono molto codice Dart nuovo (iscrizione Web Push, nuovo
+tema e nuovi widget in tutte le schermate, motore di consigli). Qui Flutter non si installa, per
+cui quel codice **non si può compilare né testare**, e la condizione «`flutter analyze` e
+`flutter test` devono passare» non sarebbe verificabile. Ho fatto le parti verificabili; il resto
+è pronto da implementare appena Flutter funziona (rete: `storage.googleapis.com` e `pub.dev`).
+
+### B. Tutte le funzionalità su web e iPhone
+
+Elenco funzione per funzione, con lo stato prima e dopo (Android / web / iPhone), e progetto
+dei promemoria Web Push (service worker, Supabase Edge Function con `pg_cron`):
+[`docs/FUNZIONI-PIATTAFORME.md`](docs/FUNZIONI-PIATTAFORME.md). Nessuna funzione è stata tolta.
+Restano da fare Web Push (decisione di privacy: i promemoria passerebbero dal server), il
+ripristino del backup e le foto in IndexedDB.
+
+### C. Interfaccia moderna: proposta prima di applicarla
+
+Tre schermate di prova in chiaro e scuro (HTML reso con Playwright, `docs/design/mockup.html`):
+corallo, lime, lilla e cielo, angoli molto arrotondati, titoli grossi in Atkinson ExtraBold, card
+grandi, il bolognese come compagno, testi del tu con qualche emoji. **Mai emoji negli allarmi**,
+dove il compagno si fa da parte. Tutte le coppie di colori superano AA (minimo 6:1). Pulsanti alti
+52 px, voci di menu di almeno 48 px.
+
+| Home «Oggi per Birba» | Scheda del cane | Allarme SUBITO |
+|---|---|---|
+| ![](docs/design/home-chiaro.png) | ![](docs/design/cane-chiaro.png) | ![](docs/design/allarme-chiaro.png) |
+| ![](docs/design/home-scuro.png) | ![](docs/design/cane-scuro.png) | ![](docs/design/allarme-scuro.png) |
+
+Il testo dell'allarme è quello vero dell'app, rivisto dai veterinari. Da approvare prima di
+riscrivere `lib/ui/theme.dart` e le schermate.
+
+### D. Lulù più intelligente
+
+[`docs/ASSISTENTE-LULU.md`](docs/ASSISTENTE-LULU.md):
+- **D1, consigli «Oggi per <nome>»**: regole e priorità progettate sui moduli esistenti
+  (prevenzione, stagione, nutrizione, peso, bisogni, diari); implementazione in attesa di Flutter.
+- **D2, assistente con l'API di Claude**: architettura con Supabase Edge Function (la chiave mai
+  nell'app), prompt di sistema con le regole di sicurezza e l'uso degli allarmi già rivisti, limiti
+  d'uso (20 al giorno, 200 al mese), consenso separato. Costo stimato per utente al mese con uso
+  medio: ~0,55 $ con Opus 5.5, ~0,27 $ con Sonnet 5.5, ~0,02 $ con Haiku 5.5.
+  **Non attivato, nessuna chiave chiesta**: decide Lorenzo.
