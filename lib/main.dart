@@ -123,49 +123,48 @@ class _RootPageState extends State<RootPage> {
           child: KeyedSubtree(key: ValueKey(_tab), child: pages[_tab]),
         ),
       ),
-      bottomNavigationBar: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).colorScheme.outlineVariant,
+      // Barra a pillola sospesa (docs/design/): il contenuto scorre sotto.
+      extendBody: true,
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(Radii.pill),
+          child: MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1.3,
+            child: NavigationBar(
+              selectedIndex: _tab,
+              labelBehavior: bigText
+                  ? NavigationDestinationLabelBehavior.onlyShowSelected
+                  : null,
+              onDestinationSelected: (i) => setState(() => _tab = i),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.wb_sunny_outlined),
+                  selectedIcon: Icon(Icons.wb_sunny),
+                  label: 'Oggi',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.water_drop_outlined),
+                  selectedIcon: Icon(Icons.water_drop),
+                  label: 'Bisogni',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.monitor_heart_outlined),
+                  selectedIcon: Icon(Icons.monitor_heart),
+                  label: 'Salute',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.rice_bowl_outlined),
+                  selectedIcon: Icon(Icons.rice_bowl),
+                  label: 'Nutrizione',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.pets_outlined),
+                  selectedIcon: Icon(Icons.pets),
+                  label: 'Profilo',
+                ),
+              ],
             ),
-          ),
-        ),
-        child: MediaQuery.withClampedTextScaling(
-          maxScaleFactor: 1.3,
-          child: NavigationBar(
-            selectedIndex: _tab,
-            labelBehavior: bigText
-                ? NavigationDestinationLabelBehavior.onlyShowSelected
-                : null,
-            onDestinationSelected: (i) => setState(() => _tab = i),
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.wb_sunny_outlined),
-                selectedIcon: Icon(Icons.wb_sunny),
-                label: 'Oggi',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.water_drop_outlined),
-                selectedIcon: Icon(Icons.water_drop),
-                label: 'Bisogni',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.monitor_heart_outlined),
-                selectedIcon: Icon(Icons.monitor_heart),
-                label: 'Salute',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.rice_bowl_outlined),
-                selectedIcon: Icon(Icons.rice_bowl),
-                label: 'Nutrizione',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.pets_outlined),
-                selectedIcon: Icon(Icons.pets),
-                label: 'Profilo',
-              ),
-            ],
           ),
         ),
       ),

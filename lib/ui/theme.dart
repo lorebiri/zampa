@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../logic/alerts.dart';
 
-/// Identità visiva (ricerca/22-direzione-visiva.md).
+/// Identità visiva di Lulù (approvata a novembre 2026, docs/design/).
 ///
-/// "Libretto e passeggiata": l'inchiostro blu del libretto sanitario per la
-/// fiducia, la senape del sole del mattino per il calore, la salvia del
-/// parco per il compagno. Un solo carattere ad alta leggibilità.
-/// Regola delle forme: più una cosa è seria, più è squadrata.
+/// Giovane ma non infantile: corallo caldo come colore guida (quello del
+/// logo), lime, lilla, cielo e sole come accenti, molto spazio, card grandi e
+/// molto arrotondate, titoli grossi. Un solo carattere ad alta leggibilità.
+/// Tutte le coppie testo/fondo superano WCAG AA (verificato nei test).
+/// Regola delle forme: più una cosa è seria, più è squadrata (gli allarmi
+/// restano i più squadrati e mantengono i loro colori clinici).
 
 /// Spaziature (griglia da 4).
 abstract final class Space {
@@ -24,12 +26,12 @@ abstract final class Space {
 
 /// Raggi: gli allarmi sono i più squadrati, il compagno il più morbido.
 abstract final class Radii {
-  static const alert = 10.0;
-  static const chip = 12.0;
-  static const field = 14.0;
-  static const card = 18.0;
-  static const hero = 24.0;
-  static const companion = 28.0;
+  static const alert = 14.0;
+  static const chip = 999.0;
+  static const field = 18.0;
+  static const card = 26.0;
+  static const hero = 32.0;
+  static const companion = 32.0;
   static const pill = 999.0;
 }
 
@@ -47,35 +49,42 @@ abstract final class Motion {
 
 /// Tavolozza di base.
 abstract final class Palette {
-  // Chiaro.
-  static const ink = Color(0xFF22406A); // blu libretto
-  static const inkDeep = Color(0xFF0F2747);
-  static const inkSoft = Color(0xFFDCE6F4);
-  static const text = Color(0xFF18212E);
-  static const textMuted = Color(0xFF4A5566);
-  static const paper = Color(0xFFF2F4EF); // fondo salvia chiarissimo
+  // Chiaro: fondo crema caldo, corallo come colore guida.
+  static const ink = Color(0xFFB3361E); // corallo scuro: testo e icone (6:1)
+  static const inkDeep = Color(0xFF2A0E06);
+  static const inkSoft = Color(0xFFFFE3DA);
+  static const coral = Color(0xFFF26B4F); // corallo del logo: pulsanti pieni
+  static const text = Color(0xFF1E1714);
+  static const textMuted = Color(0xFF5C5049);
+  static const paper = Color(0xFFFFF7F1);
   static const card = Color(0xFFFFFFFF);
-  static const line = Color(0xFFD3DAD1);
-  static const mustard = Color(0xFFF2B53A); // senape
-  static const mustardSoft = Color(0xFFFCEBC2);
-  static const mustardInk = Color(0xFF4A3300);
-  static const sage = Color(0xFF3D6A4C); // salvia
-  static const sageSoft = Color(0xFFDDEAD8);
-  static const sageInk = Color(0xFF12301D);
+  static const line = Color(0xFFF0E2D8);
+  static const mustard = Color(0xFFFFD66B); // sole
+  static const mustardSoft = Color(0xFFFFF0C2);
+  static const mustardInk = Color(0xFF3D2B00);
+  static const sage = Color(0xFF3B6512); // verde: testo
+  static const sageSoft = Color(0xFFE6F5B8); // lime chiaro
+  static const sageInk = Color(0xFF1F2A00);
+  static const lilac = Color(0xFFE4D8FF);
+  static const lilacInk = Color(0xFF2B1A5C);
+  static const sky = Color(0xFFCDEBFF);
+  static const skyInk = Color(0xFF06304D);
 
-  // Scuro: il blu della passeggiata serale, non il nero.
-  static const night = Color(0xFF0F1722);
-  static const nightCard = Color(0xFF172131);
-  static const nightRaised = Color(0xFF1F2B3D);
-  static const nightLine = Color(0xFF34425A);
-  static const nightText = Color(0xFFE7EBF2);
-  static const nightMuted = Color(0xFFAEB8C8);
-  static const nightInk = Color(0xFFA9C6F0);
-  static const nightInkSoft = Color(0xFF2A4670);
-  static const nightMustard = Color(0xFFF2C064);
+  // Scuro: marrone notte caldo, non nero.
+  static const night = Color(0xFF14100E);
+  static const nightCard = Color(0xFF221B18);
+  static const nightRaised = Color(0xFF2C2420);
+  static const nightLine = Color(0xFF3A2F2A);
+  static const nightText = Color(0xFFF8EFE9);
+  static const nightMuted = Color(0xFFC4B5AB);
+  static const nightInk = Color(0xFFFF8A6E);
+  static const nightInkSoft = Color(0xFF4A2219);
+  static const nightMustard = Color(0xFFF2C553);
   static const nightMustardSoft = Color(0xFF4A3812);
-  static const nightSage = Color(0xFFA6D1B1);
-  static const nightSageSoft = Color(0xFF24402F);
+  static const nightSage = Color(0xFFB9D85A);
+  static const nightSageSoft = Color(0xFF2E3A12);
+  static const nightLilac = Color(0xFFB9A6F2);
+  static const nightSky = Color(0xFF8CCBF5);
 
   // Schermo LCD del compagno (la sua firma, uguale nei due temi di giorno).
   static const lcdDay = Color(0xFFDCE9C9);
@@ -242,11 +251,11 @@ TextTheme _textTheme(Color text, Color muted) {
     displayLarge: s(56, FontWeight.w800, 1.05, -1.5),
     displayMedium: s(48, FontWeight.w800, 1.05, -1.2),
     displaySmall: s(40, FontWeight.w800, 1.08, -1.0),
-    headlineLarge: s(32, FontWeight.w700, 1.15, -0.6),
-    headlineMedium: s(28, FontWeight.w700, 1.18, -0.4),
-    headlineSmall: s(24, FontWeight.w700, 1.2, -0.3),
-    titleLarge: s(21, FontWeight.w700, 1.25, -0.2),
-    titleMedium: s(17, FontWeight.w600, 1.3),
+    headlineLarge: s(34, FontWeight.w800, 1.1, -0.6),
+    headlineMedium: s(30, FontWeight.w800, 1.12, -0.5),
+    headlineSmall: s(25, FontWeight.w800, 1.18, -0.3),
+    titleLarge: s(22, FontWeight.w800, 1.22, -0.2),
+    titleMedium: s(17, FontWeight.w700, 1.3),
     titleSmall: s(15.5, FontWeight.w600, 1.3),
     bodyLarge: s(17, FontWeight.w400, 1.45),
     bodyMedium: s(15.5, FontWeight.w400, 1.45),
@@ -263,17 +272,17 @@ ThemeData buildTheme(Brightness b) {
       ? const ColorScheme(
           brightness: Brightness.dark,
           primary: Palette.nightInk,
-          onPrimary: Color(0xFF0B2545),
+          onPrimary: Palette.inkDeep,
           primaryContainer: Palette.nightInkSoft,
-          onPrimaryContainer: Color(0xFFDCE8FA),
+          onPrimaryContainer: Color(0xFFFFDAD0),
           secondary: Palette.nightSage,
-          onSecondary: Color(0xFF0E2A18),
+          onSecondary: Color(0xFF1F2A00),
           secondaryContainer: Palette.nightSageSoft,
-          onSecondaryContainer: Color(0xFFD7EEDC),
-          tertiary: Palette.nightMustard,
-          onTertiary: Color(0xFF3B2A00),
-          tertiaryContainer: Palette.nightMustardSoft,
-          onTertiaryContainer: Color(0xFFFCE3B0),
+          onSecondaryContainer: Color(0xFFE6F5B8),
+          tertiary: Palette.nightLilac,
+          onTertiary: Palette.lilacInk,
+          tertiaryContainer: Color(0xFF34275C),
+          onTertiaryContainer: Palette.lilac,
           error: Color(0xFFFFB4A8),
           onError: Color(0xFF5F1408),
           errorContainer: Color(0xFF41201A),
@@ -281,12 +290,12 @@ ThemeData buildTheme(Brightness b) {
           surface: Palette.night,
           onSurface: Palette.nightText,
           onSurfaceVariant: Palette.nightMuted,
-          surfaceContainerLowest: Color(0xFF0B121B),
+          surfaceContainerLowest: Color(0xFF0E0B09),
           surfaceContainerLow: Palette.nightCard,
           surfaceContainer: Palette.nightCard,
           surfaceContainerHigh: Palette.nightRaised,
-          surfaceContainerHighest: Color(0xFF26344A),
-          outline: Color(0xFF7D8BA1),
+          surfaceContainerHighest: Color(0xFF372D28),
+          outline: Color(0xFF9C8B80),
           outlineVariant: Palette.nightLine,
           inverseSurface: Palette.nightText,
           onInverseSurface: Palette.night,
@@ -304,10 +313,10 @@ ThemeData buildTheme(Brightness b) {
           onSecondary: Colors.white,
           secondaryContainer: Palette.sageSoft,
           onSecondaryContainer: Palette.sageInk,
-          tertiary: Color(0xFF8A5A00),
+          tertiary: Color(0xFF5B3FB0),
           onTertiary: Colors.white,
-          tertiaryContainer: Palette.mustardSoft,
-          onTertiaryContainer: Palette.mustardInk,
+          tertiaryContainer: Palette.lilac,
+          onTertiaryContainer: Palette.lilacInk,
           error: Color(0xFFB42318),
           onError: Colors.white,
           errorContainer: Color(0xFFFDE6E0),
@@ -317,13 +326,13 @@ ThemeData buildTheme(Brightness b) {
           onSurfaceVariant: Palette.textMuted,
           surfaceContainerLowest: Colors.white,
           surfaceContainerLow: Palette.card,
-          surfaceContainer: Color(0xFFF7F8F5),
-          surfaceContainerHigh: Color(0xFFE9EDE6),
-          surfaceContainerHighest: Color(0xFFE2E7DF),
-          outline: Color(0xFF6E7887),
+          surfaceContainer: Color(0xFFFFFBF8),
+          surfaceContainerHigh: Color(0xFFFBEDE4),
+          surfaceContainerHighest: Color(0xFFF5E4D9),
+          outline: Color(0xFF8C7A70),
           outlineVariant: Palette.line,
-          inverseSurface: Color(0xFF243042),
-          onInverseSurface: Color(0xFFF0F3F7),
+          inverseSurface: Palette.text,
+          onInverseSurface: Palette.paper,
           inversePrimary: Palette.nightInk,
           shadow: Colors.black,
           scrim: Colors.black,
@@ -333,7 +342,14 @@ ThemeData buildTheme(Brightness b) {
   final fieldFill = dark ? Palette.nightCard : Palette.card;
   const pillShape = StadiumBorder();
   const minButton = Size(48, 52);
-  final buttonText = text.labelLarge!.copyWith(color: null);
+  final buttonText = text.labelLarge!.copyWith(
+    color: null,
+    fontWeight: FontWeight.w800,
+    fontSize: 16.5,
+  );
+  final navBg = dark ? Palette.nightText : Palette.text;
+  final navInk = dark ? Palette.night : Palette.paper;
+  final navMuted = dark ? Palette.textMuted : const Color(0xFFBDB2AA);
 
   return ThemeData(
     useMaterial3: true,
@@ -385,6 +401,10 @@ ThemeData buildTheme(Brightness b) {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
+        backgroundColor: dark ? Palette.nightInk : Palette.coral,
+        foregroundColor: Palette.inkDeep,
+        disabledBackgroundColor: scheme.onSurface.withValues(alpha: 0.12),
+        disabledForegroundColor: scheme.onSurface.withValues(alpha: 0.38),
         minimumSize: minButton,
         shape: pillShape,
         textStyle: buttonText,
@@ -396,8 +416,8 @@ ThemeData buildTheme(Brightness b) {
         minimumSize: minButton,
         shape: pillShape,
         textStyle: buttonText,
-        foregroundColor: scheme.primary,
-        side: BorderSide(color: scheme.outline, width: 1.2),
+        foregroundColor: scheme.onSurface,
+        side: BorderSide(color: scheme.onSurface, width: 2),
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
       ),
     ),
@@ -420,8 +440,8 @@ ThemeData buildTheme(Brightness b) {
       style: IconButton.styleFrom(minimumSize: const Size(48, 48)),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: dark ? Palette.nightMustard : Palette.mustard,
-      foregroundColor: dark ? const Color(0xFF3B2A00) : Palette.mustardInk,
+      backgroundColor: dark ? Palette.nightInk : Palette.coral,
+      foregroundColor: Palette.inkDeep,
       elevation: 1,
       highlightElevation: 2,
       shape: const StadiumBorder(),
@@ -478,30 +498,28 @@ ThemeData buildTheme(Brightness b) {
     switchTheme: SwitchThemeData(
       trackOutlineColor: WidgetStateProperty.all(scheme.outline),
     ),
+    // Barra a pillola: scura nel tema chiaro, chiara nel tema scuro
+    // (docs/design/home-*.png). Voce attiva su fondo corallo.
     navigationBarTheme: NavigationBarThemeData(
-      height: 72,
+      height: 68,
       elevation: 0,
-      backgroundColor: dark ? Palette.nightCard : Palette.card,
+      backgroundColor: navBg,
       surfaceTintColor: Colors.transparent,
-      indicatorColor: dark ? Palette.nightMustardSoft : Palette.mustardSoft,
+      indicatorColor: dark ? Palette.nightInk : Palette.coral,
       indicatorShape: const StadiumBorder(),
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       iconTheme: WidgetStateProperty.resolveWith(
         (s) => IconThemeData(
           size: 24,
-          color: s.contains(WidgetState.selected)
-              ? (dark ? Palette.nightMustard : Palette.ink)
-              : scheme.onSurfaceVariant,
+          color: s.contains(WidgetState.selected) ? Palette.inkDeep : navMuted,
         ),
       ),
       labelTextStyle: WidgetStateProperty.resolveWith(
         (s) => text.labelMedium!.copyWith(
-          color: s.contains(WidgetState.selected)
-              ? scheme.onSurface
-              : scheme.onSurfaceVariant,
+          color: s.contains(WidgetState.selected) ? navInk : navMuted,
           fontWeight: s.contains(WidgetState.selected)
-              ? FontWeight.w700
-              : FontWeight.w500,
+              ? FontWeight.w800
+              : FontWeight.w600,
         ),
       ),
     ),
@@ -557,7 +575,7 @@ ThemeData buildTheme(Brightness b) {
       unselectedLabelStyle: text.labelLarge,
       labelColor: scheme.onSurface,
       unselectedLabelColor: scheme.onSurfaceVariant,
-      indicatorColor: dark ? Palette.nightMustard : Palette.ink,
+      indicatorColor: dark ? Palette.nightInk : Palette.ink,
       indicatorSize: TabBarIndicatorSize.label,
       dividerColor: scheme.outlineVariant,
       overlayColor: WidgetStateProperty.all(
