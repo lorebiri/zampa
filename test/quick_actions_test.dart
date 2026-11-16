@@ -224,7 +224,9 @@ void main() {
             id: 'p$i',
             dogId: d.id,
             type: LogType.pipi,
-            time: t.subtract(Duration(hours: 4 * i)),
+            // Ultima pipì 30 minuti fa: il promemoria cade sempre nel
+            // futuro, a qualunque ora giri il test.
+            time: t.subtract(Duration(minutes: 30 + 240 * (i - 1))),
           ),
         );
       }
