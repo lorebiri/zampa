@@ -2,6 +2,12 @@
 
 *13 novembre 2026. Branch `claude/lulu-previsione-pipi`. Seguito di `ricerca/23`. Convenzioni come in `ricerca/12` e `23`: **[MISURATO]** = numero del banco di prova (simulazione, non cani veri); **[STIMA]** = giudizio. Tra parentesi quadre l'IC 95% bootstrap per cane. R = Σ<sub>cani</sub> errore mediano / Σ<sub>cani</sub> errore mediano del riferimento: sotto 1 vuol dire meglio. «Errore con segno» = pipì vera − previsione: negativo vuol dire previsione **in ritardo** (il verso pericoloso).*
 
+> **Nota dell'unione (18/11/2026, branch `claude/pellovi-unione`).** L'app ora si chiama
+> **Pellovi** (Lulù resta il nome della mascotte e del cane d'esempio nei testi qui sotto).
+> La scheda «Nuova previsione» ha lo stile grafico nuovo (pillola «IN PROVA») e il compagno in
+> pixel art: quando è ora di uscire compare «impaziente alla porta», come nella pagina Oggi.
+> Budget zero: nessun passo con un costo (store a pagamento, iOS nativo, servizi a pagamento).
+
 ---
 
 ## 0. Sintesi per chi non è tecnico

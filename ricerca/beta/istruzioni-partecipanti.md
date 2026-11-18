@@ -1,4 +1,4 @@
-# Istruzioni per chi partecipa alla prova di Lulù
+# Istruzioni per chi partecipa alla prova di Pellovi
 
 > **Bozza del 13/11/2026.** Le parti cliniche vanno fatte rivedere al veterinario.
 > Le parti `[DA COMPLETARE: …]` vanno riempite prima di mandare il testo.
@@ -16,7 +16,7 @@ Grazie di partecipare! Qui trovi tutto quello che serve per le 8 settimane.
 
 ### Android
 
-1. Apri il link che ti abbiamo mandato: `[DA COMPLETARE: link al test chiuso su Google Play o al file di installazione]`.
+1. Apri il link che ti abbiamo mandato: `[DA COMPLETARE: link all'APK nell'ultima GitHub Release]`.
 2. Segui le istruzioni sullo schermo per installare l'app.
 3. Apri l'app e **consenti le notifiche** quando te lo chiede. Senza notifiche non arrivano i promemoria.
 

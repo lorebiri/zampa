@@ -33,7 +33,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
-<title>Adesione alla prova di Lulù</title>
+<title>Adesione alla prova di Pellovi</title>
 <style>
   :root {
     --testo: #1b1b1b;
@@ -103,7 +103,7 @@
 </head>
 <body>
 <main>
-  <h1>Prova di Lulù: modulo di adesione</h1>
+  <h1>Prova di Pellovi: modulo di adesione</h1>
 
   <p>Grazie per l'interesse. Ci vogliono circa 3 minuti.</p>
   <div class="riquadro">
@@ -472,7 +472,7 @@
 
   function testoDi(d) {
     var r = [];
-    r.push("Richiesta di adesione alla prova di Lulù (" + d.modulo + ")");
+    r.push("Richiesta di adesione alla prova di Pellovi (" + d.modulo + ")");
     r.push("");
     r.push("Ho almeno 18 anni: sì");
     if (d.contatto.email) r.push("Email: " + d.contatto.email);
@@ -516,7 +516,7 @@
     ultimoJson = JSON.stringify(d, null, 2);
     $("testo-riepilogo").textContent = ultimoTesto;
     $("link-mail").href = "mailto:" + MAIL_TO +
-      "?subject=" + encodeURIComponent("Adesione alla prova di Lulù") +
+      "?subject=" + encodeURIComponent("Adesione alla prova di Pellovi") +
       "&body=" + encodeURIComponent(ultimoTesto);
     $("stato-azione").textContent = "";
     form.hidden = true;
@@ -552,7 +552,7 @@
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download = "adesione-lulu.json";
+    a.download = "adesione-pellovi.json";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

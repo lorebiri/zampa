@@ -1,5 +1,12 @@
 # 08 — Piano del CEO: stato, tesi economica, decisioni e cicli fino al lancio
 
+> **Budget zero (novembre 2026).** Lorenzo ha deciso che Pellovi resta gratuita e senza spese.
+> I passi di questo rapporto che hanno un costo (consulente o deposito del marchio, domini a
+> pagamento, Apple Developer Program e app iOS nativa, account Google Play, piani a pagamento,
+> pubblicità, assistente con l'API di Claude) sono **esclusi: budget zero**. Restano validi
+> solo i passi gratuiti: piano gratuito di Supabase, GitHub Pages e GitHub Releases.
+
+
 *10 novembre 2026. Autore: CEO e coordinatore del progetto (agente nominato da Lorenzo). Documento vincolante per il prossimo periodo: le decisioni della sezione 3 valgono finché non le cambio io con un nuovo documento, oppure finché Lorenzo non le cambia.*
 
 Convenzioni: **[FATTO]** = verificato da me nei file o nei comandi, oppure riportato da un rapporto con fonte. **[STIMA]** = mia ipotesi ragionata. **[DA VERIFICARE]** = serve un controllo esterno prima di usarla.

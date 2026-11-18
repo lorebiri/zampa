@@ -1,5 +1,12 @@
 # Zampa: verifica del nome e del marchio (incarico C1-6)
 
+> **Budget zero (novembre 2026).** Lorenzo ha deciso che Pellovi resta gratuita e senza spese.
+> I passi di questo rapporto che hanno un costo (consulente o deposito del marchio, domini a
+> pagamento, Apple Developer Program e app iOS nativa, account Google Play, piani a pagamento,
+> pubblicità, assistente con l'API di Claude) sono **esclusi: budget zero**. Restano validi
+> solo i passi gratuiti: piano gratuito di Supabase, GitHub Pages e GitHub Releases.
+
+
 *Ricerca svolta il 10 novembre 2026, tra le 22:30 e le 23:30 circa (ora italiana).*
 
 > **Avvertenza.** Questa è una **ricerca di anteriorità preliminare** (desk research), fatta da un agente e non da un consulente in marchi abilitato. **Non è un parere professionale** e non lo sostituisce. Un marchio "pulito" in questa ricerca può comunque avere anteriorità che qui non emergono: marchi simili nel concetto, ditte e nomi commerciali non registrati, marchi nazionali non presenti in TMview, domande depositate negli ultimi giorni. Prima del deposito serve la verifica professionale descritta nella sezione 8.

@@ -1,5 +1,12 @@
 # Zampa: quando può portare soldi? Modello di business, costi e scenari
 
+> **Budget zero (novembre 2026).** Lorenzo ha deciso che Pellovi resta gratuita e senza spese.
+> I passi di questo rapporto che hanno un costo (consulente o deposito del marchio, domini a
+> pagamento, Apple Developer Program e app iOS nativa, account Google Play, piani a pagamento,
+> pubblicità, assistente con l'API di Claude) sono **esclusi: budget zero**. Restano validi
+> solo i passi gratuiti: piano gratuito di Supabase, GitHub Pages e GitHub Releases.
+
+
 *Business analyst, 10 novembre 2026. Il documento distingue i **[FATTO]** (dati da fonte citata) dalle **[STIMA]** (ipotesi mie, ragionate ma non verificate). Le fonti sono in fondo, numerate [n].*
 
 ---

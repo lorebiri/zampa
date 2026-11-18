@@ -18,8 +18,10 @@ richiedono i tuoi account e le tue chiavi.
 - **Authentication › Email Templates › Magic Link**: inserisci `{{ .Token }}` nel testo,
   così l'email contiene il codice da digitare nell'app.
 
-## 3. Accedi con Apple (obbligatorio su iPhone se c'è Google)
-Serve l'**Apple Developer Program** (99 €/anno).
+## 3. Accedi con Apple — escluso: budget zero
+Servirebbe solo all'app iOS nativa, che non facciamo (budget zero: l'Apple Developer Program
+costa 99 €/anno). Su iPhone Pellovi si usa come web app con email o Google. I passi sotto
+restano solo come riferimento, **da non fare**:
 1. developer.apple.com › Identifiers: sull'App ID `it.zampa.zampa` attiva *Sign in with Apple*.
 2. In Xcode (`ios/Runner.xcworkspace`) › Runner › *Signing & Capabilities*: aggiungi *Sign in with Apple*.
 3. Supabase › Authentication › Providers › **Apple**: attiva e aggiungi `it.zampa.zampa`

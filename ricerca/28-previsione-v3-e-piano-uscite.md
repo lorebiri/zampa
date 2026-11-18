@@ -2,6 +2,16 @@
 
 *13 novembre 2026. Branch `claude/lulu-previsione-v3` (da `claude/lulu-previsione-pipi`). Seguito di `ricerca/27`. Convenzioni come in `ricerca/12`, `23` e `27`: **[MISURATO]** = numero del banco di prova (simulazione, non cani veri); **[STIMA]** = giudizio; **[IPOTESI]** = parametro del simulatore o del modello scelto senza dati, da misurare nella beta. Tra parentesi quadre l'IC 95% bootstrap per cane. R = Σ<sub>cani</sub> errore mediano / Σ<sub>cani</sub> errore mediano del riferimento (sotto 1 = meglio). Allegato: `ricerca/28-allegato-registrazione.md` (notifiche, geofence, widget). Materiali della beta: `ricerca/beta/`.*
 
+> **Nota dell'unione (18/11/2026, branch `claude/pellovi-unione`).** L'app ora si chiama
+> **Pellovi** (Lulù resta il nome della mascotte e del cane d'esempio nei testi). Le schede v3
+> (segnali, cacca legata ai pasti, piano di uscite, esportazione) hanno lo stile grafico nuovo
+> e convivono con il compagno: dopo un segnale il compagno è «impaziente alla porta» sia nella
+> schermata dei bisogni sia nella pagina Oggi. Rispetto a quanto scritto qui:
+> - `web/manifest.json` dice già «Pellovi» (punto 6 del §5 risolto);
+> - il Web Push dal server ora esiste (Supabase Edge Function `invia-promemoria`, piano gratuito);
+> - **escluso: budget zero** tutto ciò che riguarda l'app iOS nativa (AppDelegate, WidgetKit,
+>   «Location – Always»), le schede di Google Play e dell'App Store e i servizi a pagamento.
+
 ---
 
 ## 0. Sintesi per chi non è tecnico

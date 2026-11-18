@@ -232,7 +232,7 @@ dove il compagno si fa da parte. Tutte le coppie di colori superano AA (minimo 6
 Il testo dell'allarme è quello vero dell'app, rivisto dai veterinari. Da approvare prima di
 riscrivere `lib/ui/theme.dart` e le schermate.
 
-### D. Lulù più intelligente
+### D. Pellovi più intelligente
 
 [`docs/ASSISTENTE.md`](docs/ASSISTENTE.md):
 - **D1, consigli «Oggi per <nome>»**: regole e priorità progettate sui moduli esistenti
@@ -241,7 +241,8 @@ riscrivere `lib/ui/theme.dart` e le schermate.
   nell'app), prompt di sistema con le regole di sicurezza e l'uso degli allarmi già rivisti, limiti
   d'uso (20 al giorno, 200 al mese), consenso separato. Costo stimato per utente al mese con uso
   medio: ~0,55 $ con Opus 5.5, ~0,27 $ con Sonnet 5.5, ~0,02 $ con Haiku 5.5.
-  **Non attivato, nessuna chiave chiesta**: decide Lorenzo.
+  **Escluso: budget zero.** Lorenzo ha deciso di lasciare l'app gratuita senza spese: niente
+  API di Claude, nessuna chiave, nessuna Edge Function dell'assistente.
 
 ---
 

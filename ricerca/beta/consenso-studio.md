@@ -1,4 +1,4 @@
-# Consenso allo studio della beta di Lulù (v3)
+# Consenso allo studio della beta di Pellovi (v3)
 
 > **Bozza del 13/11/2026.** Da far leggere a un legale prima dell'uso. Non è un parere legale.
 > **Versione del testo: `studio-v3-2026-11`.**
@@ -242,11 +242,11 @@ file che ci hai già mandato, scrivici con il tuo codice.»
    «non inviamo mai… la tua email». Con il file mandato per email questo non è più vero
    per quel canale: aggiornare il testo o rimandare a questo.
 9. **`docs/PRIVACY.md` §4 e §6.** Riga «Studio sull'accuratezza»: aggiungere il canale
-   email e la conservazione delle email. Valutare il nome «Lulù» al posto di «Zampa».
+   email e la conservazione delle email. Usare il nome «Pellovi» al posto di «Zampa».
 10. **`lib/consent.dart`.** `studyVersion` da `tele-2026-11` a `studio-v3-2026-11` (non
     toccato: è in `lib/`).
-11. **Schede degli store** (`ricerca/24` §4): se cambia cosa esce, rivedere «Sicurezza dei
-    dati» di Google Play e le etichette di Apple.
+11. ~~Schede degli store~~ (`ricerca/24` §4): **escluso: budget zero**, Pellovi non va su
+    Google Play né sull'App Store (APK su GitHub Releases e web app).
 12. **Posizione (geofence).** Se il recinto intorno a casa (`lib/logic/outing_geofence.dart`)
     entra nella beta, cambia `docs/PRIVACY.md` §3 («non usa il GPS») e servono una voce
     nel registro e una nella DPIA, anche se la posizione resta sul telefono.

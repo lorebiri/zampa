@@ -1,4 +1,4 @@
-# Materiali della beta di Lulù (v3)
+# Materiali della beta di Pellovi (v3)
 
 *13/11/2026. Piano di riferimento: `ricerca/27-previsione-pipi-v2.md` §6, con
 `ricerca/12` §4-5 e `ricerca/23` §4. Privacy: `ricerca/24`, `docs/PRIVACY.md`,
@@ -42,12 +42,12 @@
 5. **Esportazione anonima** finita e allineata alla tabella di `consenso-studio.md` §5.
    Decidere se c'è anche l'invio automatico.
 6. `createdAt` e avviso v2 nello store (`ricerca/27` §6.6).
-7. **Distribuzione**: link Android (test chiuso Play o file di installazione), indirizzo
+7. **Distribuzione** (a costo zero): APK firmato su GitHub Releases (il test chiuso su
+   Google Play è **escluso: budget zero**, l'account costa 25 $), indirizzo
    della app web per iPhone, verifica delle notifiche web su iOS ≥ 16.4.
 8. **Questionari** a 4 e 8 settimane: strumento e modo per tenerli separati dai contatti.
-9. **Nome definitivo** dell'app (`ricerca/13`: «Lulù» a rischio alto). Il manifest web
-   (`web/manifest.json`) dice ancora «zampa» e «A new Flutter project»: è il nome che
-   compare sotto l'icona su iPhone.
+9. ~~Nome definitivo dell'app~~ **Fatto:** Pellovi, anche in `web/manifest.json` (il nome
+   sotto l'icona su iPhone). Lulù resta il nome della mascotte.
 10. **Date** di apertura e chiusura del reclutamento e di inizio della prova.
 11. Aggiornare `docs/REGISTRO-TRATTAMENTI.md`, `docs/DPIA.md`, `docs/PRIVACY.md`,
     `docs/CONSENSO-TELEMETRIA.md` (elenco in `consenso-studio.md`, «Cose da aggiornare»).
@@ -71,7 +71,8 @@
 - **Età.** Documenti privacy: 14 anni. Beta: 18.
 - **Canale email.** `docs/CONSENSO-TELEMETRIA.md` promette «non inviamo mai… la tua
   email» e un invio automatico; il file mandato per email lega il codice a un indirizzo.
-- **iPhone.** `ricerca/08` prevede TestFlight; qui iPhone usa la app web. Le notifiche web
+- **iPhone.** `ricerca/08` prevedeva TestFlight (**escluso: budget zero**, serve l'Apple
+  Developer Program); qui iPhone usa la app web. Le notifiche web
   richiedono di norma un server push, mentre il registro dice «nessun server di notifiche
   push».
 - **Parte della giornata.** `ricerca/12` §5.2: «notte-mattino / giorno / sera»;

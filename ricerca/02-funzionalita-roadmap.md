@@ -1,5 +1,12 @@
 # Zampa: funzionalità oltre il nucleo e roadmap
 
+> **Budget zero (novembre 2026).** Lorenzo ha deciso che Pellovi resta gratuita e senza spese.
+> I passi di questo rapporto che hanno un costo (consulente o deposito del marchio, domini a
+> pagamento, Apple Developer Program e app iOS nativa, account Google Play, piani a pagamento,
+> pubblicità, assistente con l'API di Claude) sono **esclusi: budget zero**. Restano validi
+> solo i passi gratuiti: piano gratuito di Supabase, GitHub Pages e GitHub Releases.
+
+
 *Rapporto di product strategy. Data: 10 novembre 2026. Mercato: Italia, poi UE.*
 
 Nucleo già deciso (qui non si rivaluta): cartella sanitaria (vaccini, antiparassitari, farmaci, visite, esami, allergie, microchip, peso), promemoria, nutrizione (fabbisogno calorico, razioni, pasti), tracker pipì/cacca con previsione della prossima uscita.

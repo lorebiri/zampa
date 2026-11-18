@@ -1,9 +1,8 @@
-# Invito alla beta di Lulù (v3)
+# Invito alla beta di Pellovi (v3)
 
 > **Bozza del 13/11/2026.** Da far rileggere prima dell'uso (vedi `README.md`).
 > Le parti tra `[DA COMPLETARE: …]` vanno riempite prima di mandare l'invito.
-> Il nome «Lulù» è provvisorio: `ricerca/13` lo dà a rischio alto come marchio.
-> `[DA COMPLETARE: nome definitivo dell'app]`
+> Nome dell'app: **Pellovi** (deciso a novembre 2026). Lulù resta il nome della mascotte.
 
 **Regole per chi usa questi testi** (non vanno inviate):
 
@@ -24,7 +23,7 @@ Fonte delle regole: `ricerca/08-piano-ceo.md` §11.3.
 
 Ciao,
 
-stiamo preparando **Lulù**, un'app gratuita per seguire la salute del cane. Ora ci serve
+stiamo preparando **Pellovi**, un'app gratuita per seguire la salute del cane. Ora ci serve
 il tuo aiuto per una **prova di 8 settimane** con cani veri.
 
 **Cosa vogliamo capire.** Chi vive in appartamento, senza giardino, deve portare fuori il
@@ -82,7 +81,7 @@ Per domande: `[DA COMPLETARE: indirizzo email della beta]`
 ## 2. Versione breve (social, WhatsApp)
 
 > 🐶 **Cerchiamo cani per una prova di 8 settimane.**
-> Lulù è un'app gratuita che ti ricorda di uscire in base alle abitudini del tuo cane.
+> Pellovi è un'app gratuita che ti ricorda di uscire in base alle abitudini del tuo cane.
 > Vogliamo capire se aiuta chi vive in appartamento senza giardino.
 > Ti chiediamo di segnare pipì, cacca e pasti con un tocco, e 2 brevi questionari.
 > È una prova: le previsioni sono stime. Gratis, senza pubblicità.
@@ -122,7 +121,7 @@ a meno che non ce lo dicano loro. `[DA COMPLETARE: decidere se chiedere nel modu
 > Ci hanno chiesto di far conoscere a tutti i nostri clienti una prova di 8 settimane.
 > Non è una nostra app e non la scegliamo noi: decidete voi se partecipare.
 >
-> Lulù è un'app gratuita che ti ricorda di uscire in base alle abitudini del cane e
+> Pellovi è un'app gratuita che ti ricorda di uscire in base alle abitudini del cane e
 > propone un piano di uscite per la giornata. Gli autori vogliono capire se può aiutare
 > chi vive in appartamento senza giardino. Le previsioni sono stime: ascolta sempre il
 > tuo cane.

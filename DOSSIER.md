@@ -32,9 +32,9 @@ Le app di salute generaliste registrano la pipì ma non la prevedono: 11pets (2,
 - cartella sanitaria completa e adatta all'Italia (microchip, filariosi, leishmaniosi);
 - previsione di pipì **e** cacca anche per cani adulti e anziani;
 - uso dei bisogni come **segnale di salute**, con avvisi quando cambia il ritmo, quando il cane beve troppo o quando c'è sforzo nell'urinare;
-- italiano, Android, iOS e web.
+- italiano, Android e web (su iPhone come web app; app iOS nativa esclusa: budget zero).
 
-Questo è lo spazio di Pellovi (nome deciso a novembre 2026; prima «Zampa», che si scontrava con ZampaVet, la catena Ca' Zampa e l'app Zampa a Zampa, poi «Lulù», a rischio alto secondo `ricerca/13`, dove «Pellovi» era tra i candidati a rischio basso). Lulù resta come nome della mascotte, il bolognese in pixel art. Prima di investire nel marchio va completata la verifica di anteriorità.
+Questo è lo spazio di Pellovi (nome deciso a novembre 2026; prima «Zampa», che si scontrava con ZampaVet, la catena Ca' Zampa e l'app Zampa a Zampa, poi «Lulù», a rischio alto secondo `ricerca/13`, dove «Pellovi» era tra i candidati a rischio basso). Lulù resta come nome della mascotte, il bolognese in pixel art. La verifica di anteriorità si fa da soli e gratis (TMview, banche dati UIBM ed EUIPO); deposito del marchio e consulente sono **esclusi: budget zero**.
 
 ## 2. Quando potremmo guadagnarci?
 
@@ -48,7 +48,8 @@ Risposta onesta del rapporto 03, con lancio ipotizzato ad aprile 2027:
 | Utile cumulato a 36 mesi | ~0 € | ~2.500 € | ~100.000 € |
 
 - **Contesto:** solo il 20% delle app in abbonamento incassa 1.000 $ in due anni (RevenueCat 2025). Lo scenario ottimista richiede di espandersi nell'UE: 69,6 milioni di cani contro i 9 dell'Italia.
-- **Modello consigliato:**
+- **Decisione di novembre 2026: l'app resta gratuita e a costo zero.** Il modello qui sotto è quello del rapporto 03, **escluso: budget zero** (niente Premium, niente incassi). Resta valido solo il principio: niente pubblicità e niente vendita di dati.
+- **Modello del rapporto 03 (non adottato):**
   - cartella sanitaria ed esportazione sempre gratuite;
   - Premium sul modello predittivo e sugli avvisi di salute, con prova di 14 giorni, a circa 24,99 €/anno o con un'opzione a vita;
   - offerta B2B per le cliniche veterinarie e affiliazioni solo dopo 12-18 mesi.
@@ -271,9 +272,9 @@ Ha poi segnalato 53 nuovi punti e 8 aggiunte. **Le correzioni di gravità A e B 
   - detrazione delle spese veterinarie nel 730;
   - scala di qualità della vita per il cane anziano;
   - calendario dei parassiti per regione;
-  - Live Activity e Apple Watch;
+  - ~~Live Activity e Apple Watch~~ (esclusi: budget zero, servono l'app iOS nativa e l'Apple Developer Program);
   - inglese.
-- **v2:** portale per il veterinario, assistente AI con limiti precisi (dichiarato come IA, AI Act art. 50), altre lingue UE.
+- **v2:** portale per il veterinario, altre lingue UE. L'assistente AI con l'API di Claude è **escluso: budget zero** (ogni domanda avrebbe un costo; `docs/ASSISTENTE.md` §D2).
 - **Futuro:** integrazioni con anagrafe SINAC e ricetta elettronica veterinaria (REV). Oggi non esistono API pubbliche per le app dei proprietari: va chiesto formalmente a VetInfo.
 
 ## 6. Come provarla

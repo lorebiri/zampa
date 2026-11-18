@@ -28,7 +28,14 @@ Test: scenari in `test/clinical_scenarios.dart` più un test per regola.
 Non è implementato in questa sessione: qui Flutter non si installa e il codice non si potrebbe
 né compilare né testare.
 
-## D2. Assistente con l'API di Claude (progetto, NON attivato)
+## D2. Assistente con l'API di Claude — ESCLUSO: budget zero
+
+> **Decisione di novembre 2026.** Pellovi resta gratuita e Lorenzo non vuole spendere nulla:
+> l'assistente con l'API di Claude **non si fa**. Ogni domanda avrebbe un costo (tabella sotto)
+> e servirebbero una chiave a pagamento e un limite di spesa. Nel codice non c'è nulla che lo
+> prepari (nessuna Edge Function `chiedi-a-lulu`, nessuna chiave, nessuna chiamata dall'app).
+> Il progetto qui sotto resta solo come archivio. Al suo posto vale D1, che gira gratis sul
+> telefono.
 
 ### Architettura
 
@@ -128,6 +135,5 @@ lancio.
 
 ### Decisioni di Lorenzo
 
-1. Attivarlo sì o no, e con quale modello (costo in tabella).
-2. Gratis con i limiti sopra, oppure solo in un piano a pagamento.
-3. Chiave API e limite di spesa nella Console Anthropic (non chiesti in questa sessione).
+Prese: **non attivarlo** (budget zero). Nessun modello, nessun piano a pagamento, nessuna chiave
+API né limite di spesa nella Console Anthropic.

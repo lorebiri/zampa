@@ -1,5 +1,12 @@
 # 14 — CNR e fisco: dossier per Lorenzo
 
+> **Budget zero (novembre 2026).** Lorenzo ha deciso che Pellovi resta gratuita e senza spese.
+> I passi di questo rapporto che hanno un costo (consulente o deposito del marchio, domini a
+> pagamento, Apple Developer Program e app iOS nativa, account Google Play, piani a pagamento,
+> pubblicità, assistente con l'API di Claude) sono **esclusi: budget zero**. Restano validi
+> solo i passi gratuiti: piano gratuito di Supabase, GitHub Pages e GitHub Releases.
+
+
 *10 novembre 2026. Autore: analista legale e fiscale del progetto (agente). Incarico C1-7 di `ricerca/08-piano-ceo.md`.*
 
 > **Avvertenza.** Questo documento **non è un parere legale né una consulenza fiscale professionale**. È una raccolta ragionata di fonti pubbliche, scritta da un agente software, per preparare le domande da fare al CNR, a un avvocato giuslavorista o della proprietà intellettuale e a un commercialista. Le decisioni spettano a Lorenzo. Le opzioni elencate sono **opzioni**, non raccomandazioni personali. Nessuno è stato contattato.

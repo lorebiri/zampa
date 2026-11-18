@@ -1,5 +1,12 @@
 # Scheda di decisione: il nome dell'app (incarico C2-8)
 
+> **Budget zero (novembre 2026).** Lorenzo ha deciso che Pellovi resta gratuita e senza spese.
+> I passi di questo rapporto che hanno un costo (consulente o deposito del marchio, domini a
+> pagamento, Apple Developer Program e app iOS nativa, account Google Play, piani a pagamento,
+> pubblicità, assistente con l'API di Claude) sono **esclusi: budget zero**. Restano validi
+> solo i passi gratuiti: piano gratuito di Supabase, GitHub Pages e GitHub Releases.
+
+
 *Seconda passata svolta l'11 novembre 2026. Prima passata: `ricerca/13-nome-e-marchio.md`. Scadenza della scelta: 15/12/2026 (B10).*
 
 > Ricerca preliminare fatta da un agente, **non** parere di un consulente in marchi. **[F]** = verificato oggi alla fonte indicata. **[I]** = mia valutazione o stima. **[M]** = da verificare a mano.
