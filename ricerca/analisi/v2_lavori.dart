@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:zampa/logic/bio_params.dart';
+import 'package:zampa/logic/pee_forecast_v2.dart';
 
 import 'banco.dart';
 
@@ -34,6 +35,10 @@ import 'banco.dart';
 
 void eseguiFrammento(int shard) {
   final l = leggiLavori();
+  final m = jsonDecode(
+    File('ricerca/analisi/risultati/lavori.json').readAsStringSync(),
+  ) as Map<String, dynamic>;
+  v2SafetyCapForBench = m['v2Safety'] as bool? ?? true;
   if (shard >= l.of) return;
   runShard(l.tag, l.jobs, shard, l.of, shadow: l.shadow);
 }

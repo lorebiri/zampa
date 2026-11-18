@@ -8,6 +8,7 @@ import '../logic/elimination_model.dart';
 import '../logic/modules.dart';
 import '../logic/nutrition.dart';
 import '../logic/potty_predictor.dart';
+import '../logic/potty_signals.dart';
 import '../logic/prevention.dart';
 import '../models.dart';
 import '../store.dart';
@@ -508,6 +509,37 @@ class _PixelPainter extends CustomPainter {
   bool shouldRepaint(covariant _PixelPainter old) => true;
 }
 
+/// Il cane disegnato, fermo: per le schede (piccolo, niente animazione, così
+/// non consuma batteria e non disturba la lettura).
+class PixelDogStill extends StatelessWidget {
+  const PixelDogStill({
+    super.key,
+    required this.look,
+    this.pose = Pose.idle,
+    this.size = 64,
+    this.frame = 0,
+  });
+  final AvatarLook look;
+  final Pose pose;
+  final double size;
+  final int frame;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: SizedBox(
+      width: size * PixelDog.w / PixelDog.h,
+      height: size,
+      child: CustomPaint(
+        painter: _PixelPainter(
+          PixelDog.render(look, pose, frame),
+          false,
+          false,
+        ),
+      ),
+    ),
+  );
+}
+
 /// Il cane disegnato, animato.
 class PixelDogView extends StatefulWidget {
   const PixelDogView({
@@ -619,6 +651,18 @@ class PetMood {
       );
     }
     final watch = alerts.any((a) => a.level == AlertLevel.attenzione);
+    final logs = store.logsOf(dog.id);
+    // Un segnale appena segnato (alla porta, annusa, guaisce...) vale anche
+    // di notte: è il cane a chiedere di uscire (ricerca/28 §1).
+    final sig = signalAlert(logs, now);
+    if (sig != null && sig.goNow) {
+      return PetMood(
+        Pose.waiting,
+        '${dog.name} è impaziente alla porta: '
+        'esci adesso.',
+        Icons.door_front_door_outlined,
+      );
+    }
     if (PottyPredictor.inSleepWindow(dog, now)) {
       return PetMood(
         Pose.sleeping,
@@ -634,7 +678,6 @@ class PetMood {
         Icons.visibility_outlined,
       );
     }
-    final logs = store.logsOf(dog.id);
     final recent = logs
         .where((l) => now.difference(l.time).inMinutes <= 30)
         .toList();
@@ -661,8 +704,18 @@ class PetMood {
         Icons.favorite,
       );
     }
+    // Previsione v2 (ricerca/27): «esci adesso» quando è passata l'ora di
+    // uscita consigliata (allerta meno il preavviso).
+    final v2 = pee.v2;
+    final v2GoNow =
+        v2 != null &&
+        !v2.alertAt
+            .subtract(Duration(minutes: dog.reminderLeadMinutes))
+            .isAfter(now);
     if (pee.last != null &&
-        (pee.overdue || pee.recommendedAt.difference(now).inMinutes <= 20)) {
+        (v2GoNow ||
+            pee.overdue ||
+            pee.recommendedAt.difference(now).inMinutes <= 20)) {
       return PetMood(
         Pose.waiting,
         '${dog.name} aspetta la porta: è ora di uscire.',

@@ -463,6 +463,10 @@ enum LogType {
   addomeGonfio,
   mammelle,
   ferita,
+
+  /// Segnale che il cane deve uscire (annusa a terra, gira su sé stesso, va
+  /// alla porta, guaisce, è irrequieto): il tipo è in [LogEntry.signs].
+  segnale,
 }
 
 extension LogTypeGender on LogType {
@@ -511,6 +515,7 @@ extension LogTypeLabel on LogType {
     LogType.addomeGonfio => 'Addome gonfio',
     LogType.mammelle => 'Mammelle gonfie/calde',
     LogType.ferita => 'Ferita chirurgica',
+    LogType.segnale => 'Segnale di uscita',
   };
   String get emoji => switch (this) {
     LogType.pipi => '💧',
@@ -541,6 +546,7 @@ extension LogTypeLabel on LogType {
     LogType.addomeGonfio => '🎈',
     LogType.mammelle => '🍼',
     LogType.ferita => '🩹',
+    LogType.segnale => '🚪',
   };
 }
 
@@ -599,6 +605,12 @@ enum Sign {
   sanguinamento,
   starnuti,
   feritaOk,
+  // Segnali che anticipano pipì e cacca (ricerca/28 §1)
+  annusaTerra,
+  giraSuSe,
+  allaPorta,
+  guaisce,
+  irrequieto,
 }
 
 extension SignLabel on Sign {
@@ -648,6 +660,11 @@ extension SignLabel on Sign {
     Sign.sanguinamento => 'Sanguina',
     Sign.starnuti => 'Starnuti violenti',
     Sign.feritaOk => 'Pulita e asciutta',
+    Sign.annusaTerra => 'Annusa a terra',
+    Sign.giraSuSe => 'Gira su sé stesso',
+    Sign.allaPorta => 'Va alla porta',
+    Sign.guaisce => 'Guaisce',
+    Sign.irrequieto => 'È irrequieto',
   };
 }
 

@@ -221,4 +221,74 @@ void main() {
       expect(nuovo.ears, EarType.lunghe);
     });
   });
+
+  // Unione con la previsione v2/v3 (ricerca/27-28): «impaziente alla porta»
+  // anche con un segnale appena segnato e con «Esci adesso» della v2.
+  test('impaziente alla porta dopo un segnale, anche di notte', () async {
+    final s = await _store();
+    await s.addLog(
+      LogEntry(
+        id: 'p',
+        dogId: 'd1',
+        type: LogType.pipi,
+        time: now.subtract(const Duration(hours: 1)),
+      ),
+    );
+    await s.addLog(
+      LogEntry(
+        id: 'sg',
+        dogId: 'd1',
+        type: LogType.segnale,
+        time: now.subtract(const Duration(minutes: 3)),
+        signs: {Sign.allaPorta},
+      ),
+    );
+    final m = _mood(s, now);
+    expect(m.pose, Pose.waiting);
+    expect(m.message, contains('impaziente alla porta'));
+    expect(m.message, contains('esci adesso'));
+  });
+
+  test(
+    'un segnale vecchio o seguito da una pipì non lo rende impaziente',
+    () async {
+      final s = await _store();
+      await s.addLog(
+        LogEntry(
+          id: 'sg',
+          dogId: 'd1',
+          type: LogType.segnale,
+          time: now.subtract(const Duration(minutes: 15)),
+          signs: {Sign.allaPorta},
+        ),
+      );
+      await s.addLog(
+        LogEntry(
+          id: 'p',
+          dogId: 'd1',
+          type: LogType.pipi,
+          time: now.subtract(const Duration(minutes: 5)),
+        ),
+      );
+      final m = _mood(s, now);
+      expect(m.message, isNot(contains('impaziente')));
+    },
+  );
+
+  test('con un allarme serio il segnale non copre l\'avviso', () async {
+    final s = await _store();
+    await s.addLog(
+      LogEntry(
+        id: 'sg',
+        dogId: 'd1',
+        type: LogType.segnale,
+        time: now.subtract(const Duration(minutes: 2)),
+        signs: {Sign.guaisce},
+      ),
+    );
+    final alert = HealthAlert(AlertLevel.subito, 'prova', 'prova');
+    final dog = s.dogs.first;
+    final m = PetMood.of(s, dog, now, s.forecast(dog, Need.pipi, now), [alert]);
+    expect(m.pose, Pose.concerned);
+  });
 }

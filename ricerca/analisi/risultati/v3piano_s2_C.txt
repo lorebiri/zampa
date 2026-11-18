@@ -1,0 +1,9 @@
+## Banco del piano di uscite (seme 2, un cane su 1)
+| Strategia | Incidenti/settimana [IC] | Uscite/giorno [IC] | Incidenti pipì / cacca | Previsti dal piano/sett. | Segnali segnati, seguiti da un bisogno entro 30 min |
+|---|---|---|---|---|---|
+| v2 | 1.40 [0.70–2.31] | 11.3 [10.3–12.3] | 99 / 35 | — | — |
+| v2+s | 1.22 [0.53–2.10] | 11.8 [10.9–12.8] | 91 / 26 | — | 650, 79% |
+| Strategia | cucciolo | adulto | anziano | cronico | poliuria | tempoPieno | partTime | casa |
+|---|---|---|---|---|---|---|---|---|
+| v2 | 3.33 / 13.4 | 0.52 / 10.1 | 0.39 / 11.4 | 2.89 / 12.0 | 2.11 / 11.6 | 2.97 / 9.0 | 0.70 / 11.1 | 0.43 / 13.9 |
+| v2+s | 3.17 / 13.9 | 0.40 / 10.7 | 0.17 / 12.0 | 2.78 / 12.3 | 1.67 / 11.9 | 2.85 / 9.4 | 0.55 / 11.8 | 0.17 / 14.5 |

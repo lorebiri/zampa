@@ -249,4 +249,35 @@ void main() {
     await tester.binding.setSurfaceSize(null);
     tester.platformDispatcher.clearTextScaleFactorTestValue();
   });
+
+  // Unione Pellovi + previsione v3: le schede «in prova» nel nuovo stile,
+  // con il compagno impaziente alla porta dopo un segnale.
+  testWidgets('segnale «Va alla porta»: avviso con il compagno, al 200%', (
+    tester,
+  ) async {
+    await _loadAtkinson(tester);
+    await tester.binding.setSurfaceSize(const Size(360, 3000));
+    final store = await _openDemo(tester);
+    tester.platformDispatcher.textScaleFactorTestValue = 2.0;
+    await tester.tap(find.byType(NavigationDestination).at(1));
+    await tester.pumpAndSettle();
+    expect(find.text('IN PROVA'), findsWidgets);
+    await tester.scrollUntilVisible(
+      find.text('Va alla porta'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Va alla porta'));
+    await tester.pumpAndSettle();
+    expect(store.logsOf(store.dog!.id).first.type, LogType.segnale);
+    await tester.scrollUntilVisible(
+      find.textContaining('Esci adesso con'),
+      -300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.textContaining('Esci adesso con'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.binding.setSurfaceSize(null);
+    tester.platformDispatcher.clearTextScaleFactorTestValue();
+  });
 }

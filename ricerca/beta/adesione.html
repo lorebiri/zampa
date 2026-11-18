@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<!--
+  NOTA PER LO STAFF (non visibile ai partecipanti)
+  ================================================
+  Questa pagina NON invia nulla. Non ha backend, non carica librerie, non fa
+  richieste di rete, non ha analytics né cookie. La regola Content-Security-Policy
+  qui sotto blocca qualsiasi connessione. Il partecipante copia il testo, apre
+  un'email già pronta o scarica un file .json, e ce lo manda lui.
+
+  Dove raccogliere le adesioni:
+  1. Una casella email DEDICATA alla beta, con fornitore e server in UE.
+     [DA COMPLETARE: indirizzo e fornitore della casella]
+     Non usare caselle personali né quella del CNR.
+  2. Un foglio con accesso limitato (solo chi gestisce il reclutamento),
+     verifica in due passaggi attiva, nessun link pubblico.
+     [DA COMPLETARE: strumento e nomi delle persone con accesso]
+  3. Nel foglio si copiano solo i campi del modulo. Non aggiungere note libere
+     sulla persona.
+  4. Cancellazione: le adesioni NON incluse (escluse, in eccesso, senza risposta)
+     vanno cancellate dalla casella e dal foglio entro 30 giorni dalla chiusura
+     del reclutamento. Annotare la data della cancellazione.
+     [DA COMPLETARE: quando si cancellano i contatti degli inclusi, per esempio
+     alla fine della beta dopo l'ultimo questionario]
+  5. Mai annotare nel foglio il codice dello studio (pid) accanto al contatto.
+     Il pid deve restare separato dai dati di contatto.
+  6. Prima della pubblicazione: sostituire beta@ESEMPIO.invalid (cercarlo nel
+     file: compare nella costante MAIL_TO dello script e nel testo) e il link
+     all'informativa. Far rileggere i testi a un legale (vedi README.md).
+-->
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Adesione alla prova di Lulù</title>
+<style>
+  :root {
+    --testo: #1b1b1b;
+    --tenue: #4a4a4a;
+    --sfondo: #ffffff;
+    --riquadro: #f4f6f8;
+    --bordo: #6b6b6b;
+    --primario: #0b4f8a;
+    --errore: #a4000f;
+    --avviso: #7a4a00;
+    --avviso-sfondo: #fff4e0;
+    --ok-sfondo: #e8f4ea;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--testo);
+    background: var(--sfondo);
+  }
+  main { max-width: 40rem; margin: 0 auto; padding: 1rem 1rem 4rem; }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0.5rem 0 1rem; }
+  h2 { font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+  p { margin: 0 0 0.75rem; }
+  .tenue { color: var(--tenue); }
+  .riquadro { background: var(--riquadro); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  fieldset { border: 1px solid var(--bordo); border-radius: 8px; padding: 0.75rem 1rem 1rem; margin: 0 0 1rem; }
+  legend { font-weight: 600; padding: 0 0.25rem; }
+  fieldset.cane { border-width: 2px; border-color: var(--primario); }
+  fieldset.cane > legend { font-size: 1.15rem; color: var(--primario); }
+  label { display: block; }
+  .scelta { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.45rem 0; min-height: 44px; cursor: pointer; }
+  .scelta input { width: 1.35rem; height: 1.35rem; margin: 0.1rem 0 0; flex: none; accent-color: var(--primario); }
+  input[type="email"], input[type="tel"], select {
+    width: 100%; font: inherit; padding: 0.6rem; min-height: 44px;
+    border: 1px solid var(--bordo); border-radius: 6px; background: #fff; color: var(--testo);
+  }
+  .campo { margin: 0 0 1rem; }
+  .campo > label { font-weight: 600; margin-bottom: 0.25rem; }
+  .aiuto { font-size: 0.95rem; color: var(--tenue); margin: 0.25rem 0 0; }
+  .obbl { font-weight: 400; color: var(--tenue); font-size: 0.95rem; }
+  button, .bottone {
+    display: inline-block; font: inherit; font-weight: 600; text-decoration: none; text-align: center;
+    padding: 0.75rem 1.25rem; min-height: 48px; border-radius: 8px; cursor: pointer;
+    border: 2px solid var(--primario); background: var(--primario); color: #fff; margin: 0.25rem 0.5rem 0.25rem 0;
+  }
+  button.secondario, .bottone.secondario { background: #fff; color: var(--primario); }
+  :focus-visible { outline: 3px solid #000; outline-offset: 2px; }
+  .messaggio { border-left: 5px solid var(--avviso); background: var(--avviso-sfondo); padding: 0.75rem 1rem; border-radius: 4px; margin: 0.5rem 0 0; }
+  .errori { border: 2px solid var(--errore); border-radius: 8px; padding: 0.75rem 1rem; margin: 1rem 0; }
+  .errori h2 { color: var(--errore); margin-top: 0; font-size: 1.1rem; }
+  .errori a { color: var(--errore); }
+  .errore-campo { color: var(--errore); font-weight: 600; margin: 0.25rem 0 0; }
+  .ok { background: var(--ok-sfondo); border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+  pre { white-space: pre-wrap; word-break: break-word; background: #fff; border: 1px solid var(--bordo); border-radius: 6px; padding: 0.75rem; font-size: 0.95rem; }
+  [hidden] { display: none !important; }
+  @media (prefers-color-scheme: dark) {
+    :root { --testo: #f1f1f1; --tenue: #c9c9c9; --sfondo: #121212; --riquadro: #1f2429; --bordo: #9a9a9a; --primario: #8cc4ff; --errore: #ff8a8a; --avviso: #ffcf7a; --avviso-sfondo: #2e2414; --ok-sfondo: #163020; }
+    input[type="email"], input[type="tel"], select, pre { background: #1b1b1b; color: var(--testo); }
+    button, .bottone { color: #0b1a2a; }
+    button.secondario, .bottone.secondario { background: transparent; color: var(--primario); }
+    :focus-visible { outline-color: #fff; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Prova di Lulù: modulo di adesione</h1>
+
+  <p>Grazie per l'interesse. Ci vogliono circa 3 minuti.</p>
+  <div class="riquadro">
+    <p><strong>Questa pagina non invia nulla da sola.</strong> Alla fine vedi un riepilogo.
+    Poi scegli tu come mandarcelo: copiando il testo, con un'email già pronta o con un
+    piccolo file.</p>
+    <p>Non chiediamo il tuo nome, la tua città né il tuo indirizzo. Non chiediamo il nome
+    del cane.</p>
+    <p class="tenue">È una prova. Le previsioni dell'app sono stime e a volte sbagliano.
+    L'app non sostituisce il veterinario.</p>
+  </div>
+
+  <div id="errori" class="errori" role="alert" tabindex="-1" hidden>
+    <h2>Controlla queste risposte</h2>
+    <ul id="lista-errori"></ul>
+  </div>
+
+  <form id="modulo" novalidate>
+    <h2>1. Su di te</h2>
+
+    <fieldset id="f-eta">
+      <legend>Età <span class="obbl">(obbligatorio)</span></legend>
+      <label class="scelta"><input type="checkbox" id="maggiorenne" name="maggiorenne">
+        <span>Confermo di avere almeno 18 anni.</span></label>
+      <p class="errore-campo" id="err-maggiorenne" hidden>Per partecipare devi avere almeno 18 anni.</p>
+    </fieldset>
+
+    <fieldset id="f-contatto">
+      <legend>Come ti contattiamo <span class="obbl">(obbligatorio: almeno uno dei due)</span></legend>
+      <p class="aiuto">È l'unico dato personale che chiediamo. Lo usiamo solo per risponderti
+      sulla prova e mandarti le istruzioni. Non lo diamo a nessuno e non lo colleghiamo ai
+      dati dello studio. Se non entri nella prova, lo cancelliamo entro 30 giorni dalla
+      chiusura del reclutamento.</p>
+      <div class="campo">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="email" inputmode="email" aria-describedby="err-contatto">
+      </div>
+      <div class="campo">
+        <label for="telefono">Telefono</label>
+        <input type="tel" id="telefono" name="telefono" autocomplete="tel" inputmode="tel" aria-describedby="err-contatto">
+      </div>
+      <p class="errore-campo" id="err-contatto" hidden>Scrivi un'email valida o un numero di telefono.</p>
+    </fieldset>
+
+    <fieldset id="f-lavoro">
+      <legend>Lavori fuori casa? <span class="obbl">(obbligatorio)</span></legend>
+      <p class="aiuto">Ci serve per capire quante ore il cane resta solo. Non chiediamo che lavoro fai.</p>
+      <label class="scelta"><input type="radio" name="lavoro" value="tempo_pieno"><span>Sì, a tempo pieno</span></label>
+      <label class="scelta"><input type="radio" name="lavoro" value="part_time"><span>Sì, part-time</span></label>
+      <label class="scelta"><input type="radio" name="lavoro" value="no"><span>No</span></label>
+      <p class="errore-campo" id="err-lavoro" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <fieldset id="f-telefono-tipo">
+      <legend>Che telefono usi? <span class="obbl">(obbligatorio)</span></legend>
+      <label class="scelta"><input type="radio" name="telefono_tipo" value="android"><span>Android</span></label>
+      <label class="scelta"><input type="radio" name="telefono_tipo" value="iphone"><span>iPhone</span></label>
+      <p class="aiuto">Su iPhone l'app si usa dal browser, aggiunta alla schermata Home. Le
+      notifiche funzionano solo con iOS 16.4 o successivo.</p>
+      <p class="errore-campo" id="err-telefono_tipo" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <h2>2. I tuoi cani</h2>
+    <div class="campo">
+      <label for="num-cani">Quanti cani vuoi iscrivere?</label>
+      <select id="num-cani" name="num_cani">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+      <p class="aiuto">Per ogni cane rispondi alle domande qui sotto.</p>
+    </div>
+
+    <div id="cani"></div>
+
+    <h2>3. Privacy</h2>
+    <fieldset id="f-privacy">
+      <legend>Informativa <span class="obbl">(obbligatorio)</span></legend>
+      <p class="aiuto">Titolare: <span>[DA COMPLETARE: titolare, oggi indicato nei documenti come Lorenzo Birindelli]</span>.
+      Usiamo queste risposte solo per scegliere i partecipanti e contattarti.
+      <a href="#informativa-adesione">[DA COMPLETARE: link all'informativa per l'adesione]</a>.
+      Il consenso allo studio vero e proprio lo darai dopo, nell'app, con un testo a parte.</p>
+      <label class="scelta"><input type="checkbox" id="privacy" name="privacy">
+        <span>Ho letto come usate queste risposte.</span></label>
+      <p class="errore-campo" id="err-privacy" hidden>Serve la conferma per preparare la richiesta.</p>
+    </fieldset>
+
+    <button type="submit" id="prepara">Prepara la richiesta</button>
+  </form>
+
+  <section id="riepilogo" hidden aria-labelledby="titolo-riepilogo">
+    <h2 id="titolo-riepilogo" tabindex="-1">Il tuo riepilogo</h2>
+    <div id="esclusi"></div>
+    <div id="pronto" class="ok">
+      <p><strong>Non è ancora partito nulla.</strong> Scegli uno di questi modi per mandarcelo:</p>
+      <p>
+        <button type="button" id="copia">Copia il testo</button>
+        <a class="bottone secondario" id="link-mail" href="#">Apri un'email già pronta</a>
+        <button type="button" class="secondario" id="scarica">Scarica il file (.json)</button>
+      </p>
+      <p class="tenue" id="stato-azione" role="status" aria-live="polite"></p>
+      <p class="aiuto">Se l'email non si apre, copia il testo e mandalo a
+      <!-- Indirizzo segnaposto: sostituire beta@ESEMPIO.invalid con la casella dedicata della beta (anche nello script, costante MAIL_TO). -->
+      <strong>beta@ESEMPIO.invalid</strong>. Se scarichi il file, allegalo a un'email allo stesso indirizzo.</p>
+    </div>
+    <pre id="testo-riepilogo"></pre>
+    <p><button type="button" class="secondario" id="modifica">Torna al modulo e correggi</button></p>
+  </section>
+
+  <section id="informativa-adesione" class="riquadro" aria-labelledby="t-info">
+    <h2 id="t-info">Come usiamo queste risposte (in breve)</h2>
+    <p>Titolare: [DA COMPLETARE: nome e contatto del titolare].</p>
+    <p>Perché: scegliere i cani della prova in modo che ci siano cani diversi (età, taglia,
+    casa con o senza giardino) e contattarti.</p>
+    <p>Base giuridica: [DA COMPLETARE: da decidere con il legale].</p>
+    <p>Chi li vede: solo chi organizza il reclutamento.</p>
+    <p>Quanto li teniamo: se non entri nella prova, li cancelliamo entro 30 giorni dalla
+    chiusura del reclutamento. Se entri, [DA COMPLETARE: fino a quando].</p>
+    <p>I tuoi diritti: puoi chiedere di vedere, correggere o cancellare queste risposte
+    scrivendo a [DA COMPLETARE: email privacy]. Puoi fare reclamo al Garante per la
+    protezione dei dati personali.</p>
+  </section>
+</main>
+
+<template id="tpl-cane">
+  <fieldset class="cane">
+    <legend>Cane <span data-n></span></legend>
+
+    <fieldset data-campo="eta">
+      <legend>Quanti anni ha?</legend>
+      <label class="scelta"><input type="radio" value="meno_6_mesi"><span>Meno di 6 mesi</span></label>
+      <label class="scelta"><input type="radio" value="6_12_mesi"><span>Da 6 mesi a 1 anno</span></label>
+      <label class="scelta"><input type="radio" value="1_7_anni"><span>Da 1 a 7 anni</span></label>
+      <label class="scelta"><input type="radio" value="7_10_anni"><span>Da 7 a 10 anni</span></label>
+      <label class="scelta"><input type="radio" value="oltre_10_anni"><span>Più di 10 anni</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <fieldset data-campo="taglia">
+      <legend>Quanto pesa, più o meno?</legend>
+      <label class="scelta"><input type="radio" value="meno_10"><span>Meno di 10 kg</span></label>
+      <label class="scelta"><input type="radio" value="10_25"><span>Da 10 a 25 kg</span></label>
+      <label class="scelta"><input type="radio" value="25_45"><span>Da 25 a 45 kg</span></label>
+      <label class="scelta"><input type="radio" value="oltre_45"><span>Più di 45 kg</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <fieldset data-campo="cronica">
+      <legend>Ha una malattia cronica diagnosticata dal veterinario?</legend>
+      <p class="aiuto">Per esempio diabete, problemi ai reni o alla vescica. Non serve dire quale.</p>
+      <label class="scelta"><input type="radio" value="si"><span>Sì</span></label>
+      <label class="scelta"><input type="radio" value="no"><span>No</span></label>
+      <label class="scelta"><input type="radio" value="non_so"><span>Non so</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <fieldset data-campo="incontinenza">
+      <legend>Il veterinario gli ha diagnosticato un'incontinenza?</legend>
+      <p class="aiuto">Cioè perdite di urina che il cane non controlla.</p>
+      <label class="scelta"><input type="radio" value="si"><span>Sì</span></label>
+      <label class="scelta"><input type="radio" value="no"><span>No</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+      <p class="messaggio" data-msg="incontinenza" role="status" hidden>Grazie per averlo detto.
+      Per questo cane la prova non è adatta: con l'incontinenza le pipì non dipendono dalle
+      uscite, e i nostri conti non varrebbero. Non è un giudizio sul tuo cane. Se hai altri cani,
+      puoi iscriverli.</p>
+    </fieldset>
+
+    <fieldset data-campo="traversina">
+      <legend>Dove fa i bisogni di solito?</legend>
+      <label class="scelta"><input type="radio" value="fuori"><span>Fuori (passeggiata, giardino o terrazzo)</span></label>
+      <label class="scelta"><input type="radio" value="misto"><span>Fuori e a volte sulla traversina</span></label>
+      <label class="scelta"><input type="radio" value="solo_traversina"><span>Solo sulla traversina</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+      <p class="messaggio" data-msg="traversina" role="status" hidden>Grazie. Per un cane che usa
+      solo la traversina la prova non è adatta, perché misura le uscite. Va benissimo così:
+      se hai altri cani, puoi iscriverli.</p>
+    </fieldset>
+
+    <fieldset data-campo="appartamento">
+      <legend>Vive in appartamento?</legend>
+      <label class="scelta"><input type="radio" value="si"><span>Sì</span></label>
+      <label class="scelta"><input type="radio" value="no"><span>No</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <fieldset data-campo="giardino">
+      <legend>Ha un giardino o un terrazzo dove può fare i bisogni da solo?</legend>
+      <label class="scelta"><input type="radio" value="si"><span>Sì</span></label>
+      <label class="scelta"><input type="radio" value="no"><span>No</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+    </fieldset>
+
+    <fieldset data-campo="stile">
+      <legend>Di solito il cane esce:</legend>
+      <label class="scelta"><input type="radio" value="quando_lo_chiede"><span>quando lo chiede</span></label>
+      <label class="scelta"><input type="radio" value="orari_fissi"><span>a orari fissi decisi da te</span></label>
+      <label class="scelta"><input type="radio" value="misto"><span>un po' e un po'</span></label>
+      <label class="scelta"><input type="radio" value="giardino_libero"><span>ha accesso libero al giardino</span></label>
+      <p class="errore-campo" hidden>Scegli una risposta.</p>
+    </fieldset>
+  </fieldset>
+</template>
+
+<script>
+(function () {
+  "use strict";
+  // Segnaposto: sostituire con la casella dedicata della beta.
+  var MAIL_TO = "beta@ESEMPIO.invalid";
+  var VERSIONE_MODULO = "adesione-v3-2026-11";
+
+  var ETICHETTE = {
+    lavoro: { tempo_pieno: "Sì, a tempo pieno", part_time: "Sì, part-time", no: "No" },
+    telefono_tipo: { android: "Android", iphone: "iPhone" },
+    eta: { meno_6_mesi: "meno di 6 mesi", "6_12_mesi": "da 6 mesi a 1 anno", "1_7_anni": "da 1 a 7 anni", "7_10_anni": "da 7 a 10 anni", oltre_10_anni: "più di 10 anni" },
+    taglia: { meno_10: "meno di 10 kg", "10_25": "10-25 kg", "25_45": "25-45 kg", oltre_45: "più di 45 kg" },
+    cronica: { si: "sì", no: "no", non_so: "non so" },
+    incontinenza: { si: "sì", no: "no" },
+    traversina: { fuori: "fuori", misto: "fuori e a volte traversina", solo_traversina: "solo traversina" },
+    appartamento: { si: "sì", no: "no" },
+    giardino: { si: "sì", no: "no" },
+    stile: { quando_lo_chiede: "quando lo chiede", orari_fissi: "a orari fissi", misto: "un po' e un po'", giardino_libero: "accesso libero al giardino" }
+  };
+  var DOMANDE_CANE = {
+    eta: "Età", taglia: "Peso", cronica: "Malattia cronica", incontinenza: "Incontinenza",
+    traversina: "Dove fa i bisogni", appartamento: "Vive in appartamento",
+    giardino: "Giardino o terrazzo dove può fare i bisogni da solo", stile: "Come esce"
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var form = $("modulo");
+  var contenitore = $("cani");
+  var tpl = $("tpl-cane");
+  var ultimoTesto = "";
+  var ultimoJson = "";
+
+  function creaCani(n) {
+    var vecchi = contenitore.querySelectorAll("fieldset.cane");
+    for (var i = vecchi.length; i < n; i++) {
+      var nodo = tpl.content.cloneNode(true);
+      var fs = nodo.querySelector("fieldset.cane");
+      fs.id = "cane-" + (i + 1);
+      fs.querySelector("[data-n]").textContent = String(i + 1);
+      var gruppi = fs.querySelectorAll("fieldset[data-campo]");
+      for (var g = 0; g < gruppi.length; g++) {
+        var campo = gruppi[g].getAttribute("data-campo");
+        gruppi[g].id = "cane-" + (i + 1) + "-" + campo;
+        var inputs = gruppi[g].querySelectorAll("input[type=radio]");
+        for (var k = 0; k < inputs.length; k++) {
+          inputs[k].name = "cane" + (i + 1) + "_" + campo;
+        }
+      }
+      contenitore.appendChild(nodo);
+    }
+    for (var j = vecchi.length - 1; j >= n; j--) {
+      contenitore.removeChild(vecchi[j]);
+    }
+  }
+
+  function valore(nome) {
+    var el = form.querySelector('input[name="' + nome + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  function aggiornaMessaggi() {
+    var cani = contenitore.querySelectorAll("fieldset.cane");
+    for (var i = 0; i < cani.length; i++) {
+      var n = i + 1;
+      var mi = cani[i].querySelector('[data-msg="incontinenza"]');
+      var mt = cani[i].querySelector('[data-msg="traversina"]');
+      mi.hidden = valore("cane" + n + "_incontinenza") !== "si";
+      mt.hidden = valore("cane" + n + "_traversina") !== "solo_traversina";
+    }
+  }
+
+  function emailValida(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+  function telefonoValido(s) { return s.replace(/[^0-9]/g, "").length >= 6 && /^[+0-9 ().-]+$/.test(s); }
+
+  function mostraErrore(idCampo, idMsg, attivo, testo, lista) {
+    var msg = $(idMsg);
+    if (msg) msg.hidden = !attivo;
+    var gruppo = $(idCampo);
+    if (gruppo) {
+      if (attivo) gruppo.setAttribute("aria-invalid", "true"); else gruppo.removeAttribute("aria-invalid");
+    }
+    if (attivo) {
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + idCampo;
+      a.textContent = testo;
+      li.appendChild(a);
+      lista.appendChild(li);
+    }
+  }
+
+  function valida() {
+    var lista = $("lista-errori");
+    lista.innerHTML = "";
+    mostraErrore("f-eta", "err-maggiorenne", !$("maggiorenne").checked, "Conferma di avere almeno 18 anni.", lista);
+    var em = $("email").value.trim();
+    var tel = $("telefono").value.trim();
+    var okContatto = (em !== "" || tel !== "") &&
+      (em === "" || emailValida(em)) && (tel === "" || telefonoValido(tel));
+    mostraErrore("f-contatto", "err-contatto", !okContatto, "Scrivi un'email valida o un numero di telefono.", lista);
+    mostraErrore("f-lavoro", "err-lavoro", !valore("lavoro"), "Rispondi a «Lavori fuori casa?».", lista);
+    mostraErrore("f-telefono-tipo", "err-telefono_tipo", !valore("telefono_tipo"), "Rispondi a «Che telefono usi?».", lista);
+
+    var cani = contenitore.querySelectorAll("fieldset.cane");
+    for (var i = 0; i < cani.length; i++) {
+      var n = i + 1;
+      var gruppi = cani[i].querySelectorAll("fieldset[data-campo]");
+      for (var g = 0; g < gruppi.length; g++) {
+        var campo = gruppi[g].getAttribute("data-campo");
+        var manca = !valore("cane" + n + "_" + campo);
+        var p = gruppi[g].querySelector(".errore-campo");
+        p.hidden = !manca;
+        if (manca) {
+          gruppi[g].setAttribute("aria-invalid", "true");
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = "#" + gruppi[g].id;
+          a.textContent = "Cane " + n + ": rispondi a «" + DOMANDE_CANE[campo] + "».";
+          li.appendChild(a);
+          lista.appendChild(li);
+        } else {
+          gruppi[g].removeAttribute("aria-invalid");
+        }
+      }
+    }
+    mostraErrore("f-privacy", "err-privacy", !$("privacy").checked, "Conferma di aver letto come usiamo le risposte.", lista);
+    var box = $("errori");
+    box.hidden = lista.children.length === 0;
+    if (!box.hidden) box.focus();
+    return box.hidden;
+  }
+
+  function raccogli() {
+    var dati = {
+      modulo: VERSIONE_MODULO,
+      maggiorenne: true,
+      contatto: { email: $("email").value.trim() || null, telefono: $("telefono").value.trim() || null },
+      lavoro_fuori_casa: valore("lavoro"),
+      tipo_di_telefono: valore("telefono_tipo"),
+      cani: [],
+      cani_non_adatti: 0
+    };
+    var cani = contenitore.querySelectorAll("fieldset.cane");
+    for (var i = 0; i < cani.length; i++) {
+      var n = i + 1;
+      var c = {};
+      for (var campo in DOMANDE_CANE) c[campo] = valore("cane" + n + "_" + campo);
+      if (c.incontinenza === "si" || c.traversina === "solo_traversina") {
+        // Minimizzazione: dei cani non adatti non teniamo le risposte.
+        dati.cani_non_adatti++;
+      } else {
+        dati.cani.push({
+          eta: c.eta, taglia: c.taglia, malattia_cronica: c.cronica,
+          bisogni: c.traversina, appartamento: c.appartamento,
+          giardino_o_terrazzo_da_solo: c.giardino, stile_uscita: c.stile
+        });
+      }
+    }
+    return dati;
+  }
+
+  function testoDi(d) {
+    var r = [];
+    r.push("Richiesta di adesione alla prova di Lulù (" + d.modulo + ")");
+    r.push("");
+    r.push("Ho almeno 18 anni: sì");
+    if (d.contatto.email) r.push("Email: " + d.contatto.email);
+    if (d.contatto.telefono) r.push("Telefono: " + d.contatto.telefono);
+    r.push("Lavoro fuori casa: " + ETICHETTE.lavoro[d.lavoro_fuori_casa]);
+    r.push("Tipo di telefono: " + ETICHETTE.telefono_tipo[d.tipo_di_telefono]);
+    for (var i = 0; i < d.cani.length; i++) {
+      var c = d.cani[i];
+      r.push("");
+      r.push("Cane " + (i + 1) + ":");
+      r.push("- età: " + ETICHETTE.eta[c.eta]);
+      r.push("- peso: " + ETICHETTE.taglia[c.taglia]);
+      r.push("- malattia cronica: " + ETICHETTE.cronica[c.malattia_cronica]);
+      r.push("- bisogni: " + ETICHETTE.traversina[c.bisogni]);
+      r.push("- vive in appartamento: " + ETICHETTE.appartamento[c.appartamento]);
+      r.push("- giardino o terrazzo dove la fa da solo: " + ETICHETTE.giardino[c.giardino_o_terrazzo_da_solo]);
+      r.push("- esce: " + ETICHETTE.stile[c.stile_uscita]);
+    }
+    if (d.cani_non_adatti > 0) {
+      r.push("");
+      r.push("Cani non adatti alla prova (risposte non incluse): " + d.cani_non_adatti);
+    }
+    return r.join("\n");
+  }
+
+  function mostraRiepilogo() {
+    var d = raccogli();
+    var esclusi = $("esclusi");
+    esclusi.innerHTML = "";
+    if (d.cani_non_adatti > 0) {
+      var p = document.createElement("p");
+      p.className = "messaggio";
+      p.textContent = d.cani.length === 0
+        ? "Grazie di cuore. Per i cani che hai indicato la prova non è adatta, quindi non c'è niente da mandarci. Non abbiamo salvato nulla: questa pagina non invia dati."
+        : "Uno o più cani non sono adatti a questa prova. Nel riepilogo non mettiamo le loro risposte.";
+      esclusi.appendChild(p);
+    }
+    $("pronto").hidden = d.cani.length === 0;
+    $("testo-riepilogo").hidden = d.cani.length === 0;
+    ultimoTesto = testoDi(d);
+    ultimoJson = JSON.stringify(d, null, 2);
+    $("testo-riepilogo").textContent = ultimoTesto;
+    $("link-mail").href = "mailto:" + MAIL_TO +
+      "?subject=" + encodeURIComponent("Adesione alla prova di Lulù") +
+      "&body=" + encodeURIComponent(ultimoTesto);
+    $("stato-azione").textContent = "";
+    form.hidden = true;
+    $("riepilogo").hidden = false;
+    $("titolo-riepilogo").focus();
+    window.scrollTo(0, 0);
+  }
+
+  function copia() {
+    var stato = $("stato-azione");
+    function fatto() { stato.textContent = "Testo copiato. Incollalo in un'email a " + MAIL_TO + "."; }
+    function ripiego() {
+      var t = document.createElement("textarea");
+      t.value = ultimoTesto;
+      t.setAttribute("readonly", "");
+      t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t);
+      t.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(t);
+      if (ok) fatto(); else stato.textContent = "Non riesco a copiare da solo. Seleziona il testo qui sotto e copialo a mano.";
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(ultimoTesto).then(fatto, ripiego);
+    } else {
+      ripiego();
+    }
+  }
+
+  function scarica() {
+    var blob = new Blob([ultimoJson], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "adesione-lulu.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    $("stato-azione").textContent = "File salvato sul tuo dispositivo. Allegalo a un'email a " + MAIL_TO + ".";
+  }
+
+  creaCani(1);
+  $("num-cani").addEventListener("change", function () { creaCani(parseInt(this.value, 10) || 1); });
+  form.addEventListener("change", aggiornaMessaggi);
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (valida()) mostraRiepilogo();
+  });
+  $("copia").addEventListener("click", copia);
+  $("scarica").addEventListener("click", scarica);
+  $("modifica").addEventListener("click", function () {
+    $("riepilogo").hidden = true;
+    form.hidden = false;
+    $("prepara").focus();
+  });
+})();
+</script>
+</body>
+</html>

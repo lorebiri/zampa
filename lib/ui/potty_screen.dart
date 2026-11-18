@@ -3,13 +3,16 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../logic/bio_params.dart';
+import '../logic/pee_forecast_v2.dart';
 import '../logic/potty_predictor.dart';
 import '../models.dart';
 import '../store.dart';
+import 'avatar.dart';
 import 'chart_summary.dart';
 import 'common.dart';
 import 'home_screen.dart';
 import 'log_sheet.dart';
+import 'potty_v3.dart';
 
 class PottyScreen extends StatefulWidget {
   const PottyScreen({super.key});
@@ -60,7 +63,15 @@ class _PottyScreenState extends State<PottyScreen> {
               onSelectionChanged: (s) => setState(() => need = s.first),
             ),
           ),
+          if (kPrevisioneV3InVista) SignalBanner(dog: dog, logs: logs),
           ForecastCard(forecast: f, dog: dog),
+          if (need == Need.pipi && f.v2 != null && kPrevisioneV2InVista)
+            _V2Card(v: f.v2!, dog: dog, now: now),
+          if (need == Need.cacca && kPrevisioneV3InVista)
+            PoopV3Card(dog: dog, logs: logs),
+          if (kPrevisioneV3InVista) SignalButtons(dog: dog),
+          if (need == Need.pipi && kPrevisioneV3InVista)
+            OutingPlanCard(dog: dog, logs: logs),
           const SectionTitle('Come calcola l\'orario'),
           Card(
             child: Padding(
@@ -101,7 +112,7 @@ class _PottyScreenState extends State<PottyScreen> {
                               'valori della letteratura per età e taglia, con i '
                               'fattori noti (farmaci, malattie, calore). Il tetto '
                               'per età vale sempre. È una stima: se ${dog.name} '
-                              'chiede di uscire, ascolta lui.'
+                              'chiede di uscire, ${dog.g('ascolta lui', 'ascolta lei')}.'
                         : 'Mostra gli orari in cui ${dog.name} la fa di solito '
                               'negli ultimi 14 giorni.',
                     style: t.textTheme.bodySmall,
@@ -187,6 +198,7 @@ class _PottyScreenState extends State<PottyScreen> {
               padding: EdgeInsets.all(16),
               child: Text('Ancora nessuna registrazione.'),
             ),
+          if (kPrevisioneV3InVista) StudyExportTile(dog: dog),
           const SizedBox(height: 8),
           Text(
             'Scorri verso sinistra una voce per eliminarla.',
@@ -214,6 +226,60 @@ class _PottyScreenState extends State<PottyScreen> {
       ],
     ),
   );
+}
+
+/// Scheda della previsione v2 (ricerca/27 §5). Spegnibile con
+/// [kPrevisioneV2InVista] finché il CEO non decide se sostituire la
+/// previsione di base anche nella Home.
+const bool kPrevisioneV2InVista = true;
+
+/// Schede v3 (ricerca/28): segnali, cacca legata ai pasti, piano di uscite,
+/// esportazione per lo studio.
+const bool kPrevisioneV3InVista = true;
+
+class _V2Card extends StatelessWidget {
+  const _V2Card({required this.v, required this.dog, required this.now});
+  final PeeForecastV2 v;
+  final Dog dog;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context);
+    final x = v2Texts(
+      v,
+      now,
+      dog.name,
+      leadMinutes: dog.reminderLeadMinutes,
+      female: dog.sex == Sex.femmina,
+    );
+    final goNow = !v.alertAt
+        .subtract(Duration(minutes: dog.reminderLeadMinutes))
+        .isAfter(now);
+    // Quando è ora di uscire il compagno compare impaziente alla porta,
+    // come nella pagina Oggi; altrimenti aspetta tranquillo.
+    return TrialCard(
+      label: 'Nuova previsione',
+      dog: dog,
+      pose: goNow ? Pose.waiting : Pose.idle,
+      children: [
+        Text(x.title, style: t.textTheme.titleMedium),
+        const SizedBox(height: 6),
+        Text(x.window),
+        const SizedBox(height: 6),
+        Text(x.advice, style: const TextStyle(fontWeight: FontWeight.w700)),
+        const SizedBox(height: 6),
+        Text(x.confidence, style: t.textTheme.bodySmall),
+        Text(
+          'Unisce tre stime: il suo intervallo abituale, gli orari dei '
+          'giorni scorsi e lo stesso giorno della settimana scorsa. È una '
+          'stima: se ${dog.name} chiede di uscire, '
+          '${dog.g('ascolta lui', 'ascolta lei')}.',
+          style: t.textTheme.bodySmall,
+        ),
+      ],
+    );
+  }
 }
 
 class _DayBars extends StatelessWidget {
@@ -275,4 +341,51 @@ class _DayBars extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Testi della scheda «Prossima pipì» (ricerca/27 §5). Nessuna frase di
+/// accuratezza (piano CEO 11.3): la fiducia è detta a parole.
+({String title, String window, String confidence, String advice}) v2Texts(
+  PeeForecastV2 v,
+  DateTime now,
+  String name, {
+  int leadMinutes = 10,
+  bool female = false,
+}) {
+  String two(int x) => x.toString().padLeft(2, '0');
+  String hm(DateTime t) => '${two(t.hour)}:${two(t.minute)}';
+  String dur(int m) {
+    if (m < 60) {
+      final r = math.max(5, (m / 5).round() * 5);
+      return '$r minuti';
+    }
+    final q = (m / 15).round() * 15;
+    final h = q ~/ 60, mm = q % 60;
+    final hs = h == 1 ? '1 ora' : '$h ore';
+    return mm == 0 ? hs : '$hs e $mm minuti';
+  }
+
+  final m = v.minutesUntil(now);
+  final title = m <= 0
+      ? 'Potrebbe essere ora: è passato l\'orario previsto (${hm(v.expectedAt)})'
+      : 'Prossima pipì tra circa ${dur(m)} (verso le ${hm(v.expectedAt)})';
+  final lo = v.lo50.isBefore(now) ? now : v.lo50;
+  final window = v.hi50.isBefore(now)
+      ? 'Di solito a quest\'ora l\'ha già fatta: se chiede di uscire, '
+            '${female ? 'portala' : 'portalo'} fuori.'
+      : 'Di solito tra le ${hm(lo)} e le ${hm(v.hi50)}.';
+  final confidence = switch (v.confidence) {
+    V2Confidence.alta =>
+      'Fiducia alta: nelle ultime settimane le previsioni di $name sono '
+          'state vicine.',
+    V2Confidence.media => 'Fiducia media.',
+    V2Confidence.bassa =>
+      'Fiducia bassa: sto ancora imparando, oppure i suoi orari cambiano '
+          'molto da un giorno all\'altro.',
+  };
+  final go = v.alertAt.subtract(Duration(minutes: leadMinutes));
+  final advice = go.isAfter(now)
+      ? 'Per stare tranquilli, esci verso le ${hm(go)}.'
+      : 'Per stare tranquilli, esci adesso.';
+  return (title: title, window: window, confidence: confidence, advice: advice);
 }
