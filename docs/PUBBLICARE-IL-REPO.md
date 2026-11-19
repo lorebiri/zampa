@@ -5,7 +5,7 @@ branch). Nessuna azione è stata fatta: decide Lorenzo.
 
 ## Segreti: niente da ruotare
 
-Cercati nel codice e in ogni versione passata dei file: chiavi Supabase di servizio (`sb_secret_`,
+Cercati nel codice e in ogni versione passata dei file: chiavi Supabase di servizio (prefisso `sb_secret…`,
 `service_role`, token JWT), chiavi private (`BEGIN … PRIVATE KEY`), chiavi Google (`AIza…`), token
 GitHub, Slack, Anthropic e Stripe, password, file `.env`, `config/*.json`, keystore Android
 (`.jks`, `.keystore`, `key.properties`), `google-services.json` e certificati Apple.
@@ -20,6 +20,8 @@ Da ricordare:
 - la chiave `service_role`, la chiave **privata** VAPID, `CRON_SECRET` e il keystore Android
   vanno solo nei segreti di Supabase o di GitHub, mai nel repository;
 - la CI controlla già a ogni push che non entrino segreti (`ci.yml`, «Nessun segreto nel codice»).
+  Il controllo cerca i prefissi esatti nel testo: nei documenti scrivili troncati (`sb_secret…`,
+  `eyJhbG…`), altrimenti la CI li scambia per un segreto vero e fallisce.
 
 ## Dati personali che diventerebbero pubblici
 
